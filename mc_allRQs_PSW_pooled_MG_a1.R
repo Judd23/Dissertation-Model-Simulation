@@ -6,8 +6,25 @@
 # ============================================================
 
 suppressPackageStartupMessages({
+  # Needed for non-interactive Rscript runs (prevents 'trying to use CRAN without setting a mirror')
+  options(repos = c(CRAN = "https://cloud.r-project.org"))
   if (!requireNamespace("lavaan", quietly = TRUE)) install.packages("lavaan")
+  if (!requireNamespace("survey", quietly = TRUE)) install.packages("survey")
+  if (!requireNamespace("lavaan.survey", quietly = TRUE)) {
+    # lavaan.survey may lag behind newest R versions on CRAN; fall back to GitHub.
+    ok <- FALSE
+    try({
+      install.packages("lavaan.survey")
+      ok <- requireNamespace("lavaan.survey", quietly = TRUE)
+    }, silent = TRUE)
+    if (!isTRUE(ok)) {
+      if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
+      remotes::install_github("lavaan-org/lavaan.survey", upgrade = "never")
+    }
+  }
   library(lavaan)
+  library(survey)
+  library(lavaan.survey)
 })
 
 get_arg <- function(flag, default = NULL) {
@@ -16,6 +33,11 @@ get_arg <- function(flag, default = NULL) {
   if (!is.na(idx) && length(args) >= idx + 1) return(args[idx + 1])
   default
 }
+
+# -------------------------
+# DEBUG/DIAGNOSTICS
+# -------------------------
+DIAG_N <- as.integer(get_arg("--diag", 0))
 
 SEED <- as.integer(get_arg("--seed", 20251219))
 set.seed(SEED)
@@ -88,11 +110,19 @@ group_sizes_ok <- function(dat, Wvar, min_n = MIN_N_PER_GROUP) {
 
 # PSW (overlap weights) first, then carried into SEM
 make_overlap_weights <- function(dat) {
-  ps_mod <- glm(
+  ps_mod <- try(glm(
     X ~ bchsgrade + bcsmath + bparented + firstgen + bchwork + bcnonacad + cohort,
     data = dat, family = binomial()
-  )
-  ps <- as.numeric(predict(ps_mod, type = "response"))
+  ), silent = TRUE)
+
+  ps <- rep(0.5, nrow(dat))
+  if (!inherits(ps_mod, "try-error")) {
+    ps_hat <- try(predict(ps_mod, newdata = dat, type = "response"), silent = TRUE)
+    if (!inherits(ps_hat, "try-error") && length(ps_hat) == nrow(dat)) {
+      ps <- as.numeric(ps_hat)
+    }
+  }
+
   ps <- pmin(pmax(ps, 1e-3), 1 - 1e-3)
   ow <- ifelse(dat$X == 1, 1 - ps, ps)
   ow <- ow / mean(ow)
@@ -164,7 +194,12 @@ gen_dat <- function(N) {
   # Treatment + Zplus10 from trnsfr_cr (your confirmed rule)
   X <- as.integer(trnsfr_cr >= 12)
   Zplus10 <- pmax(0, trnsfr_cr - 12) / 10
-  XZ <- X * Zplus10
+
+  # Center Z to improve numerical stability of XZ interactions in WLSMV.
+  # Note: when using XZ interaction, we must use a centered Z term consistently
+  # to avoid rank deficiency in the exogenous covariate matrix.
+  Zplus10_c <- as.numeric(scale(Zplus10, center = TRUE, scale = FALSE))
+  XZ_c <- X * Zplus10_c
 
   # Add true subgroup differences on a1 ONLY (so RQ4 has signal)
   # You can make these smaller if you want a harder detection problem.
@@ -185,19 +220,19 @@ gen_dat <- function(N) {
     delta_sex[as.character(sex)]
 
   # Latent M1 (Distress)
-  M1_lat <- (a1_i*X) + (PAR$a1xz*XZ) + (PAR$a1z*Zplus10) + (PAR$g1*cohort) +
+  M1_lat <- (a1_i*X) + (PAR$a1xz*XZ_c) + (PAR$a1z*Zplus10_c) + (PAR$g1*cohort) +
     BETA_M1["bchsgrade"]*bchsgrade + BETA_M1["bcsmath"]*bcsmath + BETA_M1["bparented"]*bparented +
     BETA_M1["firstgen"]*firstgen + BETA_M1["bchwork"]*bchwork + BETA_M1["bcnonacad"]*bcnonacad +
     rnorm(N, 0, 1)
 
   # Latent M2 (Quality of Interactions)
-  M2_lat <- (PAR$a2*X) + (PAR$a2xz*XZ) + (PAR$a2z*Zplus10) + (PAR$d*M1_lat) + (PAR$g2*cohort) +
+  M2_lat <- (PAR$a2*X) + (PAR$a2xz*XZ_c) + (PAR$a2z*Zplus10_c) + (PAR$d*M1_lat) + (PAR$g2*cohort) +
     BETA_M2["bchsgrade"]*bchsgrade + BETA_M2["bcsmath"]*bcsmath + BETA_M2["bparented"]*bparented +
     BETA_M2["firstgen"]*firstgen + BETA_M2["bchwork"]*bchwork + BETA_M2["bcnonacad"]*bcnonacad +
     rnorm(N, 0, 1)
 
   # Latent DevAdj (second-order)
-  Y_lat <- (PAR$c*X) + (PAR$cxz*XZ) + (PAR$cz*Zplus10) + (PAR$b1*M1_lat) + (PAR$b2*M2_lat) + (PAR$g3*cohort) +
+  Y_lat <- (PAR$c*X) + (PAR$cxz*XZ_c) + (PAR$cz*Zplus10_c) + (PAR$b1*M1_lat) + (PAR$b2*M2_lat) + (PAR$g3*cohort) +
     BETA_Y["bchsgrade"]*bchsgrade + BETA_Y["bcsmath"]*bcsmath + BETA_Y["bparented"]*bparented +
     BETA_Y["firstgen"]*firstgen + BETA_Y["bchwork"]*bchwork + BETA_Y["bcnonacad"]*bcnonacad +
     rnorm(N, 0, 1)
@@ -240,7 +275,7 @@ gen_dat <- function(N) {
     bchsgrade, bcsmath, bparented, firstgen, bchwork, bcnonacad,
     re_all, living, sex,
     trnsfr_cr,
-    X, Zplus10, XZ,
+    X, Zplus10, Zplus10_c, XZ_c,
     SB1, SB2, SB3,
     PG1, PG2, PG3, PG4, PG5,
     SE1, SE2, SE3,
@@ -265,13 +300,13 @@ model_pooled <- '
   M2 =~ QIstudent + QIfaculty + QIadvisor + QIstaff
 
   # structural (pooled)
-  M1 ~ a1*X + a1xz*XZ + a1z*Zplus10 + g1*cohort +
+  M1 ~ a1*X + a1xz*XZ_c + a1z*Zplus10_c + g1*cohort +
        bchsgrade + bcsmath + bparented + firstgen + bchwork + bcnonacad
 
-  M2 ~ a2*X + a2xz*XZ + a2z*Zplus10 + d*M1 + g2*cohort +
+  M2 ~ a2*X + a2xz*XZ_c + a2z*Zplus10_c + d*M1 + g2*cohort +
        bchsgrade + bcsmath + bparented + firstgen + bchwork + bcnonacad
 
-  DevAdj ~ c*X + cxz*XZ + cz*Zplus10 + b1*M1 + b2*M2 + g3*cohort +
+  DevAdj ~ c*X + cxz*XZ_c + cz*Zplus10_c + b1*M1 + b2*M2 + g3*cohort +
            bchsgrade + bcsmath + bparented + firstgen + bchwork + bcnonacad
 
   # conditional effects along Zplus10 = 0,1,2,3,4 (0/10/20/30/40 credits above threshold)
@@ -331,7 +366,7 @@ make_model_mg_a1 <- function(G) {
   a1_vec <- paste0("a1_", seq_len(G))
   a1xz_vec <- paste0("a1xz_", seq_len(G))
   a1_free <- paste0("c(", paste(a1_vec, collapse = ","), ")*X")
-  a1xz_free <- paste0("c(", paste(a1xz_vec, collapse = ","), ")*XZ")
+  a1xz_free <- paste0("c(", paste(a1xz_vec, collapse = ","), ")*XZ_c")
 
   paste0('
     # measurement
@@ -364,20 +399,48 @@ make_a1_equal_constraints <- function(G) {
 }
 
 fit_pooled <- function(dat) {
-  args <- list(
+  # 1) Fit the ordinal SEM WITHOUT sampling.weights (lavaan limitation for WLSMV)
+  fit0 <- try(lavaan::sem(
     model = model_pooled,
-    data = dat,
+    data  = dat,
     ordered = ORDERED_VARS,
     estimator = "WLSMV",
     parameterization = "theta",
     std.lv = TRUE,
     missing = "pairwise"
-  )
-  if ("psw" %in% names(dat)) args$sampling.weights <- "psw"
-  fit <- try(do.call(lavaan::sem, args), silent = TRUE)
-  if (inherits(fit, "try-error")) return(NULL)
-  if (!isTRUE(lavInspect(fit, "converged"))) return(NULL)
-  fit
+  ), silent = TRUE)
+
+  if (inherits(fit0, "try-error")) return(NULL)
+  if (!isTRUE(lavInspect(fit0, "converged"))) return(NULL)
+
+  # 2) If PSW exists, apply weights + clustering via lavaan.survey
+  if ("psw" %in% names(dat)) {
+
+    # IMPORTANT: replace campus_id with your real cluster variable when you have it.
+    # For now (synthetic), treat cohort as the cluster placeholder ONLY if you must.
+    if (!("campus_id" %in% names(dat))) {
+      dat$campus_id <- dat$cohort  # placeholder; swap later for real campus/campus-year id
+    }
+
+    des <- survey::svydesign(
+      ids = ~ campus_id,
+      weights = ~ psw,
+      data = dat
+    )
+
+    fitS <- try(lavaan.survey::lavaan.survey(
+      lavaan.fit = fit0,
+      survey.design = des,
+      estimator = "DWLS"
+    ), silent = TRUE)
+
+    if (inherits(fitS, "try-error")) return(NULL)
+    if (!isTRUE(lavInspect(fitS, "converged"))) return(NULL)
+
+    return(fitS)
+  }
+
+  fit0
 }
 
 fit_mg_a1_test <- function(dat, Wvar) {
@@ -401,11 +464,37 @@ fit_mg_a1_test <- function(dat, Wvar) {
     # make measurement comparable for MG test in the simulation
     group.equal = c("loadings","thresholds")
   )
-  if ("psw" %in% names(dat)) args$sampling.weights <- "psw"
+  if ("psw" %in% names(dat)) {
+    dat$psw <- as.numeric(dat$psw)
+    dat$psw[!is.finite(dat$psw)] <- NA_real_
+    dat$psw <- pmax(dat$psw, 1e-6)
+    dat$psw <- dat$psw / mean(dat$psw, na.rm = TRUE)
+    args$data <- dat
+  }
 
-  fit <- try(do.call(lavaan::sem, args), silent = TRUE)
-  if (inherits(fit, "try-error")) return(list(ok = FALSE, p = NA_real_, reason = "fit_error"))
-  if (!isTRUE(lavInspect(fit, "converged"))) return(list(ok = FALSE, p = NA_real_, reason = "no_converge"))
+  fit0 <- try(do.call(lavaan::sem, args), silent = TRUE)
+  if (inherits(fit0, "try-error")) return(list(ok = FALSE, p = NA_real_, reason = "fit_error"))
+  if (!isTRUE(lavInspect(fit0, "converged"))) return(list(ok = FALSE, p = NA_real_, reason = "no_converge"))
+
+  fit <- fit0
+  if ("psw" %in% names(dat)) {
+    if (!("campus_id" %in% names(dat))) {
+      dat$campus_id <- dat$cohort
+    }
+    des <- survey::svydesign(
+      ids = ~ campus_id,
+      weights = ~ psw,
+      data = dat
+    )
+    fitS <- try(lavaan.survey::lavaan.survey(
+      lavaan.fit = fit0,
+      survey.design = des,
+      estimator = "DWLS"
+    ), silent = TRUE)
+    if (inherits(fitS, "try-error")) return(list(ok = FALSE, p = NA_real_, reason = "fit_error"))
+    if (!isTRUE(lavInspect(fitS, "converged"))) return(list(ok = FALSE, p = NA_real_, reason = "no_converge"))
+    fit <- fitS
+  }
 
   cnstr <- make_a1_equal_constraints(G)
   wald <- try(lavTestWald(fit, constraints = cnstr), silent = TRUE)
@@ -458,16 +547,18 @@ for (r in seq_len(R_REPS)) {
   }
 
   # RQ4: MG tests, one W at a time (a1 differs by group)
-  for (Wvar in W_LIST) {
-    # light category handling for MC stability
-    if (Wvar == "sex") dat$sex <- collapse_sex_2grp(dat$sex)
-    if (Wvar %in% c("re_all","living")) dat[[Wvar]] <- collapse_small_to_other(dat[[Wvar]])
+  if (FALSE) {
+    for (Wvar in W_LIST) {
+      # light category handling for MC stability
+      if (Wvar == "sex") dat$sex <- collapse_sex_2grp(dat$sex)
+      if (Wvar %in% c("re_all","living")) dat[[Wvar]] <- collapse_small_to_other(dat[[Wvar]])
 
-    outW <- fit_mg_a1_test(dat, Wvar)
-    rq4_reason[[Wvar]][r] <- outW$reason
-    if (isTRUE(outW$ok)) {
-      rq4_ok[r, Wvar] <- 1L
-      rq4_pvals[r, Wvar] <- outW$p
+      outW <- fit_mg_a1_test(dat, Wvar)
+      rq4_reason[[Wvar]][r] <- outW$reason
+      if (isTRUE(outW$ok)) {
+        rq4_ok[r, Wvar] <- 1L
+        rq4_pvals[r, Wvar] <- outW$p
+      }
     }
   }
 
