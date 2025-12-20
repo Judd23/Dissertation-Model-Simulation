@@ -10,21 +10,8 @@ suppressPackageStartupMessages({
   options(repos = c(CRAN = "https://cloud.r-project.org"))
   if (!requireNamespace("lavaan", quietly = TRUE)) install.packages("lavaan")
   if (!requireNamespace("survey", quietly = TRUE)) install.packages("survey")
-  if (!requireNamespace("lavaan.survey", quietly = TRUE)) {
-    # lavaan.survey may lag behind newest R versions on CRAN; fall back to GitHub.
-    ok <- FALSE
-    try({
-      install.packages("lavaan.survey")
-      ok <- requireNamespace("lavaan.survey", quietly = TRUE)
-    }, silent = TRUE)
-    if (!isTRUE(ok)) {
-      if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")
-      remotes::install_github("lavaan-org/lavaan.survey", upgrade = "never")
-    }
-  }
   library(lavaan)
   library(survey)
-  library(lavaan.survey)
 })
 
 get_arg <- function(flag, default = NULL) {
@@ -33,6 +20,16 @@ get_arg <- function(flag, default = NULL) {
   if (!is.na(idx) && length(args) >= idx + 1) return(args[idx + 1])
   default
 }
+
+# --------------------------------------------------
+# PSW handling (environment-safe)
+# --------------------------------------------------
+
+USE_PSW <- as.integer(get_arg("--psw", 1))
+
+# In this environment, PSW is used for balance diagnostics only
+# (not passed into lavaan WLSMV estimation)
+APPLY_PSW_IN_SEM <- FALSE
 
 # -------------------------
 # DEBUG/DIAGNOSTICS
@@ -52,7 +49,7 @@ N      <- 3000
 #   Rscript mc_allRQs_PSW_pooled_MG_a1.R --N 500 --R 5 --seed 1
 R_REPS <- as.integer(get_arg("--R", R_REPS))
 N      <- as.integer(get_arg("--N", N))
-USE_PSW <- as.integer(get_arg("--psw", 1))
+USE_PSW <- as.integer(get_arg("--psw", USE_PSW))
 
 # W variables (you run one at a time; rename to match your file)
 W_LIST <- c("re_all", "firstgen", "living", "sex")
@@ -399,48 +396,24 @@ make_a1_equal_constraints <- function(G) {
 }
 
 fit_pooled <- function(dat) {
-  # 1) Fit the ordinal SEM WITHOUT sampling.weights (lavaan limitation for WLSMV)
-  fit0 <- try(lavaan::sem(
-    model = model_pooled,
-    data  = dat,
-    ordered = ORDERED_VARS,
-    estimator = "WLSMV",
-    parameterization = "theta",
-    std.lv = TRUE,
-    missing = "pairwise"
-  ), silent = TRUE)
+  fit <- try(
+    lavaan::sem(
+      model = model_pooled,
+      data  = dat,
+      ordered = ORDERED_VARS,
+      estimator = "WLSMV",
+      parameterization = "theta",
+      std.lv = TRUE,
+      missing = "pairwise"
+      # IMPORTANT: NO sampling.weights here
+    ),
+    silent = TRUE
+  )
 
-  if (inherits(fit0, "try-error")) return(NULL)
-  if (!isTRUE(lavInspect(fit0, "converged"))) return(NULL)
+  if (inherits(fit, "try-error")) return(NULL)
+  if (!isTRUE(lavInspect(fit, "converged"))) return(NULL)
 
-  # 2) If PSW exists, apply weights + clustering via lavaan.survey
-  if ("psw" %in% names(dat)) {
-
-    # IMPORTANT: replace campus_id with your real cluster variable when you have it.
-    # For now (synthetic), treat cohort as the cluster placeholder ONLY if you must.
-    if (!("campus_id" %in% names(dat))) {
-      dat$campus_id <- dat$cohort  # placeholder; swap later for real campus/campus-year id
-    }
-
-    des <- survey::svydesign(
-      ids = ~ campus_id,
-      weights = ~ psw,
-      data = dat
-    )
-
-    fitS <- try(lavaan.survey::lavaan.survey(
-      lavaan.fit = fit0,
-      survey.design = des,
-      estimator = "DWLS"
-    ), silent = TRUE)
-
-    if (inherits(fitS, "try-error")) return(NULL)
-    if (!isTRUE(lavInspect(fitS, "converged"))) return(NULL)
-
-    return(fitS)
-  }
-
-  fit0
+  fit
 }
 
 fit_mg_a1_test <- function(dat, Wvar) {
@@ -477,7 +450,7 @@ fit_mg_a1_test <- function(dat, Wvar) {
   if (!isTRUE(lavInspect(fit0, "converged"))) return(list(ok = FALSE, p = NA_real_, reason = "no_converge"))
 
   fit <- fit0
-  if ("psw" %in% names(dat)) {
+  if (isTRUE(APPLY_PSW_IN_SEM) && ("psw" %in% names(dat)) && requireNamespace("lavaan.survey", quietly = TRUE)) {
     if (!("campus_id" %in% names(dat))) {
       dat$campus_id <- dat$cohort
     }
