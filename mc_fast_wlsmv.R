@@ -31,7 +31,7 @@ make_ord_int <- function(y, cuts) {
 }
 
 # ---------- data generator ----------
-gen_dat <- function(N, p_fast = 0.20,
+gen_dat_base <- function(N, p_fast = 0.20,
                     # structural parameters (latent-response scale)
                     a1 = 0.20, a1z = 0.10,      # FASt, Zplus10 -> Distress
                     a2 = 0.15, a2z = -0.10,     # FASt, Zplus10 -> Interact
@@ -61,24 +61,22 @@ gen_dat <- function(N, p_fast = 0.20,
   prep <- rnorm(N, 0, 1)
 
   # ---- RQ4 subgroup variables (observed grouping vars) ----
-  # race/ethnicity (example 5 groups; edit labels/probs to match your data)
-  re_all <- sample(
-    x = c("White", "Latine", "Black", "Asian", "Other"),
+  re_all <- factor(sample(
+    c("Latino", "White", "Asian", "Black", "Other"),
     size = N,
     replace = TRUE,
-    prob = c(0.35, 0.30, 0.10, 0.15, 0.10)
-  )
+    prob = c(0.46, 0.21, 0.16, 0.05, 0.12)
+  ))
 
   # first-gen (0/1)
   firstgen <- rbinom(N, 1, 0.45)
 
-  # expected living situation (example; edit labels/probs to match)
-  living <- sample(
-    x = c("OnCampus", "OffCampus", "Family"),
+  living <- factor(sample(
+    c("WithFamily", "OffCampus", "OnCampus"),
     size = N,
     replace = TRUE,
-    prob = c(0.20, 0.45, 0.35)
-  )
+    prob = c(0.40, 0.35, 0.25)
+  ))
 
   # reported gender (example; edit labels/probs to match)
   sex <- sample(
@@ -220,6 +218,15 @@ run_mc <- function(N, R = 200, p_fast = 0.20,
                    a1=0.20, a1z=0.10, a2=0.15, a2z=-0.10,
                    b1=-0.30, b2=0.40, cprime=0.10, cz=-0.05) {
 
+  gen_dat <- function(N) {
+    gen_dat_base(
+      N,
+      p_fast = p_fast,
+      a1 = a1, a1z = a1z, a2 = a2, a2z = a2z,
+      b1 = b1, b2 = b2, cprime = cprime, cz = cz
+    )
+  }
+
   true <- list(
     a1=a1, a1z=a1z, a2=a2, a2z=a2z, b1=b1, b2=b2, cprime=cprime, cz=cz,
     imm_d = a1z*b1,
@@ -230,9 +237,7 @@ run_mc <- function(N, R = 200, p_fast = 0.20,
   conv <- rep(FALSE, R)
 
   for (r in seq_len(R)) {
-    dat <- gen_dat(N, p_fast = p_fast,
-                   a1=a1, a1z=a1z, a2=a2, a2z=a2z,
-                   b1=b1, b2=b2, cprime=cprime, cz=cz)
+    dat <- gen_dat(N)
 
     fit <- try(fit_one(dat), silent = TRUE)
     if (inherits(fit, "try-error")) next

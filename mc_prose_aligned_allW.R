@@ -131,17 +131,19 @@ ordered_vars <- ORDERED_VARS
 # GROUP DEFINITIONS (EDIT labels/probs to match your real coding)
 # ============================================================
 gen_W <- function(N) {
-  re_all <- sample(
-    x = c("White","Latine","Black","Asian","Other"),
-    size = N, replace = TRUE,
-    prob = c(0.35, 0.30, 0.10, 0.15, 0.10)
-  )
+  re_all <- factor(sample(
+    c("Latino", "White", "Asian", "Black", "Other"),
+    size = N,
+    replace = TRUE,
+    prob = c(0.46, 0.21, 0.16, 0.05, 0.12)
+  ))
   firstgen <- sample(x = c("0","1"), size = N, replace = TRUE, prob = c(0.55, 0.45))
-  living <- sample(
-    x = c("OnCampus","OffCampus","Family"),
-    size = N, replace = TRUE,
-    prob = c(0.20, 0.45, 0.35)
-  )
+  living <- factor(sample(
+    c("WithFamily", "OffCampus", "OnCampus"),
+    size = N,
+    replace = TRUE,
+    prob = c(0.40, 0.35, 0.25)
+  ))
   sex <- sample(
     x = c("Woman","Man","Nonbinary"),
     size = N, replace = TRUE,
