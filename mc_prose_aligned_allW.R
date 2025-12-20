@@ -221,7 +221,7 @@ get_a_map <- function(W) {
 # ============================================================
 # DATA GENERATOR (simulate moderation for one W at a time)
 # ============================================================
-gen_dat <- function(N, p_fast, moderate_W = c("re_all","firstgen","living","sex"),
+gen_dat_base <- function(N, p_fast, moderate_W = c("re_all","firstgen","living","sex"),
                     b1 = baseline$b1, b2 = baseline$b2,
                     cprime = baseline$cprime, cxz = baseline$cxz,
                     rho_m12 = baseline$rho_m12) {
@@ -453,13 +453,17 @@ compute_group_indirects <- function(fit_free, z_vals = c(0,1,2)) {
 # Monte Carlo runner: one W at a time, but execute all four W's
 # ============================================================
 run_mc_oneW <- function(Wvar, N, R, p_fast) {
+  gen_dat <- function(N) {
+    gen_dat_base(N, p_fast = p_fast, moderate_W = Wvar)
+  }
+
   pvals <- rep(NA_real_, R)
   conv  <- rep(FALSE, R)
   indirects_list <- vector("list", R)
   fail_reason <- rep(NA_character_, R)
 
   for (r in seq_len(R)) {
-    dat <- gen_dat(N, p_fast = p_fast, moderate_W = Wvar)
+    dat <- gen_dat(N)
 
     if (Wvar == "sex" && "sex" %in% names(dat)) {
       dat$sex <- collapse_sex_2grp(dat$sex)
