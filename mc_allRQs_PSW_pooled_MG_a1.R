@@ -107,15 +107,18 @@ PAR <- list(
   # RQ1: direct (X->Y) at threshold + dose slope above threshold
   c  =  0.20,
   cz = -0.10,
+  cxz = -0.08,  # X×Z moderation on direct path (RQ1)
 
   # RQ2: distress mediator
   a1  =  0.15,   # X -> M1 (at threshold)
   a1z =  0.10,   # Zplus10 -> M1 (dose above threshold)
+  a1xz =  0.08, # X×Z moderation on X->M1 (RQ2/Model 7 logic)
   b1  = -0.30,   # M1 -> Y
 
   # RQ3: interaction-quality mediator
   a2  =  0.20,   # X -> M2 (at threshold)
   a2z = -0.05,   # Zplus10 -> M2 (dose above threshold)
+  a2xz = -0.05, # X×Z moderation on X->M2 (RQ3/Model 7 logic)
   b2  =  0.35,   # M2 -> Y
 
   # Optional serial link (set d = 0 if you do NOT want the serial path)
@@ -161,6 +164,7 @@ gen_dat <- function(N) {
   # Treatment + Zplus10 from trnsfr_cr (your confirmed rule)
   X <- as.integer(trnsfr_cr >= 12)
   Zplus10 <- pmax(0, trnsfr_cr - 12) / 10
+  XZ <- X * Zplus10
 
   # Add true subgroup differences on a1 ONLY (so RQ4 has signal)
   # You can make these smaller if you want a harder detection problem.
@@ -181,19 +185,19 @@ gen_dat <- function(N) {
     delta_sex[as.character(sex)]
 
   # Latent M1 (Distress)
-  M1_lat <- (a1_i*X) + (PAR$a1z*Zplus10) + (PAR$g1*cohort) +
+  M1_lat <- (a1_i*X) + (PAR$a1xz*XZ) + (PAR$a1z*Zplus10) + (PAR$g1*cohort) +
     BETA_M1["bchsgrade"]*bchsgrade + BETA_M1["bcsmath"]*bcsmath + BETA_M1["bparented"]*bparented +
     BETA_M1["firstgen"]*firstgen + BETA_M1["bchwork"]*bchwork + BETA_M1["bcnonacad"]*bcnonacad +
     rnorm(N, 0, 1)
 
   # Latent M2 (Quality of Interactions)
-  M2_lat <- (PAR$a2*X) + (PAR$a2z*Zplus10) + (PAR$d*M1_lat) + (PAR$g2*cohort) +
+  M2_lat <- (PAR$a2*X) + (PAR$a2xz*XZ) + (PAR$a2z*Zplus10) + (PAR$d*M1_lat) + (PAR$g2*cohort) +
     BETA_M2["bchsgrade"]*bchsgrade + BETA_M2["bcsmath"]*bcsmath + BETA_M2["bparented"]*bparented +
     BETA_M2["firstgen"]*firstgen + BETA_M2["bchwork"]*bchwork + BETA_M2["bcnonacad"]*bcnonacad +
     rnorm(N, 0, 1)
 
   # Latent DevAdj (second-order)
-  Y_lat <- (PAR$c*X) + (PAR$cz*Zplus10) + (PAR$b1*M1_lat) + (PAR$b2*M2_lat) + (PAR$g3*cohort) +
+  Y_lat <- (PAR$c*X) + (PAR$cxz*XZ) + (PAR$cz*Zplus10) + (PAR$b1*M1_lat) + (PAR$b2*M2_lat) + (PAR$g3*cohort) +
     BETA_Y["bchsgrade"]*bchsgrade + BETA_Y["bcsmath"]*bcsmath + BETA_Y["bparented"]*bparented +
     BETA_Y["firstgen"]*firstgen + BETA_Y["bchwork"]*bchwork + BETA_Y["bcnonacad"]*bcnonacad +
     rnorm(N, 0, 1)
@@ -236,7 +240,7 @@ gen_dat <- function(N) {
     bchsgrade, bcsmath, bparented, firstgen, bchwork, bcnonacad,
     re_all, living, sex,
     trnsfr_cr,
-    X, Zplus10,
+    X, Zplus10, XZ,
     SB1, SB2, SB3,
     PG1, PG2, PG3, PG4, PG5,
     SE1, SE2, SE3,
@@ -261,44 +265,73 @@ model_pooled <- '
   M2 =~ QIstudent + QIfaculty + QIadvisor + QIstaff
 
   # structural (pooled)
-  M1 ~ a1*X + a1z*Zplus10 + g1*cohort +
+  M1 ~ a1*X + a1xz*XZ + a1z*Zplus10 + g1*cohort +
        bchsgrade + bcsmath + bparented + firstgen + bchwork + bcnonacad
 
-  M2 ~ a2*X + a2z*Zplus10 + d*M1 + g2*cohort +
+  M2 ~ a2*X + a2xz*XZ + a2z*Zplus10 + d*M1 + g2*cohort +
        bchsgrade + bcsmath + bparented + firstgen + bchwork + bcnonacad
 
-  DevAdj ~ c*X + cz*Zplus10 + b1*M1 + b2*M2 + g3*cohort +
+  DevAdj ~ c*X + cxz*XZ + cz*Zplus10 + b1*M1 + b2*M2 + g3*cohort +
            bchsgrade + bcsmath + bparented + firstgen + bchwork + bcnonacad
 
-  # conditional indirect effects at Zplus10 = 0,1,2 (0/10/20 credits above threshold)
-  ind_M1_z0 := (a1 + a1z*0)*b1
-  ind_M1_z1 := (a1 + a1z*1)*b1
-  ind_M1_z2 := (a1 + a1z*2)*b1
+  # conditional effects along Zplus10 = 0,1,2,3,4 (0/10/20/30/40 credits above threshold)
 
-  ind_M2_z0 := (a2 + a2z*0)*b2
-  ind_M2_z1 := (a2 + a2z*1)*b2
-  ind_M2_z2 := (a2 + a2z*2)*b2
+  # X->M paths conditional on Z (a-paths)
+  a1_z0 := a1 + a1xz*0
+  a1_z1 := a1 + a1xz*1
+  a1_z2 := a1 + a1xz*2
+  a1_z3 := a1 + a1xz*3
+  a1_z4 := a1 + a1xz*4
 
-  ind_serial_z0 := (a1 + a1z*0)*d*b2
-  ind_serial_z1 := (a1 + a1z*1)*d*b2
-  ind_serial_z2 := (a1 + a1z*2)*d*b2
+  a2_z0 := a2 + a2xz*0
+  a2_z1 := a2 + a2xz*1
+  a2_z2 := a2 + a2xz*2
+  a2_z3 := a2 + a2xz*3
+  a2_z4 := a2 + a2xz*4
 
-  direct_z0 := c + cz*0
-  direct_z1 := c + cz*1
-  direct_z2 := c + cz*2
+  # indirects (parallel)
+  ind_M1_z0 := a1_z0*b1
+  ind_M1_z1 := a1_z1*b1
+  ind_M1_z2 := a1_z2*b1
+  ind_M1_z3 := a1_z3*b1
+  ind_M1_z4 := a1_z4*b1
+
+  ind_M2_z0 := a2_z0*b2
+  ind_M2_z1 := a2_z1*b2
+  ind_M2_z2 := a2_z2*b2
+  ind_M2_z3 := a2_z3*b2
+  ind_M2_z4 := a2_z4*b2
+
+  # serial
+  ind_serial_z0 := a1_z0*d*b2
+  ind_serial_z1 := a1_z1*d*b2
+  ind_serial_z2 := a1_z2*d*b2
+  ind_serial_z3 := a1_z3*d*b2
+  ind_serial_z4 := a1_z4*d*b2
+
+  # direct (X->Y) conditional on Z
+  direct_z0 := c + cxz*0
+  direct_z1 := c + cxz*1
+  direct_z2 := c + cxz*2
+  direct_z3 := c + cxz*3
+  direct_z4 := c + cxz*4
 
   total_z0 := direct_z0 + ind_M1_z0 + ind_M2_z0 + ind_serial_z0
   total_z1 := direct_z1 + ind_M1_z1 + ind_M2_z1 + ind_serial_z1
   total_z2 := direct_z2 + ind_M1_z2 + ind_M2_z2 + ind_serial_z2
+  total_z3 := direct_z3 + ind_M1_z3 + ind_M2_z3 + ind_serial_z3
+  total_z4 := direct_z4 + ind_M1_z4 + ind_M2_z4 + ind_serial_z4
 '
 
 # -------------------------
 # MG SEM FOR RQ4 (ONLY a1 VARIES BY GROUP)
 # -------------------------
 make_model_mg_a1 <- function(G) {
-  # allow only a1 to vary; everything else equal across groups
+  # allow a1 and a1xz to vary; everything else equal across groups
   a1_vec <- paste0("a1_", seq_len(G))
+  a1xz_vec <- paste0("a1xz_", seq_len(G))
   a1_free <- paste0("c(", paste(a1_vec, collapse = ","), ")*X")
+  a1xz_free <- paste0("c(", paste(a1xz_vec, collapse = ","), ")*XZ")
 
   paste0('
     # measurement
@@ -310,8 +343,8 @@ make_model_mg_a1 <- function(G) {
     M1 =~ MHWdacad + MHWdlonely + MHWdmental + MHWdpeers + MHWdexhaust
     M2 =~ QIstudent + QIfaculty + QIadvisor + QIstaff
 
-    # structural (a1 varies by group; other paths equal)
-    M1 ~ ', a1_free, ' + a1z*Zplus10 + g1*cohort +
+    # structural (a1 and a1xz vary by group; other paths equal)
+    M1 ~ ', a1_free, ' + ', a1xz_free, ' + a1z*Zplus10 + g1*cohort +
          bchsgrade + bcsmath + bparented + firstgen + bchwork + bcnonacad
 
     M2 ~ a2*X + a2z*Zplus10 + d*M1 + g2*cohort +
@@ -323,9 +356,11 @@ make_model_mg_a1 <- function(G) {
 }
 
 make_a1_equal_constraints <- function(G) {
-  # a1_1 == a1_2 == ... == a1_G
+  # a1_1 == a1_2 == ... == a1_G  AND  a1xz_1 == a1xz_2 == ... == a1xz_G
   if (G <= 1) return("")
-  paste(sapply(2:G, function(g) sprintf("a1_1 == a1_%d", g)), collapse = ";\n")
+  c1 <- paste(sapply(2:G, function(g) sprintf("a1_1 == a1_%d", g)), collapse = ";\n")
+  c2 <- paste(sapply(2:G, function(g) sprintf("a1xz_1 == a1xz_%d", g)), collapse = ";\n")
+  paste(c(c1, c2), collapse = ";\n")
 }
 
 fit_pooled <- function(dat) {
@@ -386,12 +421,14 @@ fit_mg_a1_test <- function(dat, Wvar) {
 # MONTE CARLO RUN
 # -------------------------
 # storage
-pooled_targets <- c("a1","a1z","a2","a2z","d","c","cz","b1","b2",
-                    "direct_z0","direct_z1","direct_z2",
-                    "ind_M1_z0","ind_M1_z1","ind_M1_z2",
-                    "ind_M2_z0","ind_M2_z1","ind_M2_z2",
-                    "ind_serial_z0","ind_serial_z1","ind_serial_z2",
-                    "total_z0","total_z1","total_z2")
+pooled_targets <- c("a1","a1xz","a1z","a2","a2xz","a2z","d","c","cxz","cz","b1","b2",
+                    "a1_z0","a1_z1","a1_z2","a1_z3","a1_z4",
+                    "a2_z0","a2_z1","a2_z2","a2_z3","a2_z4",
+                    "direct_z0","direct_z1","direct_z2","direct_z3","direct_z4",
+                    "ind_M1_z0","ind_M1_z1","ind_M1_z2","ind_M1_z3","ind_M1_z4",
+                    "ind_M2_z0","ind_M2_z1","ind_M2_z2","ind_M2_z3","ind_M2_z4",
+                    "ind_serial_z0","ind_serial_z1","ind_serial_z2","ind_serial_z3","ind_serial_z4",
+                    "total_z0","total_z1","total_z2","total_z3","total_z4")
 
 pooled_est <- as.data.frame(matrix(NA_real_, nrow = R_REPS, ncol = length(pooled_targets)))
 names(pooled_est) <- pooled_targets
@@ -445,8 +482,11 @@ cat("POOLED SEM (RQ1–RQ3)\n")
 cat("Convergence rate:", mean(pooled_converged), "\n")
 
 # quick bias/SD table for core paths
-core <- c("c","cz","a1","a1z","a2","a2z","b1","b2","d")
-truth <- c(c = PAR$c, cz = PAR$cz, a1 = PAR$a1, a1z = PAR$a1z, a2 = PAR$a2, a2z = PAR$a2z, b1 = PAR$b1, b2 = PAR$b2, d = PAR$d)
+core <- c("c","cxz","cz","a1","a1xz","a1z","a2","a2xz","a2z","b1","b2","d")
+truth <- c(c = PAR$c, cxz = PAR$cxz, cz = PAR$cz,
+           a1 = PAR$a1, a1xz = PAR$a1xz, a1z = PAR$a1z,
+           a2 = PAR$a2, a2xz = PAR$a2xz, a2z = PAR$a2z,
+           b1 = PAR$b1, b2 = PAR$b2, d = PAR$d)
 
 summ <- data.frame(
   param = core,
