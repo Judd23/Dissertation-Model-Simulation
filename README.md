@@ -58,6 +58,39 @@ python run_simulation.py
 
 This repo also includes R scripts (e.g., `mc_allRQs_PSW_pooled_MG_a1.R`) for Monte Carlo studies using **lavaan** with categorical indicators (WLSMV).
 
+### Johnson–Neyman plots (quick, from saved rep outputs)
+
+If you run the R Monte Carlo with `--save_fits 1`, the repo writes per-rep text outputs like:
+
+- `results/lavaan/<run_id>/rep099_pooled.txt`
+
+You can generate **Johnson–Neyman (J-N)** plots for the moderated path (the conditional effect of `X` on `M1` as a function of the centered moderator `credit_dose_c`) without re-fitting anything.
+
+Single rep:
+
+```bash
+Rscript scripts/johnson_neyman_from_rep.R \
+    --rep_file results/lavaan/<run_id>/rep099_pooled.txt \
+    --out_dir results/plots \
+    --zmin -2 --zmax 2
+```
+
+Batch mode (many reps from a run directory):
+
+```bash
+Rscript scripts/johnson_neyman_from_rep.R \
+    --run_dir results/lavaan/<run_id> \
+    --reps 91:99 \
+    --out_dir results/plots \
+    --prefix pooled \
+    --zmin -2 --zmax 2
+```
+
+Notes:
+
+- This is an **approximate** J-N calculation based on the saved coefficient estimates and SEs; it ignores the covariance between the interaction terms (because we’re parsing text output, not a stored vcov matrix).
+- Outputs are written as PNG + CSV curve files in `results/plots/`.
+
 ### Optional: multiple imputation (MI) for pooled SEM
 
 If you want to handle missingness via multiple imputation, a workable pattern is:
