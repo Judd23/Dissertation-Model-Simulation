@@ -1,0 +1,1096 @@
+# Pooled SEM (rep 1)
+# Generated: 2025-12-20 11:23:50.089314
+#
+Converged: TRUE
+
+## Summary
+
+lavaan 0.6-20 ended normally after 59 iterations
+
+  Estimator                                       DWLS
+  Optimization method                           NLMINB
+  Number of model parameters                       138
+
+  Number of observations                          3000
+  Number of missing patterns                         1
+
+Model Test User Model:
+                                              Standard      Scaled
+  Test Statistic                               296.688     518.623
+  Degrees of freedom                               334         334
+  P-value (Chi-square)                           0.930       0.000
+  Scaling correction factor                                  0.702
+  Shift parameter                                           96.188
+    simple second-order correction                                
+
+Model Test Baseline Model:
+
+  Test statistic                            142868.198   53214.897
+  Degrees of freedom                               190         190
+  P-value                                        0.000       0.000
+  Scaling correction factor                                  2.691
+
+User Model versus Baseline Model:
+
+  Comparative Fit Index (CFI)                    1.000       0.997
+  Tucker-Lewis Index (TLI)                       1.000       0.998
+                                                                  
+  Robust Comparative Fit Index (CFI)                            NA
+  Robust Tucker-Lewis Index (TLI)                               NA
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.000       0.014
+  90 Percent confidence interval - lower         0.000       0.011
+  90 Percent confidence interval - upper         0.002       0.016
+  P-value H_0: RMSEA <= 0.050                    1.000       1.000
+  P-value H_0: RMSEA >= 0.080                    0.000       0.000
+                                                                  
+  Robust RMSEA                                                  NA
+  90 Percent confidence interval - lower                        NA
+  90 Percent confidence interval - upper                        NA
+  P-value H_0: Robust RMSEA <= 0.050                            NA
+  P-value H_0: Robust RMSEA >= 0.080                            NA
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.011       0.011
+
+Parameter Estimates:
+
+  Parameterization                               Theta
+  Standard errors                           Robust.sem
+  Information                                 Expected
+  Information saturated (h1) model        Unstructured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+  Belong =~                                                             
+    SB1               0.692    0.038   18.459    0.000    1.471    0.827
+    SB2               0.706    0.038   18.497    0.000    1.499    0.832
+    SB3               0.744    0.042   17.894    0.000    1.581    0.845
+  Gains =~                                                              
+    PG1               0.641    0.035   18.081    0.000    1.489    0.830
+    PG2               0.683    0.038   18.073    0.000    1.587    0.846
+    PG3               0.633    0.035   18.305    0.000    1.471    0.827
+    PG4               0.617    0.034   18.234    0.000    1.434    0.820
+    PG5               0.607    0.032   18.771    0.000    1.411    0.816
+  SuppEnv =~                                                            
+    SE1               0.761    0.039   19.441    0.000    1.488    0.830
+    SE2               0.770    0.040   19.436    0.000    1.507    0.833
+    SE3               0.735    0.037   19.778    0.000    1.438    0.821
+  DevAdj =~                                                             
+    Belong            1.626    0.085   19.092    0.000    0.882    0.882
+    Gains             1.819    0.103   17.588    0.000    0.903    0.903
+    SuppEnv           1.459    0.071   20.685    0.000    0.860    0.860
+  M1 =~                                                                 
+    MHWdacad          1.427    0.046   31.177    0.000    1.457    0.825
+    MHWdlonely        1.364    0.045   30.420    0.000    1.393    0.812
+    MHWdmental        1.338    0.044   30.451    0.000    1.366    0.807
+    MHWdpeers         1.267    0.041   30.738    0.000    1.294    0.791
+    MHWdexhaust       1.366    0.046   29.602    0.000    1.395    0.813
+  M2 =~                                                                 
+    QIstudent         1.267    0.044   28.630    0.000    1.320    0.797
+    QIfaculty         1.243    0.045   27.908    0.000    1.295    0.792
+    QIadvisor         1.359    0.050   27.376    0.000    1.416    0.817
+    QIstaff           1.279    0.045   28.654    0.000    1.333    0.800
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+  M1 ~                                                                  
+    X         (a1)    0.058    0.040    1.450    0.147    0.056    0.028
+    XZ_c    (a1xz)   -0.013    0.039   -0.335    0.738   -0.013   -0.009
+    Zpls10_  (a1z)    0.223    0.032    7.041    0.000    0.218    0.180
+    cohort    (g1)    0.071    0.039    1.802    0.072    0.069    0.035
+    bchsgrd          -0.087    0.020   -4.264    0.000   -0.085   -0.085
+    bcsmath          -0.073    0.020   -3.631    0.000   -0.072   -0.071
+    bparntd          -0.029    0.020   -1.457    0.145   -0.028   -0.028
+    firstgn           0.100    0.041    2.405    0.016    0.098    0.047
+    bchwork           0.056    0.020    2.833    0.005    0.055    0.054
+    bcnoncd           0.048    0.020    2.456    0.014    0.047    0.047
+  M2 ~                                                                  
+    X         (a2)    0.227    0.041    5.579    0.000    0.218    0.108
+    XZ_c    (a2xz)    0.034    0.042    0.809    0.419    0.033    0.022
+    Zpls10_  (a2z)   -0.075    0.035   -2.147    0.032   -0.072   -0.059
+    M1         (d)   -0.229    0.022  -10.393    0.000   -0.224   -0.224
+    cohort    (g2)   -0.019    0.040   -0.476    0.634   -0.018   -0.009
+    bchsgrd           0.071    0.021    3.406    0.001    0.068    0.068
+    bcsmath           0.043    0.021    2.086    0.037    0.041    0.041
+    bparntd           0.047    0.020    2.320    0.020    0.045    0.045
+    firstgn          -0.094    0.043   -2.206    0.027   -0.090   -0.043
+    bchwork          -0.018    0.020   -0.913    0.361   -0.018   -0.018
+    bcnoncd          -0.065    0.020   -3.208    0.001   -0.063   -0.063
+  DevAdj ~                                                              
+    X          (c)    0.156    0.043    3.599    0.000    0.135    0.067
+    XZ_c     (cxz)   -0.329    0.037   -8.901    0.000   -0.285   -0.196
+    Zpls10_   (cz)    0.089    0.028    3.192    0.001    0.077    0.064
+    M1        (b1)   -0.286    0.024  -12.089    0.000   -0.253   -0.253
+    M2        (b2)    0.328    0.024   13.560    0.000    0.296    0.296
+    cohort    (g3)    0.050    0.042    1.194    0.233    0.043    0.022
+    bchsgrd           0.102    0.022    4.682    0.000    0.089    0.089
+    bcsmath           0.057    0.021    2.670    0.008    0.050    0.049
+    bparntd           0.048    0.021    2.265    0.024    0.041    0.041
+    firstgn          -0.123    0.044   -2.786    0.005   -0.107   -0.051
+    bchwork          -0.022    0.021   -1.052    0.293   -0.019   -0.019
+    bcnoncd          -0.078    0.021   -3.697    0.000   -0.068   -0.068
+
+Thresholds:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    SB1|t1           -1.285    0.059  -21.832    0.000   -1.285   -0.722
+    SB1|t2           -0.079    0.051   -1.549    0.121   -0.079   -0.044
+    SB1|t3            1.127    0.057   19.716    0.000    1.127    0.634
+    SB2|t1           -1.298    0.059  -21.882    0.000   -1.298   -0.720
+    SB2|t2           -0.074    0.052   -1.435    0.151   -0.074   -0.041
+    SB2|t3            1.151    0.058   19.878    0.000    1.151    0.639
+    SB3|t1           -1.320    0.062  -21.174    0.000   -1.320   -0.705
+    SB3|t2           -0.055    0.054   -1.035    0.301   -0.055   -0.030
+    SB3|t3            1.209    0.061   19.770    0.000    1.209    0.646
+    PG1|t1           -1.260    0.056  -22.461    0.000   -1.260   -0.702
+    PG1|t2           -0.054    0.051   -1.058    0.290   -0.054   -0.030
+    PG1|t3            1.154    0.056   20.734    0.000    1.154    0.643
+    PG2|t1           -1.320    0.060  -21.947    0.000   -1.320   -0.704
+    PG2|t2           -0.052    0.054   -0.966    0.334   -0.052   -0.028
+    PG2|t3            1.214    0.059   20.473    0.000    1.214    0.647
+    PG3|t1           -1.255    0.056  -22.358    0.000   -1.255   -0.706
+    PG3|t2           -0.059    0.050   -1.165    0.244   -0.059   -0.033
+    PG3|t3            1.140    0.055   20.691    0.000    1.140    0.641
+    PG4|t1           -1.238    0.055  -22.360    0.000   -1.238   -0.708
+    PG4|t2           -0.057    0.050   -1.145    0.252   -0.057   -0.032
+    PG4|t3            1.124    0.055   20.570    0.000    1.124    0.643
+    PG5|t1           -1.194    0.054  -22.156    0.000   -1.194   -0.690
+    PG5|t2           -0.029    0.049   -0.593    0.553   -0.029   -0.017
+    PG5|t3            1.137    0.054   21.157    0.000    1.137    0.658
+    SE1|t1           -1.267    0.060  -21.188    0.000   -1.267   -0.707
+    SE1|t2           -0.054    0.052   -1.053    0.292   -0.054   -0.030
+    SE1|t3            1.152    0.059   19.622    0.000    1.152    0.642
+    SE2|t1           -1.286    0.061  -21.199    0.000   -1.286   -0.711
+    SE2|t2           -0.063    0.052   -1.209    0.227   -0.063   -0.035
+    SE2|t3            1.160    0.060   19.416    0.000    1.160    0.641
+    SE3|t1           -1.203    0.057  -21.230    0.000   -1.203   -0.687
+    SE3|t2           -0.024    0.050   -0.484    0.628   -0.024   -0.014
+    SE3|t3            1.152    0.057   20.211    0.000    1.152    0.658
+    MHWdacad|t1      -1.600    0.054  -29.392    0.000   -1.600   -0.905
+    MHWdacad|t2      -0.652    0.046  -14.319    0.000   -0.652   -0.369
+    MHWdacad|t3       0.109    0.044    2.467    0.014    0.109    0.062
+    MHWdacad|t4       0.870    0.048   18.149    0.000    0.870    0.493
+    MHWdacad|t5       1.820    0.057   31.983    0.000    1.820    1.030
+    MHWdlonely|t1    -1.511    0.053  -28.722    0.000   -1.511   -0.881
+    MHWdlonely|t2    -0.589    0.044  -13.375    0.000   -0.589   -0.343
+    MHWdlonely|t3     0.151    0.043    3.515    0.000    0.151    0.088
+    MHWdlonely|t4     0.891    0.046   19.175    0.000    0.891    0.520
+    MHWdlonely|t5     1.815    0.058   31.366    0.000    1.815    1.058
+    MHWdmental|t1    -1.511    0.053  -28.694    0.000   -1.511   -0.892
+    MHWdmental|t2    -0.603    0.044  -13.684    0.000   -0.603   -0.356
+    MHWdmental|t3     0.126    0.043    2.950    0.003    0.126    0.074
+    MHWdmental|t4     0.855    0.046   18.591    0.000    0.855    0.505
+    MHWdmental|t5     1.768    0.057   30.778    0.000    1.768    1.044
+    MHWdpeers|t1     -1.468    0.050  -29.113    0.000   -1.468   -0.898
+    MHWdpeers|t2     -0.594    0.043  -13.986    0.000   -0.594   -0.364
+    MHWdpeers|t3      0.108    0.041    2.605    0.009    0.108    0.066
+    MHWdpeers|t4      0.811    0.044   18.394    0.000    0.811    0.496
+    MHWdpeers|t5      1.689    0.054   31.095    0.000    1.689    1.033
+    MHWdexhaust|t1   -1.533    0.053  -28.759    0.000   -1.533   -0.893
+    MHWdexhaust|t2   -0.611    0.045  -13.713    0.000   -0.611   -0.356
+    MHWdexhaust|t3    0.129    0.043    3.004    0.003    0.129    0.075
+    MHWdexhaust|t4    0.870    0.047   18.634    0.000    0.870    0.507
+    MHWdexhaust|t5    1.792    0.058   30.885    0.000    1.792    1.044
+    QIstudent|t1     -1.743    0.055  -31.591    0.000   -1.743   -1.053
+    QIstudent|t2     -0.912    0.044  -20.791    0.000   -0.912   -0.551
+    QIstudent|t3     -0.271    0.040   -6.793    0.000   -0.271   -0.163
+    QIstudent|t4      0.328    0.040    8.213    0.000    0.328    0.198
+    QIstudent|t5      0.969    0.044   22.055    0.000    0.969    0.585
+    QIstudent|t6      1.801    0.056   32.343    0.000    1.801    1.088
+    QIfaculty|t1     -1.651    0.055  -29.883    0.000   -1.651   -1.009
+    QIfaculty|t2     -0.830    0.044  -18.933    0.000   -0.830   -0.507
+    QIfaculty|t3     -0.197    0.040   -4.938    0.000   -0.197   -0.120
+    QIfaculty|t4      0.391    0.040    9.826    0.000    0.391    0.239
+    QIfaculty|t5      1.023    0.044   23.124    0.000    1.023    0.625
+    QIfaculty|t6      1.842    0.056   32.890    0.000    1.842    1.126
+    QIadvisor|t1     -1.751    0.060  -29.140    0.000   -1.751   -1.010
+    QIadvisor|t2     -0.883    0.046  -19.167    0.000   -0.883   -0.510
+    QIadvisor|t3     -0.214    0.042   -5.139    0.000   -0.214   -0.123
+    QIadvisor|t4      0.409    0.042    9.747    0.000    0.409    0.236
+    QIadvisor|t5      1.078    0.048   22.673    0.000    1.078    0.622
+    QIadvisor|t6      1.945    0.061   31.814    0.000    1.945    1.122
+    QIstaff|t1       -1.749    0.055  -31.743    0.000   -1.749   -1.050
+    QIstaff|t2       -0.915    0.045  -20.485    0.000   -0.915   -0.549
+    QIstaff|t3       -0.272    0.040   -6.733    0.000   -0.272   -0.163
+    QIstaff|t4        0.327    0.040    8.163    0.000    0.327    0.196
+    QIstaff|t5        0.970    0.044   22.186    0.000    0.970    0.582
+    QIstaff|t6        1.805    0.055   32.956    0.000    1.805    1.084
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+   .SB1               1.000                               1.000    0.316
+   .SB2               1.000                               1.000    0.308
+   .SB3               1.000                               1.000    0.286
+   .PG1               1.000                               1.000    0.311
+   .PG2               1.000                               1.000    0.284
+   .PG3               1.000                               1.000    0.316
+   .PG4               1.000                               1.000    0.327
+   .PG5               1.000                               1.000    0.334
+   .SE1               1.000                               1.000    0.311
+   .SE2               1.000                               1.000    0.306
+   .SE3               1.000                               1.000    0.326
+   .MHWdacad          1.000                               1.000    0.320
+   .MHWdlonely        1.000                               1.000    0.340
+   .MHWdmental        1.000                               1.000    0.349
+   .MHWdpeers         1.000                               1.000    0.374
+   .MHWdexhaust       1.000                               1.000    0.339
+   .QIstudent         1.000                               1.000    0.365
+   .QIfaculty         1.000                               1.000    0.374
+   .QIadvisor         1.000                               1.000    0.333
+   .QIstaff           1.000                               1.000    0.360
+   .Belong            1.000                               0.222    0.222
+   .Gains             1.000                               0.185    0.185
+   .SuppEnv           1.000                               0.261    0.261
+   .DevAdj            1.000                               0.753    0.753
+   .M1                1.000                               0.959    0.959
+   .M2                1.000                               0.921    0.921
+
+Scales y*:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    SB1               0.573                               0.573    1.000
+    SB2               0.565                               0.565    1.000
+    SB3               0.545                               0.545    1.000
+    PG1               0.569                               0.569    1.000
+    PG2               0.544                               0.544    1.000
+    PG3               0.573                               0.573    1.000
+    PG4               0.583                               0.583    1.000
+    PG5               0.589                               0.589    1.000
+    SE1               0.568                               0.568    1.000
+    SE2               0.563                               0.563    1.000
+    SE3               0.581                               0.581    1.000
+    MHWdacad          0.574                               0.574    1.000
+    MHWdlonely        0.591                               0.591    1.000
+    MHWdmental        0.599                               0.599    1.000
+    MHWdpeers         0.620                               0.620    1.000
+    MHWdexhaust       0.591                               0.591    1.000
+    QIstudent         0.610                               0.610    1.000
+    QIfaculty         0.617                               0.617    1.000
+    QIadvisor         0.583                               0.583    1.000
+    QIstaff           0.606                               0.606    1.000
+
+R-Square:
+                   Estimate
+    SB1               0.684
+    SB2               0.692
+    SB3               0.714
+    PG1               0.689
+    PG2               0.716
+    PG3               0.684
+    PG4               0.673
+    PG5               0.666
+    SE1               0.689
+    SE2               0.694
+    SE3               0.674
+    MHWdacad          0.680
+    MHWdlonely        0.660
+    MHWdmental        0.651
+    MHWdpeers         0.626
+    MHWdexhaust       0.661
+    QIstudent         0.635
+    QIfaculty         0.626
+    QIadvisor         0.667
+    QIstaff           0.640
+    Belong            0.778
+    Gains             0.815
+    SuppEnv           0.739
+    DevAdj            0.247
+    M1                0.041
+    M2                0.079
+
+Defined Parameters:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    a1_z0             0.058    0.040    1.450    0.147    0.056    0.028
+    a1_z1             0.045    0.036    1.256    0.209    0.044    0.019
+    a1_z2             0.032    0.063    0.503    0.615    0.031    0.011
+    a1_z3             0.019    0.098    0.190    0.849    0.018    0.002
+    a1_z4             0.006    0.136    0.042    0.967    0.006   -0.007
+    a2_z0             0.227    0.041    5.579    0.000    0.218    0.108
+    a2_z1             0.261    0.040    6.594    0.000    0.250    0.131
+    a2_z2             0.295    0.071    4.161    0.000    0.283    0.153
+    a2_z3             0.329    0.110    3.000    0.003    0.316    0.176
+    a2_z4             0.363    0.150    2.416    0.016    0.348    0.198
+    ind_M1_z0        -0.016    0.011   -1.443    0.149   -0.014   -0.007
+    ind_M1_z1        -0.013    0.010   -1.250    0.211   -0.011   -0.005
+    ind_M1_z2        -0.009    0.018   -0.503    0.615   -0.008   -0.003
+    ind_M1_z3        -0.005    0.028   -0.190    0.850   -0.005   -0.000
+    ind_M1_z4        -0.002    0.039   -0.042    0.967   -0.001    0.002
+    ind_M2_z0         0.074    0.014    5.162    0.000    0.064    0.032
+    ind_M2_z1         0.085    0.014    5.987    0.000    0.074    0.039
+    ind_M2_z2         0.097    0.024    4.007    0.000    0.084    0.045
+    ind_M2_z3         0.108    0.037    2.944    0.003    0.093    0.052
+    ind_M2_z4         0.119    0.050    2.388    0.017    0.103    0.059
+    ind_serial_z0    -0.004    0.003   -1.429    0.153   -0.004   -0.002
+    ind_serial_z1    -0.003    0.003   -1.244    0.213   -0.003   -0.001
+    ind_serial_z2    -0.002    0.005   -0.503    0.615   -0.002   -0.001
+    ind_serial_z3    -0.001    0.007   -0.190    0.849   -0.001   -0.000
+    ind_serial_z4    -0.000    0.010   -0.042    0.967   -0.000    0.000
+    direct_z0         0.156    0.043    3.599    0.000    0.135    0.067
+    direct_z1        -0.173    0.031   -5.555    0.000   -0.150   -0.129
+    direct_z2        -0.502    0.053   -9.497    0.000   -0.435   -0.325
+    direct_z3        -0.831    0.086   -9.693    0.000   -0.721   -0.521
+    direct_z4        -1.159    0.121   -9.587    0.000   -1.006   -0.717
+    total_z0          0.209    0.047    4.494    0.000    0.182    0.090
+    total_z1         -0.104    0.033   -3.156    0.002   -0.090   -0.096
+    total_z2         -0.417    0.053   -7.807    0.000   -0.361   -0.283
+    total_z3         -0.730    0.086   -8.436    0.000   -0.633   -0.469
+    total_z4         -1.043    0.122   -8.520    0.000   -0.904   -0.656
+
+
+## Fit measures
+
+                         npar                          fmin 
+                      138.000                         0.049 
+                        chisq                            df 
+                      296.688                       334.000 
+                       pvalue                  chisq.scaled 
+                        0.930                       518.623 
+                    df.scaled                 pvalue.scaled 
+                      334.000                         0.000 
+         chisq.scaling.factor                baseline.chisq 
+                        0.702                    142868.198 
+                  baseline.df               baseline.pvalue 
+                      190.000                         0.000 
+        baseline.chisq.scaled            baseline.df.scaled 
+                    53214.897                       190.000 
+       baseline.pvalue.scaled baseline.chisq.scaling.factor 
+                        0.000                         2.691 
+                          cfi                           tli 
+                        1.000                         1.000 
+                   cfi.scaled                    tli.scaled 
+                        0.997                         0.998 
+                   cfi.robust                    tli.robust 
+                           NA                            NA 
+                         nnfi                           rfi 
+                        1.000                            NA 
+                          nfi                          pnfi 
+                           NA                         1.754 
+                          ifi                           rni 
+                        1.000                         1.000 
+                  nnfi.scaled                    rfi.scaled 
+                        0.998                            NA 
+                   nfi.scaled                   pnfi.scaled 
+                           NA                         1.741 
+                   ifi.scaled                    rni.scaled 
+                        0.997                         0.997 
+                  nnfi.robust                    rni.robust 
+                           NA                            NA 
+                        rmsea                rmsea.ci.lower 
+                        0.000                         0.000 
+               rmsea.ci.upper                rmsea.ci.level 
+                        0.002                         0.900 
+                 rmsea.pvalue                rmsea.close.h0 
+                        1.000                         0.050 
+        rmsea.notclose.pvalue             rmsea.notclose.h0 
+                        0.000                         0.080 
+                 rmsea.scaled         rmsea.ci.lower.scaled 
+                        0.014                         0.011 
+        rmsea.ci.upper.scaled           rmsea.pvalue.scaled 
+                        0.016                         1.000 
+ rmsea.notclose.pvalue.scaled                  rmsea.robust 
+                        0.000                            NA 
+        rmsea.ci.lower.robust         rmsea.ci.upper.robust 
+                           NA                            NA 
+          rmsea.pvalue.robust  rmsea.notclose.pvalue.robust 
+                           NA                            NA 
+                          rmr                    rmr_nomean 
+                        0.009                         0.011 
+                         srmr                  srmr_bentler 
+                        0.011                         0.009 
+          srmr_bentler_nomean                          crmr 
+                        0.011                         0.010 
+                  crmr_nomean                    srmr_mplus 
+                        0.012                            NA 
+            srmr_mplus_nomean                         cn_05 
+                           NA                      3818.067 
+                        cn_01                           gfi 
+                     4014.483                         0.998 
+                         agfi                          pgfi 
+                        0.998                         0.706 
+                          mfi                          wrmr 
+                        1.006                         0.793 
+
+## Parameter estimates
+
+              lhs  op                                         rhs         label
+1          Belong  =~                                         SB1              
+2          Belong  =~                                         SB2              
+3          Belong  =~                                         SB3              
+4           Gains  =~                                         PG1              
+5           Gains  =~                                         PG2              
+6           Gains  =~                                         PG3              
+7           Gains  =~                                         PG4              
+8           Gains  =~                                         PG5              
+9         SuppEnv  =~                                         SE1              
+10        SuppEnv  =~                                         SE2              
+11        SuppEnv  =~                                         SE3              
+12         DevAdj  =~                                      Belong              
+13         DevAdj  =~                                       Gains              
+14         DevAdj  =~                                     SuppEnv              
+15             M1  =~                                    MHWdacad              
+16             M1  =~                                  MHWdlonely              
+17             M1  =~                                  MHWdmental              
+18             M1  =~                                   MHWdpeers              
+19             M1  =~                                 MHWdexhaust              
+20             M2  =~                                   QIstudent              
+21             M2  =~                                   QIfaculty              
+22             M2  =~                                   QIadvisor              
+23             M2  =~                                     QIstaff              
+24             M1   ~                                           X            a1
+25             M1   ~                                        XZ_c          a1xz
+26             M1   ~                                   Zplus10_c           a1z
+27             M1   ~                                      cohort            g1
+28             M1   ~                                   bchsgrade              
+29             M1   ~                                     bcsmath              
+30             M1   ~                                   bparented              
+31             M1   ~                                    firstgen              
+32             M1   ~                                     bchwork              
+33             M1   ~                                   bcnonacad              
+34             M2   ~                                           X            a2
+35             M2   ~                                        XZ_c          a2xz
+36             M2   ~                                   Zplus10_c           a2z
+37             M2   ~                                          M1             d
+38             M2   ~                                      cohort            g2
+39             M2   ~                                   bchsgrade              
+40             M2   ~                                     bcsmath              
+41             M2   ~                                   bparented              
+42             M2   ~                                    firstgen              
+43             M2   ~                                     bchwork              
+44             M2   ~                                   bcnonacad              
+45         DevAdj   ~                                           X             c
+46         DevAdj   ~                                        XZ_c           cxz
+47         DevAdj   ~                                   Zplus10_c            cz
+48         DevAdj   ~                                          M1            b1
+49         DevAdj   ~                                          M2            b2
+50         DevAdj   ~                                      cohort            g3
+51         DevAdj   ~                                   bchsgrade              
+52         DevAdj   ~                                     bcsmath              
+53         DevAdj   ~                                   bparented              
+54         DevAdj   ~                                    firstgen              
+55         DevAdj   ~                                     bchwork              
+56         DevAdj   ~                                   bcnonacad              
+57            SB1   |                                          t1              
+58            SB1   |                                          t2              
+59            SB1   |                                          t3              
+60            SB2   |                                          t1              
+61            SB2   |                                          t2              
+62            SB2   |                                          t3              
+63            SB3   |                                          t1              
+64            SB3   |                                          t2              
+65            SB3   |                                          t3              
+66            PG1   |                                          t1              
+67            PG1   |                                          t2              
+68            PG1   |                                          t3              
+69            PG2   |                                          t1              
+70            PG2   |                                          t2              
+71            PG2   |                                          t3              
+72            PG3   |                                          t1              
+73            PG3   |                                          t2              
+74            PG3   |                                          t3              
+75            PG4   |                                          t1              
+76            PG4   |                                          t2              
+77            PG4   |                                          t3              
+78            PG5   |                                          t1              
+79            PG5   |                                          t2              
+80            PG5   |                                          t3              
+81            SE1   |                                          t1              
+82            SE1   |                                          t2              
+83            SE1   |                                          t3              
+84            SE2   |                                          t1              
+85            SE2   |                                          t2              
+86            SE2   |                                          t3              
+87            SE3   |                                          t1              
+88            SE3   |                                          t2              
+89            SE3   |                                          t3              
+90       MHWdacad   |                                          t1              
+91       MHWdacad   |                                          t2              
+92       MHWdacad   |                                          t3              
+93       MHWdacad   |                                          t4              
+94       MHWdacad   |                                          t5              
+95     MHWdlonely   |                                          t1              
+96     MHWdlonely   |                                          t2              
+97     MHWdlonely   |                                          t3              
+98     MHWdlonely   |                                          t4              
+99     MHWdlonely   |                                          t5              
+100    MHWdmental   |                                          t1              
+101    MHWdmental   |                                          t2              
+102    MHWdmental   |                                          t3              
+103    MHWdmental   |                                          t4              
+104    MHWdmental   |                                          t5              
+105     MHWdpeers   |                                          t1              
+106     MHWdpeers   |                                          t2              
+107     MHWdpeers   |                                          t3              
+108     MHWdpeers   |                                          t4              
+109     MHWdpeers   |                                          t5              
+110   MHWdexhaust   |                                          t1              
+111   MHWdexhaust   |                                          t2              
+112   MHWdexhaust   |                                          t3              
+113   MHWdexhaust   |                                          t4              
+114   MHWdexhaust   |                                          t5              
+115     QIstudent   |                                          t1              
+116     QIstudent   |                                          t2              
+117     QIstudent   |                                          t3              
+118     QIstudent   |                                          t4              
+119     QIstudent   |                                          t5              
+120     QIstudent   |                                          t6              
+121     QIfaculty   |                                          t1              
+122     QIfaculty   |                                          t2              
+123     QIfaculty   |                                          t3              
+124     QIfaculty   |                                          t4              
+125     QIfaculty   |                                          t5              
+126     QIfaculty   |                                          t6              
+127     QIadvisor   |                                          t1              
+128     QIadvisor   |                                          t2              
+129     QIadvisor   |                                          t3              
+130     QIadvisor   |                                          t4              
+131     QIadvisor   |                                          t5              
+132     QIadvisor   |                                          t6              
+133       QIstaff   |                                          t1              
+134       QIstaff   |                                          t2              
+135       QIstaff   |                                          t3              
+136       QIstaff   |                                          t4              
+137       QIstaff   |                                          t5              
+138       QIstaff   |                                          t6              
+139           SB1  ~~                                         SB1              
+140           SB2  ~~                                         SB2              
+141           SB3  ~~                                         SB3              
+142           PG1  ~~                                         PG1              
+143           PG2  ~~                                         PG2              
+144           PG3  ~~                                         PG3              
+145           PG4  ~~                                         PG4              
+146           PG5  ~~                                         PG5              
+147           SE1  ~~                                         SE1              
+148           SE2  ~~                                         SE2              
+149           SE3  ~~                                         SE3              
+150      MHWdacad  ~~                                    MHWdacad              
+151    MHWdlonely  ~~                                  MHWdlonely              
+152    MHWdmental  ~~                                  MHWdmental              
+153     MHWdpeers  ~~                                   MHWdpeers              
+154   MHWdexhaust  ~~                                 MHWdexhaust              
+155     QIstudent  ~~                                   QIstudent              
+156     QIfaculty  ~~                                   QIfaculty              
+157     QIadvisor  ~~                                   QIadvisor              
+158       QIstaff  ~~                                     QIstaff              
+159        Belong  ~~                                      Belong              
+160         Gains  ~~                                       Gains              
+161       SuppEnv  ~~                                     SuppEnv              
+162        DevAdj  ~~                                      DevAdj              
+163            M1  ~~                                          M1              
+164            M2  ~~                                          M2              
+165             X  ~~                                           X              
+166             X  ~~                                        XZ_c              
+167             X  ~~                                   Zplus10_c              
+168             X  ~~                                      cohort              
+169             X  ~~                                   bchsgrade              
+170             X  ~~                                     bcsmath              
+171             X  ~~                                   bparented              
+172             X  ~~                                    firstgen              
+173             X  ~~                                     bchwork              
+174             X  ~~                                   bcnonacad              
+175          XZ_c  ~~                                        XZ_c              
+176          XZ_c  ~~                                   Zplus10_c              
+177          XZ_c  ~~                                      cohort              
+178          XZ_c  ~~                                   bchsgrade              
+179          XZ_c  ~~                                     bcsmath              
+180          XZ_c  ~~                                   bparented              
+181          XZ_c  ~~                                    firstgen              
+182          XZ_c  ~~                                     bchwork              
+183          XZ_c  ~~                                   bcnonacad              
+184     Zplus10_c  ~~                                   Zplus10_c              
+185     Zplus10_c  ~~                                      cohort              
+186     Zplus10_c  ~~                                   bchsgrade              
+187     Zplus10_c  ~~                                     bcsmath              
+188     Zplus10_c  ~~                                   bparented              
+189     Zplus10_c  ~~                                    firstgen              
+190     Zplus10_c  ~~                                     bchwork              
+191     Zplus10_c  ~~                                   bcnonacad              
+192        cohort  ~~                                      cohort              
+193        cohort  ~~                                   bchsgrade              
+194        cohort  ~~                                     bcsmath              
+195        cohort  ~~                                   bparented              
+196        cohort  ~~                                    firstgen              
+197        cohort  ~~                                     bchwork              
+198        cohort  ~~                                   bcnonacad              
+199     bchsgrade  ~~                                   bchsgrade              
+200     bchsgrade  ~~                                     bcsmath              
+201     bchsgrade  ~~                                   bparented              
+202     bchsgrade  ~~                                    firstgen              
+203     bchsgrade  ~~                                     bchwork              
+204     bchsgrade  ~~                                   bcnonacad              
+205       bcsmath  ~~                                     bcsmath              
+206       bcsmath  ~~                                   bparented              
+207       bcsmath  ~~                                    firstgen              
+208       bcsmath  ~~                                     bchwork              
+209       bcsmath  ~~                                   bcnonacad              
+210     bparented  ~~                                   bparented              
+211     bparented  ~~                                    firstgen              
+212     bparented  ~~                                     bchwork              
+213     bparented  ~~                                   bcnonacad              
+214      firstgen  ~~                                    firstgen              
+215      firstgen  ~~                                     bchwork              
+216      firstgen  ~~                                   bcnonacad              
+217       bchwork  ~~                                     bchwork              
+218       bchwork  ~~                                   bcnonacad              
+219     bcnonacad  ~~                                   bcnonacad              
+220           SB1 ~*~                                         SB1              
+221           SB2 ~*~                                         SB2              
+222           SB3 ~*~                                         SB3              
+223           PG1 ~*~                                         PG1              
+224           PG2 ~*~                                         PG2              
+225           PG3 ~*~                                         PG3              
+226           PG4 ~*~                                         PG4              
+227           PG5 ~*~                                         PG5              
+228           SE1 ~*~                                         SE1              
+229           SE2 ~*~                                         SE2              
+230           SE3 ~*~                                         SE3              
+231      MHWdacad ~*~                                    MHWdacad              
+232    MHWdlonely ~*~                                  MHWdlonely              
+233    MHWdmental ~*~                                  MHWdmental              
+234     MHWdpeers ~*~                                   MHWdpeers              
+235   MHWdexhaust ~*~                                 MHWdexhaust              
+236     QIstudent ~*~                                   QIstudent              
+237     QIfaculty ~*~                                   QIfaculty              
+238     QIadvisor ~*~                                   QIadvisor              
+239       QIstaff ~*~                                     QIstaff              
+240           SB1  ~1                                                          
+241           SB2  ~1                                                          
+242           SB3  ~1                                                          
+243           PG1  ~1                                                          
+244           PG2  ~1                                                          
+245           PG3  ~1                                                          
+246           PG4  ~1                                                          
+247           PG5  ~1                                                          
+248           SE1  ~1                                                          
+249           SE2  ~1                                                          
+250           SE3  ~1                                                          
+251      MHWdacad  ~1                                                          
+252    MHWdlonely  ~1                                                          
+253    MHWdmental  ~1                                                          
+254     MHWdpeers  ~1                                                          
+255   MHWdexhaust  ~1                                                          
+256     QIstudent  ~1                                                          
+257     QIfaculty  ~1                                                          
+258     QIadvisor  ~1                                                          
+259       QIstaff  ~1                                                          
+260             X  ~1                                                          
+261          XZ_c  ~1                                                          
+262     Zplus10_c  ~1                                                          
+263        cohort  ~1                                                          
+264     bchsgrade  ~1                                                          
+265       bcsmath  ~1                                                          
+266     bparented  ~1                                                          
+267      firstgen  ~1                                                          
+268       bchwork  ~1                                                          
+269     bcnonacad  ~1                                                          
+270        Belong  ~1                                                          
+271         Gains  ~1                                                          
+272       SuppEnv  ~1                                                          
+273        DevAdj  ~1                                                          
+274            M1  ~1                                                          
+275            M2  ~1                                                          
+276         a1_z0  :=                                   a1+a1xz*0         a1_z0
+277         a1_z1  :=                                   a1+a1xz*1         a1_z1
+278         a1_z2  :=                                   a1+a1xz*2         a1_z2
+279         a1_z3  :=                                   a1+a1xz*3         a1_z3
+280         a1_z4  :=                                   a1+a1xz*4         a1_z4
+281         a2_z0  :=                                   a2+a2xz*0         a2_z0
+282         a2_z1  :=                                   a2+a2xz*1         a2_z1
+283         a2_z2  :=                                   a2+a2xz*2         a2_z2
+284         a2_z3  :=                                   a2+a2xz*3         a2_z3
+285         a2_z4  :=                                   a2+a2xz*4         a2_z4
+286     ind_M1_z0  :=                                    a1_z0*b1     ind_M1_z0
+287     ind_M1_z1  :=                                    a1_z1*b1     ind_M1_z1
+288     ind_M1_z2  :=                                    a1_z2*b1     ind_M1_z2
+289     ind_M1_z3  :=                                    a1_z3*b1     ind_M1_z3
+290     ind_M1_z4  :=                                    a1_z4*b1     ind_M1_z4
+291     ind_M2_z0  :=                                    a2_z0*b2     ind_M2_z0
+292     ind_M2_z1  :=                                    a2_z1*b2     ind_M2_z1
+293     ind_M2_z2  :=                                    a2_z2*b2     ind_M2_z2
+294     ind_M2_z3  :=                                    a2_z3*b2     ind_M2_z3
+295     ind_M2_z4  :=                                    a2_z4*b2     ind_M2_z4
+296 ind_serial_z0  :=                                  a1_z0*d*b2 ind_serial_z0
+297 ind_serial_z1  :=                                  a1_z1*d*b2 ind_serial_z1
+298 ind_serial_z2  :=                                  a1_z2*d*b2 ind_serial_z2
+299 ind_serial_z3  :=                                  a1_z3*d*b2 ind_serial_z3
+300 ind_serial_z4  :=                                  a1_z4*d*b2 ind_serial_z4
+301     direct_z0  :=                                     c+cxz*0     direct_z0
+302     direct_z1  :=                                     c+cxz*1     direct_z1
+303     direct_z2  :=                                     c+cxz*2     direct_z2
+304     direct_z3  :=                                     c+cxz*3     direct_z3
+305     direct_z4  :=                                     c+cxz*4     direct_z4
+306      total_z0  := direct_z0+ind_M1_z0+ind_M2_z0+ind_serial_z0      total_z0
+307      total_z1  := direct_z1+ind_M1_z1+ind_M2_z1+ind_serial_z1      total_z1
+308      total_z2  := direct_z2+ind_M1_z2+ind_M2_z2+ind_serial_z2      total_z2
+309      total_z3  := direct_z3+ind_M1_z3+ind_M2_z3+ind_serial_z3      total_z3
+310      total_z4  := direct_z4+ind_M1_z4+ind_M2_z4+ind_serial_z4      total_z4
+       est    se       z pvalue ci.lower ci.upper std.lv std.all std.nox
+1    0.692 0.038  18.459  0.000    0.619    0.766  1.471   0.827   0.827
+2    0.706 0.038  18.497  0.000    0.631    0.780  1.499   0.832   0.832
+3    0.744 0.042  17.894  0.000    0.663    0.826  1.581   0.845   0.845
+4    0.641 0.035  18.081  0.000    0.571    0.710  1.489   0.830   0.830
+5    0.683 0.038  18.073  0.000    0.609    0.757  1.587   0.846   0.846
+6    0.633 0.035  18.305  0.000    0.565    0.701  1.471   0.827   0.827
+7    0.617 0.034  18.234  0.000    0.551    0.684  1.434   0.820   0.820
+8    0.607 0.032  18.771  0.000    0.544    0.671  1.411   0.816   0.816
+9    0.761 0.039  19.441  0.000    0.684    0.837  1.488   0.830   0.830
+10   0.770 0.040  19.436  0.000    0.692    0.848  1.507   0.833   0.833
+11   0.735 0.037  19.778  0.000    0.662    0.808  1.438   0.821   0.821
+12   1.626 0.085  19.092  0.000    1.459    1.793  0.882   0.882   0.882
+13   1.819 0.103  17.588  0.000    1.617    2.022  0.903   0.903   0.903
+14   1.459 0.071  20.685  0.000    1.321    1.598  0.860   0.860   0.860
+15   1.427 0.046  31.177  0.000    1.337    1.517  1.457   0.825   0.825
+16   1.364 0.045  30.420  0.000    1.276    1.452  1.393   0.812   0.812
+17   1.338 0.044  30.451  0.000    1.251    1.424  1.366   0.807   0.807
+18   1.267 0.041  30.738  0.000    1.186    1.348  1.294   0.791   0.791
+19   1.366 0.046  29.602  0.000    1.276    1.457  1.395   0.813   0.813
+20   1.267 0.044  28.630  0.000    1.180    1.354  1.320   0.797   0.797
+21   1.243 0.045  27.908  0.000    1.156    1.330  1.295   0.792   0.792
+22   1.359 0.050  27.376  0.000    1.262    1.457  1.416   0.817   0.817
+23   1.279 0.045  28.654  0.000    1.192    1.367  1.333   0.800   0.800
+24   0.058 0.040   1.450  0.147   -0.020    0.136  0.056   0.028   0.056
+25  -0.013 0.039  -0.335  0.738   -0.089    0.063 -0.013  -0.009  -0.013
+26   0.223 0.032   7.041  0.000    0.161    0.284  0.218   0.180   0.218
+27   0.071 0.039   1.802  0.072   -0.006    0.148  0.069   0.035   0.069
+28  -0.087 0.020  -4.264  0.000   -0.127   -0.047 -0.085  -0.085  -0.085
+29  -0.073 0.020  -3.631  0.000   -0.112   -0.034 -0.072  -0.071  -0.072
+30  -0.029 0.020  -1.457  0.145   -0.067    0.010 -0.028  -0.028  -0.028
+31   0.100 0.041   2.405  0.016    0.018    0.181  0.098   0.047   0.098
+32   0.056 0.020   2.833  0.005    0.017    0.094  0.055   0.054   0.055
+33   0.048 0.020   2.456  0.014    0.010    0.086  0.047   0.047   0.047
+34   0.227 0.041   5.579  0.000    0.147    0.306  0.218   0.108   0.218
+35   0.034 0.042   0.809  0.419   -0.048    0.116  0.033   0.022   0.033
+36  -0.075 0.035  -2.147  0.032   -0.143   -0.007 -0.072  -0.059  -0.072
+37  -0.229 0.022 -10.393  0.000   -0.272   -0.186 -0.224  -0.224  -0.224
+38  -0.019 0.040  -0.476  0.634   -0.098    0.060 -0.018  -0.009  -0.018
+39   0.071 0.021   3.406  0.001    0.030    0.112  0.068   0.068   0.068
+40   0.043 0.021   2.086  0.037    0.003    0.084  0.041   0.041   0.041
+41   0.047 0.020   2.320  0.020    0.007    0.087  0.045   0.045   0.045
+42  -0.094 0.043  -2.206  0.027   -0.177   -0.010 -0.090  -0.043  -0.090
+43  -0.018 0.020  -0.913  0.361   -0.058    0.021 -0.018  -0.018  -0.018
+44  -0.065 0.020  -3.208  0.001   -0.105   -0.025 -0.063  -0.063  -0.063
+45   0.156 0.043   3.599  0.000    0.071    0.241  0.135   0.067   0.135
+46  -0.329 0.037  -8.901  0.000   -0.401   -0.256 -0.285  -0.196  -0.285
+47   0.089 0.028   3.192  0.001    0.034    0.144  0.077   0.064   0.077
+48  -0.286 0.024 -12.089  0.000   -0.332   -0.239 -0.253  -0.253  -0.253
+49   0.328 0.024  13.560  0.000    0.280    0.375  0.296   0.296   0.296
+50   0.050 0.042   1.194  0.233   -0.032    0.132  0.043   0.022   0.043
+51   0.102 0.022   4.682  0.000    0.060    0.145  0.089   0.089   0.089
+52   0.057 0.021   2.670  0.008    0.015    0.099  0.050   0.049   0.050
+53   0.048 0.021   2.265  0.024    0.006    0.089  0.041   0.041   0.041
+54  -0.123 0.044  -2.786  0.005   -0.210   -0.037 -0.107  -0.051  -0.107
+55  -0.022 0.021  -1.052  0.293   -0.063    0.019 -0.019  -0.019  -0.019
+56  -0.078 0.021  -3.697  0.000   -0.120   -0.037 -0.068  -0.068  -0.068
+57  -1.285 0.059 -21.832  0.000   -1.400   -1.169 -1.285  -0.722  -0.722
+58  -0.079 0.051  -1.549  0.121   -0.178    0.021 -0.079  -0.044  -0.044
+59   1.127 0.057  19.716  0.000    1.015    1.239  1.127   0.634   0.634
+60  -1.298 0.059 -21.882  0.000   -1.414   -1.181 -1.298  -0.720  -0.720
+61  -0.074 0.052  -1.435  0.151   -0.175    0.027 -0.074  -0.041  -0.041
+62   1.151 0.058  19.878  0.000    1.037    1.264  1.151   0.639   0.639
+63  -1.320 0.062 -21.174  0.000   -1.442   -1.197 -1.320  -0.705  -0.705
+64  -0.055 0.054  -1.035  0.301   -0.161    0.050 -0.055  -0.030  -0.030
+65   1.209 0.061  19.770  0.000    1.089    1.329  1.209   0.646   0.646
+66  -1.260 0.056 -22.461  0.000   -1.370   -1.150 -1.260  -0.702  -0.702
+67  -0.054 0.051  -1.058  0.290   -0.153    0.046 -0.054  -0.030  -0.030
+68   1.154 0.056  20.734  0.000    1.045    1.263  1.154   0.643   0.643
+69  -1.320 0.060 -21.947  0.000   -1.437   -1.202 -1.320  -0.704  -0.704
+70  -0.052 0.054  -0.966  0.334   -0.157    0.054 -0.052  -0.028  -0.028
+71   1.214 0.059  20.473  0.000    1.097    1.330  1.214   0.647   0.647
+72  -1.255 0.056 -22.358  0.000   -1.365   -1.145 -1.255  -0.706  -0.706
+73  -0.059 0.050  -1.165  0.244   -0.157    0.040 -0.059  -0.033  -0.033
+74   1.140 0.055  20.691  0.000    1.032    1.248  1.140   0.641   0.641
+75  -1.238 0.055 -22.360  0.000   -1.346   -1.129 -1.238  -0.708  -0.708
+76  -0.057 0.050  -1.145  0.252   -0.154    0.040 -0.057  -0.032  -0.032
+77   1.124 0.055  20.570  0.000    1.017    1.231  1.124   0.643   0.643
+78  -1.194 0.054 -22.156  0.000   -1.300   -1.088 -1.194  -0.690  -0.690
+79  -0.029 0.049  -0.593  0.553   -0.125    0.067 -0.029  -0.017  -0.017
+80   1.137 0.054  21.157  0.000    1.032    1.243  1.137   0.658   0.658
+81  -1.267 0.060 -21.188  0.000   -1.385   -1.150 -1.267  -0.707  -0.707
+82  -0.054 0.052  -1.053  0.292   -0.155    0.047 -0.054  -0.030  -0.030
+83   1.152 0.059  19.622  0.000    1.037    1.267  1.152   0.642   0.642
+84  -1.286 0.061 -21.199  0.000   -1.405   -1.167 -1.286  -0.711  -0.711
+85  -0.063 0.052  -1.209  0.227   -0.165    0.039 -0.063  -0.035  -0.035
+86   1.160 0.060  19.416  0.000    1.043    1.277  1.160   0.641   0.641
+87  -1.203 0.057 -21.230  0.000   -1.314   -1.092 -1.203  -0.687  -0.687
+88  -0.024 0.050  -0.484  0.628   -0.121    0.073 -0.024  -0.014  -0.014
+89   1.152 0.057  20.211  0.000    1.040    1.264  1.152   0.658   0.658
+90  -1.600 0.054 -29.392  0.000   -1.706   -1.493 -1.600  -0.905  -0.905
+91  -0.652 0.046 -14.319  0.000   -0.741   -0.563 -0.652  -0.369  -0.369
+92   0.109 0.044   2.467  0.014    0.022    0.196  0.109   0.062   0.062
+93   0.870 0.048  18.149  0.000    0.776    0.964  0.870   0.493   0.493
+94   1.820 0.057  31.983  0.000    1.709    1.932  1.820   1.030   1.030
+95  -1.511 0.053 -28.722  0.000   -1.614   -1.407 -1.511  -0.881  -0.881
+96  -0.589 0.044 -13.375  0.000   -0.675   -0.502 -0.589  -0.343  -0.343
+97   0.151 0.043   3.515  0.000    0.067    0.235  0.151   0.088   0.088
+98   0.891 0.046  19.175  0.000    0.800    0.983  0.891   0.520   0.520
+99   1.815 0.058  31.366  0.000    1.701    1.928  1.815   1.058   1.058
+100 -1.511 0.053 -28.694  0.000   -1.614   -1.407 -1.511  -0.892  -0.892
+101 -0.603 0.044 -13.684  0.000   -0.690   -0.517 -0.603  -0.356  -0.356
+102  0.126 0.043   2.950  0.003    0.042    0.210  0.126   0.074   0.074
+103  0.855 0.046  18.591  0.000    0.765    0.945  0.855   0.505   0.505
+104  1.768 0.057  30.778  0.000    1.655    1.880  1.768   1.044   1.044
+105 -1.468 0.050 -29.113  0.000   -1.567   -1.370 -1.468  -0.898  -0.898
+106 -0.594 0.043 -13.986  0.000   -0.678   -0.511 -0.594  -0.364  -0.364
+107  0.108 0.041   2.605  0.009    0.027    0.188  0.108   0.066   0.066
+108  0.811 0.044  18.394  0.000    0.724    0.897  0.811   0.496   0.496
+109  1.689 0.054  31.095  0.000    1.583    1.796  1.689   1.033   1.033
+110 -1.533 0.053 -28.759  0.000   -1.637   -1.428 -1.533  -0.893  -0.893
+111 -0.611 0.045 -13.713  0.000   -0.698   -0.524 -0.611  -0.356  -0.356
+112  0.129 0.043   3.004  0.003    0.045    0.213  0.129   0.075   0.075
+113  0.870 0.047  18.634  0.000    0.778    0.961  0.870   0.507   0.507
+114  1.792 0.058  30.885  0.000    1.678    1.905  1.792   1.044   1.044
+115 -1.743 0.055 -31.591  0.000   -1.851   -1.635 -1.743  -1.053  -1.053
+116 -0.912 0.044 -20.791  0.000   -0.998   -0.826 -0.912  -0.551  -0.551
+117 -0.271 0.040  -6.793  0.000   -0.349   -0.192 -0.271  -0.163  -0.163
+118  0.328 0.040   8.213  0.000    0.249    0.406  0.328   0.198   0.198
+119  0.969 0.044  22.055  0.000    0.883    1.055  0.969   0.585   0.585
+120  1.801 0.056  32.343  0.000    1.692    1.910  1.801   1.088   1.088
+121 -1.651 0.055 -29.883  0.000   -1.760   -1.543 -1.651  -1.009  -1.009
+122 -0.830 0.044 -18.933  0.000   -0.916   -0.744 -0.830  -0.507  -0.507
+123 -0.197 0.040  -4.938  0.000   -0.275   -0.119 -0.197  -0.120  -0.120
+124  0.391 0.040   9.826  0.000    0.313    0.469  0.391   0.239   0.239
+125  1.023 0.044  23.124  0.000    0.936    1.110  1.023   0.625   0.625
+126  1.842 0.056  32.890  0.000    1.732    1.951  1.842   1.126   1.126
+127 -1.751 0.060 -29.140  0.000   -1.869   -1.633 -1.751  -1.010  -1.010
+128 -0.883 0.046 -19.167  0.000   -0.974   -0.793 -0.883  -0.510  -0.510
+129 -0.214 0.042  -5.139  0.000   -0.296   -0.132 -0.214  -0.123  -0.123
+130  0.409 0.042   9.747  0.000    0.327    0.491  0.409   0.236   0.236
+131  1.078 0.048  22.673  0.000    0.985    1.171  1.078   0.622   0.622
+132  1.945 0.061  31.814  0.000    1.825    2.065  1.945   1.122   1.122
+133 -1.749 0.055 -31.743  0.000   -1.857   -1.641 -1.749  -1.050  -1.050
+134 -0.915 0.045 -20.485  0.000   -1.003   -0.828 -0.915  -0.549  -0.549
+135 -0.272 0.040  -6.733  0.000   -0.351   -0.193 -0.272  -0.163  -0.163
+136  0.327 0.040   8.163  0.000    0.248    0.405  0.327   0.196   0.196
+137  0.970 0.044  22.186  0.000    0.884    1.056  0.970   0.582   0.582
+138  1.805 0.055  32.956  0.000    1.698    1.913  1.805   1.084   1.084
+139  1.000 0.000      NA     NA    1.000    1.000  1.000   0.316   0.316
+140  1.000 0.000      NA     NA    1.000    1.000  1.000   0.308   0.308
+141  1.000 0.000      NA     NA    1.000    1.000  1.000   0.286   0.286
+142  1.000 0.000      NA     NA    1.000    1.000  1.000   0.311   0.311
+143  1.000 0.000      NA     NA    1.000    1.000  1.000   0.284   0.284
+144  1.000 0.000      NA     NA    1.000    1.000  1.000   0.316   0.316
+145  1.000 0.000      NA     NA    1.000    1.000  1.000   0.327   0.327
+146  1.000 0.000      NA     NA    1.000    1.000  1.000   0.334   0.334
+147  1.000 0.000      NA     NA    1.000    1.000  1.000   0.311   0.311
+148  1.000 0.000      NA     NA    1.000    1.000  1.000   0.306   0.306
+149  1.000 0.000      NA     NA    1.000    1.000  1.000   0.326   0.326
+150  1.000 0.000      NA     NA    1.000    1.000  1.000   0.320   0.320
+151  1.000 0.000      NA     NA    1.000    1.000  1.000   0.340   0.340
+152  1.000 0.000      NA     NA    1.000    1.000  1.000   0.349   0.349
+153  1.000 0.000      NA     NA    1.000    1.000  1.000   0.374   0.374
+154  1.000 0.000      NA     NA    1.000    1.000  1.000   0.339   0.339
+155  1.000 0.000      NA     NA    1.000    1.000  1.000   0.365   0.365
+156  1.000 0.000      NA     NA    1.000    1.000  1.000   0.374   0.374
+157  1.000 0.000      NA     NA    1.000    1.000  1.000   0.333   0.333
+158  1.000 0.000      NA     NA    1.000    1.000  1.000   0.360   0.360
+159  1.000 0.000      NA     NA    1.000    1.000  0.222   0.222   0.222
+160  1.000 0.000      NA     NA    1.000    1.000  0.185   0.185   0.185
+161  1.000 0.000      NA     NA    1.000    1.000  0.261   0.261   0.261
+162  1.000 0.000      NA     NA    1.000    1.000  0.753   0.753   0.753
+163  1.000 0.000      NA     NA    1.000    1.000  0.959   0.959   0.959
+164  1.000 0.000      NA     NA    1.000    1.000  0.921   0.921   0.921
+165  0.248 0.000      NA     NA    0.248    0.248  0.248   1.000   0.248
+166  0.151 0.000      NA     NA    0.151    0.151  0.151   0.442   0.151
+167  0.274 0.000      NA     NA    0.274    0.274  0.274   0.667   0.274
+168  0.004 0.000      NA     NA    0.004    0.004  0.004   0.016   0.004
+169  0.115 0.000      NA     NA    0.115    0.115  0.115   0.231   0.115
+170  0.073 0.000      NA     NA    0.073    0.073  0.073   0.147   0.073
+171  0.047 0.000      NA     NA    0.047    0.047  0.047   0.095   0.047
+172 -0.027 0.000      NA     NA   -0.027   -0.027 -0.027  -0.113  -0.027
+173 -0.036 0.000      NA     NA   -0.036   -0.036 -0.036  -0.074  -0.036
+174 -0.034 0.000      NA     NA   -0.034   -0.034 -0.034  -0.068  -0.034
+175  0.472 0.000      NA     NA    0.472    0.472  0.472   1.000   0.472
+176  0.547 0.000      NA     NA    0.547    0.547  0.547   0.963   0.547
+177  0.004 0.000      NA     NA    0.004    0.004  0.004   0.012   0.004
+178  0.127 0.000      NA     NA    0.127    0.127  0.127   0.185   0.127
+179  0.087 0.000      NA     NA    0.087    0.087  0.087   0.127   0.087
+180  0.051 0.000      NA     NA    0.051    0.051  0.051   0.075   0.051
+181 -0.033 0.000      NA     NA   -0.033   -0.033 -0.033  -0.102  -0.033
+182 -0.040 0.000      NA     NA   -0.040   -0.040 -0.040  -0.059  -0.040
+183 -0.040 0.000      NA     NA   -0.040   -0.040 -0.040  -0.058  -0.040
+184  0.684 0.000      NA     NA    0.684    0.684  0.684   1.000   0.684
+185  0.006 0.000      NA     NA    0.006    0.006  0.006   0.014   0.006
+186  0.184 0.000      NA     NA    0.184    0.184  0.184   0.223   0.184
+187  0.123 0.000      NA     NA    0.123    0.123  0.123   0.150   0.123
+188  0.075 0.000      NA     NA    0.075    0.075  0.075   0.091   0.075
+189 -0.047 0.000      NA     NA   -0.047   -0.047 -0.047  -0.119  -0.047
+190 -0.058 0.000      NA     NA   -0.058   -0.058 -0.058  -0.071  -0.058
+191 -0.057 0.000      NA     NA   -0.057   -0.057 -0.057  -0.068  -0.057
+192  0.250 0.000      NA     NA    0.250    0.250  0.250   1.000   0.250
+193  0.009 0.000      NA     NA    0.009    0.009  0.009   0.018   0.009
+194 -0.010 0.000      NA     NA   -0.010   -0.010 -0.010  -0.019  -0.010
+195  0.001 0.000      NA     NA    0.001    0.001  0.001   0.002   0.001
+196  0.003 0.000      NA     NA    0.003    0.003  0.003   0.011   0.003
+197  0.006 0.000      NA     NA    0.006    0.006  0.006   0.013   0.006
+198  0.016 0.000      NA     NA    0.016    0.016  0.016   0.033   0.016
+199  0.998 0.000      NA     NA    0.998    0.998  0.998   1.000   0.998
+200 -0.025 0.000      NA     NA   -0.025   -0.025 -0.025  -0.025  -0.025
+201  0.013 0.000      NA     NA    0.013    0.013  0.013   0.013   0.013
+202  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+203 -0.014 0.000      NA     NA   -0.014   -0.014 -0.014  -0.014  -0.014
+204  0.020 0.000      NA     NA    0.020    0.020  0.020   0.020   0.020
+205  0.989 0.000      NA     NA    0.989    0.989  0.989   1.000   0.989
+206  0.014 0.000      NA     NA    0.014    0.014  0.014   0.014   0.014
+207 -0.012 0.000      NA     NA   -0.012   -0.012 -0.012  -0.026  -0.012
+208 -0.009 0.000      NA     NA   -0.009   -0.009 -0.009  -0.009  -0.009
+209 -0.017 0.000      NA     NA   -0.017   -0.017 -0.017  -0.017  -0.017
+210  0.982 0.000      NA     NA    0.982    0.982  0.982   1.000   0.982
+211 -0.005 0.000      NA     NA   -0.005   -0.005 -0.005  -0.011  -0.005
+212  0.006 0.000      NA     NA    0.006    0.006  0.006   0.006   0.006
+213 -0.005 0.000      NA     NA   -0.005   -0.005 -0.005  -0.005  -0.005
+214  0.228 0.000      NA     NA    0.228    0.228  0.228   1.000   0.228
+215 -0.002 0.000      NA     NA   -0.002   -0.002 -0.002  -0.004  -0.002
+216  0.003 0.000      NA     NA    0.003    0.003  0.003   0.007   0.003
+217  0.991 0.000      NA     NA    0.991    0.991  0.991   1.000   0.991
+218  0.010 0.000      NA     NA    0.010    0.010  0.010   0.010   0.010
+219  1.000 0.000      NA     NA    1.000    1.000  1.000   1.000   1.000
+220  0.573 0.000      NA     NA    0.573    0.573  0.573   1.000   1.000
+221  0.565 0.000      NA     NA    0.565    0.565  0.565   1.000   1.000
+222  0.545 0.000      NA     NA    0.545    0.545  0.545   1.000   1.000
+223  0.569 0.000      NA     NA    0.569    0.569  0.569   1.000   1.000
+224  0.544 0.000      NA     NA    0.544    0.544  0.544   1.000   1.000
+225  0.573 0.000      NA     NA    0.573    0.573  0.573   1.000   1.000
+226  0.583 0.000      NA     NA    0.583    0.583  0.583   1.000   1.000
+227  0.589 0.000      NA     NA    0.589    0.589  0.589   1.000   1.000
+228  0.568 0.000      NA     NA    0.568    0.568  0.568   1.000   1.000
+229  0.563 0.000      NA     NA    0.563    0.563  0.563   1.000   1.000
+230  0.581 0.000      NA     NA    0.581    0.581  0.581   1.000   1.000
+231  0.574 0.000      NA     NA    0.574    0.574  0.574   1.000   1.000
+232  0.591 0.000      NA     NA    0.591    0.591  0.591   1.000   1.000
+233  0.599 0.000      NA     NA    0.599    0.599  0.599   1.000   1.000
+234  0.620 0.000      NA     NA    0.620    0.620  0.620   1.000   1.000
+235  0.591 0.000      NA     NA    0.591    0.591  0.591   1.000   1.000
+236  0.610 0.000      NA     NA    0.610    0.610  0.610   1.000   1.000
+237  0.617 0.000      NA     NA    0.617    0.617  0.617   1.000   1.000
+238  0.583 0.000      NA     NA    0.583    0.583  0.583   1.000   1.000
+239  0.606 0.000      NA     NA    0.606    0.606  0.606   1.000   1.000
+240  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+241  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+242  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+243  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+244  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+245  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+246  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+247  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+248  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+249  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+250  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+251  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+252  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+253  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+254  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+255  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+256  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+257  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+258  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+259  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+260  0.450 0.000      NA     NA    0.450    0.450  0.450   0.904   0.450
+261  0.274 0.000      NA     NA    0.274    0.274  0.274   0.399   0.274
+262  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+263  0.508 0.000      NA     NA    0.508    0.508  0.508   1.016   0.508
+264  0.022 0.000      NA     NA    0.022    0.022  0.022   0.022   0.022
+265 -0.019 0.000      NA     NA   -0.019   -0.019 -0.019  -0.020  -0.019
+266  0.022 0.000      NA     NA    0.022    0.022  0.022   0.022   0.022
+267  0.350 0.000      NA     NA    0.350    0.350  0.350   0.734   0.350
+268  0.017 0.000      NA     NA    0.017    0.017  0.017   0.017   0.017
+269  0.005 0.000      NA     NA    0.005    0.005  0.005   0.005   0.005
+270  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+271  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+272  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+273  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+274  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+275  0.000 0.000      NA     NA    0.000    0.000  0.000   0.000   0.000
+276  0.058 0.040   1.450  0.147   -0.020    0.136  0.056   0.028   0.056
+277  0.045 0.036   1.256  0.209   -0.025    0.114  0.044   0.019   0.044
+278  0.032 0.063   0.503  0.615   -0.092    0.155  0.031   0.011   0.031
+279  0.019 0.098   0.190  0.849   -0.174    0.211  0.018   0.002   0.018
+280  0.006 0.136   0.042  0.967   -0.260    0.271  0.006  -0.007   0.006
+281  0.227 0.041   5.579  0.000    0.147    0.306  0.218   0.108   0.218
+282  0.261 0.040   6.594  0.000    0.183    0.338  0.250   0.131   0.250
+283  0.295 0.071   4.161  0.000    0.156    0.433  0.283   0.153   0.283
+284  0.329 0.110   3.000  0.003    0.114    0.543  0.316   0.176   0.316
+285  0.363 0.150   2.416  0.016    0.068    0.657  0.348   0.198   0.348
+286 -0.016 0.011  -1.443  0.149   -0.039    0.006 -0.014  -0.007  -0.014
+287 -0.013 0.010  -1.250  0.211   -0.033    0.007 -0.011  -0.005  -0.011
+288 -0.009 0.018  -0.503  0.615   -0.044    0.026 -0.008  -0.003  -0.008
+289 -0.005 0.028  -0.190  0.850   -0.060    0.050 -0.005   0.000  -0.005
+290 -0.002 0.039  -0.042  0.967   -0.078    0.074 -0.001   0.002  -0.001
+291  0.074 0.014   5.162  0.000    0.046    0.102  0.064   0.032   0.064
+292  0.085 0.014   5.987  0.000    0.057    0.113  0.074   0.039   0.074
+293  0.097 0.024   4.007  0.000    0.049    0.144  0.084   0.045   0.084
+294  0.108 0.037   2.944  0.003    0.036    0.179  0.093   0.052   0.093
+295  0.119 0.050   2.388  0.017    0.021    0.216  0.103   0.059   0.103
+296 -0.004 0.003  -1.429  0.153   -0.010    0.002 -0.004  -0.002  -0.004
+297 -0.003 0.003  -1.244  0.213   -0.009    0.002 -0.003  -0.001  -0.003
+298 -0.002 0.005  -0.503  0.615   -0.012    0.007 -0.002  -0.001  -0.002
+299 -0.001 0.007  -0.190  0.849   -0.016    0.013 -0.001   0.000  -0.001
+300  0.000 0.010  -0.042  0.967   -0.020    0.020  0.000   0.000   0.000
+301  0.156 0.043   3.599  0.000    0.071    0.241  0.135   0.067   0.135
+302 -0.173 0.031  -5.555  0.000   -0.234   -0.112 -0.150  -0.129  -0.150
+303 -0.502 0.053  -9.497  0.000   -0.605   -0.398 -0.435  -0.325  -0.435
+304 -0.831 0.086  -9.693  0.000   -0.999   -0.663 -0.721  -0.521  -0.721
+305 -1.159 0.121  -9.587  0.000   -1.396   -0.922 -1.006  -0.717  -1.006
+306  0.209 0.047   4.494  0.000    0.118    0.301  0.182   0.090   0.182
+307 -0.104 0.033  -3.156  0.002   -0.168   -0.039 -0.090  -0.096  -0.090
+308 -0.417 0.053  -7.807  0.000   -0.521   -0.312 -0.361  -0.283  -0.361
+309 -0.730 0.086  -8.436  0.000   -0.899   -0.560 -0.633  -0.469  -0.633
+310 -1.043 0.122  -8.520  0.000   -1.283   -0.803 -0.904  -0.656  -0.904
+
+## Modification indices (top 50)
+
+            lhs  op         rhs     mi    epc sepc.lv sepc.all sepc.nox
+608       Gains  ~~          M1 11.140 -0.075  -0.075   -0.075   -0.075
+611     SuppEnv  ~~          M1 10.072  0.064   0.064    0.064    0.064
+221         SB2 ~*~         SB2  9.526  0.174   0.174    1.000    1.000
+390          M1  =~         SE3  6.671  0.058   0.059    0.034    0.034
+601      Belong  ~~       Gains  6.494 -0.226  -0.226   -0.226   -0.226
+610     SuppEnv  ~~      DevAdj  6.494  0.112   0.112    0.112    0.112
+559         SE3  ~~   MHWdpeers  5.744  0.134   0.134    0.134    0.134
+315      Belong  =~         PG5  5.282 -0.072  -0.153   -0.089   -0.089
+220         SB1 ~*~         SB1  5.118  0.130   0.130    1.000    1.000
+385          M1  =~         PG3  4.812 -0.049  -0.050   -0.028   -0.028
+227         PG5 ~*~         PG5  4.722 -0.126  -0.126   -1.000   -1.000
+387          M1  =~         PG5  4.561 -0.047  -0.048   -0.027   -0.027
+400          M2  =~         PG3  4.144 -0.051  -0.053   -0.030   -0.030
+402          M2  =~         PG5  4.125  0.049   0.051    0.030    0.030
+380          M1  =~         SB1  4.068  0.047   0.047    0.027    0.027
+503         PG3  ~~  MHWdmental  3.944 -0.116  -0.116   -0.116   -0.116
+409          M2  =~   MHWdpeers  3.529  0.040   0.041    0.025    0.025
+336       Gains  =~  MHWdmental  3.012 -0.013  -0.031   -0.018   -0.018
+367      DevAdj  =~         PG5  2.924 -0.174  -0.201   -0.116   -0.116
+528         PG5  ~~  MHWdmental  2.779 -0.095  -0.095   -0.095   -0.095
+354     SuppEnv  =~   MHWdpeers  2.763  0.016   0.031    0.019    0.019
+593 MHWdexhaust  ~~   QIadvisor  2.706 -0.094  -0.094   -0.094   -0.094
+223         PG1 ~*~         PG1  2.541 -0.088  -0.088   -1.000   -1.000
+501         PG3  ~~    MHWdacad  2.451 -0.094  -0.094   -0.094   -0.094
+410          M2  =~ MHWdexhaust  2.206 -0.033  -0.034   -0.020   -0.020
+508         PG3  ~~   QIadvisor  2.177 -0.089  -0.089   -0.089   -0.089
+534         PG5  ~~     QIstaff  2.154  0.080   0.080    0.080    0.080
+497         PG3  ~~         PG5  2.132  0.065   0.065    0.065    0.065
+373      DevAdj  =~  MHWdmental  2.107 -0.023  -0.027   -0.016   -0.016
+404          M2  =~         SE2  2.037 -0.037  -0.039   -0.021   -0.021
+452         SB3  ~~         PG5  2.023 -0.080  -0.080   -0.080   -0.080
+602      Belong  ~~     SuppEnv  2.014  0.094   0.094    0.094    0.094
+607       Gains  ~~      DevAdj  2.014 -0.072  -0.072   -0.072   -0.072
+342       Gains  =~     QIstaff  1.932  0.012   0.027    0.016    0.016
+321      Belong  =~  MHWdmental  1.893 -0.012  -0.026   -0.015   -0.015
+551         SE2  ~~ MHWdexhaust  1.886  0.084   0.084    0.084    0.084
+329       Gains  =~         SB2  1.885 -0.048  -0.113   -0.062   -0.062
+388          M1  =~         SE1  1.870  0.032   0.032    0.018    0.018
+413         SB1  ~~         PG1  1.865 -0.076  -0.076   -0.076   -0.076
+374      DevAdj  =~   MHWdpeers  1.769  0.021   0.024    0.015    0.015
+398          M2  =~         PG1  1.755  0.033   0.035    0.019    0.019
+506         PG3  ~~   QIstudent  1.721 -0.076  -0.076   -0.076   -0.076
+322      Belong  =~   MHWdpeers  1.644  0.011   0.024    0.014    0.014
+399          M2  =~         PG2  1.622  0.033   0.035    0.019    0.019
+379      DevAdj  =~     QIstaff  1.619  0.022   0.025    0.015    0.015
+312      Belong  =~         PG2  1.605  0.042   0.090    0.048    0.048
+237   QIfaculty ~*~   QIfaculty  1.600  0.110   0.110    1.000    1.000
+350     SuppEnv  =~         PG5  1.593 -0.040  -0.078   -0.045   -0.045
+364      DevAdj  =~         PG2  1.558  0.138   0.159    0.085    0.085
+327      Belong  =~     QIstaff  1.511  0.012   0.025    0.015    0.015
+
+## Warnings
+
+(none)
