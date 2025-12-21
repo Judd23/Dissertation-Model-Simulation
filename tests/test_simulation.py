@@ -3,22 +3,31 @@ Unit tests for Monte Carlo simulation modules
 """
 
 import sys
-sys.path.insert(0, '/workspaces/Process-SEM/src')
+from pathlib import Path
+
+# Make `src/` importable when running tests from a fresh checkout.
+# Prefer installed/editable installs in real workflows, but keep this for local CI simplicity.
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC_PATH = str(REPO_ROOT / "src")
+if SRC_PATH not in sys.path:
+    sys.path.insert(0, SRC_PATH)
 
 import numpy as np
 import pytest
-from monte_carlo import (
+from process_sem.monte_carlo import (
     MonteCarloSimulator,
     SimulationConfig,
     example_data_generator,
     example_estimator
 )
-from utils import (
+from process_sem.utils import (
     calculate_bias,
     calculate_mse,
     calculate_coverage,
     generate_correlation_matrix
 )
+
+EPS = 1e-12
 
 
 def test_simulation_config():
@@ -26,7 +35,7 @@ def test_simulation_config():
     config = SimulationConfig(n_simulations=100, sample_size=50)
     assert config.n_simulations == 100
     assert config.sample_size == 50
-    assert config.random_seed == 42
+    assert config.random_seed == 42  # default
 
 
 def test_monte_carlo_simulator_init():
@@ -45,6 +54,8 @@ def test_data_generator():
     assert data.shape == (100, 3)
     assert not np.isnan(data).any()
     assert not np.isinf(data).any()
+    # Basic sanity: each variable should vary.
+    assert np.all(np.var(data, axis=0) > 0)
 
 
 def test_estimator():
@@ -53,10 +64,13 @@ def test_estimator():
     data = np.random.randn(100, 3)
     results = example_estimator(data)
     
-    assert results['converged'] == True
+    assert results.get('converged') is True
     assert 'parameters' in results
     assert 'standard_errors' in results
     assert 'fit_indices' in results
+
+    # Basic shape/type sanity (without over-assuming estimator internals)
+    assert isinstance(results['fit_indices'], dict)
 
 
 def test_monte_carlo_run():
@@ -71,8 +85,15 @@ def test_monte_carlo_run():
         correlation=0.5
     )
     
-    assert len(results_df) <= 5
     assert 'iteration' in results_df.columns
+    # Expect one record per requested simulation (if run() is designed to drop failures,
+    # it should still record them with a status flag rather than silently omitting).
+    assert len(results_df) == config.n_simulations
+
+    iters = results_df['iteration'].to_numpy()
+    assert len(np.unique(iters)) == config.n_simulations
+    # Allow either 0..n-1 or 1..n as iteration schemes.
+    assert set(iters) in (set(range(config.n_simulations)), set(range(1, config.n_simulations + 1)))
 
 
 def test_calculate_bias():
@@ -80,7 +101,7 @@ def test_calculate_bias():
     estimates = np.array([1.0, 1.1, 0.9, 1.05, 0.95])
     true_value = 1.0
     bias = calculate_bias(estimates, true_value)
-    assert abs(bias) < 0.1
+    assert bias == pytest.approx(0.0, abs=1e-12)
 
 
 def test_calculate_mse():
@@ -88,7 +109,9 @@ def test_calculate_mse():
     estimates = np.array([1.0, 1.1, 0.9, 1.05, 0.95])
     true_value = 1.0
     mse = calculate_mse(estimates, true_value)
-    assert mse >= 0
+    # Exact MSE for the synthetic vector relative to true_value=1.0
+    expected = np.mean((estimates - true_value) ** 2)
+    assert mse == pytest.approx(expected, rel=0, abs=1e-12)
 
 
 def test_calculate_coverage():
@@ -99,7 +122,10 @@ def test_calculate_coverage():
     true_value = 1.0
     
     coverage = calculate_coverage(estimates, standard_errors, true_value)
-    assert 0 <= coverage <= 1
+    assert isinstance(coverage, (float, np.floating))
+    assert 0.0 <= coverage <= 1.0
+    # Under a normal model with correct SEs, coverage should be near 0.95 for 95% CIs.
+    assert 0.85 <= coverage <= 0.99
 
 
 def test_generate_correlation_matrix():
@@ -110,10 +136,7 @@ def test_generate_correlation_matrix():
     assert np.allclose(np.diag(corr_matrix), 1.0)
     assert np.allclose(corr_matrix, corr_matrix.T)
     
-    # Check positive definiteness
-    eigenvalues = np.linalg.eigvals(corr_matrix)
-    assert np.all(eigenvalues > 0)
-
-
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
+    # Check (numerically) positive definiteness / semi-definiteness.
+    # Use symmetric eigen-solver for stability.
+    eigenvalues = np.linalg.eigvalsh(corr_matrix)
+    assert np.min(eigenvalues) > -1e-10
