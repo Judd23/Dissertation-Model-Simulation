@@ -54,6 +54,73 @@ Run a Monte Carlo simulation with default settings:
 python run_simulation.py
 ```
 
+## R scripts (lavaan WLSMV Monte Carlo)
+
+This repo also includes R scripts (e.g., `mc_allRQs_PSW_pooled_MG_a1.R`) for Monte Carlo studies using **lavaan** with categorical indicators (WLSMV).
+
+### Optional: multiple imputation (MI) for pooled SEM
+
+If you want to handle missingness via multiple imputation, a workable pattern is:
+
+1) impute with `mice`
+2) fit the pooled SEM across imputations with `semTools::runMI()`
+3) recompute derived terms like `credit_dose_c` and `XZ_c` inside the analysis function (don’t impute them directly)
+
+Packages needed (install once in your R environment):
+
+- `lavaan`
+- `mice`
+- `semTools`
+
+Example (pooled model; assumes `dat`, `ORDERED_VARS`, and `build_model_pooled()` exist in your session):
+
+```r
+library(mice)
+library(semTools)
+library(lavaan)
+
+vars_for_mi <- unique(c(
+    ORDERED_VARS,
+        "X","credit_dose",
+    "hgrades","bparented","pell","hapcl","hprecalc13","hchallenge","cSFcareer","cohort",
+    "re_all","firstgen","living18","sex"
+))
+
+dat_mi <- dat[, vars_for_mi]
+
+# Ensure ordered vars are ordered factors
+for (v in ORDERED_VARS) dat_mi[[v]] <- as.ordered(dat_mi[[v]])
+
+meth <- make.method(dat_mi)
+meth[ORDERED_VARS] <- "polr"
+meth[c("hgrades","bparented","hchallenge","cSFcareer","credit_dose")] <- "pmm"
+meth[c("X","pell","hapcl","hprecalc13","firstgen","cohort")] <- "logreg"
+meth[c("re_all","living18","sex")] <- "polyreg"  # or set to "" to not impute
+
+pred <- make.predictorMatrix(dat_mi)
+diag(pred) <- 0
+
+imp <- mice(dat_mi, m = 30, method = meth, predictorMatrix = pred,
+                        maxit = 20, seed = 123)
+
+fit_fun <- function(data) {
+        zbar <- mean(data$credit_dose, na.rm = TRUE)
+        data$credit_dose_c <- as.numeric(scale(data$credit_dose, center = TRUE, scale = FALSE))
+        data$XZ_c <- data$X * data$credit_dose_c
+
+    lavaan::sem(
+        model = build_model_pooled(zbar = zbar),
+        data = data,
+        ordered = ORDERED_VARS,
+        estimator = "WLSMV",
+        parameterization = "theta"
+    )
+}
+
+fit_mi <- runMI(data = imp, fun = fit_fun)
+summary(fit_mi, standardized = TRUE, fit.measures = TRUE)
+```
+
 ### Custom Configuration
 
 Edit `config/simulation_config.yaml` to customize simulation parameters:
