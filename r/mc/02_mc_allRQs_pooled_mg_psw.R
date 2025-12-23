@@ -76,6 +76,10 @@ MI_POOLED <- as.integer(get_arg("--mi_pooled", 0))
 MI_M <- as.integer(get_arg("--mi_m", 30))
 MI_MAXIT <- as.integer(get_arg("--mi_maxit", 20))
 
+# MI in the Monte Carlo loop (when --analysis mi)
+MI_MC_M <- as.integer(get_arg("--mi_mc_m", MI_M))
+MI_MC_MAXIT <- as.integer(get_arg("--mi_mc_maxit", MI_MAXIT))
+
 SEED <- as.integer(get_arg("--seed", 20251219))
 set.seed(SEED)
 
@@ -91,6 +95,29 @@ ITEM_PROBS <- NULL
 # -------------------------
 R_REPS <- 100
 N      <- 3000
+
+# -------------------------
+# DESIGN GRID (multi-condition simulation)
+# -------------------------
+# If --design 1 is provided, we run a grid of conditions instead of a single condition.
+DO_DESIGN <- as.integer(get_arg("--design", 0))
+# Optional: limit to a single condition id for debugging
+DESIGN_ID_ONLY <- suppressWarnings(as.integer(get_arg("--design_id", NA)))
+
+# Missingness options (condition-level)
+DEFAULT_MISS_RATE <- as.numeric(get_arg("--miss_rate", 0))
+DEFAULT_MISS_MECH <- as.character(get_arg("--miss_mech", "none"))  # none|mcar|mar
+
+# Analysis options (condition-level)
+# Policy: prefer MI for missingness handling.
+DEFAULT_ANALYSIS <- as.character(get_arg("--analysis", "mi"))  # mi|fiml
+
+# If MI fails for a replication, optionally fall back to FIML (when feasible).
+ALLOW_FIML_FALLBACK <- as.integer(get_arg("--allow_fiml_fallback", 1))
+
+# MC CI options (fast, per-rep; used later by coverage/power summaries)
+MC_CI_DRAWS <- as.integer(get_arg("--mc_ci_draws", 0))
+MC_CI_LEVEL <- as.numeric(get_arg("--mc_ci_level", 0.95))
 
 # Optional CLI overrides:
 #
@@ -163,7 +190,9 @@ write_lavaan_output <- function(fit, file_path, title = NULL) {
   w("Converged: ", if (!inherits(conv, "try-error")) as.character(conv) else "NA")
 
   w("\n## Summary\n")
-  s <- capture.output(summary(fit, standardized = TRUE, fit.measures = TRUE, rsquare = TRUE))
+  # Robust across lavaan and semTools::runMI (OLDlavaan.mi): avoid standardized output
+  # which can error for OLDlavaan.mi objects.
+  s <- capture.output(summary(fit, standardized = FALSE, fit.measures = TRUE, rsquare = TRUE))
   writeLines(s, con)
 
   w("\n## Fit measures\n")
@@ -175,7 +204,7 @@ write_lavaan_output <- function(fit, file_path, title = NULL) {
   }
 
   w("\n## Parameter estimates\n")
-  pe <- try(parameterEstimates(fit, standardized = TRUE), silent = TRUE)
+  pe <- try(parameterEstimates(fit, standardized = FALSE), silent = TRUE)
   if (!inherits(pe, "try-error")) {
     writeLines(capture.output(print(pe)), con)
   } else {
@@ -287,7 +316,8 @@ run_representative_study <- function(N, use_psw = TRUE) {
   fitP <- fit_pooled(dat)
   if (is.null(fitP)) stop("Representative pooled SEM failed to converge.")
   write_lavaan_output(fitP, file.path(rep_dir, "pooled.txt"), title = "Representative Study — Pooled SEM (RQ1–RQ3)")
-  peP <- parameterEstimates(fitP, standardized = TRUE)
+  # Keep extraction unstandardized (and MI-safe policy: never standardized=TRUE for MI fits).
+  peP <- parameterEstimates(fitP, standardized = FALSE)
   utils::write.csv(peP, file.path(rep_dir, "pooled_parameterEstimates.csv"), row.names = FALSE)
   fm <- fitMeasures(fitP)
   utils::write.csv(data.frame(measure = names(fm), value = as.numeric(fm)), file.path(rep_dir, "pooled_fitMeasures.csv"), row.names = FALSE)
@@ -323,8 +353,8 @@ run_representative_study <- function(N, use_psw = TRUE) {
 
       vars_for_mi <- unique(c(
         ORDERED_VARS,
-        "X", "credit_dose",
-        "hgrades", "bparented", "pell", "hapcl", "hprecalc13", "hchallenge", "cSFcareer", "cohort",
+        "X", "credit_dose", "credit_dose_c", "XZ_c",
+        "hgrades", "hgrades_c", "bparented", "bparented_c", "pell", "hapcl", "hprecalc13", "hchallenge", "hchallenge_c", "cSFcareer", "cSFcareer_c", "cohort",
         "re_all", "firstgen", "living18", "sex"
       ))
 
@@ -364,29 +394,31 @@ run_representative_study <- function(N, use_psw = TRUE) {
           con = mi_out
         )
       } else {
-        fit_fun <- function(data) {
-          # recompute derived terms post-imputation for internal consistency
-          zbar <- mean(data$credit_dose, na.rm = TRUE)
-          data$credit_dose_c <- as.numeric(scale(data$credit_dose, center = TRUE, scale = FALSE))
-          data$XZ_c <- data$X * data$credit_dose_c
+        # For representative-study MI output, prefer semTools::lavaan.mi over runMI.
+        # runMI() can produce an OLDlavaan.mi object in some semTools/lavaan combos,
+        # which is brittle (e.g., standardized summaries can fail).
+        zbar0 <- mean(dat$credit_dose, na.rm = TRUE)
+        model0 <- build_model_pooled(zbar = zbar0)
+        dat_list <- lapply(seq_len(MI_M), function(k) mice::complete(imp, action = k))
 
-          lavaan::sem(
-            model = build_model_pooled(zbar = zbar),
-            data = data,
-            ordered = ORDERED_VARS,
+        fit_mi <- try(
+          semTools::lavaan.mi(
+            model = model0,
+            data = dat_list,
             estimator = "WLSMV",
+            ordered = ORDERED_VARS,
             parameterization = "theta",
             std.lv = FALSE,
             auto.fix.first = FALSE,
-            missing = "pairwise"
-          )
-        }
-
-        fit_mi <- try(semTools::runMI(data = imp, fun = fit_fun), silent = TRUE)
+            # Study policy: no pairwise; WLSMV does not support FIML.
+            missing = "listwise"
+          ),
+          silent = TRUE
+        )
         if (inherits(fit_mi, "try-error")) {
           writeLines(
             c(
-              "MI failed during semTools::runMI() call.",
+              "MI failed during semTools::lavaan.mi() call.",
               "Error:",
               as.character(fit_mi)
             ),
@@ -395,11 +427,15 @@ run_representative_study <- function(N, use_psw = TRUE) {
         } else {
           con <- file(mi_out, open = "wt")
           on.exit(close(con), add = TRUE)
-          writeLines("Representative Study — Pooled MI (mice + semTools::runMI)", con = con)
-          writeLines(paste0("m=", MI_M, ", maxit=", MI_MAXIT, ", seed=", SEED), con = con)
+          writeLines("Representative Study — Pooled MI (mice + semTools::lavaan.mi)", con = con)
+          writeLines(paste0("m=", MI_M, ", maxit=", MI_MAXIT, ", seed=", SEED, ", zbar0=", sprintf("%.4f", zbar0)), con = con)
           writeLines("", con = con)
-          out_txt <- utils::capture.output(summary(fit_mi, standardized = TRUE, fit.measures = TRUE))
+          # Keep the representative-study MI output robust by avoiding standardized output.
+          out_txt <- utils::capture.output(summary(fit_mi, fit.measures = TRUE))
           writeLines(out_txt, con = con)
+          writeLines("", con = con)
+          pe_txt <- utils::capture.output(try(parameterEstimates(fit_mi), silent = TRUE))
+          writeLines(pe_txt, con = con)
         }
       }
     }
@@ -464,7 +500,8 @@ run_representative_study <- function(N, use_psw = TRUE) {
     }
 
     write_lavaan_output(outW$fit, file.path(rep_dir, sprintf("mg_%s.txt", safe_filename(Wvar))), title = paste0("Representative Study — MG SEM (RQ4, W=", Wvar, ")"))
-    peMG <- parameterEstimates(outW$fit, standardized = TRUE)
+  # Keep extraction unstandardized (and MI-safe policy: never standardized=TRUE for MI fits).
+  peMG <- parameterEstimates(outW$fit, standardized = FALSE)
     utils::write.csv(peMG, file.path(rep_dir, sprintf("mg_parameterEstimates_%s.csv", safe_filename(Wvar))), row.names = FALSE)
 
     # Wald test
@@ -762,31 +799,6 @@ diag_group_sizes <- function(dat, group_var) {
   )
 }
 
-diag_scalar_chr <- function(x) {
-  # Ensure we always return a length-1 character scalar (or NA_character_)
-  if (is.null(x)) return(NA_character_)
-  x <- as.character(x)
-  if (length(x) == 0) return(NA_character_)
-  if (!nzchar(x[[1]])) return(NA_character_)
-  x[[1]]
-}
-
-diag_scalar_int <- function(x) {
-  # Ensure we always return a length-1 integer scalar (or NA_integer_)
-  if (is.null(x)) return(NA_integer_)
-  x <- suppressWarnings(as.integer(x))
-  if (length(x) == 0) return(NA_integer_)
-  x[[1]]
-}
-
-diag_scalar_num <- function(x) {
-  # Ensure we always return a length-1 numeric scalar (or NA_real_)
-  if (is.null(x)) return(NA_real_)
-  x <- suppressWarnings(as.numeric(x))
-  if (length(x) == 0) return(NA_real_)
-  x[[1]]
-}
-
 merge_rare_categories_nearest <- function(x, min_prop = 0.01, min_expected_n = 5) {
   # Merge rare categories into a neighboring category to avoid empty/small cells in MG.
   # Rule: if a category proportion < min_prop OR count < min_expected_n, merge it with a
@@ -908,6 +920,137 @@ make_overlap_weights <- function(dat) {
   dat
 }
 
+# Recompute derived variables after imputation
+recompute_derived_terms <- function(dat) {
+  # trnsfr_cr was used in the data generator; keep this defensive.
+  if (!("trnsfr_cr" %in% names(dat))) return(dat)
+
+  if (!("X" %in% names(dat))) {
+    dat$X <- as.integer(dat$trnsfr_cr >= 12)
+  }
+  dat$credit_dose <- pmax(0, dat$trnsfr_cr - 12) / 10
+  dat$credit_dose_c <- as.numeric(scale(dat$credit_dose, scale = FALSE))
+
+  if (!("Z" %in% names(dat))) {
+    # If Z is missing, we can't build XZ_c; leave as-is.
+    return(dat)
+  }
+  dat$Z_c <- as.numeric(scale(dat$Z, scale = FALSE))
+  dat$XZ_c <- dat$X * dat$Z_c
+  dat
+}
+
+# Fast imputation wrapper for MC runs
+impute_mice_quiet <- function(dat, m, maxit, seed) {
+  if (!requireNamespace("mice", quietly = TRUE)) {
+    stop(
+      "Package 'mice' is required for --analysis mi but is not installed.\n",
+      "Install once: install.packages('mice')",
+      call. = FALSE
+    )
+  }
+  # Keep output clean in parallel workers.
+  suppressMessages(
+    mice::mice(dat, m = m, maxit = maxit, seed = seed, printFlag = FALSE)
+  )
+}
+
+# MI pooled SEM with per-imputation PSW (for MC runs)
+fit_pooled_mi <- function(dat, r, run_dir = NULL) {
+  if (!requireNamespace("semTools", quietly = TRUE)) {
+    stop(
+      "Package 'semTools' is required for --analysis mi but is not installed.\n",
+      "Install once: install.packages('semTools')",
+      call. = FALSE
+    )
+  }
+  if (!requireNamespace("mice", quietly = TRUE)) {
+    stop(
+      "Package 'mice' is required for --analysis mi but is not installed.",
+      call. = FALSE
+    )
+  }
+
+  # 1) Impute
+  imp <- impute_mice_quiet(dat, m = MI_MC_M, maxit = MI_MC_MAXIT, seed = SEED + r)
+
+  # 2) For each completed dataset: recompute derived terms + recompute psw
+  # NOTE: mice doesn't support in-place editing of an existing mids object via complete();
+  # we therefore create a new list of completed datasets and pass those to runMI.
+  dat_list <- vector("list", length = imp$m)
+  for (k in seq_len(imp$m)) {
+    dk <- mice::complete(imp, action = k)
+    dk <- recompute_derived_terms(dk)
+    if (isTRUE(USE_PSW == 1)) {
+      dk <- make_overlap_weights(dk)
+    }
+    dat_list[[k]] <- dk
+  }
+
+  # 3) Fit + pool using lavaan.mi (avoid OLDlavaan.mi)
+  base_args <- list(
+    model = build_model_pooled(zbar = mean(dat$credit_dose, na.rm = TRUE)),
+    data = dat_list,
+    estimator = "WLSMV",
+    ordered = ORDERED_VARS,
+    parameterization = "theta",
+    std.lv = FALSE,
+    auto.fix.first = FALSE,
+    missing = "listwise",
+    control = list(iter.max = 2000)
+  )
+  if (isTRUE(USE_PSW == 1)) base_args$sampling.weights <- "psw"
+
+  fit <- tryCatch(
+    suppressWarnings(do.call(semTools::lavaan.mi, base_args)),
+    warning = function(w) {
+      if (isTRUE(DIAG_N > 0)) message("[pooled MI fit_warning] ", conditionMessage(w))
+      invokeRestart("muffleWarning")
+    },
+    error = function(e) {
+      if (isTRUE(DIAG_N > 0)) message("[pooled MI fit_error] ", e$message)
+      return(structure(NULL, fit_error_message = e$message))
+    }
+  )
+  if (is.null(fit)) return(NULL)
+  fit
+}
+
+# Robust MI parameter extraction
+#
+# semTools::lavaan.mi objects sometimes yield parameterEstimates() tables without
+# the usual numeric columns depending on class/version. This helper guarantees
+# a data.frame with numeric `est` (and optionally `se`) when possible.
+extract_pe_numeric <- function(fit, standardized = FALSE) {
+  pe <- try(lavaan::parameterEstimates(fit, standardized = standardized), silent = TRUE)
+  if (inherits(pe, "try-error") || !is.data.frame(pe)) return(NULL)
+
+  # Normalize common column variants
+  if (!"est" %in% names(pe) && "Estimate" %in% names(pe)) pe$est <- pe$Estimate
+  if (!"se" %in% names(pe) && "Std.Err" %in% names(pe)) pe$se <- pe$Std.Err
+
+  # Coerce to numeric if possible
+  if ("est" %in% names(pe)) pe$est <- suppressWarnings(as.numeric(pe$est))
+  if ("se" %in% names(pe)) pe$se <- suppressWarnings(as.numeric(pe$se))
+
+  # If `est` is still missing/non-numeric, try pooled table methods.
+  if (!"est" %in% names(pe) || all(is.na(pe$est))) {
+    pe_pool <- try(as.data.frame(semTools::parameterEstimates(fit, standardized = standardized)), silent = TRUE)
+    if (!inherits(pe_pool, "try-error") && is.data.frame(pe_pool)) {
+      if (!"est" %in% names(pe_pool) && "estimate" %in% names(pe_pool)) pe_pool$est <- pe_pool$estimate
+      if (!"se" %in% names(pe_pool) && "se" %in% names(pe_pool) == FALSE && "std.error" %in% names(pe_pool)) pe_pool$se <- pe_pool$std.error
+      if ("est" %in% names(pe_pool)) pe_pool$est <- suppressWarnings(as.numeric(pe_pool$est))
+      if ("se" %in% names(pe_pool)) pe_pool$se <- suppressWarnings(as.numeric(pe_pool$se))
+      if ("est" %in% names(pe_pool) && !all(is.na(pe_pool$est))) {
+        return(pe_pool)
+      }
+    }
+  }
+
+  if (!"est" %in% names(pe) || all(is.na(pe$est))) return(NULL)
+  pe
+}
+
 # -------------------------
 # POPULATION PARAMETERS (EDIT IF YOU WANT DIFFERENT "TRUE" EFFECTS)
 # -------------------------
@@ -937,6 +1080,47 @@ PAR <- list(
   g2 = 0.00,
   g3 = 0.05
 )
+
+# Default measurement strength for indicators
+LAM <- 0.80  # loading strength for indicators
+
+make_design_grid <- function() {
+  # Minimal starter grid; expand as you like.
+  # Columns are intentionally explicit so later summaries can be grouped cleanly.
+  #
+  # Notes:
+  # - LAM controls measurement quality.
+  # - X_prev conceptually belongs in the credit generator; wired in via GEN settings.
+  # - a1xz and cxz are overridden inside PAR per condition.
+  data.frame(
+    design_id = 1:4,
+    N = c(N, N, N * 2, N * 2),
+    LAM = c(0.80, 0.65, 0.80, 0.65),
+    X_prev = c(0.35, 0.35, 0.35, 0.35),
+    a1xz = c(PAR$a1xz, 0.08, PAR$a1xz, 0.08),
+    cxz = c(PAR$cxz, PAR$cxz, -0.04, -0.04),
+    miss_rate = c(DEFAULT_MISS_RATE, DEFAULT_MISS_RATE, 0.15, 0.15),
+    miss_mech = c(DEFAULT_MISS_MECH, DEFAULT_MISS_MECH, "mar", "mar"),
+    analysis = c(DEFAULT_ANALYSIS, DEFAULT_ANALYSIS, DEFAULT_ANALYSIS, DEFAULT_ANALYSIS),
+    invariance_violation = c(0L, 0L, 0L, 0L),
+    stringsAsFactors = FALSE
+  )
+}
+
+apply_condition <- function(cond_row) {
+  # Set globals for this condition (keeps code changes minimal).
+  N <<- as.integer(cond_row$N)
+  LAM <<- as.numeric(cond_row$LAM)
+  DEFAULT_MISS_RATE <<- as.numeric(cond_row$miss_rate)
+  DEFAULT_MISS_MECH <<- as.character(cond_row$miss_mech)
+  DEFAULT_ANALYSIS <<- as.character(cond_row$analysis)
+
+  PARc <- PAR
+  if ("a1xz" %in% names(cond_row)) PARc$a1xz <- as.numeric(cond_row$a1xz)
+  if ("cxz" %in% names(cond_row)) PARc$cxz <- as.numeric(cond_row$cxz)
+  PAR <<- PARc
+  invisible(TRUE)
+}
 
 BETA_M1 <- c(hgrades = -0.10, bparented = -0.04, pell = 0.09, hapcl = 0.06, hprecalc13 = 0.05, hchallenge = 0.06, cSFcareer = 0.03)
 BETA_M2 <- c(hgrades =  0.08, bparented =  0.04, pell = -0.04, hapcl = 0.04, hprecalc13 = 0.06, hchallenge = -0.05, cSFcareer = 0.04)
@@ -1142,6 +1326,70 @@ gen_dat <- function(N) {
   MHWdexhaust   <- make_item("MHWdexhaust",   LAM*M1_lat + rnorm(N, 0, sqrt(1 - LAM^2)), K = 6)
   MHWdsleep     <- make_item("MHWdsleep",     LAM*M1_lat + rnorm(N, 0, sqrt(1 - LAM^2)), K = 6)
   MHWdfinancial <- make_item("MHWdfinancial", LAM*M1_lat + rnorm(N, 0, sqrt(1 - LAM^2)), K = 6)
+  
+  # -------------------------
+  # CSU-realistic missingness (MCAR / MAR)
+  # Pattern focus: higher missing on MHW items among high distress and Pell.
+  # We only induce missingness on observed items (not latent variables).
+  #
+  # DEFAULT_MISS_RATE and DEFAULT_MISS_MECH are condition-level globals set by the design grid.
+  # - miss_mech = "none" (default), "mcar", or "mar"
+  # - miss_rate is an overall target rate (approx; MAR is deliberately differential)
+  #
+  # Rationale:
+  # - In CSU-like survey data, wellness/distress items are often skipped non-randomly.
+  # - Pell is used as a low-SES proxy; distress is the psychological driver.
+  #
+  apply_missingness <- function(df, miss_rate, mech) {
+    mech <- tolower(as.character(mech))
+    if (!is.finite(miss_rate) || miss_rate <= 0 || mech %in% c("none","0","off")) return(df)
+
+    mhw_vars <- c("MHWdacad","MHWdlonely","MHWdmental","MHWdexhaust","MHWdsleep","MHWdfinancial")
+    mhw_vars <- mhw_vars[mhw_vars %in% names(df)]
+    if (length(mhw_vars) == 0) return(df)
+
+    if (mech == "mcar") {
+      for (v in mhw_vars) {
+        miss <- stats::runif(nrow(df)) < miss_rate
+        df[[v]][miss] <- NA
+      }
+      df$miss_mech <- "mcar"
+      df$miss_rate_target <- as.numeric(miss_rate)
+      return(df)
+    }
+
+    if (mech == "mar") {
+      # Logistic MAR: P(miss) increases with latent distress and Pell.
+      # Calibrate intercept so marginal missingness roughly ~ miss_rate.
+      # Scale M1_lat to stabilize the logistic.
+      zM1 <- as.numeric(scale(M1_lat, center = TRUE, scale = TRUE))
+      pell0 <- as.numeric(pell)
+      # Keep effects moderate; will still create strong differential missingness.
+      b1 <- 0.70
+      b2 <- 0.60
+      # Solve intercept via a quick 1D search so mean(plogis(a + b1*zM1 + b2*pell)) ~= miss_rate
+      target <- min(max(miss_rate, 0.001), 0.80)
+      f <- function(a) mean(stats::plogis(a + b1*zM1 + b2*pell0)) - target
+      a0 <- try(uniroot(f, interval = c(-10, 10))$root, silent = TRUE)
+      if (inherits(a0, "try-error") || !is.finite(a0)) a0 <- stats::qlogis(target)
+
+      p_miss <- stats::plogis(a0 + b1*zM1 + b2*pell0)
+      p_miss <- pmin(pmax(p_miss, 0.0001), 0.95)
+
+      # Apply same missing indicator across all MHW items more often than not (block-missingness).
+      block <- stats::runif(nrow(df)) < p_miss
+      for (v in mhw_vars) {
+        df[[v]][block] <- NA
+      }
+      df$miss_mech <- "mar"
+      df$miss_rate_target <- as.numeric(miss_rate)
+      df$miss_rate_realized_mhw <- mean(is.na(df[[mhw_vars[[1]]]]))
+      return(df)
+    }
+
+    # Unknown mechanism: no-op
+    df
+  }
 
   # Quality of Interactions (NSSE): 7-category frequency/quality items
   QIstudent <- make_item("QIstudent", LAM*M2_lat + rnorm(N, 0, sqrt(1 - LAM^2)), K = 7)
@@ -1162,7 +1410,7 @@ gen_dat <- function(N) {
     firstgen,
     re_all, living18, sex,
     trnsfr_cr,
-  X, credit_dose, credit_dose_c, XZ_c,
+    X, credit_dose, credit_dose_c, XZ_c,
     sbmyself, sbvalued, sbcommunity,
     pgthink, pganalyze, pgwork, pgvalues, pgprobsolve,
     SEwellness, SEnonacad, SEactivities, SEacademic, SEdiverse,
@@ -1172,6 +1420,8 @@ gen_dat <- function(N) {
     SFcareer, SFotherwork, SFdiscuss, SFperform
   )
 
+  # Induce missingness at the very end so it affects only observed items.
+  dat <- apply_missingness(dat, miss_rate = DEFAULT_MISS_RATE, mech = DEFAULT_MISS_MECH)
   dat
 }
 
@@ -1305,14 +1555,19 @@ fit_pooled <- function(dat) {
     parameterization = "theta",
     std.lv = FALSE,
     auto.fix.first = FALSE,
-    missing = "pairwise",
+    # Study policy: no pairwise; WLSMV does not support FIML.
+    missing = "listwise",
     control = list(iter.max = 2000)  # hard stop instead of endless churn
   )
 
-  # IMPORTANT:
-  # lavaan + ordered indicators + WLSMV + sampling.weights is currently unstable here
-  # (internal "subscript out of bounds" during W-matrix construction).
-  # We therefore compute PSW but do NOT pass it into SEM estimation.
+  # If PSW is requested, test the *same* estimator you plan to use later by passing
+  # sampling weights into lavaan.
+  # Note: lavaan will apply its default normalization unless changed via lavOptions
+  # (sampling.weights.normalization). Your make_overlap_weights() already scales weights
+  # to mean 1, so the default normalization will typically leave them effectively unchanged.
+  if (isTRUE(USE_PSW == 1) && isTRUE("psw" %in% names(dat))) {
+    args$sampling.weights <- "psw"
+  }
 
   fit <- tryCatch(
     suppressWarnings(do.call(lavaan::sem, args)),
@@ -1323,7 +1578,8 @@ fit_pooled <- function(dat) {
     },
     error = function(e) {
       message("[pooled fit_error] ", e$message)
-      return(NULL)
+      attr(e, "fit_error_message") <- e$message
+      return(structure(NULL, fit_error_message = e$message))
     }
   )
   if (is.null(fit)) return(NULL)
@@ -1363,18 +1619,32 @@ fit_mg_a1_test <- function(dat, Wvar) {
     parameterization = "theta",
     std.lv = FALSE,
     auto.fix.first = FALSE,
-    missing = "pairwise",
+    # Study policy: no pairwise; WLSMV does not support FIML.
+    missing = "listwise",
     # make measurement comparable for MG test in the simulation
     group.equal = c("loadings","thresholds")
   )
 
-  fit0 <- try(do.call(lavaan::sem, args), silent = TRUE)
+  # Pass overlap weights into the MG estimator when PSW is requested.
+  if (isTRUE(USE_PSW == 1) && isTRUE("psw" %in% names(dat))) {
+    args$sampling.weights <- "psw"
+  }
+  fit0 <- tryCatch(
+    suppressWarnings(do.call(lavaan::sem, args)),
+    warning = function(w) {
+      if (isTRUE(DIAG_N > 0)) message("[MG fit_warning] Wvar=", Wvar, " | ", conditionMessage(w))
+      invokeRestart("muffleWarning")
+    },
+    error = function(e) {
+      return(structure(list(message = e$message), class = "try-error"))
+    }
+  )
   if (inherits(fit0, "try-error")) {
+    msg <- if (is.list(fit0) && !is.null(fit0$message)) fit0$message else as.character(fit0)
     if (isTRUE(DIAG_N > 0)) {
-      msg <- as.character(fit0)
       message("[MG fit_error] Wvar=", Wvar, " | ", msg)
     }
-    return(list(ok = FALSE, p = NA_real_, reason = "fit_error", fit = NULL, err_msg = as.character(fit0)))
+    return(list(ok = FALSE, p = NA_real_, reason = "fit_error", fit = NULL, err_msg = msg))
   }
   if (!isTRUE(lavInspect(fit0, "converged"))) {
     warn <- try(lavInspect(fit0, "warnings"), silent = TRUE)
@@ -1449,40 +1719,70 @@ run_mc <- function() {
       diag_min_overall_var <- mm$min_prop_var
     }
 
-    # PSW first (weights computed prior to SEM estimation)
-    if (isTRUE(USE_PSW == 1)) {
-      dat <- make_overlap_weights(dat)
-    }
-
-    # pooled SEM (tests RQ1–RQ3)
+    # Pooled SEM (tests RQ1–RQ3)
     pooled_ok <- 0L
     pooled_row <- setNames(as.list(rep(NA_real_, length(pooled_targets))), pooled_targets)
-    fitP <- fit_pooled(dat)
     pooled_path <- NA_character_
+
+    pooled_analysis_used <- DEFAULT_ANALYSIS
+
+    # If using MI, PSW must be recomputed post-imputation, so do NOT precompute here.
+    fitP <- NULL
+    if (isTRUE(DEFAULT_ANALYSIS == "mi")) {
+      fitP_try <- try(fit_pooled_mi(dat, r = r, run_dir = run_dir), silent = TRUE)
+      if (!inherits(fitP_try, "try-error") && !is.null(fitP_try)) {
+        fitP <- fitP_try
+        pooled_analysis_used <- "mi"
+      } else {
+        if (isTRUE(DIAG_N > 0)) message("[pooled][MI failed] ", as.character(fitP_try))
+        if (isTRUE(ALLOW_FIML_FALLBACK == 1)) {
+          if (isTRUE(USE_PSW == 1)) dat <- make_overlap_weights(dat)
+          fitP <- fit_pooled(dat)
+          pooled_analysis_used <- "fiml"
+        }
+      }
+    } else if (isTRUE(DEFAULT_ANALYSIS == "fiml")) {
+      if (isTRUE(USE_PSW == 1)) dat <- make_overlap_weights(dat)
+      fitP <- fit_pooled(dat)
+      pooled_analysis_used <- "fiml"
+    } else {
+      stop("Unknown analysis mode: ", DEFAULT_ANALYSIS, " (expected 'mi' or 'fiml')")
+    }
+
     pooled_diag <- diag_extract_lavaan_status(fitP)
     if (!is.null(fitP)) {
       pooled_ok <- 1L
-      pe <- parameterEstimates(fitP)
-      pe2 <- pe[pe$label %in% pooled_targets & pe$op %in% c("~",":="), c("label","est")]
-      if (nrow(pe2) > 0) {
-        for (i in seq_len(nrow(pe2))) pooled_row[[pe2$label[i]]] <- pe2$est[i]
+      pe <- extract_pe_numeric(fitP, standardized = FALSE)
+      if (!is.null(pe) && all(c("label", "op", "est") %in% names(pe))) {
+        pe2 <- pe[pe$label %in% pooled_targets & pe$op %in% c("~", ":="), c("label", "est"), drop = FALSE]
+        if (nrow(pe2) > 0) {
+          for (i in seq_len(nrow(pe2))) pooled_row[[pe2$label[i]]] <- pe2$est[i]
+        }
+      } else {
+        if (isTRUE(DIAG_N > 0)) {
+          message("[pooled] could not extract numeric parameter estimates")
+        }
       }
 
       if (isTRUE(SAVE_FITS == 1)) {
-        pooled_path <- file.path(run_dir, sprintf("rep%03d_pooled.txt", r))
-        write_lavaan_output(fitP, pooled_path, title = paste0("Pooled SEM (rep ", r, ")"))
+        pooled_path <- file.path(run_dir, sprintf("rep%03d_pooled_%s.txt", r, safe_filename(pooled_analysis_used)))
+        # NOTE: semTools::runMI may return OLDlavaan.mi objects that can error in summary() internals
+        # (standardization routines). To keep MI MC runs robust, we skip the full text output for MI.
+        if (!isTRUE(pooled_analysis_used == "mi")) {
+          write_lavaan_output(fitP, pooled_path, title = paste0("Pooled SEM (", pooled_analysis_used, ") rep ", r))
+        }
 
         # Machine-readable parameter estimates for aggregation/resume
-        pe_out <- try(parameterEstimates(fitP, standardized = TRUE), silent = TRUE)
-        if (!inherits(pe_out, "try-error") && is.data.frame(pe_out)) {
-          utils::write.csv(pe_out, file.path(run_dir, sprintf("rep%03d_pooled_pe.csv", r)), row.names = FALSE)
+        pe_out <- extract_pe_numeric(fitP, standardized = FALSE)
+        if (!is.null(pe_out)) {
+          utils::write.csv(pe_out, file.path(run_dir, sprintf("rep%03d_pooled_%s_pe.csv", r, safe_filename(pooled_analysis_used))), row.names = FALSE)
         }
 
         # Machine-readable R2 values (optional but handy)
         r2_out <- try(lavInspect(fitP, "rsquare"), silent = TRUE)
         if (!inherits(r2_out, "try-error") && length(r2_out) > 0) {
           r2_df <- data.frame(var = names(r2_out), r2 = as.numeric(r2_out), stringsAsFactors = FALSE)
-          utils::write.csv(r2_df, file.path(run_dir, sprintf("rep%03d_pooled_r2.csv", r)), row.names = FALSE)
+          utils::write.csv(r2_df, file.path(run_dir, sprintf("rep%03d_pooled_%s_r2.csv", r, safe_filename(pooled_analysis_used))), row.names = FALSE)
         }
       }
     }
@@ -1533,7 +1833,8 @@ run_mc <- function() {
             write_lavaan_output(outW$fit, mg_path, title = paste0("MG SEM (W=", Wvar, ", rep ", r, ")"))
 
             # Machine-readable MG parameter estimates
-            pe_mg <- try(parameterEstimates(outW$fit, standardized = TRUE), silent = TRUE)
+            # Keep extraction unstandardized (and MI-safe policy: never standardized=TRUE for MI fits).
+            pe_mg <- try(parameterEstimates(outW$fit, standardized = FALSE), silent = TRUE)
             if (!inherits(pe_mg, "try-error") && is.data.frame(pe_mg)) {
               utils::write.csv(pe_mg, file.path(run_dir, sprintf("rep%03d_mg_%s_pe.csv", r, safe_filename(Wvar))), row.names = FALSE)
             }
@@ -1591,7 +1892,7 @@ run_mc <- function() {
       }, logical(1))
     } else {
       done <- vapply(seq_len(R_REPS), function(r) {
-        file.exists(file.path(run_dir, sprintf("rep%03d_pooled_pe.csv", r)))
+        file.exists(file.path(run_dir, sprintf("rep%03d_pooled_%s_pe.csv", r, safe_filename(DEFAULT_ANALYSIS))))
       }, logical(1))
     }
 
@@ -1619,7 +1920,7 @@ run_mc <- function() {
   # OPTIONAL: Preload already-completed pooled estimates into pooled_est so the final summary uses all reps.
   if (isTRUE(RESUME == 1) && isTRUE(SAVE_FITS == 1)) {
     for (r in seq_len(R_REPS)) {
-      pe_path <- file.path(run_dir, sprintf("rep%03d_pooled_pe.csv", r))
+      pe_path <- file.path(run_dir, sprintf("rep%03d_pooled_%s_pe.csv", r, safe_filename(DEFAULT_ANALYSIS)))
       if (!file.exists(pe_path)) next
       pe_df <- try(utils::read.csv(pe_path, stringsAsFactors = FALSE), silent = TRUE)
       if (inherits(pe_df, "try-error") || !is.data.frame(pe_df)) next
@@ -1654,6 +1955,20 @@ run_mc <- function() {
         one_rep(r)
       }
     )
+  }
+
+  # If any parallel worker errored, mclapply returns a "try-error" character string
+  # for that entry. Fail fast with the underlying message instead of crashing later
+  # with "$ operator is invalid for atomic vectors".
+  bad_idx <- which(vapply(results, function(x) is.character(x) || inherits(x, "try-error"), logical(1)))
+  if (length(bad_idx) > 0) {
+    msg <- paste0(
+      "Parallel worker failures detected in reps: ",
+      paste(reps[bad_idx], collapse = ", "),
+      "\nFirst error:\n",
+      as.character(results[[bad_idx[[1]]]])
+    )
+    stop(msg, call. = FALSE)
   }
 
   # --- Collect results back into the pre-allocated containers ---
@@ -1741,6 +2056,9 @@ run_mc <- function() {
   cat("POOLED SEM (RQ1–RQ3)\n")
   cat("Convergence rate:", mean(pooled_converged), "\n")
 
+  # When using MI via semTools::runMI, standardized summaries can fail for OLDlavaan.mi.
+  # We keep MC summaries purely numeric (means/sds/bias) and avoid summary(fit) calls.
+
   # quick bias/SD table for core paths
   core <- c("c","cxz","cz","a1","a1xz","a1z","a2","a2xz","a2z","b1","b2","d")
   truth <- c(c = PAR$c, cxz = PAR$cxz, cz = PAR$cz,
@@ -1793,9 +2111,60 @@ if (sys.nframe() == 0) {
   } else {
     message("Item marginals: using default equal-quantile cuts (no calibration loaded)")
   }
-  if (isTRUE(DO_REP_STUDY == 1)) {
-    run_representative_study(N = N, use_psw = isTRUE(USE_PSW == 1))
+  if (isTRUE(DO_DESIGN == 1)) {
+    design <- make_design_grid()
+    if (is.finite(DESIGN_ID_ONLY)) {
+      design <- design[design$design_id == DESIGN_ID_ONLY, , drop = FALSE]
+    }
+    if (nrow(design) == 0) stop("Design grid empty (check --design_id).")
+
+    out_root <- file.path("results", "design_grid", safe_filename(paste0("seed", SEED, "_R", R_REPS)))
+    dir.create(out_root, showWarnings = FALSE, recursive = TRUE)
+    utils::write.csv(design, file.path(out_root, "DESIGN.csv"), row.names = FALSE)
+
+    cond_summaries <- list()
+    for (i in seq_len(nrow(design))) {
+      cond <- design[i, , drop = FALSE]
+      apply_condition(cond)
+
+      # Run ID includes updated global parameters
+      message("[design] Running condition ", cond$design_id, " / ", nrow(design),
+              " | N=", N, " LAM=", sprintf("%.2f", LAM),
+              " a1xz=", sprintf("%.3f", PAR$a1xz), " cxz=", sprintf("%.3f", PAR$cxz),
+              " miss=", cond$miss_mech, ":", sprintf("%.2f", DEFAULT_MISS_RATE),
+              " analysis=", DEFAULT_ANALYSIS)
+
+      # NOTE: missingness + MI/FIML behavior will be added next; for now MC runs as-is.
+      mc_out <- NULL
+      if (isTRUE(DO_REP_STUDY == 1)) {
+        mc_out <- run_representative_study(N = N, use_psw = isTRUE(USE_PSW == 1))
+      } else {
+        mc_out <- run_mc()
+      }
+
+      # Minimal condition summary (expanded later to include coverage/power/etc.)
+      cond_summaries[[length(cond_summaries) + 1L]] <- data.frame(
+        design_id = as.integer(cond$design_id),
+        run_id = mk_run_id(),
+        N = as.integer(N),
+        LAM = as.numeric(LAM),
+        a1xz = as.numeric(PAR$a1xz),
+        cxz = as.numeric(PAR$cxz),
+        miss_rate = as.numeric(DEFAULT_MISS_RATE),
+        miss_mech = as.character(DEFAULT_MISS_MECH),
+        analysis = as.character(DEFAULT_ANALYSIS),
+        stringsAsFactors = FALSE
+      )
+    }
+
+    cond_df <- do.call(rbind, cond_summaries)
+    utils::write.csv(cond_df, file.path(out_root, "condition_runs.csv"), row.names = FALSE)
+    message("[design] Wrote condition run index: ", file.path(out_root, "condition_runs.csv"))
   } else {
-    run_mc()
+    if (isTRUE(DO_REP_STUDY == 1)) {
+      run_representative_study(N = N, use_psw = isTRUE(USE_PSW == 1))
+    } else {
+      run_mc()
+    }
   }
 }

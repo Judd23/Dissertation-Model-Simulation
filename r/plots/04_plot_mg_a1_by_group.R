@@ -1,23 +1,21 @@
 #!/usr/bin/env Rscript
 
-# APA 7 styled MG a1-by-group figure (Times New Roman if available; fallback Times).
+# MG a1-by-group figure.
 #
 # Input: results/tables/mg_re_all_a1_by_group.csv
-# Output: results/plots/MG_a1_by_group_re_all.pdf (+ PNG)
+# Output: results/runs/<run_id>/plots/MG_a1_by_group_<W>.pdf (+ PNG)
 
 suppressWarnings(suppressMessages({
   library(optparse)
   library(ggplot2)
 }))
 
-source(file.path("scripts", "apa7_theme.R"))
-tnr_ok <- isTRUE(apa7_enable_times_new_roman())
-base_family <- if (tnr_ok) "Times New Roman" else "Times"
+source(file.path("r", "themes", "theme_basic.R"))
 
 option_list <- list(
   make_option(c("--in_csv"), type = "character", default = "results/tables/mg_re_all_a1_by_group.csv",
               help = "Input CSV with group summaries (default: %default)"),
-  make_option(c("--out_dir"), type = "character", default = "results/plots",
+  make_option(c("--out_dir"), type = "character", default = file.path("results", "runs", "_latest", "plots"),
               help = "Output directory (default: %default)"),
   make_option(c("--W"), type = "character", default = "re_all",
               help = "W label (default: %default)"),
@@ -31,7 +29,10 @@ if (!file.exists(opt$in_csv)) stop("Input not found: ", opt$in_csv)
 dir.create(opt$out_dir, recursive = TRUE, showWarnings = FALSE)
 
 dat <- utils::read.csv(opt$in_csv, stringsAsFactors = FALSE)
-if (!all(c("group","mean_a1","sd_a1") %in% names(dat))) stop("Expected columns: group, mean_a1, sd_a1")
+req_cols <- c("group", "mean_a1", "sd_a1")
+if (!all(req_cols %in% names(dat))) {
+  stop("Expected columns: ", paste(req_cols, collapse = ", "), ". Found: ", paste(names(dat), collapse = ", "))
+}
 
 dat$group <- factor(dat$group, levels = sort(unique(dat$group)))
 # Approx 95% interval across-rep variation (not SE of mean)
@@ -48,7 +49,7 @@ p <- ggplot(dat, aes(x = group, y = mean_a1)) +
     x = "Group",
     y = "Mean a1 (across reps)"
   ) +
-  apa7_theme(base_size = 12, family = base_family)
+  basic_theme(base_size = 12)
 
 out_pdf <- file.path(opt$out_dir, paste0("MG_a1_by_group_", opt$W, ".pdf"))
 out_png <- file.path(opt$out_dir, paste0("MG_a1_by_group_", opt$W, ".png"))

@@ -17,9 +17,13 @@ suppressWarnings(suppressMessages({
   library(optparse)
 }))
 
+source(file.path("r", "utils", "results_paths.R"))
+
 option_list <- list(
   make_option(c("--run_dir"), type = "character", default = NULL,
-              help = "Run directory under results/lavaan (required)"),
+              help = "Run directory under results/runs (required)"),
+  make_option(c("--run_id"), type = "character", default = NULL,
+              help = "Run id under results/runs/<run_id> (optional alternative to --run_dir)"),
   make_option(c("--diag_csv"), type = "character", default = NULL,
               help = "Diagnostics CSV path (optional; autodetect under results/diagnostics if omitted)"),
   make_option(c("--out_dir"), type = "character", default = "results/tables",
@@ -35,7 +39,7 @@ option_list <- list(
 opt <- parse_args(OptionParser(option_list = option_list))
 
 stop_if_missing <- function(x, msg) if (is.null(x) || !nzchar(x)) stop(msg)
-stop_if_missing(opt$run_dir, "--run_dir is required")
+opt$run_dir <- resolve_run_dir(run_dir = opt$run_dir, run_id = opt$run_id)
 if (!dir.exists(opt$run_dir)) stop("run_dir not found: ", opt$run_dir)
 
 dir.create(opt$out_dir, recursive = TRUE, showWarnings = FALSE)
@@ -175,7 +179,7 @@ pooled_apa_out <- data.frame(
   stringsAsFactors = FALSE
 )
 
-utils::write.csv(pooled_apa_out, file.path(opt$out_dir, "pooled_param_summary_APA7_Word.csv"), row.names = FALSE)
+utils::write.csv(pooled_apa_out, file.path(opt$out_dir, "pooled_param_summary_word_ready.csv"), row.names = FALSE)
 
 # Convergence proxy: number of pooled PE files present
 pooled_conv <- data.frame(
@@ -302,7 +306,7 @@ if (length(mg_pe_files) > 0) {
 
 cat("Wrote tables to: ", normalizePath(opt$out_dir), "\n", sep = "")
 cat("- pooled_param_summary.csv\n")
-cat("- pooled_param_summary_APA7_Word.csv\n")
+cat("- pooled_param_summary_word_ready.csv\n")
 cat("- pooled_convergence.csv\n")
 if (!is.null(diag)) cat("- diagnostics_summary.csv\n")
 if (file.exists(file.path(opt$out_dir, sprintf("mg_%s_power.csv", opt$W)))) cat("- mg_", opt$W, "_power.csv\n", sep = "")

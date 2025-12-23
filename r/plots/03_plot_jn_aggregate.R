@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-# Aggregate per-rep Johnson–Neyman curve CSVs into a single APA-7-ready figure.
+# Aggregate per-rep Johnson–Neyman curve CSVs into a single figure.
 #
 # Input: many *_JN_curve.csv files with columns z, effect, lo, hi, sig.
 # Output:
@@ -8,19 +8,17 @@
 # - results/plots/JN_aggregate_<prefix>.png  (preview)
 # - results/plots/JN_aggregate_<prefix>.csv  (aggregated curve)
 #
-# Styling: Times New Roman, APA 7-ish: clean grid, black lines, minimal color.
+# Styling: minimal.
 
 suppressWarnings(suppressMessages({
   library(optparse)
   library(ggplot2)
 }))
 
-source(file.path("scripts", "apa7_theme.R"))
-tnr_ok <- isTRUE(apa7_enable_times_new_roman())
-base_family <- if (tnr_ok) "Times New Roman" else "Times"
+source(file.path("r", "themes", "theme_basic.R"))
 
 option_list <- list(
-  make_option(c("--curves_glob"), type = "character", default = "results/plots/pooled_R50_rep*_pooled_JN_curve.csv",
+  make_option(c("--curves_glob"), type = "character", default = "results/runs/*/plots/pooled_rep*_pooled_JN_curve.csv",
               help = "Glob for per-rep JN curve CSVs (default: %default)"),
   make_option(c("--out_dir"), type = "character", default = "results/plots",
               help = "Output directory (default: %default)"),
@@ -92,20 +90,17 @@ p <- ggplot(agg, aes(x = z, y = effect_med)) +
     x = "Moderator (centered Z)",
     y = "Conditional effect of X on M1"
   ) +
-  apa7_theme(base_size = 12, family = base_family) +
+  basic_theme(base_size = 12) +
   theme(legend.position = "none")
 
 out_pdf <- file.path(opt$out_dir, paste0("JN_aggregate_", opt$prefix, ".pdf"))
-out_pdf_final <- file.path(opt$out_dir, paste0("JN_aggregate_", opt$prefix, "_APA7_TNR.pdf"))
 out_png <- file.path(opt$out_dir, paste0("JN_aggregate_", opt$prefix, ".png"))
 
 ggsave(out_pdf, p, width = 6.5, height = 4.5, dpi = 300)
-suppressWarnings(ggsave(out_pdf_final, p, width = 6.5, height = 4.5, dpi = 300))
 # High-res PNG preview
 suppressWarnings(ggsave(out_png, p, width = 6.5, height = 4.5, dpi = 600))
 
 cat("Wrote:\n")
 cat("- ", out_pdf, "\n", sep = "")
-cat("- ", out_pdf_final, "\n", sep = "")
 cat("- ", out_png, "\n", sep = "")
 cat("- ", out_csv, "\n", sep = "")

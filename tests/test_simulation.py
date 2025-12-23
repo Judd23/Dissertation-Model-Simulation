@@ -6,21 +6,20 @@ import sys
 from pathlib import Path
 
 # Make project modules importable for local runs without requiring an editable install.
-# This repo’s import style is `from monte_carlo import ...` (modules live in `src/`).
+# Imports come from the packaged module `process_sem/`.
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SRC_DIR = REPO_ROOT / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 import numpy as np
 import pytest
-from monte_carlo import (
+from process_sem.monte_carlo import (
     MonteCarloSimulator,
     SimulationConfig,
     example_data_generator,
     example_estimator
 )
-from utils import (
+from process_sem.utils import (
     calculate_bias,
     calculate_mse,
     calculate_coverage,

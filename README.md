@@ -15,18 +15,18 @@ A comprehensive workspace for conducting Monte Carlo simulation studies for Stru
 
 ```
 Process-SEM/
-├── src/                        # Source code
+├── process_sem/                # Python package
 │   ├── __init__.py
 │   ├── monte_carlo.py          # Main simulation engine
 │   └── utils.py                # Utility functions
 ├── config/                     # Configuration files
 │   └── simulation_config.yaml  # Simulation parameters
-├── results/                    # Output directory
-│   └── plots/                  # Visualization outputs
-├── notebooks/                  # Jupyter notebooks for analysis
+├── results/                    # Output directory (generated; ignored by git)
 ├── tests/                      # Unit tests
 │   └── test_simulation.py
-├── run_simulation.py           # Main execution script
+├── scripts/                    # Entry points + helpers
+│   ├── run_simulation.py       # Main Python execution script
+│   └── generate_fake_data.py
 ├── requirements.txt            # Python dependencies
 └── README.md                   # This file
 ```
@@ -51,12 +51,58 @@ pip install -r requirements.txt
 Run a Monte Carlo simulation with default settings:
 
 ```bash
-python run_simulation.py
+python3 scripts/run_simulation.py
 ```
 
 ## R scripts (lavaan WLSMV Monte Carlo)
 
-This repo also includes R scripts (e.g., `mc_allRQs_PSW_pooled_MG_a1.R`) for Monte Carlo studies using **lavaan** with categorical indicators (WLSMV).
+This repo also includes R scripts (in `r/mc/`) for Monte Carlo studies using **lavaan** with categorical indicators (WLSMV).
+
+### R package version guard (reproducibility)
+
+For the next steps in this workflow, make sure your R environment is using a sufficiently recent `lavaan`.
+This workspace is currently tested with `lavaan >= 0.6-21`.
+
+In any script where you want to hard-lock the requirement, you can add:
+
+```r
+stopifnot(packageVersion("lavaan") >= "0.6-21")
+```
+
+If you need to upgrade:
+
+```r
+install.packages("lavaan")
+```
+
+### PSW overlap weights (pre-processing stage)
+
+If you're estimating propensity score overlap weights outside the simulation, use:
+
+- `scripts/01_psw_stage.R`
+    (If you keep a PSW pre-processing script, consider placing it under `r/` as well.)
+
+It reads an analysis-ready CSV, fits a logistic PS model, computes **overlap weights**
+$w_i = 1-\hat p_i$ for treated and $w_i = \hat p_i$ for controls, then scales weights to have mean 1.
+
+Inputs (expected columns):
+
+- `X` (0/1 treatment indicator)
+- the covariates in the PS formula (edit in the script to match your paper)
+
+Outputs:
+
+- a CSV with `id` and `psw` (and optional `ps_hat`)
+
+Example:
+
+```bash
+Rscript scripts/01_psw_stage.R \
+    --in data/analysis.csv \
+    --out data/weights_psw.csv \
+    --id id \
+    --keep_ps 1
+```
 
 ### Johnson–Neyman plots (quick, from saved rep outputs)
 
@@ -69,7 +115,7 @@ You can generate **Johnson–Neyman (J-N)** plots for the moderated path (the co
 Single rep:
 
 ```bash
-Rscript scripts/johnson_neyman_from_rep.R \
+Rscript r/plots/02_compute_jn_from_rep.R \
     --rep_file results/lavaan/<run_id>/rep099_pooled.txt \
     --out_dir results/plots \
     --zmin -2 --zmax 2
@@ -78,7 +124,7 @@ Rscript scripts/johnson_neyman_from_rep.R \
 Batch mode (many reps from a run directory):
 
 ```bash
-Rscript scripts/johnson_neyman_from_rep.R \
+Rscript r/plots/02_compute_jn_from_rep.R \
     --run_dir results/lavaan/<run_id> \
     --reps 91:99 \
     --out_dir results/plots \
@@ -104,6 +150,12 @@ Packages needed (install once in your R environment):
 - `lavaan`
 - `mice`
 - `semTools`
+
+Note on missing data (study policy):
+
+- This repo is set up to **avoid pairwise deletion**.
+- With **WLSMV + ordered indicators**, `lavaan` does not do FIML; the safe default is **listwise** deletion.
+- If you want to keep cases under missingness with ordinal indicators, use **multiple imputation** (`mice` + `semTools::runMI()`).
 
 Example (pooled model; assumes `dat`, `ORDERED_VARS`, and `build_model_pooled()` exist in your session):
 

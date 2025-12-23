@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
+"""Python Monte Carlo engine demo (separate from the R SEM MC pipeline).
+
+This script runs the *Python* example simulation from `process_sem/`.
+
+Your dissertation Monte Carlo SEM study entrypoints live under:
+- `r/mc/` (runs simulations)
+- `r/summaries/` (turn outputs into tables)
+- `r/plots/` (plots only)
+
+This script is kept as a small demo/test harness for the Python engine.
 """
-Example Monte Carlo Simulation Study
 
-This script demonstrates how to run a Monte Carlo simulation for
-a simple correlation structure.
-"""
-
-import sys
-sys.path.insert(0, '/workspaces/Process-SEM/src')
-
-import numpy as np
 import pandas as pd
-from monte_carlo import (
+from process_sem.monte_carlo import (
     MonteCarloSimulator,
     SimulationConfig,
     example_data_generator,
     example_estimator
 )
-from utils import (
+from process_sem.utils import (
     create_summary_table,
     plot_parameter_distributions,
     plot_convergence_over_iterations,
@@ -49,7 +50,7 @@ def main():
     
     # Load configuration
     config_dict = load_config()
-    
+
     # Create simulation configuration
     sim_config = SimulationConfig(
         n_simulations=config_dict.get('n_simulations', 1000),
