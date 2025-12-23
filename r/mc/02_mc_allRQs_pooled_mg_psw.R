@@ -1672,13 +1672,15 @@ run_mc <- function() {
   W_TARGETS <- W_LIST
   if (isTRUE(nzchar(WVAR_SINGLE)) && isTRUE(!is.na(WVAR_SINGLE))) W_TARGETS <- WVAR_SINGLE
 
-  # Run directory (also used for resume checks when SAVE_FITS=1)
-  run_dir <- file.path("results", "lavaan", mk_run_id())
-  if (isTRUE(SAVE_FITS == 1)) dir.create(run_dir, showWarnings = FALSE, recursive = TRUE)
+  # Create one run_id/run_dir for the entire run (do this once)
+  run_id  <- mk_run_id()
+  run_dir <- file.path("results", "runs", run_id)
 
-  # Create run_dir once for this run
-  run_dir <- file.path("results", "lavaan", mk_run_id())
-  if (isTRUE(SAVE_FITS == 1)) dir.create(run_dir, showWarnings = FALSE, recursive = TRUE)
+  # Always create the run folder so summaries/diagnostics have a home
+  dir.create(run_dir, showWarnings = FALSE, recursive = TRUE)
+
+  message("[run] run_id  = ", run_id)
+  message("[run] run_dir = ", run_dir)
 
   pooled_targets <- c("a1","a1xz","a1z","a2","a2xz","a2z","d","c","cxz","cz","b1","b2",
                       "a1_z0","a1_z1","a1_z2","a1_z3","a1_z4",
@@ -1834,8 +1836,8 @@ run_mc <- function() {
 
             # Machine-readable MG parameter estimates
             # Keep extraction unstandardized (and MI-safe policy: never standardized=TRUE for MI fits).
-            pe_mg <- try(parameterEstimates(outW$fit, standardized = FALSE), silent = TRUE)
-            if (!inherits(pe_mg, "try-error") && is.data.frame(pe_mg)) {
+            pe_mg <- extract_pe_numeric(outW$fit, standardized = FALSE)
+            if (!is.null(pe_mg)) {
               utils::write.csv(pe_mg, file.path(run_dir, sprintf("rep%03d_mg_%s_pe.csv", r, safe_filename(Wvar))), row.names = FALSE)
             }
           }
@@ -2042,12 +2044,33 @@ run_mc <- function() {
   }
 
   if (isTRUE(DIAG_N > 0) && length(diag_rows) > 0) {
-    diag_dir <- file.path("results", "diagnostics", mk_run_id())
+    diag_dir <- file.path(run_dir, "diagnostics")
     dir.create(diag_dir, showWarnings = FALSE, recursive = TRUE)
     diag_df <- do.call(rbind, diag_rows)
     utils::write.csv(diag_df, file.path(diag_dir, "diagnostics.csv"), row.names = FALSE)
     message("[diag] wrote diagnostics: ", file.path(diag_dir, "diagnostics.csv"))
   }
+
+  # -------------------------
+  # RUN SUMMARY (written once per run)
+  # -------------------------
+  summary_path <- file.path(run_dir, "run_summary.txt")
+  summary_lines <- c(
+    paste0("run_id=", run_id),
+    paste0("run_dir=", run_dir),
+    paste0("seed=", SEED),
+    paste0("N=", N),
+    paste0("R=", R_REPS),
+    paste0("psw=", USE_PSW),
+    paste0("mg=", RUN_MG),
+    paste0("analysis=", DEFAULT_ANALYSIS),
+    paste0("save_fits=", SAVE_FITS),
+    paste0("diag=", DIAG_N),
+  paste0("cores=", NCORES),
+    paste0("timestamp=", format(Sys.time(), tz = "UTC", usetz = TRUE))
+  )
+  writeLines(summary_lines, con = summary_path)
+  message("[run] wrote summary: ", summary_path)
 
   # -------------------------
   # SUMMARIES
