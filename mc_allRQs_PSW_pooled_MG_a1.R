@@ -42,8 +42,10 @@ RUN_MG <- as.integer(get_arg("--mg", 1))
 # Parallelization (replications over cores)
 NCORES <- max(1L, parallel::detectCores() - 1L)
 
-# Save full lavaan output to disk (text files)
 SAVE_FITS <- as.integer(get_arg("--save_fits", 1))
+
+# Add resume CLI flag
+RESUME <- as.integer(get_arg("--resume", 0))
 
 # -------------------------
 # DEBUG/DIAGNOSTICS
@@ -91,6 +93,7 @@ R_REPS <- 100
 N      <- 3000
 
 # Optional CLI overrides:
+#
 #   Rscript mc_allRQs_PSW_pooled_MG_a1.R --N 500 --R 5 --seed 1
 R_REPS <- as.integer(get_arg("--R", R_REPS))
 N      <- as.integer(get_arg("--N", N))
@@ -99,6 +102,7 @@ RUN_MG <- as.integer(get_arg("--mg", RUN_MG))
 NCORES <- as.integer(get_arg("--cores", NCORES))
 NCORES <- max(1L, NCORES)
 SAVE_FITS <- as.integer(get_arg("--save_fits", SAVE_FITS))
+RESUME <- as.integer(get_arg("--resume", RESUME))
 
 # W variables (you run one at a time; rename to match your file)
 W_LIST <- c("re_all", "firstgen", "pell", "living18", "sex")
@@ -669,6 +673,120 @@ diag_check_6pt_marginals <- function(dat, group_var = NULL, vars = NULL, min_pro
   invisible(NULL)
 }
 
+# --------------------------------------------------
+# Compact diagnostics (CSV) helpers
+# --------------------------------------------------
+
+diag_extract_lavaan_status <- function(fit) {
+  # Returns a list of safe, scalar diagnostics about a lavaan fit
+  if (is.null(fit)) {
+    return(list(converged = 0L, n_warnings = NA_integer_, warnings_head = NA_character_))
+  }
+  conv <- try(lavInspect(fit, "converged"), silent = TRUE)
+  converged <- if (!inherits(conv, "try-error") && isTRUE(conv)) 1L else 0L
+
+  warn <- try(lavInspect(fit, "warnings"), silent = TRUE)
+  if (!inherits(warn, "try-error") && length(warn) > 0) {
+    warn_chr <- as.character(warn)
+    warn_chr <- warn_chr[nzchar(warn_chr)]
+    warnings_head <- paste(utils::head(warn_chr, 3), collapse = " | ")
+    n_warnings <- length(warn_chr)
+    if (!nzchar(warnings_head)) warnings_head <- NA_character_
+  } else {
+    n_warnings <- 0L
+    warnings_head <- NA_character_
+  }
+
+  list(converged = converged, n_warnings = as.integer(n_warnings), warnings_head = as.character(warnings_head))
+}
+
+diag_scalar_chr <- function(x) {
+  # Force a single-length character scalar (or NA)
+  if (is.null(x) || length(x) == 0) return(NA_character_)
+  x <- as.character(x)
+  if (length(x) == 0) return(NA_character_)
+  x[[1]]
+}
+
+diag_scalar_int <- function(x) {
+  if (is.null(x) || length(x) == 0) return(NA_integer_)
+  x <- suppressWarnings(as.integer(x))
+  if (length(x) == 0) return(NA_integer_)
+  x[[1]]
+}
+
+diag_scalar_num <- function(x) {
+  if (is.null(x) || length(x) == 0) return(NA_real_)
+  x <- suppressWarnings(as.numeric(x))
+  if (length(x) == 0) return(NA_real_)
+  x[[1]]
+}
+
+diag_min_category_prop <- function(x) {
+  # Returns the minimum observed category proportion for a (ordered) factor-like vector.
+  # NA if cannot compute.
+  if (is.null(x)) return(NA_real_)
+  if (!is.factor(x)) x <- factor(x)
+  x <- x[!is.na(x)]
+  if (length(x) == 0) return(NA_real_)
+  tab <- table(x)
+  prop <- as.numeric(tab) / sum(tab)
+  suppressWarnings(min(prop))
+}
+
+diag_min_category_prop_vars <- function(dat, vars) {
+  # Compute min category proportion across a set of variables;
+  # returns (worst_overall, worst_item_name)
+  vars <- vars[vars %in% names(dat)]
+  if (length(vars) == 0) return(list(min_prop = NA_real_, min_prop_var = NA_character_))
+
+  mins <- vapply(vars, function(v) diag_min_category_prop(dat[[v]]), numeric(1))
+  if (all(!is.finite(mins))) return(list(min_prop = NA_real_, min_prop_var = NA_character_))
+  idx <- which.min(mins)
+  list(min_prop = as.numeric(mins[[idx]]), min_prop_var = vars[[idx]])
+}
+
+diag_group_sizes <- function(dat, group_var) {
+  # Returns group counts, min group size, number of groups
+  if (is.null(dat) || is.null(group_var) || !isTRUE(group_var %in% names(dat))) {
+    return(list(n_groups = NA_integer_, min_group_n = NA_integer_, groups_n = NA_character_))
+  }
+  g <- dat[[group_var]]
+  if (!is.factor(g)) g <- factor(g)
+  tab <- table(g)
+  groups_n <- paste(names(tab), as.integer(tab), sep = ":", collapse = "|")
+  list(
+    n_groups = as.integer(length(tab)),
+    min_group_n = as.integer(min(as.integer(tab))),
+    groups_n = groups_n
+  )
+}
+
+diag_scalar_chr <- function(x) {
+  # Ensure we always return a length-1 character scalar (or NA_character_)
+  if (is.null(x)) return(NA_character_)
+  x <- as.character(x)
+  if (length(x) == 0) return(NA_character_)
+  if (!nzchar(x[[1]])) return(NA_character_)
+  x[[1]]
+}
+
+diag_scalar_int <- function(x) {
+  # Ensure we always return a length-1 integer scalar (or NA_integer_)
+  if (is.null(x)) return(NA_integer_)
+  x <- suppressWarnings(as.integer(x))
+  if (length(x) == 0) return(NA_integer_)
+  x[[1]]
+}
+
+diag_scalar_num <- function(x) {
+  # Ensure we always return a length-1 numeric scalar (or NA_real_)
+  if (is.null(x)) return(NA_real_)
+  x <- suppressWarnings(as.numeric(x))
+  if (length(x) == 0) return(NA_real_)
+  x[[1]]
+}
+
 merge_rare_categories_nearest <- function(x, min_prop = 0.01, min_expected_n = 5) {
   # Merge rare categories into a neighboring category to avoid empty/small cells in MG.
   # Rule: if a category proportion < min_prop OR count < min_expected_n, merge it with a
@@ -1197,7 +1315,12 @@ fit_pooled <- function(dat) {
   # We therefore compute PSW but do NOT pass it into SEM estimation.
 
   fit <- tryCatch(
-    do.call(lavaan::sem, args),
+    suppressWarnings(do.call(lavaan::sem, args)),
+    warning = function(w) {
+      # Keep warnings from aborting a parallel worker; record and continue.
+      if (isTRUE(DIAG_N > 0)) message("[pooled fit_warning] ", conditionMessage(w))
+      invokeRestart("muffleWarning")
+    },
     error = function(e) {
       message("[pooled fit_error] ", e$message)
       return(NULL)
@@ -1279,6 +1402,14 @@ run_mc <- function() {
   W_TARGETS <- W_LIST
   if (isTRUE(nzchar(WVAR_SINGLE)) && isTRUE(!is.na(WVAR_SINGLE))) W_TARGETS <- WVAR_SINGLE
 
+  # Run directory (also used for resume checks when SAVE_FITS=1)
+  run_dir <- file.path("results", "lavaan", mk_run_id())
+  if (isTRUE(SAVE_FITS == 1)) dir.create(run_dir, showWarnings = FALSE, recursive = TRUE)
+
+  # Create run_dir once for this run
+  run_dir <- file.path("results", "lavaan", mk_run_id())
+  if (isTRUE(SAVE_FITS == 1)) dir.create(run_dir, showWarnings = FALSE, recursive = TRUE)
+
   pooled_targets <- c("a1","a1xz","a1z","a2","a2xz","a2z","d","c","cxz","cz","b1","b2",
                       "a1_z0","a1_z1","a1_z2","a1_z3","a1_z4",
                       "a2_z0","a2_z1","a2_z2","a2_z3","a2_z4",
@@ -1297,13 +1428,25 @@ run_mc <- function() {
   rq4_reason <- lapply(W_TARGETS, function(x) rep(NA_character_, R_REPS))
   names(rq4_reason) <- W_TARGETS
 
+  # Compact diagnostics rows (one row per rep per W); written at end when DIAG_N > 0
+  diag_rows <- list()
+
   # --- One replication as a pure function (makes parallelization easy) ---
   one_rep <- function(r) {
+    t0 <- proc.time()[["elapsed"]]
     dat <- gen_dat(N)
+
+    diag_min_overall <- NA_real_
+    diag_min_overall_var <- NA_character_
+    diag_min_post_mgprep <- NA_real_
+    diag_min_post_mgprep_var <- NA_character_
 
     if (isTRUE(DIAG_N > 0)) {
       # Sanity check the generator-side K=6 floor (overall).
       diag_check_6pt_marginals(dat, group_var = NULL, vars = ORDERED_VARS, min_prop = 0.02)
+      mm <- diag_min_category_prop_vars(dat, ORDERED_VARS)
+      diag_min_overall <- mm$min_prop
+      diag_min_overall_var <- mm$min_prop_var
     }
 
     # PSW first (weights computed prior to SEM estimation)
@@ -1316,6 +1459,7 @@ run_mc <- function() {
     pooled_row <- setNames(as.list(rep(NA_real_, length(pooled_targets))), pooled_targets)
     fitP <- fit_pooled(dat)
     pooled_path <- NA_character_
+    pooled_diag <- diag_extract_lavaan_status(fitP)
     if (!is.null(fitP)) {
       pooled_ok <- 1L
       pe <- parameterEstimates(fitP)
@@ -1325,15 +1469,28 @@ run_mc <- function() {
       }
 
       if (isTRUE(SAVE_FITS == 1)) {
-        run_dir <- file.path("results", "lavaan", mk_run_id())
         pooled_path <- file.path(run_dir, sprintf("rep%03d_pooled.txt", r))
         write_lavaan_output(fitP, pooled_path, title = paste0("Pooled SEM (rep ", r, ")"))
+
+        # Machine-readable parameter estimates for aggregation/resume
+        pe_out <- try(parameterEstimates(fitP, standardized = TRUE), silent = TRUE)
+        if (!inherits(pe_out, "try-error") && is.data.frame(pe_out)) {
+          utils::write.csv(pe_out, file.path(run_dir, sprintf("rep%03d_pooled_pe.csv", r)), row.names = FALSE)
+        }
+
+        # Machine-readable R2 values (optional but handy)
+        r2_out <- try(lavInspect(fitP, "rsquare"), silent = TRUE)
+        if (!inherits(r2_out, "try-error") && length(r2_out) > 0) {
+          r2_df <- data.frame(var = names(r2_out), r2 = as.numeric(r2_out), stringsAsFactors = FALSE)
+          utils::write.csv(r2_df, file.path(run_dir, sprintf("rep%03d_pooled_r2.csv", r)), row.names = FALSE)
+        }
       }
     }
 
     # RQ4: MG tests, one W at a time (a1 differs by group)
     mg <- list()
     mg_paths <- list()
+    mg_diag <- list()
     if (isTRUE(RUN_MG == 1)) {
       for (Wvar in W_TARGETS) {
         if (isTRUE(DIAG_N > 0)) {
@@ -1345,16 +1502,41 @@ run_mc <- function() {
         # Merge rare categories for any MG grouping Wvar
         dat[[Wvar]] <- merge_rare_categories_nearest(dat[[Wvar]], min_prop = 0.01, min_expected_n = 5)
 
+        if (isTRUE(DIAG_N > 0)) {
+          gm <- diag_min_category_prop_vars(dat, ORDERED_VARS)
+          diag_min_post_mgprep <- gm$min_prop
+          diag_min_post_mgprep_var <- gm$min_prop_var
+        }
+
         outW <- fit_mg_a1_test(dat, Wvar)
         mg[[Wvar]] <- outW
 
-        if (isTRUE(SAVE_FITS == 1)) {
-          run_dir <- file.path("results", "lavaan", mk_run_id())
+        # Compact MG diagnostics
+        gsz <- diag_group_sizes(dat, Wvar)
+        mg_fit_diag <- diag_extract_lavaan_status(outW[["fit"]])
+        mg_diag[[Wvar]] <- list(
+          ok = as.integer(isTRUE(outW[["ok"]])),
+          reason = as.character(outW[["reason"]]),
+          err_msg = as.character(outW[["err_msg"]]),
+          n_groups = gsz$n_groups,
+          min_group_n = gsz$min_group_n,
+          groups_n = gsz$groups_n,
+          converged = mg_fit_diag$converged,
+          n_warnings = mg_fit_diag$n_warnings,
+          warnings_head = mg_fit_diag$warnings_head
+        )
 
+        if (isTRUE(SAVE_FITS == 1)) {
           if (!is.null(outW[["fit"]])) {
             mg_path <- file.path(run_dir, sprintf("rep%03d_mg_%s.txt", r, safe_filename(Wvar)))
             mg_paths[[Wvar]] <- mg_path
             write_lavaan_output(outW$fit, mg_path, title = paste0("MG SEM (W=", Wvar, ", rep ", r, ")"))
+
+            # Machine-readable MG parameter estimates
+            pe_mg <- try(parameterEstimates(outW$fit, standardized = TRUE), silent = TRUE)
+            if (!inherits(pe_mg, "try-error") && is.data.frame(pe_mg)) {
+              utils::write.csv(pe_mg, file.path(run_dir, sprintf("rep%03d_mg_%s_pe.csv", r, safe_filename(Wvar))), row.names = FALSE)
+            }
           }
 
           # If MG failed for any reason, write an explicit error log that captures the exact message/warnings.
@@ -1379,7 +1561,14 @@ run_mc <- function() {
       pooled_row = pooled_row,
       pooled_path = pooled_path,
       mg = mg,
-      mg_paths = mg_paths
+      mg_paths = mg_paths,
+      pooled_diag = pooled_diag,
+      mg_diag = mg_diag,
+      diag_min_overall = diag_min_overall,
+      diag_min_overall_var = diag_min_overall_var,
+      diag_min_post_mgprep = diag_min_post_mgprep,
+      diag_min_post_mgprep_var = diag_min_post_mgprep_var,
+      elapsed_sec = proc.time()[["elapsed"]] - t0
     )
   }
 
@@ -1388,12 +1577,61 @@ run_mc <- function() {
   if (!is.null(REPS_SUBSET) && length(REPS_SUBSET) > 0) {
     reps <- REPS_SUBSET
   }
+  # Resume logic
+  # - pooled-only runs: skip reps with pooled_pe.csv
+  # - MG runs for a single W: skip reps with mg_<W>.txt (or mg_<W>_pe.csv)
+  if (isTRUE(RESUME == 1) && isTRUE(SAVE_FITS == 1)) {
+    done <- rep(FALSE, R_REPS)
+
+    if (isTRUE(RUN_MG == 1) && isTRUE(length(W_TARGETS) == 1L)) {
+      Wvar <- W_TARGETS[[1]]
+      done <- vapply(seq_len(R_REPS), function(r) {
+        file.exists(file.path(run_dir, sprintf("rep%03d_mg_%s.txt", r, safe_filename(Wvar)))) ||
+          file.exists(file.path(run_dir, sprintf("rep%03d_mg_%s_pe.csv", r, safe_filename(Wvar))))
+      }, logical(1))
+    } else {
+      done <- vapply(seq_len(R_REPS), function(r) {
+        file.exists(file.path(run_dir, sprintf("rep%03d_pooled_pe.csv", r)))
+      }, logical(1))
+    }
+
+    if (is.null(REPS_SUBSET)) {
+      reps <- which(!done)
+    } else {
+      reps <- reps[!done[reps]]
+    }
+
+    if (length(reps) == 0) {
+      message("[resume] Nothing to do: all requested reps already have outputs in ", run_dir)
+      return(invisible(list()))
+    } else {
+      message("[resume] Skipping ", sum(done), " completed reps; running ", length(reps), " reps.")
+    }
+  }
   if (isTRUE(DIAG_N > 0)) {
     message(
       "run_mc(): reps=",
       if (is.null(REPS_SUBSET)) R_REPS else paste0(length(REPS_SUBSET), " (subset)"),
       ", N=", N, ", mg=", RUN_MG, ", psw=", USE_PSW, ", cores=", NCORES
     )
+  }
+
+  # OPTIONAL: Preload already-completed pooled estimates into pooled_est so the final summary uses all reps.
+  if (isTRUE(RESUME == 1) && isTRUE(SAVE_FITS == 1)) {
+    for (r in seq_len(R_REPS)) {
+      pe_path <- file.path(run_dir, sprintf("rep%03d_pooled_pe.csv", r))
+      if (!file.exists(pe_path)) next
+      pe_df <- try(utils::read.csv(pe_path, stringsAsFactors = FALSE), silent = TRUE)
+      if (inherits(pe_df, "try-error") || !is.data.frame(pe_df)) next
+      # Pull labeled parameters and defined effects
+      if (all(c("label","est") %in% names(pe_df))) {
+        pe2 <- pe_df[!is.na(pe_df$label) & nzchar(pe_df$label) & pe_df$label %in% pooled_targets, c("label","est")]
+        if (nrow(pe2) > 0) {
+          for (i in seq_len(nrow(pe2))) pooled_est[r, pe2$label[i]] <- pe2$est[i]
+          pooled_converged[r] <- 1L
+        }
+      }
+    }
   }
 
   # Reproducible parallel RNG: each fork inherits stream; we then set per-rep seed.
@@ -1424,7 +1662,14 @@ run_mc <- function() {
     r <- reps[[i]]
     out <- results[[i]]
     pooled_converged[r] <- out$pooled_ok
-    pooled_est[r, names(out$pooled_row)] <- as.numeric(out$pooled_row)
+    # pooled_row is stored as a named list; unlist to a named numeric vector before assignment
+    row_vec <- unlist(out$pooled_row, use.names = TRUE)
+    if (length(row_vec) > 0) {
+      cols <- intersect(names(row_vec), names(pooled_est))
+      if (length(cols) > 0) {
+        pooled_est[r, cols] <- as.numeric(row_vec[cols])
+      }
+    }
 
     if (isTRUE(RUN_MG == 1) && length(out$mg) > 0) {
       for (Wvar in names(out$mg)) {
@@ -1436,6 +1681,57 @@ run_mc <- function() {
         }
       }
     }
+
+    # Compact diagnostics (written once per run)
+    if (isTRUE(DIAG_N > 0)) {
+      pooled_d <- out$pooled_diag
+      for (Wvar in W_TARGETS) {
+        md <- out$mg_diag[[Wvar]]
+        if (is.null(md)) {
+          md <- list(
+            ok = NA_integer_, reason = NA_character_, err_msg = NA_character_,
+            n_groups = NA_integer_, min_group_n = NA_integer_, groups_n = NA_character_,
+            converged = NA_integer_, n_warnings = NA_integer_, warnings_head = NA_character_
+          )
+        }
+        diag_rows[[length(diag_rows) + 1L]] <- data.frame(
+          rep = as.integer(r),
+          seed = as.integer(SEED),
+          N = as.integer(N),
+          R = as.integer(R_REPS),
+          psw = as.integer(USE_PSW),
+          mg = as.integer(RUN_MG),
+          W = as.character(Wvar),
+          pooled_ok = as.integer(out$pooled_ok),
+          pooled_converged = diag_scalar_int(pooled_d$converged),
+          pooled_n_warnings = diag_scalar_int(pooled_d$n_warnings),
+          pooled_warnings_head = diag_scalar_chr(pooled_d$warnings_head),
+          mg_ok = diag_scalar_int(md$ok),
+          mg_reason = diag_scalar_chr(md$reason),
+          mg_err_msg = diag_scalar_chr(md$err_msg),
+          mg_n_groups = diag_scalar_int(md$n_groups),
+          mg_min_group_n = diag_scalar_int(md$min_group_n),
+          mg_groups_n = diag_scalar_chr(md$groups_n),
+          mg_converged = diag_scalar_int(md$converged),
+          mg_n_warnings = diag_scalar_int(md$n_warnings),
+          mg_warnings_head = diag_scalar_chr(md$warnings_head),
+          min_cat_prop_overall = diag_scalar_num(out$diag_min_overall),
+          min_cat_prop_overall_var = diag_scalar_chr(out$diag_min_overall_var),
+          min_cat_prop_post_mgprep = diag_scalar_num(out$diag_min_post_mgprep),
+          min_cat_prop_post_mgprep_var = diag_scalar_chr(out$diag_min_post_mgprep_var),
+          elapsed_sec = diag_scalar_num(out$elapsed_sec),
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+  }
+
+  if (isTRUE(DIAG_N > 0) && length(diag_rows) > 0) {
+    diag_dir <- file.path("results", "diagnostics", mk_run_id())
+    dir.create(diag_dir, showWarnings = FALSE, recursive = TRUE)
+    diag_df <- do.call(rbind, diag_rows)
+    utils::write.csv(diag_df, file.path(diag_dir, "diagnostics.csv"), row.names = FALSE)
+    message("[diag] wrote diagnostics: ", file.path(diag_dir, "diagnostics.csv"))
   }
 
   # -------------------------
