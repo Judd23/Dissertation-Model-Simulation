@@ -1,5 +1,6 @@
 # Simulation outputs
 results/
+results/**
 
 # Python
 __pycache__/
@@ -48,14 +49,8 @@ wheels/
 htmlcov/
 .tox/
 
-# Results (keep directory structure)
-results/*.csv
-results/*.json
-results/*.tex
-results/plots/*.png
-results/plots/*.pdf
+# Results (previously kept directory structure; now ignore everything)
 !results/.gitkeep
-!results/plots/.gitkeep
 
 # OS
 .DS_Store
@@ -63,3 +58,19 @@ Thumbs.db
 
 # Logs
 *.log
+
+# --- local env & cache ---
+.venv/
+.pytest_cache/
+**/__pycache__/
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/
+
+# --- outputs ---
+results/
+
+# --- local data (keep examples only) ---
+data/*.csv
+!data/example_*.csv

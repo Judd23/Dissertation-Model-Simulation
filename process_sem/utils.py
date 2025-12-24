@@ -6,10 +6,19 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+def _to_float_numpy(values: Any) -> np.ndarray:
+    """Convert scalars/Series/Index to a float NumPy array.
+
+    Pandas' pd.to_numeric() is typed to possibly return a scalar float.
+    This helper keeps both Pylance and runtime happy.
+    """
+    return np.asarray(pd.to_numeric(values, errors="coerce"), dtype=float)
 
 
 def calculate_bias(estimates: np.ndarray, true_value: float) -> float:
@@ -23,7 +32,7 @@ def calculate_bias(estimates: np.ndarray, true_value: float) -> float:
     Returns:
         Bias (mean estimate - true value)
     """
-    return np.mean(estimates) - true_value
+    return float(np.mean(estimates) - true_value)
 
 
 def calculate_mse(estimates: np.ndarray, true_value: float) -> float:
@@ -37,7 +46,7 @@ def calculate_mse(estimates: np.ndarray, true_value: float) -> float:
     Returns:
         Mean squared error
     """
-    return np.mean((estimates - true_value) ** 2)
+    return float(np.mean((estimates - true_value) ** 2))
 
 
 def calculate_coverage(
@@ -67,7 +76,7 @@ def calculate_coverage(
     
     coverage = np.mean((lower_bounds <= true_value) & (true_value <= upper_bounds))
     
-    return coverage
+    return float(coverage)
 
 
 def calculate_relative_bias(estimates: np.ndarray, true_value: float) -> float:
@@ -82,9 +91,9 @@ def calculate_relative_bias(estimates: np.ndarray, true_value: float) -> float:
         Relative bias as percentage
     """
     if true_value == 0:
-        return np.nan
+        return float("nan")
     
-    return (calculate_bias(estimates, true_value) / true_value) * 100
+    return float((calculate_bias(estimates, true_value) / true_value) * 100)
 
 
 def calculate_power(p_values: np.ndarray, alpha: float = 0.05) -> float:
@@ -98,7 +107,7 @@ def calculate_power(p_values: np.ndarray, alpha: float = 0.05) -> float:
     Returns:
         Power (proportion of significant results)
     """
-    return np.mean(p_values < alpha)
+    return float(np.mean(p_values < alpha))
 
 
 def create_summary_table(
@@ -124,35 +133,61 @@ def create_summary_table(
     
     for col in param_cols:
         param_name = col.replace('est_', '')
-        estimates = results_df[col].values
-        
-        row = {
-            'Parameter': param_name,
-            'Mean': np.mean(estimates),
-            'Median': np.median(estimates),
-            'SD': np.std(estimates),
-            'Min': np.min(estimates),
-            'Max': np.max(estimates),
-            'Q25': np.percentile(estimates, 25),
-            'Q75': np.percentile(estimates, 75)
-        }
-        
+
+        # Ensure a plain numeric NumPy array (avoids ExtensionArray/Categorical typing issues)
+        estimates = _to_float_numpy(results_df[col])
+        est_mask = ~np.isnan(estimates)
+        valid_estimates = estimates[est_mask]
+
+        if valid_estimates.size == 0:
+            row = {
+                'Parameter': param_name,
+                'Mean': float("nan"),
+                'Median': float("nan"),
+                'SD': float("nan"),
+                'Min': float("nan"),
+                'Max': float("nan"),
+                'Q25': float("nan"),
+                'Q75': float("nan")
+            }
+        else:
+            row = {
+                'Parameter': param_name,
+                'Mean': float(np.mean(valid_estimates)),
+                'Median': float(np.median(valid_estimates)),
+                'SD': float(np.std(valid_estimates)),
+                'Min': float(np.min(valid_estimates)),
+                'Max': float(np.max(valid_estimates)),
+                'Q25': float(np.percentile(valid_estimates, 25)),
+                'Q75': float(np.percentile(valid_estimates, 75))
+            }
+
         # Add bias and MSE if true values provided
         if true_values and param_name in true_values:
             true_val = true_values[param_name]
             row['True_Value'] = true_val
-            row['Bias'] = calculate_bias(estimates, true_val)
-            row['Relative_Bias_%'] = calculate_relative_bias(estimates, true_val)
-            row['MSE'] = calculate_mse(estimates, true_val)
-            
+
+            if valid_estimates.size == 0:
+                row['Bias'] = float("nan")
+                row['Relative_Bias_%'] = float("nan")
+                row['MSE'] = float("nan")
+            else:
+                row['Bias'] = calculate_bias(valid_estimates, true_val)
+                row['Relative_Bias_%'] = calculate_relative_bias(valid_estimates, true_val)
+                row['MSE'] = calculate_mse(valid_estimates, true_val)
+
             # Calculate coverage if standard errors available
             se_col = f'se_{param_name}'
             if se_col in results_df.columns:
-                standard_errors = results_df[se_col].values
-                row['Coverage'] = calculate_coverage(
-                    estimates, standard_errors, true_val, confidence_level
-                )
-        
+                standard_errors = _to_float_numpy(results_df[se_col])
+                mask = ~np.isnan(estimates) & ~np.isnan(standard_errors)
+                if np.any(mask):
+                    row['Coverage'] = calculate_coverage(
+                        estimates[mask], standard_errors[mask], true_val, confidence_level
+                    )
+                else:
+                    row['Coverage'] = float("nan")
+
         summary_rows.append(row)
     
     return pd.DataFrame(summary_rows)
@@ -242,10 +277,13 @@ def plot_convergence_over_iterations(
         logger.error(f"Parameter {param_name} not found in results")
         return
     
-    cumulative_mean = results_df[col_name].expanding().mean()
+    values = _to_float_numpy(results_df[col_name])
+    cumulative_mean = pd.Series(values).expanding(min_periods=1).mean()
+    x_vals = np.arange(1, len(values) + 1, dtype=float)
+    y_vals = np.asarray(cumulative_mean.to_numpy(), dtype=float)
     
     plt.figure(figsize=(10, 6))
-    plt.plot(cumulative_mean.index, cumulative_mean.values, 
+    plt.plot(x_vals, y_vals,
             linewidth=2, label='Cumulative Mean')
     
     if true_value is not None:

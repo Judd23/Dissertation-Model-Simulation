@@ -6,7 +6,7 @@
 # from the saved text output (repNNN_pooled.txt) and produces a J-N plot + CSV.
 #
 # Why text parsing?
-# - Your repo saves lavaan outputs as text (e.g., results/lavaan/.../rep099_pooled.txt)
+# - Your repo saves lavaan outputs as text (e.g., results/runs/.../rep099_pooled.txt)
 # - This lets us reproduce J-N plots without needing to save/load RDS fit objects.
 #
 # J-N here is for the conditional effect of X on M1 when M1 ~ a1*X + a1xz*XZ_c + a1z*Z + ...
@@ -17,6 +17,8 @@ suppressWarnings(suppressMessages({
   library(optparse)
   library(ggplot2)
 }))
+
+source(file.path("r", "utils", "results_paths.R"))
 
 parse_numeric_after <- function(line, pattern) {
   m <- regexpr(pattern, line, perl = TRUE)
@@ -123,6 +125,8 @@ option_list <- list(
               help = "Path to repNNN_pooled.txt"),
   make_option(c("--run_dir"), type = "character", default = NULL,
               help = "Directory containing rep*_pooled.txt (if --rep_file not provided)"),
+  make_option(c("--run_id"), type = "character", default = NULL,
+              help = "Run id under results/runs/<run_id> (optional alternative to --run_dir)"),
   make_option(c("--reps"), type = "character", default = NULL,
               help = "Optional rep filter for --run_dir. Examples: 'all' (default), '99', '1,2,5', '1:10'."),
   make_option(c("--rep"), type = "integer", default = 99,
@@ -133,13 +137,17 @@ option_list <- list(
               help = "Plot range min for moderator (centered scale) (default: %default)"),
   make_option(c("--zmax"), type = "double", default =  2,
               help = "Plot range max for moderator (centered scale) (default: %default)"),
-  make_option(c("--out_dir"), type = "character", default = "results/plots",
+  make_option(c("--out_dir"), type = "character", default = file.path("results", "runs", "_latest", "plots"),
               help = "Output directory (default: %default)"),
   make_option(c("--prefix"), type = "character", default = NULL,
               help = "Optional filename prefix for outputs")
 )
 
 opt <- parse_args(OptionParser(option_list = option_list))
+
+if (is.null(opt$rep_file) || !nzchar(opt$rep_file)) {
+  opt$run_dir <- resolve_run_dir(run_dir = opt$run_dir, run_id = opt$run_id)
+}
 
 parse_rep_selector <- function(x) {
   if (is.null(x) || identical(tolower(x), "all")) return(NULL)
@@ -230,7 +238,7 @@ if (!is.null(opt$rep_file)) {
   make_one(opt$rep_file, opt$out_dir, opt$alpha, opt$zmin, opt$zmax, opt$prefix)
 } else {
   if (is.null(opt$run_dir)) {
-    opt$run_dir <- "results/lavaan/seed20251219_N3000_R100_psw1_mg1"
+  opt$run_dir <- "results/runs/seed20251219_N3000_R100_psw1_mg1"
   }
   if (!dir.exists(opt$run_dir)) stop("run_dir not found: ", opt$run_dir)
 

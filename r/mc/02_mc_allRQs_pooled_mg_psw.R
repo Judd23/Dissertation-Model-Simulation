@@ -888,6 +888,18 @@ group_sizes_ok <- function(dat, Wvar, min_n = MIN_N_PER_GROUP) {
   all(tab >= min_n)
 }
 
+drop_smallest_group <- function(dat, Wvar) {
+  # Drop the smallest group (post-prep) to avoid numerical instabilities in MG fits.
+  # Returns a filtered data.frame; if fewer than 2 groups, returns original dat.
+  if (is.null(dat) || !isTRUE(Wvar %in% names(dat))) return(dat)
+  g <- dat[[Wvar]]
+  if (!is.factor(g)) g <- factor(g)
+  tab <- table(g)
+  if (length(tab) < 2) return(dat)
+  smallest <- names(tab)[which.min(as.integer(tab))][[1]]
+  dat[g != smallest, , drop = FALSE]
+}
+
 covars_for_mg <- function(Wvar) {
   # Baseline covariates used in SEM equations (selection-bias adjustment proxies)
   # NOTE: firstgen is treated as a demographic/W variable, not a baseline covariate in the SEM.
@@ -1014,6 +1026,147 @@ fit_pooled_mi <- function(dat, r, run_dir = NULL) {
   )
   if (is.null(fit)) return(NULL)
   fit
+}
+
+# Robust parameter extraction
+#
+# Goal: always return a data.frame with a numeric `est` column.
+# Handles:
+# - lavaan fits (standard)
+# - semTools::lavaan.mi / OLDlavaan.mi
+#   - OLDlavaan.mi often returns parameterEstimates() without est/se; we pool
+#     across imputations using ParTableList (Rubin SE when available).
+extract_pe_numeric <- function(fit_obj, standardized = FALSE) {
+  normalize_pe <- function(pe) {
+    if (is.null(pe) || !is.data.frame(pe)) return(NULL)
+
+    if (!"est" %in% names(pe)) {
+      synonyms <- c("Estimate", "estimate", "coef", "value")
+      hit <- intersect(synonyms, names(pe))
+      if (length(hit) > 0) {
+        pe$est <- pe[[hit[1]]]
+      } else {
+        num_cols <- names(pe)[vapply(pe, is.numeric, logical(1))]
+        drop_cols <- c(
+          "se", "SE", "Std.Err", "std.err", "std.error", "Std.Error",
+          "z", "z-value", "t", "t-value",
+          "p", "pvalue", "P(>|z|)", "P(>|t|)",
+          "ci.lower", "ci.upper", "ci.lower.95", "ci.upper.95",
+          "std.lv", "std.all", "std.nox", "df"
+        )
+        cand <- setdiff(num_cols, drop_cols)
+        if (length(cand) == 0) return(NULL)
+        pe$est <- pe[[cand[1]]]
+      }
+    }
+
+    if (!"se" %in% names(pe)) {
+      if ("Std.Err" %in% names(pe)) pe$se <- pe$Std.Err
+      if ("std.error" %in% names(pe)) pe$se <- pe$std.error
+      if ("Std.Error" %in% names(pe)) pe$se <- pe$Std.Error
+      if ("SE" %in% names(pe)) pe$se <- pe$SE
+    }
+
+    pe$est <- suppressWarnings(as.numeric(pe$est))
+    if ("se" %in% names(pe)) pe$se <- suppressWarnings(as.numeric(pe$se))
+    if (all(is.na(pe$est))) return(NULL)
+
+    keep <- intersect(c("lhs", "op", "rhs", "label", "group", "block", "est", "se"), names(pe))
+    pe[, keep, drop = FALSE]
+  }
+
+  add_pooled_labels <- function(pe) {
+    if (is.null(pe) || !is.data.frame(pe)) return(pe)
+    if (!all(c("lhs", "op") %in% names(pe))) return(pe)
+    if (!"label" %in% names(pe)) pe$label <- ""
+    if (!"rhs" %in% names(pe)) pe$rhs <- NA_character_
+
+    # Defined parameters (':='): lhs is the defined parameter name.
+    is_def <- pe$op == ":="
+    if (any(is_def, na.rm = TRUE)) {
+      pe$label[is_def] <- pe$lhs[is_def]
+    }
+
+    # Structural paths used in pooled summaries.
+    map <- data.frame(
+      label = c("a1", "a1z", "a1xz", "a2", "a2z", "a2xz", "b1", "b2", "d", "c", "cz", "cxz"),
+      lhs = c("M1", "M1", "M1", "M2", "M2", "M2", "Y", "Y", "M2", "Y", "Y", "Y"),
+      op  = rep("~", 12),
+      rhs = c("X", "credit_dose_c", "XZ_c", "X", "credit_dose_c", "XZ_c", "M1", "M2", "M1", "X", "credit_dose_c", "XZ_c"),
+      stringsAsFactors = FALSE
+    )
+    for (i in seq_len(nrow(map))) {
+      idx <- pe$lhs == map$lhs[i] & pe$op == map$op[i] & pe$rhs == map$rhs[i]
+      idx <- idx & (!nzchar(pe$label) | is.na(pe$label))
+      if (any(idx, na.rm = TRUE)) pe$label[idx] <- map$label[i]
+    }
+
+    pe
+  }
+
+  # 1) Try lavaan::parameterEstimates
+  pe_try <- tryCatch(
+    lavaan::parameterEstimates(fit_obj, standardized = standardized),
+    error = function(e) NULL
+  )
+  pe <- normalize_pe(pe_try)
+  if (!is.null(pe)) {
+    pe <- add_pooled_labels(pe)
+    if ("est" %in% names(pe) && !all(is.na(pe$est))) return(pe)
+  }
+
+  # 2) OLDlavaan.mi fallback: pool across imputations via ParTableList
+  if (isS4(fit_obj) && ("ParTableList" %in% slotNames(fit_obj))) {
+    ptl <- tryCatch(slot(fit_obj, "ParTableList"), error = function(e) NULL)
+    if (!is.null(ptl) && length(ptl) > 0) {
+      pe_list <- lapply(ptl, function(ptk) {
+        dfk <- tryCatch(as.data.frame(ptk, stringsAsFactors = FALSE), error = function(e) NULL)
+        dfk <- normalize_pe(dfk)
+        dfk <- add_pooled_labels(dfk)
+        dfk
+      })
+      pe_list <- pe_list[!vapply(pe_list, is.null, logical(1))]
+      if (length(pe_list) > 0) {
+        all_pe <- do.call(rbind, pe_list)
+
+        # Pooling key: what identifies a parameter row.
+        key_cols <- intersect(c("lhs", "op", "rhs", "label", "group", "block"), names(all_pe))
+        if (length(key_cols) == 0) return(NULL)
+        key <- do.call(paste, c(all_pe[key_cols], sep = "||"))
+
+        pooled <- stats::aggregate(all_pe$est, by = list(key = key), FUN = function(v) mean(v, na.rm = TRUE))
+        names(pooled)[names(pooled) == "x"] <- "est"
+
+        # Optionally pool SE using Rubin's rules when per-imputation SE exists.
+        if ("se" %in% names(all_pe) && any(is.finite(all_pe$se))) {
+          split_est <- split(all_pe$est, key)
+          split_se  <- split(all_pe$se,  key)
+          m <- length(pe_list)
+          se_pool <- vapply(names(split_est), function(k) {
+            est_k <- split_est[[k]]
+            se_k  <- split_se[[k]]
+            est_k <- est_k[is.finite(est_k)]
+            se_k  <- se_k[is.finite(se_k)]
+            if (length(est_k) == 0) return(NA_real_)
+
+            W <- if (length(se_k) > 0) mean(se_k^2, na.rm = TRUE) else NA_real_
+            B <- if (length(est_k) > 1) stats::var(est_k, na.rm = TRUE) else 0
+            if (!is.finite(W)) return(NA_real_)
+            sqrt(W + (1 + 1 / m) * B)
+          }, numeric(1))
+          pooled$se <- unname(se_pool[pooled$key])
+        }
+
+        # Reconstruct representative columns by taking the first row per key.
+        first_row <- all_pe[match(pooled$key, key), key_cols, drop = FALSE]
+        out <- cbind(first_row, pooled[, setdiff(names(pooled), "key"), drop = FALSE])
+        rownames(out) <- NULL
+        return(out)
+      }
+    }
+  }
+
+  NULL
 }
 
 # -------------------------
@@ -1637,13 +1790,15 @@ run_mc <- function() {
   W_TARGETS <- W_LIST
   if (isTRUE(nzchar(WVAR_SINGLE)) && isTRUE(!is.na(WVAR_SINGLE))) W_TARGETS <- WVAR_SINGLE
 
-  # Run directory (also used for resume checks when SAVE_FITS=1)
-  run_dir <- file.path("results", "lavaan", mk_run_id())
-  if (isTRUE(SAVE_FITS == 1)) dir.create(run_dir, showWarnings = FALSE, recursive = TRUE)
+  # Create one run_id/run_dir for the entire run (do this once)
+  run_id  <- mk_run_id()
+  run_dir <- file.path("results", "runs", run_id)
 
-  # Create run_dir once for this run
-  run_dir <- file.path("results", "lavaan", mk_run_id())
-  if (isTRUE(SAVE_FITS == 1)) dir.create(run_dir, showWarnings = FALSE, recursive = TRUE)
+  # Always create the run folder so summaries/diagnostics have a home
+  dir.create(run_dir, showWarnings = FALSE, recursive = TRUE)
+
+  message("[run] run_id  = ", run_id)
+  message("[run] run_dir = ", run_dir)
 
   pooled_targets <- c("a1","a1xz","a1z","a2","a2xz","a2z","d","c","cxz","cz","b1","b2",
                       "a1_z0","a1_z1","a1_z2","a1_z3","a1_z4",
@@ -1717,27 +1872,63 @@ run_mc <- function() {
     pooled_diag <- diag_extract_lavaan_status(fitP)
     if (!is.null(fitP)) {
       pooled_ok <- 1L
-      pe <- try(lavaan::parameterEstimates(fitP, standardized = FALSE), silent = TRUE)
-      if (!inherits(pe, "try-error") && is.data.frame(pe)) {
-        # Normalize column names across lavaan / semTools MI outputs
-        if (!"est" %in% names(pe) && "Estimate" %in% names(pe)) pe$est <- pe$Estimate
-        if (!"se" %in% names(pe) && "Std.Err" %in% names(pe)) pe$se <- pe$Std.Err
-
-        if (all(c("label", "op", "est") %in% names(pe))) {
-          pe2 <- pe[pe$label %in% pooled_targets & pe$op %in% c("~", ":="), c("label", "est"), drop = FALSE]
-          if (nrow(pe2) > 0) {
-            for (i in seq_len(nrow(pe2))) pooled_row[[pe2$label[i]]] <- pe2$est[i]
-          }
-        } else {
-          if (isTRUE(DIAG_N > 0)) {
-            message(
-              "[pooled] parameterEstimates() missing expected columns: ",
-              paste(setdiff(c("label", "op", "est"), names(pe)), collapse = ", ")
-            )
-          }
+      pe <- extract_pe_numeric(fitP, standardized = FALSE)
+      if (!is.null(pe) && all(c("label", "op", "est") %in% names(pe))) {
+        pe2 <- pe[pe$label %in% pooled_targets & pe$op %in% c("~", ":="), c("label", "est"), drop = FALSE]
+        if (nrow(pe2) > 0) {
+          for (i in seq_len(nrow(pe2))) pooled_row[[pe2$label[i]]] <- pe2$est[i]
         }
       } else {
-        if (isTRUE(DIAG_N > 0)) message("[pooled] parameterEstimates() failed: ", as.character(pe))
+        if (isTRUE(DIAG_N > 0)) {
+          message("[pooled] could not extract numeric parameter estimates")
+
+          dbg_path <- file.path(run_dir, sprintf("rep%03d_pooled_%s_pe_debug.txt", r, safe_filename(pooled_analysis_used)))
+          con <- file(dbg_path, open = "wt")
+          on.exit(close(con), add = TRUE)
+          w <- function(...) writeLines(paste0(...), con = con)
+
+          w("# POOLED PE DEBUG")
+          w(paste0("# rep=", r, ", analysis=", pooled_analysis_used, ", time=", as.character(Sys.time())))
+          w("#")
+          w("\n## fit class\n")
+          writeLines(utils::capture.output(print(class(fitP))), con = con)
+
+          # Save the fit object for offline inspection/debugging
+          fit_rds <- file.path(run_dir, sprintf("rep%03d_pooled_%s_fit.rds", r, safe_filename(pooled_analysis_used)))
+          try(saveRDS(fitP, fit_rds), silent = TRUE)
+
+          w("\n## lavaan::parameterEstimates(fit)\n")
+          pe_lav <- try(lavaan::parameterEstimates(fitP, standardized = FALSE), silent = TRUE)
+          if (inherits(pe_lav, "try-error")) {
+            w("ERROR: ", as.character(pe_lav))
+          } else {
+            writeLines(utils::capture.output(str(pe_lav)), con = con)
+            if (is.data.frame(pe_lav)) {
+              w("\ncolnames:\n")
+              writeLines(utils::capture.output(print(names(pe_lav))), con = con)
+              w("\nhead:\n")
+              writeLines(utils::capture.output(print(utils::head(pe_lav, 20))), con = con)
+            }
+          }
+
+          w("\n## semTools::parameterEstimates(fit)\n")
+          if (requireNamespace("semTools", quietly = TRUE)) {
+            pe_st <- try(as.data.frame(semTools::parameterEstimates(fitP, standardized = FALSE)), silent = TRUE)
+            if (inherits(pe_st, "try-error")) {
+              w("ERROR: ", as.character(pe_st))
+            } else {
+              writeLines(utils::capture.output(str(pe_st)), con = con)
+              if (is.data.frame(pe_st)) {
+                w("\ncolnames:\n")
+                writeLines(utils::capture.output(print(names(pe_st))), con = con)
+                w("\nhead:\n")
+                writeLines(utils::capture.output(print(utils::head(pe_st, 20))), con = con)
+              }
+            }
+          } else {
+            w("semTools not available")
+          }
+        }
       }
 
       if (isTRUE(SAVE_FITS == 1)) {
@@ -1749,8 +1940,8 @@ run_mc <- function() {
         }
 
         # Machine-readable parameter estimates for aggregation/resume
-        pe_out <- try(parameterEstimates(fitP), silent = TRUE)
-        if (!inherits(pe_out, "try-error") && is.data.frame(pe_out)) {
+        pe_out <- extract_pe_numeric(fitP, standardized = FALSE)
+        if (!is.null(pe_out)) {
           utils::write.csv(pe_out, file.path(run_dir, sprintf("rep%03d_pooled_%s_pe.csv", r, safe_filename(pooled_analysis_used))), row.names = FALSE)
         }
 
@@ -1777,6 +1968,10 @@ run_mc <- function() {
         if (Wvar == "sex") dat$sex <- collapse_sex_2grp(dat$sex)
         # Merge rare categories for any MG grouping Wvar
         dat[[Wvar]] <- merge_rare_categories_nearest(dat[[Wvar]], min_prop = 0.01, min_expected_n = 5)
+
+        # User-requested stability fallback: drop the smallest group to reduce
+        # numerical failures (e.g., Lapack 'dgesdd') when W has uneven groups.
+        dat <- drop_smallest_group(dat, Wvar)
 
         if (isTRUE(DIAG_N > 0)) {
           gm <- diag_min_category_prop_vars(dat, ORDERED_VARS)
@@ -1810,8 +2005,8 @@ run_mc <- function() {
 
             # Machine-readable MG parameter estimates
             # Keep extraction unstandardized (and MI-safe policy: never standardized=TRUE for MI fits).
-            pe_mg <- try(parameterEstimates(outW$fit, standardized = FALSE), silent = TRUE)
-            if (!inherits(pe_mg, "try-error") && is.data.frame(pe_mg)) {
+            pe_mg <- extract_pe_numeric(outW$fit, standardized = FALSE)
+            if (!is.null(pe_mg)) {
               utils::write.csv(pe_mg, file.path(run_dir, sprintf("rep%03d_mg_%s_pe.csv", r, safe_filename(Wvar))), row.names = FALSE)
             }
           }
@@ -2018,12 +2213,33 @@ run_mc <- function() {
   }
 
   if (isTRUE(DIAG_N > 0) && length(diag_rows) > 0) {
-    diag_dir <- file.path("results", "diagnostics", mk_run_id())
+    diag_dir <- file.path(run_dir, "diagnostics")
     dir.create(diag_dir, showWarnings = FALSE, recursive = TRUE)
     diag_df <- do.call(rbind, diag_rows)
     utils::write.csv(diag_df, file.path(diag_dir, "diagnostics.csv"), row.names = FALSE)
     message("[diag] wrote diagnostics: ", file.path(diag_dir, "diagnostics.csv"))
   }
+
+  # -------------------------
+  # RUN SUMMARY (written once per run)
+  # -------------------------
+  summary_path <- file.path(run_dir, "run_summary.txt")
+  summary_lines <- c(
+    paste0("run_id=", run_id),
+    paste0("run_dir=", run_dir),
+    paste0("seed=", SEED),
+    paste0("N=", N),
+    paste0("R=", R_REPS),
+    paste0("psw=", USE_PSW),
+    paste0("mg=", RUN_MG),
+    paste0("analysis=", DEFAULT_ANALYSIS),
+    paste0("save_fits=", SAVE_FITS),
+    paste0("diag=", DIAG_N),
+  paste0("cores=", NCORES),
+    paste0("timestamp=", format(Sys.time(), tz = "UTC", usetz = TRUE))
+  )
+  writeLines(summary_lines, con = summary_path)
+  message("[run] wrote summary: ", summary_path)
 
   # -------------------------
   # SUMMARIES
