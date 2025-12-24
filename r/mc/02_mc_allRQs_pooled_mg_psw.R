@@ -1028,39 +1028,145 @@ fit_pooled_mi <- function(dat, r, run_dir = NULL) {
   fit
 }
 
-# Robust MI parameter extraction
+# Robust parameter extraction
 #
-# semTools::lavaan.mi objects sometimes yield parameterEstimates() tables without
-# the usual numeric columns depending on class/version. This helper guarantees
-# a data.frame with numeric `est` (and optionally `se`) when possible.
-extract_pe_numeric <- function(fit, standardized = FALSE) {
-  pe <- try(lavaan::parameterEstimates(fit, standardized = standardized), silent = TRUE)
-  if (inherits(pe, "try-error") || !is.data.frame(pe)) return(NULL)
+# Goal: always return a data.frame with a numeric `est` column.
+# Handles:
+# - lavaan fits (standard)
+# - semTools::lavaan.mi / OLDlavaan.mi
+#   - OLDlavaan.mi often returns parameterEstimates() without est/se; we pool
+#     across imputations using ParTableList (Rubin SE when available).
+extract_pe_numeric <- function(fit_obj, standardized = FALSE) {
+  normalize_pe <- function(pe) {
+    if (is.null(pe) || !is.data.frame(pe)) return(NULL)
 
-  # Normalize common column variants
-  if (!"est" %in% names(pe) && "Estimate" %in% names(pe)) pe$est <- pe$Estimate
-  if (!"se" %in% names(pe) && "Std.Err" %in% names(pe)) pe$se <- pe$Std.Err
+    if (!"est" %in% names(pe)) {
+      synonyms <- c("Estimate", "estimate", "coef", "value")
+      hit <- intersect(synonyms, names(pe))
+      if (length(hit) > 0) {
+        pe$est <- pe[[hit[1]]]
+      } else {
+        num_cols <- names(pe)[vapply(pe, is.numeric, logical(1))]
+        drop_cols <- c(
+          "se", "SE", "Std.Err", "std.err", "std.error", "Std.Error",
+          "z", "z-value", "t", "t-value",
+          "p", "pvalue", "P(>|z|)", "P(>|t|)",
+          "ci.lower", "ci.upper", "ci.lower.95", "ci.upper.95",
+          "std.lv", "std.all", "std.nox", "df"
+        )
+        cand <- setdiff(num_cols, drop_cols)
+        if (length(cand) == 0) return(NULL)
+        pe$est <- pe[[cand[1]]]
+      }
+    }
 
-  # Coerce to numeric if possible
-  if ("est" %in% names(pe)) pe$est <- suppressWarnings(as.numeric(pe$est))
-  if ("se" %in% names(pe)) pe$se <- suppressWarnings(as.numeric(pe$se))
+    if (!"se" %in% names(pe)) {
+      if ("Std.Err" %in% names(pe)) pe$se <- pe$Std.Err
+      if ("std.error" %in% names(pe)) pe$se <- pe$std.error
+      if ("Std.Error" %in% names(pe)) pe$se <- pe$Std.Error
+      if ("SE" %in% names(pe)) pe$se <- pe$SE
+    }
 
-  # If `est` is still missing/non-numeric, try pooled table methods.
-  if (!"est" %in% names(pe) || all(is.na(pe$est))) {
-    pe_pool <- try(as.data.frame(semTools::parameterEstimates(fit, standardized = standardized)), silent = TRUE)
-    if (!inherits(pe_pool, "try-error") && is.data.frame(pe_pool)) {
-      if (!"est" %in% names(pe_pool) && "estimate" %in% names(pe_pool)) pe_pool$est <- pe_pool$estimate
-      if (!"se" %in% names(pe_pool) && "se" %in% names(pe_pool) == FALSE && "std.error" %in% names(pe_pool)) pe_pool$se <- pe_pool$std.error
-      if ("est" %in% names(pe_pool)) pe_pool$est <- suppressWarnings(as.numeric(pe_pool$est))
-      if ("se" %in% names(pe_pool)) pe_pool$se <- suppressWarnings(as.numeric(pe_pool$se))
-      if ("est" %in% names(pe_pool) && !all(is.na(pe_pool$est))) {
-        return(pe_pool)
+    pe$est <- suppressWarnings(as.numeric(pe$est))
+    if ("se" %in% names(pe)) pe$se <- suppressWarnings(as.numeric(pe$se))
+    if (all(is.na(pe$est))) return(NULL)
+
+    keep <- intersect(c("lhs", "op", "rhs", "label", "group", "block", "est", "se"), names(pe))
+    pe[, keep, drop = FALSE]
+  }
+
+  add_pooled_labels <- function(pe) {
+    if (is.null(pe) || !is.data.frame(pe)) return(pe)
+    if (!all(c("lhs", "op") %in% names(pe))) return(pe)
+    if (!"label" %in% names(pe)) pe$label <- ""
+    if (!"rhs" %in% names(pe)) pe$rhs <- NA_character_
+
+    # Defined parameters (':='): lhs is the defined parameter name.
+    is_def <- pe$op == ":="
+    if (any(is_def, na.rm = TRUE)) {
+      pe$label[is_def] <- pe$lhs[is_def]
+    }
+
+    # Structural paths used in pooled summaries.
+    map <- data.frame(
+      label = c("a1", "a1z", "a1xz", "a2", "a2z", "a2xz", "b1", "b2", "d", "c", "cz", "cxz"),
+      lhs = c("M1", "M1", "M1", "M2", "M2", "M2", "Y", "Y", "M2", "Y", "Y", "Y"),
+      op  = rep("~", 12),
+      rhs = c("X", "credit_dose_c", "XZ_c", "X", "credit_dose_c", "XZ_c", "M1", "M2", "M1", "X", "credit_dose_c", "XZ_c"),
+      stringsAsFactors = FALSE
+    )
+    for (i in seq_len(nrow(map))) {
+      idx <- pe$lhs == map$lhs[i] & pe$op == map$op[i] & pe$rhs == map$rhs[i]
+      idx <- idx & (!nzchar(pe$label) | is.na(pe$label))
+      if (any(idx, na.rm = TRUE)) pe$label[idx] <- map$label[i]
+    }
+
+    pe
+  }
+
+  # 1) Try lavaan::parameterEstimates
+  pe_try <- tryCatch(
+    lavaan::parameterEstimates(fit_obj, standardized = standardized),
+    error = function(e) NULL
+  )
+  pe <- normalize_pe(pe_try)
+  if (!is.null(pe)) {
+    pe <- add_pooled_labels(pe)
+    if ("est" %in% names(pe) && !all(is.na(pe$est))) return(pe)
+  }
+
+  # 2) OLDlavaan.mi fallback: pool across imputations via ParTableList
+  if (isS4(fit_obj) && ("ParTableList" %in% slotNames(fit_obj))) {
+    ptl <- tryCatch(slot(fit_obj, "ParTableList"), error = function(e) NULL)
+    if (!is.null(ptl) && length(ptl) > 0) {
+      pe_list <- lapply(ptl, function(ptk) {
+        dfk <- tryCatch(as.data.frame(ptk, stringsAsFactors = FALSE), error = function(e) NULL)
+        dfk <- normalize_pe(dfk)
+        dfk <- add_pooled_labels(dfk)
+        dfk
+      })
+      pe_list <- pe_list[!vapply(pe_list, is.null, logical(1))]
+      if (length(pe_list) > 0) {
+        all_pe <- do.call(rbind, pe_list)
+
+        # Pooling key: what identifies a parameter row.
+        key_cols <- intersect(c("lhs", "op", "rhs", "label", "group", "block"), names(all_pe))
+        if (length(key_cols) == 0) return(NULL)
+        key <- do.call(paste, c(all_pe[key_cols], sep = "||"))
+
+        pooled <- stats::aggregate(all_pe$est, by = list(key = key), FUN = function(v) mean(v, na.rm = TRUE))
+        names(pooled)[names(pooled) == "x"] <- "est"
+
+        # Optionally pool SE using Rubin's rules when per-imputation SE exists.
+        if ("se" %in% names(all_pe) && any(is.finite(all_pe$se))) {
+          split_est <- split(all_pe$est, key)
+          split_se  <- split(all_pe$se,  key)
+          m <- length(pe_list)
+          se_pool <- vapply(names(split_est), function(k) {
+            est_k <- split_est[[k]]
+            se_k  <- split_se[[k]]
+            est_k <- est_k[is.finite(est_k)]
+            se_k  <- se_k[is.finite(se_k)]
+            if (length(est_k) == 0) return(NA_real_)
+
+            W <- if (length(se_k) > 0) mean(se_k^2, na.rm = TRUE) else NA_real_
+            B <- if (length(est_k) > 1) stats::var(est_k, na.rm = TRUE) else 0
+            if (!is.finite(W)) return(NA_real_)
+            sqrt(W + (1 + 1 / m) * B)
+          }, numeric(1))
+          pooled$se <- unname(se_pool[pooled$key])
+        }
+
+        # Reconstruct representative columns by taking the first row per key.
+        first_row <- all_pe[match(pooled$key, key), key_cols, drop = FALSE]
+        out <- cbind(first_row, pooled[, setdiff(names(pooled), "key"), drop = FALSE])
+        rownames(out) <- NULL
+        return(out)
       }
     }
   }
 
-  if (!"est" %in% names(pe) || all(is.na(pe$est))) return(NULL)
-  pe
+  NULL
 }
 
 # -------------------------
@@ -1775,6 +1881,53 @@ run_mc <- function() {
       } else {
         if (isTRUE(DIAG_N > 0)) {
           message("[pooled] could not extract numeric parameter estimates")
+
+          dbg_path <- file.path(run_dir, sprintf("rep%03d_pooled_%s_pe_debug.txt", r, safe_filename(pooled_analysis_used)))
+          con <- file(dbg_path, open = "wt")
+          on.exit(close(con), add = TRUE)
+          w <- function(...) writeLines(paste0(...), con = con)
+
+          w("# POOLED PE DEBUG")
+          w(paste0("# rep=", r, ", analysis=", pooled_analysis_used, ", time=", as.character(Sys.time())))
+          w("#")
+          w("\n## fit class\n")
+          writeLines(utils::capture.output(print(class(fitP))), con = con)
+
+          # Save the fit object for offline inspection/debugging
+          fit_rds <- file.path(run_dir, sprintf("rep%03d_pooled_%s_fit.rds", r, safe_filename(pooled_analysis_used)))
+          try(saveRDS(fitP, fit_rds), silent = TRUE)
+
+          w("\n## lavaan::parameterEstimates(fit)\n")
+          pe_lav <- try(lavaan::parameterEstimates(fitP, standardized = FALSE), silent = TRUE)
+          if (inherits(pe_lav, "try-error")) {
+            w("ERROR: ", as.character(pe_lav))
+          } else {
+            writeLines(utils::capture.output(str(pe_lav)), con = con)
+            if (is.data.frame(pe_lav)) {
+              w("\ncolnames:\n")
+              writeLines(utils::capture.output(print(names(pe_lav))), con = con)
+              w("\nhead:\n")
+              writeLines(utils::capture.output(print(utils::head(pe_lav, 20))), con = con)
+            }
+          }
+
+          w("\n## semTools::parameterEstimates(fit)\n")
+          if (requireNamespace("semTools", quietly = TRUE)) {
+            pe_st <- try(as.data.frame(semTools::parameterEstimates(fitP, standardized = FALSE)), silent = TRUE)
+            if (inherits(pe_st, "try-error")) {
+              w("ERROR: ", as.character(pe_st))
+            } else {
+              writeLines(utils::capture.output(str(pe_st)), con = con)
+              if (is.data.frame(pe_st)) {
+                w("\ncolnames:\n")
+                writeLines(utils::capture.output(print(names(pe_st))), con = con)
+                w("\nhead:\n")
+                writeLines(utils::capture.output(print(utils::head(pe_st, 20))), con = con)
+              }
+            }
+          } else {
+            w("semTools not available")
+          }
         }
       }
 

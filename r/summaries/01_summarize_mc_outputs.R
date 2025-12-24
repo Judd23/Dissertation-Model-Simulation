@@ -63,7 +63,6 @@ format_round <- function(x, digits = 3) {
 # Load pooled parameterEstimates (per-rep)
 # ------------------------
 pe_files <- list.files(opt$run_dir, pattern = "^rep[0-9]{3}_pooled(_[A-Za-z0-9]+)?_pe\\.csv$", full.names = TRUE)
-if (length(pe_files) == 0) stop("No repXXX_pooled*_pe.csv files in ", opt$run_dir)
 pe_files <- sort(pe_files)
 
 extract_rep_id <- function(path) {
@@ -73,14 +72,15 @@ extract_rep_id <- function(path) {
   as.integer(r[2])
 }
 
-pooled_long <- do.call(rbind, lapply(pe_files, function(f) {
-  dat <- read_csv_safe(f)
-  if (is.null(dat)) return(NULL)
-  dat$rep <- extract_rep_id(f)
-  dat
-}))
-
-if (is.null(pooled_long) || nrow(pooled_long) == 0) stop("Could not read pooled PE CSVs")
+pooled_long <- NULL
+if (length(pe_files) > 0) {
+  pooled_long <- do.call(rbind, lapply(pe_files, function(f) {
+    dat <- read_csv_safe(f)
+    if (is.null(dat)) return(NULL)
+    dat$rep <- extract_rep_id(f)
+    dat
+  }))
+}
 
 # Keep the regression coefficients of primary interest.
 # These labels follow lavaan conventions: lhs, op, rhs, label.
@@ -118,68 +118,75 @@ apa_labels <- c(
   d = "d (X → Y residual)"
 )
 
-sel <- pooled_long
-if ("label" %in% names(sel)) {
-  sel <- sel[sel$label %in% key_labels, ]
-}
+if (length(pe_files) == 0 || is.null(pooled_long) || nrow(pooled_long) == 0) {
+  warning(
+    "No pooled PE CSVs found/readable under run_dir; skipping pooled tables. ",
+    "(Expected files like rep001_pooled_..._pe.csv)."
+  )
+} else {
+  sel <- pooled_long
+  if ("label" %in% names(sel)) {
+    sel <- sel[sel$label %in% key_labels, ]
+  }
 
-# Fall back to lhs/op/rhs if label not present
-if (nrow(sel) == 0 && all(c("lhs","op","rhs") %in% names(pooled_long))) {
-  sel <- pooled_long[pooled_long$op == "~" & pooled_long$rhs %in% c("X","XZ_c","crdt_d_"), ]
-}
+  # Fall back to lhs/op/rhs if label not present
+  if (nrow(sel) == 0 && all(c("lhs","op","rhs") %in% names(pooled_long))) {
+    sel <- pooled_long[pooled_long$op == "~" & pooled_long$rhs %in% c("X","XZ_c","crdt_d_"), ]
+  }
 
-if (!all(c("est") %in% names(sel))) stop("Expected column 'est' in pooled PE")
+  if (!all(c("est") %in% names(sel))) stop("Expected column 'est' in pooled PE")
 
-# Summaries per parameter label
-param_name <- if ("label" %in% names(sel)) sel$label else paste(sel$lhs, sel$op, sel$rhs)
-sel$param <- as.character(param_name)
+  # Summaries per parameter label
+  param_name <- if ("label" %in% names(sel)) sel$label else paste(sel$lhs, sel$op, sel$rhs)
+  sel$param <- as.character(param_name)
 
-# Build per-parameter summaries.
-pooled_summary <- do.call(rbind, lapply(names(split(sel$est, sel$param)), function(p) {
-  x <- sel$est[sel$param == p]
-  s <- summ_num(x)
-  data.frame(
-    param = p,
-    n = unname(s["n"]),
-    mean_est = unname(s["mean"]),
-    sd_est = unname(s["sd"]),
-    rmse = unname(s["rmse"]),
+  # Build per-parameter summaries.
+  pooled_summary <- do.call(rbind, lapply(names(split(sel$est, sel$param)), function(p) {
+    x <- sel$est[sel$param == p]
+    s <- summ_num(x)
+    data.frame(
+      param = p,
+      n = unname(s["n"]),
+      mean_est = unname(s["mean"]),
+      sd_est = unname(s["sd"]),
+      rmse = unname(s["rmse"]),
+      stringsAsFactors = FALSE
+    )
+  }))
+
+  utils::write.csv(pooled_summary, file.path(opt$out_dir, "pooled_param_summary.csv"), row.names = FALSE)
+
+  # APA/Word-ready pooled table (most complete)
+  pooled_apa <- pooled_summary
+  pooled_apa$true <- true_vals[pooled_apa$param]
+  pooled_apa$bias <- pooled_apa$mean_est - pooled_apa$true
+  pooled_apa$mcse_mean <- pooled_apa$sd_est / sqrt(pooled_apa$n)
+  pooled_apa$ci95_lo <- pooled_apa$mean_est - 1.96 * pooled_apa$mcse_mean
+  pooled_apa$ci95_hi <- pooled_apa$mean_est + 1.96 * pooled_apa$mcse_mean
+  pooled_apa$label <- apa_labels[pooled_apa$param]
+
+  # Reorder rows in a standard PROCESS-style order
+  order_params <- key_labels
+  pooled_apa <- pooled_apa[match(order_params, pooled_apa$param), ]
+
+  # Round for Word
+  pooled_apa_out <- data.frame(
+    Parameter = pooled_apa$label,
+    Symbol = pooled_apa$param,
+    True = format_round(pooled_apa$true, 3),
+    Mean = format_round(pooled_apa$mean_est, 3),
+    SD = format_round(pooled_apa$sd_est, 3),
+    MCSE = format_round(pooled_apa$mcse_mean, 3),
+    Bias = format_round(pooled_apa$bias, 3),
+    RMSE = format_round(pooled_apa$rmse, 3),
+    CI95_L = format_round(pooled_apa$ci95_lo, 3),
+    CI95_U = format_round(pooled_apa$ci95_hi, 3),
+    Reps = pooled_apa$n,
     stringsAsFactors = FALSE
   )
-}))
 
-utils::write.csv(pooled_summary, file.path(opt$out_dir, "pooled_param_summary.csv"), row.names = FALSE)
-
-# APA/Word-ready pooled table (most complete)
-pooled_apa <- pooled_summary
-pooled_apa$true <- true_vals[pooled_apa$param]
-pooled_apa$bias <- pooled_apa$mean_est - pooled_apa$true
-pooled_apa$mcse_mean <- pooled_apa$sd_est / sqrt(pooled_apa$n)
-pooled_apa$ci95_lo <- pooled_apa$mean_est - 1.96 * pooled_apa$mcse_mean
-pooled_apa$ci95_hi <- pooled_apa$mean_est + 1.96 * pooled_apa$mcse_mean
-pooled_apa$label <- apa_labels[pooled_apa$param]
-
-# Reorder rows in a standard PROCESS-style order
-order_params <- key_labels
-pooled_apa <- pooled_apa[match(order_params, pooled_apa$param), ]
-
-# Round for Word
-pooled_apa_out <- data.frame(
-  Parameter = pooled_apa$label,
-  Symbol = pooled_apa$param,
-  True = format_round(pooled_apa$true, 3),
-  Mean = format_round(pooled_apa$mean_est, 3),
-  SD = format_round(pooled_apa$sd_est, 3),
-  MCSE = format_round(pooled_apa$mcse_mean, 3),
-  Bias = format_round(pooled_apa$bias, 3),
-  RMSE = format_round(pooled_apa$rmse, 3),
-  CI95_L = format_round(pooled_apa$ci95_lo, 3),
-  CI95_U = format_round(pooled_apa$ci95_hi, 3),
-  Reps = pooled_apa$n,
-  stringsAsFactors = FALSE
-)
-
-utils::write.csv(pooled_apa_out, file.path(opt$out_dir, "pooled_param_summary_word_ready.csv"), row.names = FALSE)
+  utils::write.csv(pooled_apa_out, file.path(opt$out_dir, "pooled_param_summary_word_ready.csv"), row.names = FALSE)
+}
 
 # Convergence proxy: number of pooled PE files present
 pooled_conv <- data.frame(
@@ -195,10 +202,16 @@ utils::write.csv(pooled_conv, file.path(opt$out_dir, "pooled_convergence.csv"), 
 # ------------------------
 # Try to infer diag CSV if omitted.
 if (is.null(opt$diag_csv) || !nzchar(opt$diag_csv)) {
-  # Look for diagnostics/<run_id>/diagnostics.csv where run_id is basename(run_dir)
-  run_id <- basename(normalizePath(opt$run_dir))
-  guess <- file.path("results", "diagnostics", run_id, "diagnostics.csv")
-  if (file.exists(guess)) opt$diag_csv <- guess
+  # Prefer run_dir-local diagnostics first (newer layout)
+  guess_local <- file.path(opt$run_dir, "diagnostics", "diagnostics.csv")
+  if (file.exists(guess_local)) {
+    opt$diag_csv <- guess_local
+  } else {
+    # Legacy layout: results/diagnostics/<run_id>/diagnostics.csv
+    run_id <- basename(normalizePath(opt$run_dir))
+    guess_legacy <- file.path("results", "diagnostics", run_id, "diagnostics.csv")
+    if (file.exists(guess_legacy)) opt$diag_csv <- guess_legacy
+  }
 }
 
 diag <- NULL
@@ -206,7 +219,167 @@ if (!is.null(opt$diag_csv) && nzchar(opt$diag_csv) && file.exists(opt$diag_csv))
   diag <- read_csv_safe(opt$diag_csv)
 }
 
+parse_mg_converged_from_txt <- function(txt_path) {
+  if (!file.exists(txt_path)) return(NA)
+  lines <- readLines(txt_path, warn = FALSE, n = 50)
+  hit <- grep("^Converged:\\s*", lines)
+  if (!length(hit)) return(NA)
+  val <- trimws(sub("^Converged:\\s*", "", lines[hit[1]]))
+  if (tolower(val) %in% c("true","t")) return(TRUE)
+  if (tolower(val) %in% c("false","f")) return(FALSE)
+  NA
+}
+
+parse_group_counts_from_txt <- function(txt_path) {
+  if (!file.exists(txt_path)) return(NULL)
+  lines <- readLines(txt_path, warn = FALSE)
+  i <- grep("^\\s*Number of observations per group:", lines)
+  if (!length(i)) return(NULL)
+  j <- i[1] + 1
+  out <- list()
+  while (j <= length(lines)) {
+    ln <- lines[j]
+    if (!nzchar(trimws(ln))) break
+    if (!grepl("^\\s+", ln)) break
+    # Capture last integer as n; everything before as label
+    n <- suppressWarnings(as.integer(sub("^.*?([0-9]+)\\s*$", "\\1", ln)))
+    lab <- trimws(sub("\\s+[0-9]+\\s*$", "", ln))
+    if (!is.na(n) && nzchar(lab)) out[[lab]] <- n
+    j <- j + 1
+  }
+  if (!length(out)) return(NULL)
+  v <- unlist(out)
+  names(v) <- names(out)
+  v
+}
+
+backfill_diag_missing_reps <- function(diag, run_dir, W, R_expected) {
+  if (is.null(diag) || nrow(diag) == 0) return(diag)
+  if (!"rep" %in% names(diag)) return(diag)
+
+  # Coerce rep to integer safely
+  diag$rep <- suppressWarnings(as.integer(diag$rep))
+  diag <- diag[!is.na(diag$rep), , drop = FALSE]
+
+  missing <- setdiff(seq_len(R_expected), unique(diag$rep))
+  if (!length(missing)) return(diag)
+
+  # Build new rows using the existing diagnostics schema
+  cols <- names(diag)
+  make_blank <- function() {
+    row <- as.list(rep(NA, length(cols)))
+    names(row) <- cols
+    row
+  }
+
+  new_rows <- list()
+  for (r in missing) {
+    base <- sprintf("rep%03d_mg_%s", r, W)
+    txt_path <- file.path(run_dir, paste0(base, ".txt"))
+    pe_path <- file.path(run_dir, paste0(base, "_pe.csv"))
+    err_path <- file.path(run_dir, sprintf("rep%03d_mg_%s_ERROR.txt", r, W))
+
+    row <- make_blank()
+    row$rep <- r
+
+    # Copy run-level fields if present (take from first row)
+    for (k in intersect(c("seed","N","R","psw","mg","W"), cols)) {
+      if (k == "W") {
+        row[[k]] <- W
+      } else {
+        row[[k]] <- diag[[k]][1]
+      }
+    }
+
+    # Pooled fields: keep consistent with this run's diag defaults
+    if ("pooled_ok" %in% cols) row$pooled_ok <- 1
+    if ("pooled_converged" %in% cols) row$pooled_converged <- 0
+    if ("pooled_n_warnings" %in% cols) row$pooled_n_warnings <- 0
+
+    # MG status from files
+    if (file.exists(err_path)) {
+      if ("mg_ok" %in% cols) row$mg_ok <- 0
+      if ("mg_reason" %in% cols) row$mg_reason <- "fit_error"
+      if ("mg_err_msg" %in% cols) {
+        msg <- tryCatch(paste(readLines(err_path, warn = FALSE), collapse = " | "), error = function(e) NA)
+        row$mg_err_msg <- ifelse(nzchar(msg), msg, NA)
+      }
+      if ("mg_converged" %in% cols) row$mg_converged <- 0
+    } else if (file.exists(txt_path) && file.exists(pe_path)) {
+      if ("mg_ok" %in% cols) row$mg_ok <- 1
+      if ("mg_reason" %in% cols) row$mg_reason <- "ok"
+      if ("mg_converged" %in% cols) {
+        conv <- parse_mg_converged_from_txt(txt_path)
+        row$mg_converged <- ifelse(is.na(conv), 1, as.integer(conv))
+      }
+      if ("mg_n_warnings" %in% cols) row$mg_n_warnings <- 0
+    } else {
+      # Truly missing outputs
+      if ("mg_ok" %in% cols) row$mg_ok <- 0
+      if ("mg_reason" %in% cols) row$mg_reason <- "missing_output"
+      if ("mg_converged" %in% cols) row$mg_converged <- 0
+    }
+
+    # Optional group counts if we can parse them
+    if (file.exists(txt_path)) {
+      gc <- parse_group_counts_from_txt(txt_path)
+      if (!is.null(gc)) {
+        if ("mg_groups_n" %in% cols) {
+          row$mg_groups_n <- paste(paste0(names(gc), ":", as.integer(gc)), collapse = "|")
+        }
+        if ("mg_n_groups" %in% cols) row$mg_n_groups <- length(gc)
+        if ("mg_min_group_n" %in% cols) row$mg_min_group_n <- min(gc)
+      }
+    }
+
+    new_rows[[length(new_rows) + 1]] <- row
+  }
+
+  new_df <- as.data.frame(do.call(rbind, lapply(new_rows, function(x) {
+    # Ensure correct column order
+    x[cols]
+  })), stringsAsFactors = FALSE)
+
+  out <- rbind(diag, new_df)
+  out$rep <- suppressWarnings(as.integer(out$rep))
+  out <- out[order(out$rep), , drop = FALSE]
+
+  # Ensure no list columns remain (these break write.csv)
+  for (nm in names(out)) {
+    if (is.list(out[[nm]])) {
+      out[[nm]] <- vapply(out[[nm]], function(v) {
+        if (is.null(v) || length(v) == 0) return(NA_character_)
+        as.character(v)[1]
+      }, character(1))
+    }
+  }
+  out
+}
+
+flatten_list_cols <- function(df) {
+  if (is.null(df) || nrow(df) == 0) return(df)
+  for (nm in names(df)) {
+    if (is.list(df[[nm]])) {
+      df[[nm]] <- vapply(df[[nm]], function(v) {
+        if (is.null(v) || length(v) == 0) return(NA_character_)
+        as.character(v)[1]
+      }, character(1))
+    }
+  }
+  df
+}
+
 if (!is.null(diag) && nrow(diag) > 0) {
+  # Backfill missing reps in diagnostics (common after --resume runs)
+  diag2 <- backfill_diag_missing_reps(diag, opt$run_dir, opt$W, opt$R)
+  if (nrow(diag2) != nrow(diag)) {
+    diag <- diag2
+    # Persist backfilled diagnostics for downstream scripts
+    tryCatch(utils::write.csv(diag, opt$diag_csv, row.names = FALSE), error = function(e) NULL)
+  }
+
+  diag <- flatten_list_cols(diag)
+
   # Pick a compact set of columns if present.
   keep_cols <- intersect(
     c("rep", "elapsed_sec",
@@ -219,6 +392,7 @@ if (!is.null(diag) && nrow(diag) > 0) {
     names(diag)
   )
   diag_small <- diag[, keep_cols, drop = FALSE]
+  diag_small <- flatten_list_cols(diag_small)
   utils::write.csv(diag_small, file.path(opt$out_dir, "diagnostics_summary.csv"), row.names = FALSE)
 }
 
@@ -263,8 +437,16 @@ mg_tab <- data.frame(
   reps_expected = opt$R,
   reps_with_mg_txt = length(mg_txt_files),
   reps_with_mg_pe = length(mg_pe_files),
-  reps_used = NA_integer_,
-  reps_failed = opt$R - length(mg_txt_files),
+  reps_used = if (!is.null(diag) && nrow(diag) > 0 && "mg_reason" %in% names(diag)) {
+    sum(diag$W == opt$W & diag$mg_reason == "ok", na.rm = TRUE)
+  } else {
+    NA_integer_
+  },
+  reps_failed = if (!is.null(diag) && nrow(diag) > 0 && "mg_reason" %in% names(diag)) {
+    opt$R - sum(diag$W == opt$W & diag$mg_reason == "ok", na.rm = TRUE)
+  } else {
+    opt$R - length(mg_txt_files)
+  },
   power_reject_equal_a1 = NA_real_,
   note = "Per-rep Wald p-values not found in rep*_mg_*.txt; power available from console summary or if per-rep wald CSVs are saved.",
   stringsAsFactors = FALSE
