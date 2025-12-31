@@ -181,6 +181,8 @@ fig.text(0.5, 0.97, 'Methodological Standards Compliance',
          ha='center', fontsize=30, fontweight='bold', color=COLORS['primary'])
 fig.text(0.5, 0.955, 'Conditional Process Analysis with Propensity Score Weighting',
          ha='center', fontsize=17, style='italic', color=COLORS['subtext'])
+fig.text(0.5, 0.938, 'Results From an Empirically Informed Simulated Dataset Based on Current Reports on CSU Populations',
+         ha='center', fontsize=12, color=COLORS['subtext'])
 
 # ============================================================================
 # TOP ROW: Summary score boxes (centered)
@@ -419,8 +421,9 @@ ax3.set_ylim(-0.75, 5.8)
 # Title using suptitle for proper spacing
 fig3.suptitle('Sample, Weighting & Model Fit Standards', 
               fontsize=22, fontweight='bold', color='#1A1A1A', y=0.98)
-ax3.set_title('Process-SEM Dissertation Study | Developmental Adjustment among Accelerated Dual Credit Students',
-              fontsize=12, style='italic', color='#444444', pad=18)
+ax3.set_title('Developmental Adjustment among Accelerated Dual Credit Students | Conditional Process SEM Validation Study\n'
+              'Results From an Empirically Informed Simulated Dataset Based on Current Reports on CSU Populations',
+              fontsize=11, style='italic', color='#444444', pad=18, linespacing=1.3)
 
 # Note at bottom
 fig3.text(0.5, 0.02, 
@@ -434,7 +437,7 @@ legend_elements = [
     Patch(facecolor='#FB8C00', alpha=0.9, label='Adequate (ratio < 1.0)'),
     Line2D([0], [0], color='#C62828', linewidth=2, linestyle='--', label='Benchmark threshold'),
 ]
-ax3.legend(handles=legend_elements, loc='upper right', fontsize=11, framealpha=0.95)
+# Legend removed per user request
 
 ax3.spines['top'].set_visible(False)
 ax3.spines['right'].set_visible(False)
@@ -467,15 +470,15 @@ metrics_chart2 = [
     ('Interaction', 'X×Z product', 1.0, 'Product term'),
     ('Identifiability', 'df = 546', 1.0, 'df > 0'),
     # Bootstrap (4)
-    ('Bootstrap Design', 'BTW', 1.0, 'Nonparametric'),
+    ('Boot Design', 'BTW', 1.0, 'Nonparametric'),
     ('CI Method', 'BCa', 1.0, 'BCa/Percentile'),
     ('Bootstrap B', f'B={ACTUAL_DATA["bootstrap_b"]}', ACTUAL_DATA["bootstrap_b"] / 1000, '≥1,000'),
     ('Convergence', f'{ACTUAL_DATA["bootstrap_pct"]:.0f}%', ACTUAL_DATA["bootstrap_pct"] / 95, '≥95%'),
     # Effects (4)
-    ('Direct Effects', 'Est + BCa CI', 1.0, 'Est + CI'),
-    ('Indirect Effects', 'BCa CI', 1.0, 'Bootstrap CI'),
-    ('Conditional Indirects', '±1 SD levels', 1.0, 'Low/Mid/High'),
-    ('Index of Mod. Med.', 'BCa CI', 1.0, 'Point + CI'),
+    ('Direct Eff.', 'Est + BCa CI', 1.0, 'Est + CI'),
+    ('Indirect Eff.', 'BCa CI', 1.0, 'Bootstrap CI'),
+    ('Cond. Indirect', '±1 SD', 1.0, 'Low/Mid/High'),
+    ('IMM', 'BCa CI', 1.0, 'Point + CI'),
 ]
 
 fig4, ax4 = plt.subplots(figsize=(16, 9))
@@ -519,8 +522,9 @@ ax4.set_ylim(-0.55, 2.5)
 # Title using suptitle for proper spacing
 fig4.suptitle('Specification, Bootstrap & Effect Reporting Standards', 
               fontsize=22, fontweight='bold', color='#1A1A1A', y=0.98)
-ax4.set_title('Process-SEM Dissertation Study | Developmental Adjustment among Accelerated Dual Credit Students',
-              fontsize=12, style='italic', color='#444444', pad=18)
+ax4.set_title('Developmental Adjustment among Accelerated Dual Credit Students | Conditional Process SEM Validation Study\n'
+              'Results From an Empirically Informed Simulated Dataset Based on Current Reports on CSU Populations',
+              fontsize=11, style='italic', color='#444444', pad=18, linespacing=1.3)
 
 # Note at bottom
 fig4.text(0.5, 0.02, 
@@ -529,7 +533,7 @@ fig4.text(0.5, 0.02,
           'Labels display actual observed values.',
           ha='center', fontsize=9, color='#666666', style='italic', wrap=True)
 
-ax4.legend(handles=legend_elements, loc='upper right', fontsize=11, framealpha=0.95)
+# Legend removed per user request
 
 ax4.spines['top'].set_visible(False)
 ax4.spines['right'].set_visible(False)
