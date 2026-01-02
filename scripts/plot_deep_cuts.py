@@ -16,6 +16,15 @@ from scipy import stats
 from matplotlib.patches import FancyBboxPatch
 import matplotlib.patches as mpatches
 
+# Note for simulated data
+SIM_NOTE = "Note: Data simulated to reflect CSU demographics and theorized treatment effects."
+
+def add_sim_note(fig, y_offset=-0.02):
+    """Add simulation note to bottom of figure."""
+    fig.text(0.5, y_offset, SIM_NOTE, ha='center', va='top', 
+             fontsize=8, fontstyle='italic', color='#666666',
+             transform=fig.transFigure)
+
 def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     os.makedirs(outdir, exist_ok=True)
     
@@ -147,6 +156,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 7\nCumulative Disadvantage Analysis', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig7_cumulative_risk.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 7: Cumulative Risk Analysis saved')
@@ -315,6 +325,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 8\nCredit Dose × FASt Moderation Pattern', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig8_credit_dose_moderation.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 8: Credit Dose Moderation saved')
@@ -467,80 +478,102 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 9\nMediation Pathway Analysis', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig9_mediation_pathways.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 9: Mediation Pathways saved')
     
     # =========================================================================
     # FIGURE 10: Intersectionality Matrix (FASt × First-Gen × URM)
+    # Redesigned: Grouped bars for direct FASt vs Non-FASt comparison
     # =========================================================================
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
     
-    # Create intersectional groups
-    df['intersection'] = (df['x_FASt'].astype(str) + '_' + 
-                          df['firstgen'].astype(str) + '_' + 
-                          df['urm'].astype(str))
+    # Define demographic subgroups (4 combinations of First-Gen × URM)
+    subgroup_labels = ['Cont-Gen\nNon-URM', 'Cont-Gen\nURM', 'First-Gen\nNon-URM', 'First-Gen\nURM']
+    subgroup_keys = [('0', '0'), ('0', '1'), ('1', '0'), ('1', '1')]  # (firstgen, urm)
     
-    # Readable labels
-    int_labels = {
-        '0_0_0': 'Non-FASt\nCont-Gen\nNon-URM',
-        '0_0_1': 'Non-FASt\nCont-Gen\nURM',
-        '0_1_0': 'Non-FASt\nFirst-Gen\nNon-URM',
-        '0_1_1': 'Non-FASt\nFirst-Gen\nURM',
-        '1_0_0': 'FASt\nCont-Gen\nNon-URM',
-        '1_0_1': 'FASt\nCont-Gen\nURM',
-        '1_1_0': 'FASt\nFirst-Gen\nNon-URM',
-        '1_1_1': 'FASt\nFirst-Gen\nURM'
-    }
-    
-    # 10a. Distress by intersectional group - RED theme with intensity
+    # 10a. Distress by subgroup: FASt vs Non-FASt side-by-side
     ax = axes[0, 0]
-    int_means = df.groupby('intersection')['mean_distress'].agg(['mean', 'sem', 'count'])
-    int_means = int_means.reindex(['0_0_0', '0_0_1', '0_1_0', '0_1_1', '1_0_0', '1_0_1', '1_1_0', '1_1_1'])
+    x = np.arange(len(subgroup_labels))
+    width = 0.35
     
-    x_pos = np.arange(8)
-    # Non-FASt = red shades with hatching, FASt = orange shades solid
-    bar_colors_10a = ['#ffcccc', '#ff9999', '#ff6666', '#ff3333',  # Non-FASt (red gradient)
-                      '#ffe6b3', '#ffcc66', '#ffb333', '#ff9900']  # FASt (orange gradient)
+    nonfast_distress = []
+    fast_distress = []
+    nonfast_distress_err = []
+    fast_distress_err = []
     
-    for i, (idx, row) in enumerate(int_means.iterrows()):
-        # First 4 bars are Non-FASt (hatched), last 4 are FASt (solid)
-        hatch_pattern = '///' if i < 4 else None
-        ax.bar(i, row['mean'], yerr=1.96*row['sem'], capsize=3,
-               color=bar_colors_10a[i], edgecolor='black', linewidth=1, hatch=hatch_pattern)
+    for fg, urm in subgroup_keys:
+        # Non-FASt
+        mask_nf = (df['x_FASt'].astype(str) == '0') & (df['firstgen'].astype(str) == fg) & (df['urm'].astype(str) == urm)
+        if mask_nf.sum() > 0:
+            nonfast_distress.append(df.loc[mask_nf, 'mean_distress'].mean())
+            nonfast_distress_err.append(1.96 * df.loc[mask_nf, 'mean_distress'].sem())
+        else:
+            nonfast_distress.append(np.nan)
+            nonfast_distress_err.append(0)
+        # FASt
+        mask_f = (df['x_FASt'].astype(str) == '1') & (df['firstgen'].astype(str) == fg) & (df['urm'].astype(str) == urm)
+        if mask_f.sum() > 0:
+            fast_distress.append(df.loc[mask_f, 'mean_distress'].mean())
+            fast_distress_err.append(1.96 * df.loc[mask_f, 'mean_distress'].sem())
+        else:
+            fast_distress.append(np.nan)
+            fast_distress_err.append(0)
     
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels([int_labels[k] for k in int_means.index], fontsize=8, rotation=45, ha='right')
+    bars1 = ax.bar(x - width/2, nonfast_distress, width, yerr=nonfast_distress_err, capsize=4,
+                   label='Non-FASt', color='#ff6666', edgecolor='black', hatch='///')
+    bars2 = ax.bar(x + width/2, fast_distress, width, yerr=fast_distress_err, capsize=4,
+                   label='FASt', color='#ff9900', edgecolor='black')
+    
     ax.set_ylabel('Mean Distress', fontsize=11)
     ax.set_title('Emotional Distress by Intersectional Identity', fontsize=12, fontweight='bold')
-    # Auto-scale y-axis based on data
-    y_min = int_means['mean'].min() - 0.5
-    y_max = int_means['mean'].max() + 0.5
-    ax.set_ylim(max(1, y_min), y_max)
+    ax.set_xticks(x)
+    ax.set_xticklabels(subgroup_labels, fontsize=9)
+    ax.legend(loc='upper right')
+    all_vals = [v for v in nonfast_distress + fast_distress if not np.isnan(v)]
+    if all_vals:
+        ax.set_ylim(max(1, min(all_vals) - 0.5), max(all_vals) + 0.5)
     
-    # 10b. Engagement by intersectional group - BLUE theme with intensity
+    # 10b. Engagement by subgroup: FASt vs Non-FASt side-by-side
     ax = axes[0, 1]
-    int_means_eng = df.groupby('intersection')['mean_engagement'].agg(['mean', 'sem', 'count'])
-    int_means_eng = int_means_eng.reindex(['0_0_0', '0_0_1', '0_1_0', '0_1_1', '1_0_0', '1_0_1', '1_1_0', '1_1_1'])
     
-    # Non-FASt = blue shades with hatching, FASt = orange shades solid
-    bar_colors_10b = ['#cce5ff', '#99ccff', '#66b3ff', '#3399ff',  # Non-FASt (blue gradient)
-                      '#ffe6b3', '#ffcc66', '#ffb333', '#ff9900']  # FASt (orange gradient)
+    nonfast_engage = []
+    fast_engage = []
+    nonfast_engage_err = []
+    fast_engage_err = []
     
-    for i, (idx, row) in enumerate(int_means_eng.iterrows()):
-        # First 4 bars are Non-FASt (hatched), last 4 are FASt (solid)
-        hatch_pattern = '///' if i < 4 else None
-        ax.bar(i, row['mean'], yerr=1.96*row['sem'], capsize=3,
-               color=bar_colors_10b[i], edgecolor='black', linewidth=1, hatch=hatch_pattern)
+    for fg, urm in subgroup_keys:
+        # Non-FASt
+        mask_nf = (df['x_FASt'].astype(str) == '0') & (df['firstgen'].astype(str) == fg) & (df['urm'].astype(str) == urm)
+        if mask_nf.sum() > 0:
+            nonfast_engage.append(df.loc[mask_nf, 'mean_engagement'].mean())
+            nonfast_engage_err.append(1.96 * df.loc[mask_nf, 'mean_engagement'].sem())
+        else:
+            nonfast_engage.append(np.nan)
+            nonfast_engage_err.append(0)
+        # FASt
+        mask_f = (df['x_FASt'].astype(str) == '1') & (df['firstgen'].astype(str) == fg) & (df['urm'].astype(str) == urm)
+        if mask_f.sum() > 0:
+            fast_engage.append(df.loc[mask_f, 'mean_engagement'].mean())
+            fast_engage_err.append(1.96 * df.loc[mask_f, 'mean_engagement'].sem())
+        else:
+            fast_engage.append(np.nan)
+            fast_engage_err.append(0)
     
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels([int_labels[k] for k in int_means_eng.index], fontsize=8, rotation=45, ha='right')
+    bars1 = ax.bar(x - width/2, nonfast_engage, width, yerr=nonfast_engage_err, capsize=4,
+                   label='Non-FASt', color='#3399ff', edgecolor='black', hatch='///')
+    bars2 = ax.bar(x + width/2, fast_engage, width, yerr=fast_engage_err, capsize=4,
+                   label='FASt', color='#ff9900', edgecolor='black')
+    
     ax.set_ylabel('Mean Engagement', fontsize=11)
     ax.set_title('Quality of Engagement by Intersectional Identity', fontsize=12, fontweight='bold')
-    # Auto-scale y-axis
-    y_min = int_means_eng['mean'].min() - 0.5
-    y_max = int_means_eng['mean'].max() + 0.5
-    ax.set_ylim(max(1, y_min), y_max)
+    ax.set_xticks(x)
+    ax.set_xticklabels(subgroup_labels, fontsize=9)
+    ax.legend(loc='upper right')
+    all_vals = [v for v in nonfast_engage + fast_engage if not np.isnan(v)]
+    if all_vals:
+        ax.set_ylim(max(1, min(all_vals) - 0.5), max(all_vals) + 0.5)
     
     # 10c. Heatmap: FASt × First-Gen interaction on distress
     ax = axes[1, 0]
@@ -590,6 +623,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 10\nIntersectionality Analysis', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig10_intersectionality.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 10: Intersectionality Analysis saved')
@@ -695,6 +729,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 11\nStudent Outcome Profiles', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig11_outcome_profiles.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 11: Outcome Profiles saved')
@@ -773,6 +808,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 12\nCohort Comparison Patterns', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig12_cohort_patterns.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 12: Cohort Patterns saved')

@@ -1385,12 +1385,15 @@ def table14_serial_mediation(doc, table_num, data_dir, compact=True):
 
 def main():
     parser = argparse.ArgumentParser(description='Build complete dissertation tables')
-    parser.add_argument('--outdir', type=str, required=True, help='Output directory with results')
+    parser.add_argument('--outdir', type=str, required=True, help='Input directory with results data')
+    parser.add_argument('--out', type=str, default=None, help='Output directory for docx (default: same as outdir)')
     parser.add_argument('--B', type=int, default=2000, help='Bootstrap replicates')
     parser.add_argument('--ci_type', type=str, default='perc', help='CI type: bca, perc, norm')
     args = parser.parse_args()
     
     outdir = Path(args.outdir)
+    out_docx_dir = Path(args.out) if args.out else outdir
+    out_docx_dir.mkdir(parents=True, exist_ok=True)
     
     # Find bootstrap results
     boot_csv = outdir / "bootstrap_results.csv"
@@ -1486,8 +1489,8 @@ def main():
     if serial_dir.exists():
         table_num = table14_serial_mediation(doc, table_num, serial_dir, compact=True)
     
-    # Save
-    out_docx = outdir / "Dissertation_Tables.docx"
+    # Save to specified output directory
+    out_docx = out_docx_dir / "Dissertation_Tables.docx"
     doc.save(str(out_docx))
     
     print(f"\n{'='*60}")

@@ -13,6 +13,15 @@ import numpy as np
 import os
 import argparse
 
+# Note for simulated data
+SIM_NOTE = "Note: Data simulated to reflect CSU demographics and theorized treatment effects."
+
+def add_sim_note(fig, y_offset=-0.02):
+    """Add simulation note to bottom of figure."""
+    fig.text(0.5, y_offset, SIM_NOTE, ha='center', va='top', 
+             fontsize=8, fontstyle='italic', color='#666666',
+             transform=fig.transFigure)
+
 def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     os.makedirs(outdir, exist_ok=True)
     
@@ -98,6 +107,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 1\nSample Demographics Overview', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig1_demographics.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 1: Demographics saved')
@@ -127,6 +137,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 2\nEmotional Distress Indicators (EmoDiss)', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig2_emotional_distress.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 2: Emotional Distress saved')
@@ -157,6 +168,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 3\nQuality of Engagement Indicators (QualEngag)', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig3_quality_engagement.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 3: Quality of Engagement saved')
@@ -247,6 +259,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 4\nDevelopmental Adjustment Indicators (DevAdj)', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig4_developmental_adjustment.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 4: Developmental Adjustment saved')
@@ -349,6 +362,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     
     plt.suptitle('Figure 5\nEquity Gaps Analysis', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
+    add_sim_note(fig)
     plt.savefig(f'{outdir}/fig5_equity_gaps.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 5: Equity Gaps saved')
@@ -424,6 +438,7 @@ def main(data_path='rep_data.csv', outdir='results/descriptive_plots'):
     ax.set_title('Figure 6\nCorrelation Matrix by Construct\n(X/Z | Covariates | EmoDiss | QualEngag | Belong | Gains | Satisf)', 
                  fontsize=14, fontweight='bold')
     plt.tight_layout()
+    add_sim_note(fig, y_offset=0.01)
     plt.savefig(f'{outdir}/fig6_correlation_heatmap.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 6: Correlation Heatmap saved')

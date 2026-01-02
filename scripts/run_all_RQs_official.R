@@ -1388,12 +1388,12 @@ message("\n=== Building Bootstrap Tables ===")
 boot_csv_path <- file.path(OUT_BASE, "RQ1_RQ3_main", "structural", "structural_parameterEstimates.txt")
 if (file.exists(boot_csv_path)) {
   tables_cmd <- sprintf(
-    "python3 scripts/build_bootstrap_tables.py --csv '%s' --B %d --ci_type '%s'",
-    boot_csv_path, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN
+    "python3 scripts/build_bootstrap_tables.py --csv '%s' --B %d --ci_type '%s' --out '%s'",
+    boot_csv_path, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN, OUT_BASE
   )
   tables_result <- system(tables_cmd, intern = FALSE)
   if (tables_result == 0) {
-    message("Bootstrap tables saved to: ", dirname(boot_csv_path))
+    message("Bootstrap tables saved to: ", OUT_BASE)
   } else {
     warning("Bootstrap tables script failed (exit code ", tables_result, ")")
   }

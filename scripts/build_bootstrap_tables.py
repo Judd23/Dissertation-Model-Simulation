@@ -166,9 +166,12 @@ def main():
     parser.add_argument('--csv', required=True)
     parser.add_argument('--B', type=int, default=2000)
     parser.add_argument('--ci_type', default='perc')
+    parser.add_argument('--out', default=None, help='Output directory (default: same as csv parent)')
     args = parser.parse_args()
     
     csv_path = Path(args.csv)
+    out_dir = Path(args.out) if args.out else csv_path.parent
+    out_dir.mkdir(parents=True, exist_ok=True)
     if not csv_path.exists():
         print(f"ERROR: {csv_path} not found")
         return
@@ -256,7 +259,7 @@ def main():
                        f"*95% {ci} CI excludes zero. B = {B:,}.",
                        column_spanners=estimate_spanner)
     
-    out = csv_path.parent / "Bootstrap_Tables.docx"
+    out = out_dir / "Bootstrap_Tables.docx"
     doc.save(str(out))
     print(f"Wrote: {out}")
     print(f"Tables: {num-1} | B = {B:,} | CI = {ci}")
