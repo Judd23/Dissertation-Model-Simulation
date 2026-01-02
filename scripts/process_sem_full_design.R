@@ -339,7 +339,7 @@ extract_targets <- function(fit, use_serial = FALSE) {
   labs <- c(
     "a1","a1z","a2","a2z","b1","b2","c","cz",
     "a1_z_low","a1_z_mid","a1_z_high",
-    "a2_z_mid","a2_z_high",
+    "a2_z_low","a2_z_mid","a2_z_high",
     "dir_z_low","dir_z_mid","dir_z_high",
     "ind_EmoDiss_z_low","ind_EmoDiss_z_mid","ind_EmoDiss_z_high",
     "ind_QualEngag_z_low","ind_QualEngag_z_mid","ind_QualEngag_z_high",
@@ -406,8 +406,8 @@ bootstrap_pipeline <- function(d, ps_formula, B, out_dir, fast_boot = FALSE, use
         )
       }, error = function(e) NULL)
       
-      if (is.null(fit)) return(rep(NA_real_, if(use_serial) 33 else 28))
-      if (!lavInspect(fit, "converged")) return(rep(NA_real_, if(use_serial) 33 else 28))
+      if (is.null(fit)) return(rep(NA_real_, if(use_serial) 34 else 29))
+      if (!lavInspect(fit, "converged")) return(rep(NA_real_, if(use_serial) 34 else 29))
       unname(extract_targets(fit, use_serial))
     }
     boot_data <- d_with_weights
@@ -417,11 +417,11 @@ bootstrap_pipeline <- function(d, ps_formula, B, out_dir, fast_boot = FALSE, use
     stat_fn <- function(data, indices) {
       bd <- data[indices, , drop = FALSE]
       res <- tryCatch({
-        fit_weighted_sem(bd, ps_formula)
+        fit_weighted_sem(bd, ps_formula, use_serial = use_serial)  # BUG FIX: pass use_serial
       }, error = function(e) NULL)
       
-      if (is.null(res)) return(rep(NA_real_, if(use_serial) 33 else 28))
-      if (!lavInspect(res$fit, "converged")) return(rep(NA_real_, if(use_serial) 33 else 28))
+      if (is.null(res)) return(rep(NA_real_, if(use_serial) 34 else 29))
+      if (!lavInspect(res$fit, "converged")) return(rep(NA_real_, if(use_serial) 34 else 29))
       unname(extract_targets(res$fit, use_serial))
     }
     boot_data <- d
