@@ -8,10 +8,11 @@
 
 | What You Need | Location |
 |---------------|----------|
-| **Results Tables** | [4_Model_Results/Tables/](4_Model_Results/Tables/) *(download .docx to view)* |
+| **Results Tables** | [4_Model_Results/Tables/Dissertation_Tables.md](4_Model_Results/Tables/Dissertation_Tables.md) |
+| **Bootstrap Tables** | [4_Model_Results/Tables/Bootstrap_Tables.md](4_Model_Results/Tables/Bootstrap_Tables.md) |
 | **Figures** | [4_Model_Results/Figures/](4_Model_Results/Figures/) |
 | **Plain-Language Summary** | [4_Model_Results/Summary/Key_Findings_Summary.md](4_Model_Results/Summary/Key_Findings_Summary.md) |
-| **Variable Dictionary** | [2_Codebooks/Variable_Table.xlsx](2_Codebooks/Variable_Table.xlsx) |
+| **Variable Dictionary** | [2_Codebooks/Variable_Table.csv](2_Codebooks/Variable_Table.csv) |
 
 ---
 
