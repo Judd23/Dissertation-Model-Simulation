@@ -1,0 +1,16 @@
+{
+  "n": 5000,
+  "cfi": 0.9564,
+  "tli": 0.9513,
+  "rmsea": 0.0226,
+  "srmr": 0.0241,
+  "chisq": 1857.1598,
+  "df": 523,
+  "pvalue": 0,
+  "cfi_robust": 0.9666,
+  "tli_robust": 0.9627,
+  "rmsea_robust": 0.0196,
+  "bootstrap_b": 2000,
+  "bootstrap_converged": 2000,
+  "bootstrap_pct": 100
+}

@@ -1,0 +1,13 @@
+Wald tests: linear constraints (treatment and moderation terms)
+$stat
+[1] 1050.378
+
+$df
+[1] 8
+
+$p.value
+[1] 0
+
+$se
+[1] "standard"
+

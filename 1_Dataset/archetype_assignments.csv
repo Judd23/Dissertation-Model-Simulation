@@ -1,0 +1,5001 @@
+id,archetype_id,archetype_name
+1,10,Continuing-Gen Cruiser
+2,8,Multiracial Bridge-Builder
+3,2,Latino First-Gen Striver
+4,2,Latino First-Gen Striver
+5,9,Hispanic On-Campus Transitioner
+6,1,Latina Commuter Caretaker
+7,2,Latino First-Gen Striver
+8,7,White Commuter Working
+9,2,Latino First-Gen Striver
+10,1,Latina Commuter Caretaker
+11,8,Multiracial Bridge-Builder
+12,6,White Residential Traditional
+13,3,Asian High-Pressure Achiever
+14,8,Multiracial Bridge-Builder
+15,2,Latino First-Gen Striver
+16,5,Black Campus Connector
+17,10,Continuing-Gen Cruiser
+18,6,White Residential Traditional
+19,3,Asian High-Pressure Achiever
+20,10,Continuing-Gen Cruiser
+21,7,White Commuter Working
+22,6,White Residential Traditional
+23,10,Continuing-Gen Cruiser
+24,1,Latina Commuter Caretaker
+25,8,Multiracial Bridge-Builder
+26,3,Asian High-Pressure Achiever
+27,2,Latino First-Gen Striver
+28,6,White Residential Traditional
+29,1,Latina Commuter Caretaker
+30,2,Latino First-Gen Striver
+31,9,Hispanic On-Campus Transitioner
+32,1,Latina Commuter Caretaker
+33,2,Latino First-Gen Striver
+34,1,Latina Commuter Caretaker
+35,1,Latina Commuter Caretaker
+36,10,Continuing-Gen Cruiser
+37,2,Latino First-Gen Striver
+38,2,Latino First-Gen Striver
+39,9,Hispanic On-Campus Transitioner
+40,3,Asian High-Pressure Achiever
+41,1,Latina Commuter Caretaker
+42,9,Hispanic On-Campus Transitioner
+43,1,Latina Commuter Caretaker
+44,10,Continuing-Gen Cruiser
+45,10,Continuing-Gen Cruiser
+46,9,Hispanic On-Campus Transitioner
+47,1,Latina Commuter Caretaker
+48,10,Continuing-Gen Cruiser
+49,4,Asian First-Gen Navigator
+50,6,White Residential Traditional
+51,10,Continuing-Gen Cruiser
+52,2,Latino First-Gen Striver
+53,3,Asian High-Pressure Achiever
+54,2,Latino First-Gen Striver
+55,1,Latina Commuter Caretaker
+56,10,Continuing-Gen Cruiser
+57,10,Continuing-Gen Cruiser
+58,1,Latina Commuter Caretaker
+59,2,Latino First-Gen Striver
+60,3,Asian High-Pressure Achiever
+61,3,Asian High-Pressure Achiever
+62,1,Latina Commuter Caretaker
+63,2,Latino First-Gen Striver
+64,3,Asian High-Pressure Achiever
+65,8,Multiracial Bridge-Builder
+66,1,Latina Commuter Caretaker
+67,7,White Commuter Working
+68,1,Latina Commuter Caretaker
+69,10,Continuing-Gen Cruiser
+70,9,Hispanic On-Campus Transitioner
+71,10,Continuing-Gen Cruiser
+72,3,Asian High-Pressure Achiever
+73,5,Black Campus Connector
+74,10,Continuing-Gen Cruiser
+75,9,Hispanic On-Campus Transitioner
+76,4,Asian First-Gen Navigator
+77,8,Multiracial Bridge-Builder
+78,4,Asian First-Gen Navigator
+79,10,Continuing-Gen Cruiser
+80,10,Continuing-Gen Cruiser
+81,2,Latino First-Gen Striver
+82,9,Hispanic On-Campus Transitioner
+83,2,Latino First-Gen Striver
+84,6,White Residential Traditional
+85,5,Black Campus Connector
+86,3,Asian High-Pressure Achiever
+87,8,Multiracial Bridge-Builder
+88,10,Continuing-Gen Cruiser
+89,9,Hispanic On-Campus Transitioner
+90,2,Latino First-Gen Striver
+91,1,Latina Commuter Caretaker
+92,7,White Commuter Working
+93,10,Continuing-Gen Cruiser
+94,1,Latina Commuter Caretaker
+95,3,Asian High-Pressure Achiever
+96,10,Continuing-Gen Cruiser
+97,2,Latino First-Gen Striver
+98,5,Black Campus Connector
+99,3,Asian High-Pressure Achiever
+100,7,White Commuter Working
+101,1,Latina Commuter Caretaker
+102,2,Latino First-Gen Striver
+103,1,Latina Commuter Caretaker
+104,10,Continuing-Gen Cruiser
+105,7,White Commuter Working
+106,8,Multiracial Bridge-Builder
+107,9,Hispanic On-Campus Transitioner
+108,2,Latino First-Gen Striver
+109,2,Latino First-Gen Striver
+110,9,Hispanic On-Campus Transitioner
+111,10,Continuing-Gen Cruiser
+112,8,Multiracial Bridge-Builder
+113,9,Hispanic On-Campus Transitioner
+114,8,Multiracial Bridge-Builder
+115,8,Multiracial Bridge-Builder
+116,4,Asian First-Gen Navigator
+117,4,Asian First-Gen Navigator
+118,1,Latina Commuter Caretaker
+119,10,Continuing-Gen Cruiser
+120,1,Latina Commuter Caretaker
+121,10,Continuing-Gen Cruiser
+122,9,Hispanic On-Campus Transitioner
+123,4,Asian First-Gen Navigator
+124,1,Latina Commuter Caretaker
+125,3,Asian High-Pressure Achiever
+126,1,Latina Commuter Caretaker
+127,1,Latina Commuter Caretaker
+128,10,Continuing-Gen Cruiser
+129,10,Continuing-Gen Cruiser
+130,1,Latina Commuter Caretaker
+131,4,Asian First-Gen Navigator
+132,3,Asian High-Pressure Achiever
+133,2,Latino First-Gen Striver
+134,3,Asian High-Pressure Achiever
+135,2,Latino First-Gen Striver
+136,10,Continuing-Gen Cruiser
+137,1,Latina Commuter Caretaker
+138,7,White Commuter Working
+139,2,Latino First-Gen Striver
+140,10,Continuing-Gen Cruiser
+141,10,Continuing-Gen Cruiser
+142,9,Hispanic On-Campus Transitioner
+143,10,Continuing-Gen Cruiser
+144,10,Continuing-Gen Cruiser
+145,6,White Residential Traditional
+146,3,Asian High-Pressure Achiever
+147,10,Continuing-Gen Cruiser
+148,10,Continuing-Gen Cruiser
+149,5,Black Campus Connector
+150,10,Continuing-Gen Cruiser
+151,10,Continuing-Gen Cruiser
+152,3,Asian High-Pressure Achiever
+153,8,Multiracial Bridge-Builder
+154,10,Continuing-Gen Cruiser
+155,4,Asian First-Gen Navigator
+156,1,Latina Commuter Caretaker
+157,3,Asian High-Pressure Achiever
+158,10,Continuing-Gen Cruiser
+159,1,Latina Commuter Caretaker
+160,9,Hispanic On-Campus Transitioner
+161,6,White Residential Traditional
+162,7,White Commuter Working
+163,6,White Residential Traditional
+164,10,Continuing-Gen Cruiser
+165,10,Continuing-Gen Cruiser
+166,10,Continuing-Gen Cruiser
+167,9,Hispanic On-Campus Transitioner
+168,1,Latina Commuter Caretaker
+169,3,Asian High-Pressure Achiever
+170,1,Latina Commuter Caretaker
+171,6,White Residential Traditional
+172,5,Black Campus Connector
+173,9,Hispanic On-Campus Transitioner
+174,6,White Residential Traditional
+175,10,Continuing-Gen Cruiser
+176,7,White Commuter Working
+177,10,Continuing-Gen Cruiser
+178,1,Latina Commuter Caretaker
+179,2,Latino First-Gen Striver
+180,9,Hispanic On-Campus Transitioner
+181,1,Latina Commuter Caretaker
+182,10,Continuing-Gen Cruiser
+183,2,Latino First-Gen Striver
+184,1,Latina Commuter Caretaker
+185,1,Latina Commuter Caretaker
+186,10,Continuing-Gen Cruiser
+187,1,Latina Commuter Caretaker
+188,10,Continuing-Gen Cruiser
+189,1,Latina Commuter Caretaker
+190,6,White Residential Traditional
+191,5,Black Campus Connector
+192,6,White Residential Traditional
+193,5,Black Campus Connector
+194,4,Asian First-Gen Navigator
+195,8,Multiracial Bridge-Builder
+196,2,Latino First-Gen Striver
+197,10,Continuing-Gen Cruiser
+198,10,Continuing-Gen Cruiser
+199,3,Asian High-Pressure Achiever
+200,10,Continuing-Gen Cruiser
+201,10,Continuing-Gen Cruiser
+202,6,White Residential Traditional
+203,6,White Residential Traditional
+204,3,Asian High-Pressure Achiever
+205,3,Asian High-Pressure Achiever
+206,3,Asian High-Pressure Achiever
+207,10,Continuing-Gen Cruiser
+208,3,Asian High-Pressure Achiever
+209,3,Asian High-Pressure Achiever
+210,6,White Residential Traditional
+211,7,White Commuter Working
+212,3,Asian High-Pressure Achiever
+213,3,Asian High-Pressure Achiever
+214,1,Latina Commuter Caretaker
+215,8,Multiracial Bridge-Builder
+216,3,Asian High-Pressure Achiever
+217,9,Hispanic On-Campus Transitioner
+218,8,Multiracial Bridge-Builder
+219,3,Asian High-Pressure Achiever
+220,1,Latina Commuter Caretaker
+221,9,Hispanic On-Campus Transitioner
+222,8,Multiracial Bridge-Builder
+223,3,Asian High-Pressure Achiever
+224,7,White Commuter Working
+225,10,Continuing-Gen Cruiser
+226,1,Latina Commuter Caretaker
+227,10,Continuing-Gen Cruiser
+228,8,Multiracial Bridge-Builder
+229,6,White Residential Traditional
+230,8,Multiracial Bridge-Builder
+231,1,Latina Commuter Caretaker
+232,10,Continuing-Gen Cruiser
+233,6,White Residential Traditional
+234,1,Latina Commuter Caretaker
+235,10,Continuing-Gen Cruiser
+236,4,Asian First-Gen Navigator
+237,4,Asian First-Gen Navigator
+238,3,Asian High-Pressure Achiever
+239,10,Continuing-Gen Cruiser
+240,9,Hispanic On-Campus Transitioner
+241,6,White Residential Traditional
+242,1,Latina Commuter Caretaker
+243,2,Latino First-Gen Striver
+244,10,Continuing-Gen Cruiser
+245,2,Latino First-Gen Striver
+246,10,Continuing-Gen Cruiser
+247,4,Asian First-Gen Navigator
+248,10,Continuing-Gen Cruiser
+249,3,Asian High-Pressure Achiever
+250,7,White Commuter Working
+251,1,Latina Commuter Caretaker
+252,2,Latino First-Gen Striver
+253,9,Hispanic On-Campus Transitioner
+254,4,Asian First-Gen Navigator
+255,9,Hispanic On-Campus Transitioner
+256,1,Latina Commuter Caretaker
+257,10,Continuing-Gen Cruiser
+258,2,Latino First-Gen Striver
+259,1,Latina Commuter Caretaker
+260,7,White Commuter Working
+261,4,Asian First-Gen Navigator
+262,1,Latina Commuter Caretaker
+263,7,White Commuter Working
+264,10,Continuing-Gen Cruiser
+265,9,Hispanic On-Campus Transitioner
+266,8,Multiracial Bridge-Builder
+267,1,Latina Commuter Caretaker
+268,8,Multiracial Bridge-Builder
+269,2,Latino First-Gen Striver
+270,9,Hispanic On-Campus Transitioner
+271,3,Asian High-Pressure Achiever
+272,10,Continuing-Gen Cruiser
+273,10,Continuing-Gen Cruiser
+274,9,Hispanic On-Campus Transitioner
+275,1,Latina Commuter Caretaker
+276,1,Latina Commuter Caretaker
+277,10,Continuing-Gen Cruiser
+278,1,Latina Commuter Caretaker
+279,2,Latino First-Gen Striver
+280,3,Asian High-Pressure Achiever
+281,2,Latino First-Gen Striver
+282,7,White Commuter Working
+283,3,Asian High-Pressure Achiever
+284,1,Latina Commuter Caretaker
+285,1,Latina Commuter Caretaker
+286,1,Latina Commuter Caretaker
+287,6,White Residential Traditional
+288,10,Continuing-Gen Cruiser
+289,10,Continuing-Gen Cruiser
+290,3,Asian High-Pressure Achiever
+291,8,Multiracial Bridge-Builder
+292,1,Latina Commuter Caretaker
+293,1,Latina Commuter Caretaker
+294,10,Continuing-Gen Cruiser
+295,1,Latina Commuter Caretaker
+296,10,Continuing-Gen Cruiser
+297,10,Continuing-Gen Cruiser
+298,4,Asian First-Gen Navigator
+299,9,Hispanic On-Campus Transitioner
+300,9,Hispanic On-Campus Transitioner
+301,1,Latina Commuter Caretaker
+302,10,Continuing-Gen Cruiser
+303,2,Latino First-Gen Striver
+304,2,Latino First-Gen Striver
+305,6,White Residential Traditional
+306,7,White Commuter Working
+307,3,Asian High-Pressure Achiever
+308,10,Continuing-Gen Cruiser
+309,10,Continuing-Gen Cruiser
+310,6,White Residential Traditional
+311,2,Latino First-Gen Striver
+312,6,White Residential Traditional
+313,1,Latina Commuter Caretaker
+314,3,Asian High-Pressure Achiever
+315,10,Continuing-Gen Cruiser
+316,6,White Residential Traditional
+317,8,Multiracial Bridge-Builder
+318,2,Latino First-Gen Striver
+319,1,Latina Commuter Caretaker
+320,10,Continuing-Gen Cruiser
+321,2,Latino First-Gen Striver
+322,8,Multiracial Bridge-Builder
+323,9,Hispanic On-Campus Transitioner
+324,9,Hispanic On-Campus Transitioner
+325,9,Hispanic On-Campus Transitioner
+326,2,Latino First-Gen Striver
+327,10,Continuing-Gen Cruiser
+328,10,Continuing-Gen Cruiser
+329,1,Latina Commuter Caretaker
+330,9,Hispanic On-Campus Transitioner
+331,10,Continuing-Gen Cruiser
+332,9,Hispanic On-Campus Transitioner
+333,2,Latino First-Gen Striver
+334,10,Continuing-Gen Cruiser
+335,10,Continuing-Gen Cruiser
+336,1,Latina Commuter Caretaker
+337,3,Asian High-Pressure Achiever
+338,4,Asian First-Gen Navigator
+339,9,Hispanic On-Campus Transitioner
+340,6,White Residential Traditional
+341,10,Continuing-Gen Cruiser
+342,2,Latino First-Gen Striver
+343,8,Multiracial Bridge-Builder
+344,1,Latina Commuter Caretaker
+345,2,Latino First-Gen Striver
+346,7,White Commuter Working
+347,10,Continuing-Gen Cruiser
+348,1,Latina Commuter Caretaker
+349,6,White Residential Traditional
+350,1,Latina Commuter Caretaker
+351,8,Multiracial Bridge-Builder
+352,2,Latino First-Gen Striver
+353,1,Latina Commuter Caretaker
+354,3,Asian High-Pressure Achiever
+355,7,White Commuter Working
+356,3,Asian High-Pressure Achiever
+357,2,Latino First-Gen Striver
+358,5,Black Campus Connector
+359,8,Multiracial Bridge-Builder
+360,1,Latina Commuter Caretaker
+361,7,White Commuter Working
+362,10,Continuing-Gen Cruiser
+363,6,White Residential Traditional
+364,9,Hispanic On-Campus Transitioner
+365,3,Asian High-Pressure Achiever
+366,6,White Residential Traditional
+367,8,Multiracial Bridge-Builder
+368,3,Asian High-Pressure Achiever
+369,8,Multiracial Bridge-Builder
+370,7,White Commuter Working
+371,10,Continuing-Gen Cruiser
+372,2,Latino First-Gen Striver
+373,6,White Residential Traditional
+374,6,White Residential Traditional
+375,8,Multiracial Bridge-Builder
+376,6,White Residential Traditional
+377,3,Asian High-Pressure Achiever
+378,8,Multiracial Bridge-Builder
+379,7,White Commuter Working
+380,3,Asian High-Pressure Achiever
+381,2,Latino First-Gen Striver
+382,3,Asian High-Pressure Achiever
+383,1,Latina Commuter Caretaker
+384,3,Asian High-Pressure Achiever
+385,2,Latino First-Gen Striver
+386,1,Latina Commuter Caretaker
+387,6,White Residential Traditional
+388,8,Multiracial Bridge-Builder
+389,6,White Residential Traditional
+390,2,Latino First-Gen Striver
+391,1,Latina Commuter Caretaker
+392,1,Latina Commuter Caretaker
+393,7,White Commuter Working
+394,10,Continuing-Gen Cruiser
+395,6,White Residential Traditional
+396,10,Continuing-Gen Cruiser
+397,1,Latina Commuter Caretaker
+398,1,Latina Commuter Caretaker
+399,10,Continuing-Gen Cruiser
+400,4,Asian First-Gen Navigator
+401,1,Latina Commuter Caretaker
+402,4,Asian First-Gen Navigator
+403,6,White Residential Traditional
+404,10,Continuing-Gen Cruiser
+405,9,Hispanic On-Campus Transitioner
+406,3,Asian High-Pressure Achiever
+407,5,Black Campus Connector
+408,10,Continuing-Gen Cruiser
+409,2,Latino First-Gen Striver
+410,1,Latina Commuter Caretaker
+411,10,Continuing-Gen Cruiser
+412,1,Latina Commuter Caretaker
+413,9,Hispanic On-Campus Transitioner
+414,1,Latina Commuter Caretaker
+415,9,Hispanic On-Campus Transitioner
+416,10,Continuing-Gen Cruiser
+417,8,Multiracial Bridge-Builder
+418,10,Continuing-Gen Cruiser
+419,2,Latino First-Gen Striver
+420,4,Asian First-Gen Navigator
+421,2,Latino First-Gen Striver
+422,10,Continuing-Gen Cruiser
+423,1,Latina Commuter Caretaker
+424,4,Asian First-Gen Navigator
+425,1,Latina Commuter Caretaker
+426,1,Latina Commuter Caretaker
+427,5,Black Campus Connector
+428,2,Latino First-Gen Striver
+429,6,White Residential Traditional
+430,6,White Residential Traditional
+431,6,White Residential Traditional
+432,8,Multiracial Bridge-Builder
+433,1,Latina Commuter Caretaker
+434,2,Latino First-Gen Striver
+435,10,Continuing-Gen Cruiser
+436,9,Hispanic On-Campus Transitioner
+437,3,Asian High-Pressure Achiever
+438,2,Latino First-Gen Striver
+439,1,Latina Commuter Caretaker
+440,1,Latina Commuter Caretaker
+441,4,Asian First-Gen Navigator
+442,7,White Commuter Working
+443,5,Black Campus Connector
+444,9,Hispanic On-Campus Transitioner
+445,4,Asian First-Gen Navigator
+446,3,Asian High-Pressure Achiever
+447,1,Latina Commuter Caretaker
+448,10,Continuing-Gen Cruiser
+449,8,Multiracial Bridge-Builder
+450,8,Multiracial Bridge-Builder
+451,10,Continuing-Gen Cruiser
+452,1,Latina Commuter Caretaker
+453,10,Continuing-Gen Cruiser
+454,9,Hispanic On-Campus Transitioner
+455,10,Continuing-Gen Cruiser
+456,10,Continuing-Gen Cruiser
+457,10,Continuing-Gen Cruiser
+458,10,Continuing-Gen Cruiser
+459,8,Multiracial Bridge-Builder
+460,6,White Residential Traditional
+461,2,Latino First-Gen Striver
+462,1,Latina Commuter Caretaker
+463,7,White Commuter Working
+464,10,Continuing-Gen Cruiser
+465,7,White Commuter Working
+466,9,Hispanic On-Campus Transitioner
+467,10,Continuing-Gen Cruiser
+468,8,Multiracial Bridge-Builder
+469,2,Latino First-Gen Striver
+470,1,Latina Commuter Caretaker
+471,9,Hispanic On-Campus Transitioner
+472,10,Continuing-Gen Cruiser
+473,2,Latino First-Gen Striver
+474,6,White Residential Traditional
+475,2,Latino First-Gen Striver
+476,5,Black Campus Connector
+477,9,Hispanic On-Campus Transitioner
+478,1,Latina Commuter Caretaker
+479,9,Hispanic On-Campus Transitioner
+480,3,Asian High-Pressure Achiever
+481,2,Latino First-Gen Striver
+482,6,White Residential Traditional
+483,10,Continuing-Gen Cruiser
+484,10,Continuing-Gen Cruiser
+485,4,Asian First-Gen Navigator
+486,2,Latino First-Gen Striver
+487,1,Latina Commuter Caretaker
+488,10,Continuing-Gen Cruiser
+489,10,Continuing-Gen Cruiser
+490,1,Latina Commuter Caretaker
+491,10,Continuing-Gen Cruiser
+492,10,Continuing-Gen Cruiser
+493,7,White Commuter Working
+494,10,Continuing-Gen Cruiser
+495,1,Latina Commuter Caretaker
+496,9,Hispanic On-Campus Transitioner
+497,1,Latina Commuter Caretaker
+498,9,Hispanic On-Campus Transitioner
+499,10,Continuing-Gen Cruiser
+500,10,Continuing-Gen Cruiser
+501,1,Latina Commuter Caretaker
+502,10,Continuing-Gen Cruiser
+503,2,Latino First-Gen Striver
+504,10,Continuing-Gen Cruiser
+505,9,Hispanic On-Campus Transitioner
+506,6,White Residential Traditional
+507,8,Multiracial Bridge-Builder
+508,10,Continuing-Gen Cruiser
+509,5,Black Campus Connector
+510,6,White Residential Traditional
+511,2,Latino First-Gen Striver
+512,3,Asian High-Pressure Achiever
+513,2,Latino First-Gen Striver
+514,9,Hispanic On-Campus Transitioner
+515,1,Latina Commuter Caretaker
+516,1,Latina Commuter Caretaker
+517,1,Latina Commuter Caretaker
+518,2,Latino First-Gen Striver
+519,2,Latino First-Gen Striver
+520,1,Latina Commuter Caretaker
+521,4,Asian First-Gen Navigator
+522,10,Continuing-Gen Cruiser
+523,4,Asian First-Gen Navigator
+524,8,Multiracial Bridge-Builder
+525,6,White Residential Traditional
+526,3,Asian High-Pressure Achiever
+527,10,Continuing-Gen Cruiser
+528,4,Asian First-Gen Navigator
+529,2,Latino First-Gen Striver
+530,2,Latino First-Gen Striver
+531,7,White Commuter Working
+532,3,Asian High-Pressure Achiever
+533,7,White Commuter Working
+534,2,Latino First-Gen Striver
+535,3,Asian High-Pressure Achiever
+536,8,Multiracial Bridge-Builder
+537,8,Multiracial Bridge-Builder
+538,6,White Residential Traditional
+539,10,Continuing-Gen Cruiser
+540,9,Hispanic On-Campus Transitioner
+541,1,Latina Commuter Caretaker
+542,6,White Residential Traditional
+543,1,Latina Commuter Caretaker
+544,1,Latina Commuter Caretaker
+545,3,Asian High-Pressure Achiever
+546,1,Latina Commuter Caretaker
+547,3,Asian High-Pressure Achiever
+548,10,Continuing-Gen Cruiser
+549,2,Latino First-Gen Striver
+550,10,Continuing-Gen Cruiser
+551,1,Latina Commuter Caretaker
+552,9,Hispanic On-Campus Transitioner
+553,2,Latino First-Gen Striver
+554,5,Black Campus Connector
+555,10,Continuing-Gen Cruiser
+556,3,Asian High-Pressure Achiever
+557,1,Latina Commuter Caretaker
+558,9,Hispanic On-Campus Transitioner
+559,10,Continuing-Gen Cruiser
+560,1,Latina Commuter Caretaker
+561,8,Multiracial Bridge-Builder
+562,10,Continuing-Gen Cruiser
+563,7,White Commuter Working
+564,10,Continuing-Gen Cruiser
+565,8,Multiracial Bridge-Builder
+566,10,Continuing-Gen Cruiser
+567,7,White Commuter Working
+568,8,Multiracial Bridge-Builder
+569,1,Latina Commuter Caretaker
+570,10,Continuing-Gen Cruiser
+571,5,Black Campus Connector
+572,4,Asian First-Gen Navigator
+573,9,Hispanic On-Campus Transitioner
+574,10,Continuing-Gen Cruiser
+575,4,Asian First-Gen Navigator
+576,7,White Commuter Working
+577,2,Latino First-Gen Striver
+578,1,Latina Commuter Caretaker
+579,1,Latina Commuter Caretaker
+580,9,Hispanic On-Campus Transitioner
+581,2,Latino First-Gen Striver
+582,2,Latino First-Gen Striver
+583,10,Continuing-Gen Cruiser
+584,6,White Residential Traditional
+585,10,Continuing-Gen Cruiser
+586,8,Multiracial Bridge-Builder
+587,2,Latino First-Gen Striver
+588,3,Asian High-Pressure Achiever
+589,2,Latino First-Gen Striver
+590,1,Latina Commuter Caretaker
+591,1,Latina Commuter Caretaker
+592,10,Continuing-Gen Cruiser
+593,7,White Commuter Working
+594,10,Continuing-Gen Cruiser
+595,10,Continuing-Gen Cruiser
+596,10,Continuing-Gen Cruiser
+597,10,Continuing-Gen Cruiser
+598,8,Multiracial Bridge-Builder
+599,10,Continuing-Gen Cruiser
+600,2,Latino First-Gen Striver
+601,6,White Residential Traditional
+602,3,Asian High-Pressure Achiever
+603,4,Asian First-Gen Navigator
+604,4,Asian First-Gen Navigator
+605,1,Latina Commuter Caretaker
+606,5,Black Campus Connector
+607,1,Latina Commuter Caretaker
+608,10,Continuing-Gen Cruiser
+609,2,Latino First-Gen Striver
+610,9,Hispanic On-Campus Transitioner
+611,2,Latino First-Gen Striver
+612,1,Latina Commuter Caretaker
+613,2,Latino First-Gen Striver
+614,8,Multiracial Bridge-Builder
+615,8,Multiracial Bridge-Builder
+616,9,Hispanic On-Campus Transitioner
+617,10,Continuing-Gen Cruiser
+618,6,White Residential Traditional
+619,10,Continuing-Gen Cruiser
+620,6,White Residential Traditional
+621,3,Asian High-Pressure Achiever
+622,10,Continuing-Gen Cruiser
+623,10,Continuing-Gen Cruiser
+624,1,Latina Commuter Caretaker
+625,1,Latina Commuter Caretaker
+626,1,Latina Commuter Caretaker
+627,8,Multiracial Bridge-Builder
+628,6,White Residential Traditional
+629,8,Multiracial Bridge-Builder
+630,10,Continuing-Gen Cruiser
+631,7,White Commuter Working
+632,9,Hispanic On-Campus Transitioner
+633,5,Black Campus Connector
+634,6,White Residential Traditional
+635,6,White Residential Traditional
+636,8,Multiracial Bridge-Builder
+637,1,Latina Commuter Caretaker
+638,5,Black Campus Connector
+639,10,Continuing-Gen Cruiser
+640,10,Continuing-Gen Cruiser
+641,10,Continuing-Gen Cruiser
+642,10,Continuing-Gen Cruiser
+643,3,Asian High-Pressure Achiever
+644,10,Continuing-Gen Cruiser
+645,8,Multiracial Bridge-Builder
+646,8,Multiracial Bridge-Builder
+647,3,Asian High-Pressure Achiever
+648,1,Latina Commuter Caretaker
+649,6,White Residential Traditional
+650,10,Continuing-Gen Cruiser
+651,2,Latino First-Gen Striver
+652,9,Hispanic On-Campus Transitioner
+653,3,Asian High-Pressure Achiever
+654,1,Latina Commuter Caretaker
+655,2,Latino First-Gen Striver
+656,10,Continuing-Gen Cruiser
+657,3,Asian High-Pressure Achiever
+658,2,Latino First-Gen Striver
+659,10,Continuing-Gen Cruiser
+660,4,Asian First-Gen Navigator
+661,2,Latino First-Gen Striver
+662,2,Latino First-Gen Striver
+663,3,Asian High-Pressure Achiever
+664,9,Hispanic On-Campus Transitioner
+665,1,Latina Commuter Caretaker
+666,10,Continuing-Gen Cruiser
+667,10,Continuing-Gen Cruiser
+668,6,White Residential Traditional
+669,7,White Commuter Working
+670,10,Continuing-Gen Cruiser
+671,10,Continuing-Gen Cruiser
+672,10,Continuing-Gen Cruiser
+673,7,White Commuter Working
+674,2,Latino First-Gen Striver
+675,10,Continuing-Gen Cruiser
+676,3,Asian High-Pressure Achiever
+677,2,Latino First-Gen Striver
+678,10,Continuing-Gen Cruiser
+679,3,Asian High-Pressure Achiever
+680,5,Black Campus Connector
+681,10,Continuing-Gen Cruiser
+682,10,Continuing-Gen Cruiser
+683,10,Continuing-Gen Cruiser
+684,10,Continuing-Gen Cruiser
+685,7,White Commuter Working
+686,7,White Commuter Working
+687,1,Latina Commuter Caretaker
+688,3,Asian High-Pressure Achiever
+689,10,Continuing-Gen Cruiser
+690,10,Continuing-Gen Cruiser
+691,9,Hispanic On-Campus Transitioner
+692,2,Latino First-Gen Striver
+693,3,Asian High-Pressure Achiever
+694,10,Continuing-Gen Cruiser
+695,10,Continuing-Gen Cruiser
+696,2,Latino First-Gen Striver
+697,10,Continuing-Gen Cruiser
+698,10,Continuing-Gen Cruiser
+699,6,White Residential Traditional
+700,1,Latina Commuter Caretaker
+701,9,Hispanic On-Campus Transitioner
+702,1,Latina Commuter Caretaker
+703,2,Latino First-Gen Striver
+704,6,White Residential Traditional
+705,1,Latina Commuter Caretaker
+706,10,Continuing-Gen Cruiser
+707,10,Continuing-Gen Cruiser
+708,8,Multiracial Bridge-Builder
+709,1,Latina Commuter Caretaker
+710,10,Continuing-Gen Cruiser
+711,5,Black Campus Connector
+712,10,Continuing-Gen Cruiser
+713,2,Latino First-Gen Striver
+714,2,Latino First-Gen Striver
+715,2,Latino First-Gen Striver
+716,1,Latina Commuter Caretaker
+717,1,Latina Commuter Caretaker
+718,3,Asian High-Pressure Achiever
+719,10,Continuing-Gen Cruiser
+720,8,Multiracial Bridge-Builder
+721,5,Black Campus Connector
+722,2,Latino First-Gen Striver
+723,2,Latino First-Gen Striver
+724,10,Continuing-Gen Cruiser
+725,6,White Residential Traditional
+726,8,Multiracial Bridge-Builder
+727,10,Continuing-Gen Cruiser
+728,8,Multiracial Bridge-Builder
+729,2,Latino First-Gen Striver
+730,10,Continuing-Gen Cruiser
+731,10,Continuing-Gen Cruiser
+732,1,Latina Commuter Caretaker
+733,1,Latina Commuter Caretaker
+734,10,Continuing-Gen Cruiser
+735,6,White Residential Traditional
+736,6,White Residential Traditional
+737,4,Asian First-Gen Navigator
+738,10,Continuing-Gen Cruiser
+739,10,Continuing-Gen Cruiser
+740,2,Latino First-Gen Striver
+741,10,Continuing-Gen Cruiser
+742,9,Hispanic On-Campus Transitioner
+743,6,White Residential Traditional
+744,2,Latino First-Gen Striver
+745,2,Latino First-Gen Striver
+746,1,Latina Commuter Caretaker
+747,1,Latina Commuter Caretaker
+748,9,Hispanic On-Campus Transitioner
+749,5,Black Campus Connector
+750,1,Latina Commuter Caretaker
+751,2,Latino First-Gen Striver
+752,10,Continuing-Gen Cruiser
+753,5,Black Campus Connector
+754,6,White Residential Traditional
+755,9,Hispanic On-Campus Transitioner
+756,7,White Commuter Working
+757,1,Latina Commuter Caretaker
+758,10,Continuing-Gen Cruiser
+759,6,White Residential Traditional
+760,4,Asian First-Gen Navigator
+761,1,Latina Commuter Caretaker
+762,9,Hispanic On-Campus Transitioner
+763,4,Asian First-Gen Navigator
+764,3,Asian High-Pressure Achiever
+765,3,Asian High-Pressure Achiever
+766,8,Multiracial Bridge-Builder
+767,1,Latina Commuter Caretaker
+768,10,Continuing-Gen Cruiser
+769,6,White Residential Traditional
+770,1,Latina Commuter Caretaker
+771,6,White Residential Traditional
+772,6,White Residential Traditional
+773,8,Multiracial Bridge-Builder
+774,2,Latino First-Gen Striver
+775,6,White Residential Traditional
+776,7,White Commuter Working
+777,4,Asian First-Gen Navigator
+778,9,Hispanic On-Campus Transitioner
+779,1,Latina Commuter Caretaker
+780,1,Latina Commuter Caretaker
+781,2,Latino First-Gen Striver
+782,3,Asian High-Pressure Achiever
+783,10,Continuing-Gen Cruiser
+784,2,Latino First-Gen Striver
+785,3,Asian High-Pressure Achiever
+786,8,Multiracial Bridge-Builder
+787,10,Continuing-Gen Cruiser
+788,4,Asian First-Gen Navigator
+789,3,Asian High-Pressure Achiever
+790,6,White Residential Traditional
+791,3,Asian High-Pressure Achiever
+792,4,Asian First-Gen Navigator
+793,3,Asian High-Pressure Achiever
+794,7,White Commuter Working
+795,1,Latina Commuter Caretaker
+796,1,Latina Commuter Caretaker
+797,6,White Residential Traditional
+798,10,Continuing-Gen Cruiser
+799,2,Latino First-Gen Striver
+800,9,Hispanic On-Campus Transitioner
+801,3,Asian High-Pressure Achiever
+802,4,Asian First-Gen Navigator
+803,3,Asian High-Pressure Achiever
+804,10,Continuing-Gen Cruiser
+805,3,Asian High-Pressure Achiever
+806,10,Continuing-Gen Cruiser
+807,10,Continuing-Gen Cruiser
+808,7,White Commuter Working
+809,7,White Commuter Working
+810,10,Continuing-Gen Cruiser
+811,10,Continuing-Gen Cruiser
+812,1,Latina Commuter Caretaker
+813,1,Latina Commuter Caretaker
+814,1,Latina Commuter Caretaker
+815,3,Asian High-Pressure Achiever
+816,10,Continuing-Gen Cruiser
+817,1,Latina Commuter Caretaker
+818,10,Continuing-Gen Cruiser
+819,3,Asian High-Pressure Achiever
+820,10,Continuing-Gen Cruiser
+821,3,Asian High-Pressure Achiever
+822,6,White Residential Traditional
+823,10,Continuing-Gen Cruiser
+824,4,Asian First-Gen Navigator
+825,2,Latino First-Gen Striver
+826,6,White Residential Traditional
+827,2,Latino First-Gen Striver
+828,3,Asian High-Pressure Achiever
+829,1,Latina Commuter Caretaker
+830,9,Hispanic On-Campus Transitioner
+831,1,Latina Commuter Caretaker
+832,1,Latina Commuter Caretaker
+833,4,Asian First-Gen Navigator
+834,1,Latina Commuter Caretaker
+835,7,White Commuter Working
+836,2,Latino First-Gen Striver
+837,2,Latino First-Gen Striver
+838,10,Continuing-Gen Cruiser
+839,3,Asian High-Pressure Achiever
+840,10,Continuing-Gen Cruiser
+841,2,Latino First-Gen Striver
+842,3,Asian High-Pressure Achiever
+843,10,Continuing-Gen Cruiser
+844,4,Asian First-Gen Navigator
+845,7,White Commuter Working
+846,10,Continuing-Gen Cruiser
+847,3,Asian High-Pressure Achiever
+848,5,Black Campus Connector
+849,10,Continuing-Gen Cruiser
+850,9,Hispanic On-Campus Transitioner
+851,1,Latina Commuter Caretaker
+852,9,Hispanic On-Campus Transitioner
+853,10,Continuing-Gen Cruiser
+854,3,Asian High-Pressure Achiever
+855,1,Latina Commuter Caretaker
+856,9,Hispanic On-Campus Transitioner
+857,3,Asian High-Pressure Achiever
+858,1,Latina Commuter Caretaker
+859,3,Asian High-Pressure Achiever
+860,9,Hispanic On-Campus Transitioner
+861,2,Latino First-Gen Striver
+862,10,Continuing-Gen Cruiser
+863,3,Asian High-Pressure Achiever
+864,8,Multiracial Bridge-Builder
+865,9,Hispanic On-Campus Transitioner
+866,3,Asian High-Pressure Achiever
+867,10,Continuing-Gen Cruiser
+868,6,White Residential Traditional
+869,2,Latino First-Gen Striver
+870,10,Continuing-Gen Cruiser
+871,2,Latino First-Gen Striver
+872,6,White Residential Traditional
+873,2,Latino First-Gen Striver
+874,2,Latino First-Gen Striver
+875,4,Asian First-Gen Navigator
+876,1,Latina Commuter Caretaker
+877,7,White Commuter Working
+878,2,Latino First-Gen Striver
+879,10,Continuing-Gen Cruiser
+880,10,Continuing-Gen Cruiser
+881,2,Latino First-Gen Striver
+882,2,Latino First-Gen Striver
+883,3,Asian High-Pressure Achiever
+884,10,Continuing-Gen Cruiser
+885,1,Latina Commuter Caretaker
+886,9,Hispanic On-Campus Transitioner
+887,5,Black Campus Connector
+888,9,Hispanic On-Campus Transitioner
+889,1,Latina Commuter Caretaker
+890,3,Asian High-Pressure Achiever
+891,9,Hispanic On-Campus Transitioner
+892,2,Latino First-Gen Striver
+893,8,Multiracial Bridge-Builder
+894,10,Continuing-Gen Cruiser
+895,4,Asian First-Gen Navigator
+896,2,Latino First-Gen Striver
+897,1,Latina Commuter Caretaker
+898,9,Hispanic On-Campus Transitioner
+899,2,Latino First-Gen Striver
+900,9,Hispanic On-Campus Transitioner
+901,10,Continuing-Gen Cruiser
+902,3,Asian High-Pressure Achiever
+903,2,Latino First-Gen Striver
+904,10,Continuing-Gen Cruiser
+905,10,Continuing-Gen Cruiser
+906,3,Asian High-Pressure Achiever
+907,1,Latina Commuter Caretaker
+908,6,White Residential Traditional
+909,2,Latino First-Gen Striver
+910,10,Continuing-Gen Cruiser
+911,10,Continuing-Gen Cruiser
+912,2,Latino First-Gen Striver
+913,10,Continuing-Gen Cruiser
+914,4,Asian First-Gen Navigator
+915,1,Latina Commuter Caretaker
+916,2,Latino First-Gen Striver
+917,4,Asian First-Gen Navigator
+918,4,Asian First-Gen Navigator
+919,1,Latina Commuter Caretaker
+920,4,Asian First-Gen Navigator
+921,7,White Commuter Working
+922,10,Continuing-Gen Cruiser
+923,5,Black Campus Connector
+924,10,Continuing-Gen Cruiser
+925,2,Latino First-Gen Striver
+926,3,Asian High-Pressure Achiever
+927,6,White Residential Traditional
+928,6,White Residential Traditional
+929,10,Continuing-Gen Cruiser
+930,6,White Residential Traditional
+931,10,Continuing-Gen Cruiser
+932,2,Latino First-Gen Striver
+933,10,Continuing-Gen Cruiser
+934,1,Latina Commuter Caretaker
+935,9,Hispanic On-Campus Transitioner
+936,1,Latina Commuter Caretaker
+937,1,Latina Commuter Caretaker
+938,6,White Residential Traditional
+939,4,Asian First-Gen Navigator
+940,10,Continuing-Gen Cruiser
+941,10,Continuing-Gen Cruiser
+942,9,Hispanic On-Campus Transitioner
+943,10,Continuing-Gen Cruiser
+944,9,Hispanic On-Campus Transitioner
+945,4,Asian First-Gen Navigator
+946,8,Multiracial Bridge-Builder
+947,3,Asian High-Pressure Achiever
+948,2,Latino First-Gen Striver
+949,1,Latina Commuter Caretaker
+950,10,Continuing-Gen Cruiser
+951,3,Asian High-Pressure Achiever
+952,3,Asian High-Pressure Achiever
+953,10,Continuing-Gen Cruiser
+954,1,Latina Commuter Caretaker
+955,1,Latina Commuter Caretaker
+956,10,Continuing-Gen Cruiser
+957,2,Latino First-Gen Striver
+958,1,Latina Commuter Caretaker
+959,10,Continuing-Gen Cruiser
+960,10,Continuing-Gen Cruiser
+961,8,Multiracial Bridge-Builder
+962,6,White Residential Traditional
+963,10,Continuing-Gen Cruiser
+964,10,Continuing-Gen Cruiser
+965,10,Continuing-Gen Cruiser
+966,2,Latino First-Gen Striver
+967,1,Latina Commuter Caretaker
+968,3,Asian High-Pressure Achiever
+969,10,Continuing-Gen Cruiser
+970,9,Hispanic On-Campus Transitioner
+971,1,Latina Commuter Caretaker
+972,9,Hispanic On-Campus Transitioner
+973,3,Asian High-Pressure Achiever
+974,1,Latina Commuter Caretaker
+975,2,Latino First-Gen Striver
+976,4,Asian First-Gen Navigator
+977,1,Latina Commuter Caretaker
+978,1,Latina Commuter Caretaker
+979,9,Hispanic On-Campus Transitioner
+980,1,Latina Commuter Caretaker
+981,1,Latina Commuter Caretaker
+982,10,Continuing-Gen Cruiser
+983,10,Continuing-Gen Cruiser
+984,10,Continuing-Gen Cruiser
+985,3,Asian High-Pressure Achiever
+986,1,Latina Commuter Caretaker
+987,10,Continuing-Gen Cruiser
+988,9,Hispanic On-Campus Transitioner
+989,10,Continuing-Gen Cruiser
+990,1,Latina Commuter Caretaker
+991,9,Hispanic On-Campus Transitioner
+992,10,Continuing-Gen Cruiser
+993,2,Latino First-Gen Striver
+994,7,White Commuter Working
+995,9,Hispanic On-Campus Transitioner
+996,8,Multiracial Bridge-Builder
+997,2,Latino First-Gen Striver
+998,6,White Residential Traditional
+999,1,Latina Commuter Caretaker
+1000,1,Latina Commuter Caretaker
+1001,4,Asian First-Gen Navigator
+1002,10,Continuing-Gen Cruiser
+1003,1,Latina Commuter Caretaker
+1004,1,Latina Commuter Caretaker
+1005,10,Continuing-Gen Cruiser
+1006,10,Continuing-Gen Cruiser
+1007,10,Continuing-Gen Cruiser
+1008,1,Latina Commuter Caretaker
+1009,1,Latina Commuter Caretaker
+1010,2,Latino First-Gen Striver
+1011,10,Continuing-Gen Cruiser
+1012,10,Continuing-Gen Cruiser
+1013,1,Latina Commuter Caretaker
+1014,6,White Residential Traditional
+1015,9,Hispanic On-Campus Transitioner
+1016,1,Latina Commuter Caretaker
+1017,4,Asian First-Gen Navigator
+1018,10,Continuing-Gen Cruiser
+1019,4,Asian First-Gen Navigator
+1020,10,Continuing-Gen Cruiser
+1021,2,Latino First-Gen Striver
+1022,1,Latina Commuter Caretaker
+1023,3,Asian High-Pressure Achiever
+1024,10,Continuing-Gen Cruiser
+1025,2,Latino First-Gen Striver
+1026,8,Multiracial Bridge-Builder
+1027,4,Asian First-Gen Navigator
+1028,10,Continuing-Gen Cruiser
+1029,7,White Commuter Working
+1030,10,Continuing-Gen Cruiser
+1031,2,Latino First-Gen Striver
+1032,5,Black Campus Connector
+1033,10,Continuing-Gen Cruiser
+1034,8,Multiracial Bridge-Builder
+1035,10,Continuing-Gen Cruiser
+1036,1,Latina Commuter Caretaker
+1037,10,Continuing-Gen Cruiser
+1038,1,Latina Commuter Caretaker
+1039,2,Latino First-Gen Striver
+1040,1,Latina Commuter Caretaker
+1041,7,White Commuter Working
+1042,7,White Commuter Working
+1043,6,White Residential Traditional
+1044,10,Continuing-Gen Cruiser
+1045,1,Latina Commuter Caretaker
+1046,4,Asian First-Gen Navigator
+1047,8,Multiracial Bridge-Builder
+1048,3,Asian High-Pressure Achiever
+1049,2,Latino First-Gen Striver
+1050,10,Continuing-Gen Cruiser
+1051,10,Continuing-Gen Cruiser
+1052,10,Continuing-Gen Cruiser
+1053,4,Asian First-Gen Navigator
+1054,6,White Residential Traditional
+1055,8,Multiracial Bridge-Builder
+1056,1,Latina Commuter Caretaker
+1057,4,Asian First-Gen Navigator
+1058,1,Latina Commuter Caretaker
+1059,7,White Commuter Working
+1060,10,Continuing-Gen Cruiser
+1061,6,White Residential Traditional
+1062,10,Continuing-Gen Cruiser
+1063,1,Latina Commuter Caretaker
+1064,10,Continuing-Gen Cruiser
+1065,3,Asian High-Pressure Achiever
+1066,10,Continuing-Gen Cruiser
+1067,6,White Residential Traditional
+1068,1,Latina Commuter Caretaker
+1069,9,Hispanic On-Campus Transitioner
+1070,1,Latina Commuter Caretaker
+1071,1,Latina Commuter Caretaker
+1072,1,Latina Commuter Caretaker
+1073,10,Continuing-Gen Cruiser
+1074,2,Latino First-Gen Striver
+1075,10,Continuing-Gen Cruiser
+1076,8,Multiracial Bridge-Builder
+1077,10,Continuing-Gen Cruiser
+1078,3,Asian High-Pressure Achiever
+1079,1,Latina Commuter Caretaker
+1080,4,Asian First-Gen Navigator
+1081,2,Latino First-Gen Striver
+1082,10,Continuing-Gen Cruiser
+1083,2,Latino First-Gen Striver
+1084,1,Latina Commuter Caretaker
+1085,10,Continuing-Gen Cruiser
+1086,1,Latina Commuter Caretaker
+1087,10,Continuing-Gen Cruiser
+1088,2,Latino First-Gen Striver
+1089,1,Latina Commuter Caretaker
+1090,1,Latina Commuter Caretaker
+1091,9,Hispanic On-Campus Transitioner
+1092,3,Asian High-Pressure Achiever
+1093,9,Hispanic On-Campus Transitioner
+1094,8,Multiracial Bridge-Builder
+1095,5,Black Campus Connector
+1096,4,Asian First-Gen Navigator
+1097,1,Latina Commuter Caretaker
+1098,3,Asian High-Pressure Achiever
+1099,10,Continuing-Gen Cruiser
+1100,1,Latina Commuter Caretaker
+1101,3,Asian High-Pressure Achiever
+1102,3,Asian High-Pressure Achiever
+1103,3,Asian High-Pressure Achiever
+1104,10,Continuing-Gen Cruiser
+1105,3,Asian High-Pressure Achiever
+1106,4,Asian First-Gen Navigator
+1107,10,Continuing-Gen Cruiser
+1108,4,Asian First-Gen Navigator
+1109,10,Continuing-Gen Cruiser
+1110,3,Asian High-Pressure Achiever
+1111,2,Latino First-Gen Striver
+1112,1,Latina Commuter Caretaker
+1113,4,Asian First-Gen Navigator
+1114,5,Black Campus Connector
+1115,10,Continuing-Gen Cruiser
+1116,1,Latina Commuter Caretaker
+1117,9,Hispanic On-Campus Transitioner
+1118,2,Latino First-Gen Striver
+1119,10,Continuing-Gen Cruiser
+1120,4,Asian First-Gen Navigator
+1121,4,Asian First-Gen Navigator
+1122,10,Continuing-Gen Cruiser
+1123,10,Continuing-Gen Cruiser
+1124,8,Multiracial Bridge-Builder
+1125,9,Hispanic On-Campus Transitioner
+1126,3,Asian High-Pressure Achiever
+1127,10,Continuing-Gen Cruiser
+1128,10,Continuing-Gen Cruiser
+1129,8,Multiracial Bridge-Builder
+1130,3,Asian High-Pressure Achiever
+1131,2,Latino First-Gen Striver
+1132,4,Asian First-Gen Navigator
+1133,9,Hispanic On-Campus Transitioner
+1134,7,White Commuter Working
+1135,1,Latina Commuter Caretaker
+1136,1,Latina Commuter Caretaker
+1137,10,Continuing-Gen Cruiser
+1138,2,Latino First-Gen Striver
+1139,4,Asian First-Gen Navigator
+1140,2,Latino First-Gen Striver
+1141,10,Continuing-Gen Cruiser
+1142,1,Latina Commuter Caretaker
+1143,6,White Residential Traditional
+1144,1,Latina Commuter Caretaker
+1145,4,Asian First-Gen Navigator
+1146,10,Continuing-Gen Cruiser
+1147,9,Hispanic On-Campus Transitioner
+1148,9,Hispanic On-Campus Transitioner
+1149,8,Multiracial Bridge-Builder
+1150,6,White Residential Traditional
+1151,1,Latina Commuter Caretaker
+1152,1,Latina Commuter Caretaker
+1153,9,Hispanic On-Campus Transitioner
+1154,2,Latino First-Gen Striver
+1155,7,White Commuter Working
+1156,8,Multiracial Bridge-Builder
+1157,1,Latina Commuter Caretaker
+1158,6,White Residential Traditional
+1159,10,Continuing-Gen Cruiser
+1160,10,Continuing-Gen Cruiser
+1161,3,Asian High-Pressure Achiever
+1162,2,Latino First-Gen Striver
+1163,10,Continuing-Gen Cruiser
+1164,1,Latina Commuter Caretaker
+1165,3,Asian High-Pressure Achiever
+1166,10,Continuing-Gen Cruiser
+1167,8,Multiracial Bridge-Builder
+1168,1,Latina Commuter Caretaker
+1169,7,White Commuter Working
+1170,6,White Residential Traditional
+1171,7,White Commuter Working
+1172,6,White Residential Traditional
+1173,10,Continuing-Gen Cruiser
+1174,10,Continuing-Gen Cruiser
+1175,2,Latino First-Gen Striver
+1176,9,Hispanic On-Campus Transitioner
+1177,8,Multiracial Bridge-Builder
+1178,10,Continuing-Gen Cruiser
+1179,3,Asian High-Pressure Achiever
+1180,10,Continuing-Gen Cruiser
+1181,9,Hispanic On-Campus Transitioner
+1182,10,Continuing-Gen Cruiser
+1183,10,Continuing-Gen Cruiser
+1184,3,Asian High-Pressure Achiever
+1185,3,Asian High-Pressure Achiever
+1186,1,Latina Commuter Caretaker
+1187,1,Latina Commuter Caretaker
+1188,4,Asian First-Gen Navigator
+1189,10,Continuing-Gen Cruiser
+1190,2,Latino First-Gen Striver
+1191,10,Continuing-Gen Cruiser
+1192,8,Multiracial Bridge-Builder
+1193,1,Latina Commuter Caretaker
+1194,8,Multiracial Bridge-Builder
+1195,8,Multiracial Bridge-Builder
+1196,6,White Residential Traditional
+1197,10,Continuing-Gen Cruiser
+1198,1,Latina Commuter Caretaker
+1199,7,White Commuter Working
+1200,10,Continuing-Gen Cruiser
+1201,10,Continuing-Gen Cruiser
+1202,2,Latino First-Gen Striver
+1203,10,Continuing-Gen Cruiser
+1204,1,Latina Commuter Caretaker
+1205,1,Latina Commuter Caretaker
+1206,10,Continuing-Gen Cruiser
+1207,4,Asian First-Gen Navigator
+1208,10,Continuing-Gen Cruiser
+1209,6,White Residential Traditional
+1210,2,Latino First-Gen Striver
+1211,10,Continuing-Gen Cruiser
+1212,6,White Residential Traditional
+1213,3,Asian High-Pressure Achiever
+1214,3,Asian High-Pressure Achiever
+1215,10,Continuing-Gen Cruiser
+1216,3,Asian High-Pressure Achiever
+1217,8,Multiracial Bridge-Builder
+1218,1,Latina Commuter Caretaker
+1219,10,Continuing-Gen Cruiser
+1220,1,Latina Commuter Caretaker
+1221,9,Hispanic On-Campus Transitioner
+1222,10,Continuing-Gen Cruiser
+1223,1,Latina Commuter Caretaker
+1224,10,Continuing-Gen Cruiser
+1225,2,Latino First-Gen Striver
+1226,2,Latino First-Gen Striver
+1227,1,Latina Commuter Caretaker
+1228,6,White Residential Traditional
+1229,10,Continuing-Gen Cruiser
+1230,3,Asian High-Pressure Achiever
+1231,9,Hispanic On-Campus Transitioner
+1232,2,Latino First-Gen Striver
+1233,1,Latina Commuter Caretaker
+1234,5,Black Campus Connector
+1235,9,Hispanic On-Campus Transitioner
+1236,6,White Residential Traditional
+1237,4,Asian First-Gen Navigator
+1238,2,Latino First-Gen Striver
+1239,2,Latino First-Gen Striver
+1240,7,White Commuter Working
+1241,1,Latina Commuter Caretaker
+1242,2,Latino First-Gen Striver
+1243,10,Continuing-Gen Cruiser
+1244,4,Asian First-Gen Navigator
+1245,5,Black Campus Connector
+1246,2,Latino First-Gen Striver
+1247,3,Asian High-Pressure Achiever
+1248,1,Latina Commuter Caretaker
+1249,10,Continuing-Gen Cruiser
+1250,1,Latina Commuter Caretaker
+1251,9,Hispanic On-Campus Transitioner
+1252,10,Continuing-Gen Cruiser
+1253,10,Continuing-Gen Cruiser
+1254,4,Asian First-Gen Navigator
+1255,2,Latino First-Gen Striver
+1256,3,Asian High-Pressure Achiever
+1257,10,Continuing-Gen Cruiser
+1258,2,Latino First-Gen Striver
+1259,8,Multiracial Bridge-Builder
+1260,10,Continuing-Gen Cruiser
+1261,2,Latino First-Gen Striver
+1262,4,Asian First-Gen Navigator
+1263,3,Asian High-Pressure Achiever
+1264,5,Black Campus Connector
+1265,6,White Residential Traditional
+1266,10,Continuing-Gen Cruiser
+1267,3,Asian High-Pressure Achiever
+1268,1,Latina Commuter Caretaker
+1269,4,Asian First-Gen Navigator
+1270,7,White Commuter Working
+1271,4,Asian First-Gen Navigator
+1272,3,Asian High-Pressure Achiever
+1273,10,Continuing-Gen Cruiser
+1274,10,Continuing-Gen Cruiser
+1275,4,Asian First-Gen Navigator
+1276,3,Asian High-Pressure Achiever
+1277,5,Black Campus Connector
+1278,6,White Residential Traditional
+1279,1,Latina Commuter Caretaker
+1280,10,Continuing-Gen Cruiser
+1281,1,Latina Commuter Caretaker
+1282,10,Continuing-Gen Cruiser
+1283,8,Multiracial Bridge-Builder
+1284,10,Continuing-Gen Cruiser
+1285,6,White Residential Traditional
+1286,2,Latino First-Gen Striver
+1287,1,Latina Commuter Caretaker
+1288,10,Continuing-Gen Cruiser
+1289,5,Black Campus Connector
+1290,1,Latina Commuter Caretaker
+1291,1,Latina Commuter Caretaker
+1292,10,Continuing-Gen Cruiser
+1293,10,Continuing-Gen Cruiser
+1294,6,White Residential Traditional
+1295,10,Continuing-Gen Cruiser
+1296,7,White Commuter Working
+1297,9,Hispanic On-Campus Transitioner
+1298,7,White Commuter Working
+1299,10,Continuing-Gen Cruiser
+1300,2,Latino First-Gen Striver
+1301,9,Hispanic On-Campus Transitioner
+1302,1,Latina Commuter Caretaker
+1303,10,Continuing-Gen Cruiser
+1304,9,Hispanic On-Campus Transitioner
+1305,2,Latino First-Gen Striver
+1306,10,Continuing-Gen Cruiser
+1307,3,Asian High-Pressure Achiever
+1308,10,Continuing-Gen Cruiser
+1309,10,Continuing-Gen Cruiser
+1310,3,Asian High-Pressure Achiever
+1311,4,Asian First-Gen Navigator
+1312,1,Latina Commuter Caretaker
+1313,2,Latino First-Gen Striver
+1314,10,Continuing-Gen Cruiser
+1315,1,Latina Commuter Caretaker
+1316,6,White Residential Traditional
+1317,1,Latina Commuter Caretaker
+1318,10,Continuing-Gen Cruiser
+1319,10,Continuing-Gen Cruiser
+1320,9,Hispanic On-Campus Transitioner
+1321,10,Continuing-Gen Cruiser
+1322,3,Asian High-Pressure Achiever
+1323,6,White Residential Traditional
+1324,1,Latina Commuter Caretaker
+1325,3,Asian High-Pressure Achiever
+1326,10,Continuing-Gen Cruiser
+1327,3,Asian High-Pressure Achiever
+1328,10,Continuing-Gen Cruiser
+1329,1,Latina Commuter Caretaker
+1330,7,White Commuter Working
+1331,8,Multiracial Bridge-Builder
+1332,1,Latina Commuter Caretaker
+1333,9,Hispanic On-Campus Transitioner
+1334,2,Latino First-Gen Striver
+1335,3,Asian High-Pressure Achiever
+1336,1,Latina Commuter Caretaker
+1337,3,Asian High-Pressure Achiever
+1338,4,Asian First-Gen Navigator
+1339,1,Latina Commuter Caretaker
+1340,1,Latina Commuter Caretaker
+1341,9,Hispanic On-Campus Transitioner
+1342,3,Asian High-Pressure Achiever
+1343,1,Latina Commuter Caretaker
+1344,2,Latino First-Gen Striver
+1345,1,Latina Commuter Caretaker
+1346,10,Continuing-Gen Cruiser
+1347,8,Multiracial Bridge-Builder
+1348,10,Continuing-Gen Cruiser
+1349,3,Asian High-Pressure Achiever
+1350,10,Continuing-Gen Cruiser
+1351,10,Continuing-Gen Cruiser
+1352,2,Latino First-Gen Striver
+1353,3,Asian High-Pressure Achiever
+1354,2,Latino First-Gen Striver
+1355,7,White Commuter Working
+1356,8,Multiracial Bridge-Builder
+1357,7,White Commuter Working
+1358,9,Hispanic On-Campus Transitioner
+1359,2,Latino First-Gen Striver
+1360,1,Latina Commuter Caretaker
+1361,7,White Commuter Working
+1362,10,Continuing-Gen Cruiser
+1363,2,Latino First-Gen Striver
+1364,3,Asian High-Pressure Achiever
+1365,1,Latina Commuter Caretaker
+1366,10,Continuing-Gen Cruiser
+1367,10,Continuing-Gen Cruiser
+1368,2,Latino First-Gen Striver
+1369,2,Latino First-Gen Striver
+1370,10,Continuing-Gen Cruiser
+1371,1,Latina Commuter Caretaker
+1372,4,Asian First-Gen Navigator
+1373,1,Latina Commuter Caretaker
+1374,9,Hispanic On-Campus Transitioner
+1375,2,Latino First-Gen Striver
+1376,10,Continuing-Gen Cruiser
+1377,8,Multiracial Bridge-Builder
+1378,9,Hispanic On-Campus Transitioner
+1379,9,Hispanic On-Campus Transitioner
+1380,3,Asian High-Pressure Achiever
+1381,8,Multiracial Bridge-Builder
+1382,7,White Commuter Working
+1383,6,White Residential Traditional
+1384,9,Hispanic On-Campus Transitioner
+1385,3,Asian High-Pressure Achiever
+1386,10,Continuing-Gen Cruiser
+1387,9,Hispanic On-Campus Transitioner
+1388,1,Latina Commuter Caretaker
+1389,7,White Commuter Working
+1390,5,Black Campus Connector
+1391,3,Asian High-Pressure Achiever
+1392,2,Latino First-Gen Striver
+1393,10,Continuing-Gen Cruiser
+1394,3,Asian High-Pressure Achiever
+1395,7,White Commuter Working
+1396,10,Continuing-Gen Cruiser
+1397,3,Asian High-Pressure Achiever
+1398,1,Latina Commuter Caretaker
+1399,10,Continuing-Gen Cruiser
+1400,2,Latino First-Gen Striver
+1401,3,Asian High-Pressure Achiever
+1402,10,Continuing-Gen Cruiser
+1403,2,Latino First-Gen Striver
+1404,1,Latina Commuter Caretaker
+1405,10,Continuing-Gen Cruiser
+1406,1,Latina Commuter Caretaker
+1407,4,Asian First-Gen Navigator
+1408,1,Latina Commuter Caretaker
+1409,8,Multiracial Bridge-Builder
+1410,1,Latina Commuter Caretaker
+1411,2,Latino First-Gen Striver
+1412,6,White Residential Traditional
+1413,10,Continuing-Gen Cruiser
+1414,10,Continuing-Gen Cruiser
+1415,1,Latina Commuter Caretaker
+1416,10,Continuing-Gen Cruiser
+1417,10,Continuing-Gen Cruiser
+1418,4,Asian First-Gen Navigator
+1419,3,Asian High-Pressure Achiever
+1420,10,Continuing-Gen Cruiser
+1421,10,Continuing-Gen Cruiser
+1422,4,Asian First-Gen Navigator
+1423,5,Black Campus Connector
+1424,9,Hispanic On-Campus Transitioner
+1425,6,White Residential Traditional
+1426,5,Black Campus Connector
+1427,10,Continuing-Gen Cruiser
+1428,9,Hispanic On-Campus Transitioner
+1429,6,White Residential Traditional
+1430,1,Latina Commuter Caretaker
+1431,2,Latino First-Gen Striver
+1432,1,Latina Commuter Caretaker
+1433,6,White Residential Traditional
+1434,2,Latino First-Gen Striver
+1435,10,Continuing-Gen Cruiser
+1436,9,Hispanic On-Campus Transitioner
+1437,1,Latina Commuter Caretaker
+1438,1,Latina Commuter Caretaker
+1439,2,Latino First-Gen Striver
+1440,9,Hispanic On-Campus Transitioner
+1441,5,Black Campus Connector
+1442,5,Black Campus Connector
+1443,10,Continuing-Gen Cruiser
+1444,2,Latino First-Gen Striver
+1445,2,Latino First-Gen Striver
+1446,7,White Commuter Working
+1447,10,Continuing-Gen Cruiser
+1448,10,Continuing-Gen Cruiser
+1449,2,Latino First-Gen Striver
+1450,8,Multiracial Bridge-Builder
+1451,8,Multiracial Bridge-Builder
+1452,2,Latino First-Gen Striver
+1453,6,White Residential Traditional
+1454,3,Asian High-Pressure Achiever
+1455,10,Continuing-Gen Cruiser
+1456,10,Continuing-Gen Cruiser
+1457,3,Asian High-Pressure Achiever
+1458,3,Asian High-Pressure Achiever
+1459,1,Latina Commuter Caretaker
+1460,3,Asian High-Pressure Achiever
+1461,6,White Residential Traditional
+1462,10,Continuing-Gen Cruiser
+1463,10,Continuing-Gen Cruiser
+1464,10,Continuing-Gen Cruiser
+1465,10,Continuing-Gen Cruiser
+1466,1,Latina Commuter Caretaker
+1467,1,Latina Commuter Caretaker
+1468,10,Continuing-Gen Cruiser
+1469,1,Latina Commuter Caretaker
+1470,1,Latina Commuter Caretaker
+1471,7,White Commuter Working
+1472,10,Continuing-Gen Cruiser
+1473,2,Latino First-Gen Striver
+1474,6,White Residential Traditional
+1475,3,Asian High-Pressure Achiever
+1476,2,Latino First-Gen Striver
+1477,10,Continuing-Gen Cruiser
+1478,9,Hispanic On-Campus Transitioner
+1479,1,Latina Commuter Caretaker
+1480,8,Multiracial Bridge-Builder
+1481,1,Latina Commuter Caretaker
+1482,9,Hispanic On-Campus Transitioner
+1483,10,Continuing-Gen Cruiser
+1484,1,Latina Commuter Caretaker
+1485,2,Latino First-Gen Striver
+1486,5,Black Campus Connector
+1487,7,White Commuter Working
+1488,10,Continuing-Gen Cruiser
+1489,2,Latino First-Gen Striver
+1490,10,Continuing-Gen Cruiser
+1491,6,White Residential Traditional
+1492,10,Continuing-Gen Cruiser
+1493,1,Latina Commuter Caretaker
+1494,10,Continuing-Gen Cruiser
+1495,1,Latina Commuter Caretaker
+1496,6,White Residential Traditional
+1497,10,Continuing-Gen Cruiser
+1498,8,Multiracial Bridge-Builder
+1499,2,Latino First-Gen Striver
+1500,6,White Residential Traditional
+1501,6,White Residential Traditional
+1502,9,Hispanic On-Campus Transitioner
+1503,3,Asian High-Pressure Achiever
+1504,3,Asian High-Pressure Achiever
+1505,3,Asian High-Pressure Achiever
+1506,6,White Residential Traditional
+1507,1,Latina Commuter Caretaker
+1508,6,White Residential Traditional
+1509,10,Continuing-Gen Cruiser
+1510,8,Multiracial Bridge-Builder
+1511,10,Continuing-Gen Cruiser
+1512,2,Latino First-Gen Striver
+1513,3,Asian High-Pressure Achiever
+1514,6,White Residential Traditional
+1515,2,Latino First-Gen Striver
+1516,9,Hispanic On-Campus Transitioner
+1517,6,White Residential Traditional
+1518,5,Black Campus Connector
+1519,1,Latina Commuter Caretaker
+1520,10,Continuing-Gen Cruiser
+1521,7,White Commuter Working
+1522,2,Latino First-Gen Striver
+1523,1,Latina Commuter Caretaker
+1524,6,White Residential Traditional
+1525,10,Continuing-Gen Cruiser
+1526,2,Latino First-Gen Striver
+1527,10,Continuing-Gen Cruiser
+1528,3,Asian High-Pressure Achiever
+1529,10,Continuing-Gen Cruiser
+1530,1,Latina Commuter Caretaker
+1531,7,White Commuter Working
+1532,3,Asian High-Pressure Achiever
+1533,10,Continuing-Gen Cruiser
+1534,2,Latino First-Gen Striver
+1535,10,Continuing-Gen Cruiser
+1536,1,Latina Commuter Caretaker
+1537,1,Latina Commuter Caretaker
+1538,2,Latino First-Gen Striver
+1539,2,Latino First-Gen Striver
+1540,7,White Commuter Working
+1541,1,Latina Commuter Caretaker
+1542,1,Latina Commuter Caretaker
+1543,9,Hispanic On-Campus Transitioner
+1544,10,Continuing-Gen Cruiser
+1545,2,Latino First-Gen Striver
+1546,6,White Residential Traditional
+1547,2,Latino First-Gen Striver
+1548,8,Multiracial Bridge-Builder
+1549,4,Asian First-Gen Navigator
+1550,2,Latino First-Gen Striver
+1551,10,Continuing-Gen Cruiser
+1552,1,Latina Commuter Caretaker
+1553,7,White Commuter Working
+1554,10,Continuing-Gen Cruiser
+1555,10,Continuing-Gen Cruiser
+1556,3,Asian High-Pressure Achiever
+1557,10,Continuing-Gen Cruiser
+1558,10,Continuing-Gen Cruiser
+1559,1,Latina Commuter Caretaker
+1560,8,Multiracial Bridge-Builder
+1561,2,Latino First-Gen Striver
+1562,8,Multiracial Bridge-Builder
+1563,4,Asian First-Gen Navigator
+1564,2,Latino First-Gen Striver
+1565,2,Latino First-Gen Striver
+1566,5,Black Campus Connector
+1567,7,White Commuter Working
+1568,3,Asian High-Pressure Achiever
+1569,8,Multiracial Bridge-Builder
+1570,10,Continuing-Gen Cruiser
+1571,10,Continuing-Gen Cruiser
+1572,3,Asian High-Pressure Achiever
+1573,7,White Commuter Working
+1574,1,Latina Commuter Caretaker
+1575,1,Latina Commuter Caretaker
+1576,1,Latina Commuter Caretaker
+1577,3,Asian High-Pressure Achiever
+1578,4,Asian First-Gen Navigator
+1579,3,Asian High-Pressure Achiever
+1580,2,Latino First-Gen Striver
+1581,2,Latino First-Gen Striver
+1582,9,Hispanic On-Campus Transitioner
+1583,2,Latino First-Gen Striver
+1584,1,Latina Commuter Caretaker
+1585,3,Asian High-Pressure Achiever
+1586,1,Latina Commuter Caretaker
+1587,1,Latina Commuter Caretaker
+1588,2,Latino First-Gen Striver
+1589,2,Latino First-Gen Striver
+1590,10,Continuing-Gen Cruiser
+1591,6,White Residential Traditional
+1592,1,Latina Commuter Caretaker
+1593,1,Latina Commuter Caretaker
+1594,8,Multiracial Bridge-Builder
+1595,4,Asian First-Gen Navigator
+1596,10,Continuing-Gen Cruiser
+1597,3,Asian High-Pressure Achiever
+1598,10,Continuing-Gen Cruiser
+1599,1,Latina Commuter Caretaker
+1600,9,Hispanic On-Campus Transitioner
+1601,10,Continuing-Gen Cruiser
+1602,1,Latina Commuter Caretaker
+1603,1,Latina Commuter Caretaker
+1604,10,Continuing-Gen Cruiser
+1605,10,Continuing-Gen Cruiser
+1606,1,Latina Commuter Caretaker
+1607,3,Asian High-Pressure Achiever
+1608,9,Hispanic On-Campus Transitioner
+1609,10,Continuing-Gen Cruiser
+1610,1,Latina Commuter Caretaker
+1611,10,Continuing-Gen Cruiser
+1612,3,Asian High-Pressure Achiever
+1613,8,Multiracial Bridge-Builder
+1614,7,White Commuter Working
+1615,4,Asian First-Gen Navigator
+1616,9,Hispanic On-Campus Transitioner
+1617,10,Continuing-Gen Cruiser
+1618,9,Hispanic On-Campus Transitioner
+1619,3,Asian High-Pressure Achiever
+1620,7,White Commuter Working
+1621,8,Multiracial Bridge-Builder
+1622,1,Latina Commuter Caretaker
+1623,1,Latina Commuter Caretaker
+1624,3,Asian High-Pressure Achiever
+1625,2,Latino First-Gen Striver
+1626,2,Latino First-Gen Striver
+1627,4,Asian First-Gen Navigator
+1628,2,Latino First-Gen Striver
+1629,10,Continuing-Gen Cruiser
+1630,1,Latina Commuter Caretaker
+1631,3,Asian High-Pressure Achiever
+1632,1,Latina Commuter Caretaker
+1633,10,Continuing-Gen Cruiser
+1634,10,Continuing-Gen Cruiser
+1635,1,Latina Commuter Caretaker
+1636,7,White Commuter Working
+1637,2,Latino First-Gen Striver
+1638,3,Asian High-Pressure Achiever
+1639,1,Latina Commuter Caretaker
+1640,10,Continuing-Gen Cruiser
+1641,9,Hispanic On-Campus Transitioner
+1642,8,Multiracial Bridge-Builder
+1643,10,Continuing-Gen Cruiser
+1644,1,Latina Commuter Caretaker
+1645,1,Latina Commuter Caretaker
+1646,10,Continuing-Gen Cruiser
+1647,3,Asian High-Pressure Achiever
+1648,10,Continuing-Gen Cruiser
+1649,8,Multiracial Bridge-Builder
+1650,5,Black Campus Connector
+1651,1,Latina Commuter Caretaker
+1652,1,Latina Commuter Caretaker
+1653,5,Black Campus Connector
+1654,10,Continuing-Gen Cruiser
+1655,10,Continuing-Gen Cruiser
+1656,2,Latino First-Gen Striver
+1657,7,White Commuter Working
+1658,1,Latina Commuter Caretaker
+1659,3,Asian High-Pressure Achiever
+1660,10,Continuing-Gen Cruiser
+1661,6,White Residential Traditional
+1662,4,Asian First-Gen Navigator
+1663,10,Continuing-Gen Cruiser
+1664,2,Latino First-Gen Striver
+1665,8,Multiracial Bridge-Builder
+1666,10,Continuing-Gen Cruiser
+1667,1,Latina Commuter Caretaker
+1668,10,Continuing-Gen Cruiser
+1669,1,Latina Commuter Caretaker
+1670,1,Latina Commuter Caretaker
+1671,9,Hispanic On-Campus Transitioner
+1672,2,Latino First-Gen Striver
+1673,10,Continuing-Gen Cruiser
+1674,7,White Commuter Working
+1675,4,Asian First-Gen Navigator
+1676,1,Latina Commuter Caretaker
+1677,2,Latino First-Gen Striver
+1678,2,Latino First-Gen Striver
+1679,2,Latino First-Gen Striver
+1680,9,Hispanic On-Campus Transitioner
+1681,8,Multiracial Bridge-Builder
+1682,1,Latina Commuter Caretaker
+1683,10,Continuing-Gen Cruiser
+1684,10,Continuing-Gen Cruiser
+1685,1,Latina Commuter Caretaker
+1686,8,Multiracial Bridge-Builder
+1687,7,White Commuter Working
+1688,10,Continuing-Gen Cruiser
+1689,3,Asian High-Pressure Achiever
+1690,10,Continuing-Gen Cruiser
+1691,2,Latino First-Gen Striver
+1692,3,Asian High-Pressure Achiever
+1693,9,Hispanic On-Campus Transitioner
+1694,2,Latino First-Gen Striver
+1695,2,Latino First-Gen Striver
+1696,2,Latino First-Gen Striver
+1697,8,Multiracial Bridge-Builder
+1698,10,Continuing-Gen Cruiser
+1699,10,Continuing-Gen Cruiser
+1700,1,Latina Commuter Caretaker
+1701,7,White Commuter Working
+1702,1,Latina Commuter Caretaker
+1703,6,White Residential Traditional
+1704,2,Latino First-Gen Striver
+1705,3,Asian High-Pressure Achiever
+1706,3,Asian High-Pressure Achiever
+1707,1,Latina Commuter Caretaker
+1708,10,Continuing-Gen Cruiser
+1709,7,White Commuter Working
+1710,5,Black Campus Connector
+1711,10,Continuing-Gen Cruiser
+1712,4,Asian First-Gen Navigator
+1713,10,Continuing-Gen Cruiser
+1714,1,Latina Commuter Caretaker
+1715,2,Latino First-Gen Striver
+1716,8,Multiracial Bridge-Builder
+1717,4,Asian First-Gen Navigator
+1718,6,White Residential Traditional
+1719,9,Hispanic On-Campus Transitioner
+1720,7,White Commuter Working
+1721,10,Continuing-Gen Cruiser
+1722,9,Hispanic On-Campus Transitioner
+1723,4,Asian First-Gen Navigator
+1724,10,Continuing-Gen Cruiser
+1725,6,White Residential Traditional
+1726,10,Continuing-Gen Cruiser
+1727,8,Multiracial Bridge-Builder
+1728,10,Continuing-Gen Cruiser
+1729,1,Latina Commuter Caretaker
+1730,9,Hispanic On-Campus Transitioner
+1731,2,Latino First-Gen Striver
+1732,10,Continuing-Gen Cruiser
+1733,3,Asian High-Pressure Achiever
+1734,7,White Commuter Working
+1735,1,Latina Commuter Caretaker
+1736,10,Continuing-Gen Cruiser
+1737,2,Latino First-Gen Striver
+1738,2,Latino First-Gen Striver
+1739,7,White Commuter Working
+1740,2,Latino First-Gen Striver
+1741,4,Asian First-Gen Navigator
+1742,2,Latino First-Gen Striver
+1743,8,Multiracial Bridge-Builder
+1744,10,Continuing-Gen Cruiser
+1745,10,Continuing-Gen Cruiser
+1746,10,Continuing-Gen Cruiser
+1747,4,Asian First-Gen Navigator
+1748,7,White Commuter Working
+1749,2,Latino First-Gen Striver
+1750,8,Multiracial Bridge-Builder
+1751,7,White Commuter Working
+1752,10,Continuing-Gen Cruiser
+1753,10,Continuing-Gen Cruiser
+1754,6,White Residential Traditional
+1755,9,Hispanic On-Campus Transitioner
+1756,10,Continuing-Gen Cruiser
+1757,3,Asian High-Pressure Achiever
+1758,1,Latina Commuter Caretaker
+1759,10,Continuing-Gen Cruiser
+1760,1,Latina Commuter Caretaker
+1761,3,Asian High-Pressure Achiever
+1762,2,Latino First-Gen Striver
+1763,4,Asian First-Gen Navigator
+1764,1,Latina Commuter Caretaker
+1765,10,Continuing-Gen Cruiser
+1766,6,White Residential Traditional
+1767,1,Latina Commuter Caretaker
+1768,3,Asian High-Pressure Achiever
+1769,10,Continuing-Gen Cruiser
+1770,4,Asian First-Gen Navigator
+1771,8,Multiracial Bridge-Builder
+1772,5,Black Campus Connector
+1773,6,White Residential Traditional
+1774,10,Continuing-Gen Cruiser
+1775,7,White Commuter Working
+1776,9,Hispanic On-Campus Transitioner
+1777,1,Latina Commuter Caretaker
+1778,2,Latino First-Gen Striver
+1779,3,Asian High-Pressure Achiever
+1780,6,White Residential Traditional
+1781,2,Latino First-Gen Striver
+1782,3,Asian High-Pressure Achiever
+1783,1,Latina Commuter Caretaker
+1784,9,Hispanic On-Campus Transitioner
+1785,10,Continuing-Gen Cruiser
+1786,8,Multiracial Bridge-Builder
+1787,10,Continuing-Gen Cruiser
+1788,3,Asian High-Pressure Achiever
+1789,3,Asian High-Pressure Achiever
+1790,6,White Residential Traditional
+1791,3,Asian High-Pressure Achiever
+1792,1,Latina Commuter Caretaker
+1793,4,Asian First-Gen Navigator
+1794,3,Asian High-Pressure Achiever
+1795,4,Asian First-Gen Navigator
+1796,9,Hispanic On-Campus Transitioner
+1797,2,Latino First-Gen Striver
+1798,3,Asian High-Pressure Achiever
+1799,8,Multiracial Bridge-Builder
+1800,10,Continuing-Gen Cruiser
+1801,10,Continuing-Gen Cruiser
+1802,9,Hispanic On-Campus Transitioner
+1803,6,White Residential Traditional
+1804,3,Asian High-Pressure Achiever
+1805,6,White Residential Traditional
+1806,2,Latino First-Gen Striver
+1807,4,Asian First-Gen Navigator
+1808,10,Continuing-Gen Cruiser
+1809,1,Latina Commuter Caretaker
+1810,1,Latina Commuter Caretaker
+1811,1,Latina Commuter Caretaker
+1812,2,Latino First-Gen Striver
+1813,10,Continuing-Gen Cruiser
+1814,9,Hispanic On-Campus Transitioner
+1815,10,Continuing-Gen Cruiser
+1816,5,Black Campus Connector
+1817,3,Asian High-Pressure Achiever
+1818,4,Asian First-Gen Navigator
+1819,9,Hispanic On-Campus Transitioner
+1820,7,White Commuter Working
+1821,1,Latina Commuter Caretaker
+1822,7,White Commuter Working
+1823,9,Hispanic On-Campus Transitioner
+1824,1,Latina Commuter Caretaker
+1825,9,Hispanic On-Campus Transitioner
+1826,2,Latino First-Gen Striver
+1827,1,Latina Commuter Caretaker
+1828,8,Multiracial Bridge-Builder
+1829,3,Asian High-Pressure Achiever
+1830,1,Latina Commuter Caretaker
+1831,10,Continuing-Gen Cruiser
+1832,6,White Residential Traditional
+1833,10,Continuing-Gen Cruiser
+1834,2,Latino First-Gen Striver
+1835,5,Black Campus Connector
+1836,10,Continuing-Gen Cruiser
+1837,3,Asian High-Pressure Achiever
+1838,6,White Residential Traditional
+1839,2,Latino First-Gen Striver
+1840,2,Latino First-Gen Striver
+1841,3,Asian High-Pressure Achiever
+1842,1,Latina Commuter Caretaker
+1843,7,White Commuter Working
+1844,4,Asian First-Gen Navigator
+1845,9,Hispanic On-Campus Transitioner
+1846,8,Multiracial Bridge-Builder
+1847,2,Latino First-Gen Striver
+1848,10,Continuing-Gen Cruiser
+1849,10,Continuing-Gen Cruiser
+1850,7,White Commuter Working
+1851,3,Asian High-Pressure Achiever
+1852,7,White Commuter Working
+1853,10,Continuing-Gen Cruiser
+1854,10,Continuing-Gen Cruiser
+1855,3,Asian High-Pressure Achiever
+1856,9,Hispanic On-Campus Transitioner
+1857,2,Latino First-Gen Striver
+1858,10,Continuing-Gen Cruiser
+1859,10,Continuing-Gen Cruiser
+1860,4,Asian First-Gen Navigator
+1861,10,Continuing-Gen Cruiser
+1862,9,Hispanic On-Campus Transitioner
+1863,10,Continuing-Gen Cruiser
+1864,3,Asian High-Pressure Achiever
+1865,10,Continuing-Gen Cruiser
+1866,6,White Residential Traditional
+1867,1,Latina Commuter Caretaker
+1868,10,Continuing-Gen Cruiser
+1869,9,Hispanic On-Campus Transitioner
+1870,1,Latina Commuter Caretaker
+1871,9,Hispanic On-Campus Transitioner
+1872,3,Asian High-Pressure Achiever
+1873,1,Latina Commuter Caretaker
+1874,3,Asian High-Pressure Achiever
+1875,10,Continuing-Gen Cruiser
+1876,10,Continuing-Gen Cruiser
+1877,6,White Residential Traditional
+1878,10,Continuing-Gen Cruiser
+1879,10,Continuing-Gen Cruiser
+1880,10,Continuing-Gen Cruiser
+1881,3,Asian High-Pressure Achiever
+1882,3,Asian High-Pressure Achiever
+1883,6,White Residential Traditional
+1884,10,Continuing-Gen Cruiser
+1885,7,White Commuter Working
+1886,4,Asian First-Gen Navigator
+1887,6,White Residential Traditional
+1888,10,Continuing-Gen Cruiser
+1889,1,Latina Commuter Caretaker
+1890,10,Continuing-Gen Cruiser
+1891,2,Latino First-Gen Striver
+1892,5,Black Campus Connector
+1893,6,White Residential Traditional
+1894,10,Continuing-Gen Cruiser
+1895,3,Asian High-Pressure Achiever
+1896,3,Asian High-Pressure Achiever
+1897,10,Continuing-Gen Cruiser
+1898,2,Latino First-Gen Striver
+1899,10,Continuing-Gen Cruiser
+1900,7,White Commuter Working
+1901,10,Continuing-Gen Cruiser
+1902,2,Latino First-Gen Striver
+1903,10,Continuing-Gen Cruiser
+1904,3,Asian High-Pressure Achiever
+1905,10,Continuing-Gen Cruiser
+1906,10,Continuing-Gen Cruiser
+1907,6,White Residential Traditional
+1908,10,Continuing-Gen Cruiser
+1909,7,White Commuter Working
+1910,2,Latino First-Gen Striver
+1911,3,Asian High-Pressure Achiever
+1912,1,Latina Commuter Caretaker
+1913,10,Continuing-Gen Cruiser
+1914,2,Latino First-Gen Striver
+1915,10,Continuing-Gen Cruiser
+1916,7,White Commuter Working
+1917,3,Asian High-Pressure Achiever
+1918,10,Continuing-Gen Cruiser
+1919,2,Latino First-Gen Striver
+1920,10,Continuing-Gen Cruiser
+1921,10,Continuing-Gen Cruiser
+1922,10,Continuing-Gen Cruiser
+1923,7,White Commuter Working
+1924,7,White Commuter Working
+1925,10,Continuing-Gen Cruiser
+1926,7,White Commuter Working
+1927,9,Hispanic On-Campus Transitioner
+1928,10,Continuing-Gen Cruiser
+1929,3,Asian High-Pressure Achiever
+1930,10,Continuing-Gen Cruiser
+1931,10,Continuing-Gen Cruiser
+1932,1,Latina Commuter Caretaker
+1933,5,Black Campus Connector
+1934,1,Latina Commuter Caretaker
+1935,3,Asian High-Pressure Achiever
+1936,10,Continuing-Gen Cruiser
+1937,10,Continuing-Gen Cruiser
+1938,6,White Residential Traditional
+1939,10,Continuing-Gen Cruiser
+1940,3,Asian High-Pressure Achiever
+1941,5,Black Campus Connector
+1942,7,White Commuter Working
+1943,3,Asian High-Pressure Achiever
+1944,10,Continuing-Gen Cruiser
+1945,5,Black Campus Connector
+1946,4,Asian First-Gen Navigator
+1947,1,Latina Commuter Caretaker
+1948,1,Latina Commuter Caretaker
+1949,10,Continuing-Gen Cruiser
+1950,3,Asian High-Pressure Achiever
+1951,7,White Commuter Working
+1952,6,White Residential Traditional
+1953,3,Asian High-Pressure Achiever
+1954,10,Continuing-Gen Cruiser
+1955,2,Latino First-Gen Striver
+1956,10,Continuing-Gen Cruiser
+1957,2,Latino First-Gen Striver
+1958,2,Latino First-Gen Striver
+1959,6,White Residential Traditional
+1960,1,Latina Commuter Caretaker
+1961,9,Hispanic On-Campus Transitioner
+1962,8,Multiracial Bridge-Builder
+1963,2,Latino First-Gen Striver
+1964,1,Latina Commuter Caretaker
+1965,10,Continuing-Gen Cruiser
+1966,1,Latina Commuter Caretaker
+1967,6,White Residential Traditional
+1968,10,Continuing-Gen Cruiser
+1969,3,Asian High-Pressure Achiever
+1970,10,Continuing-Gen Cruiser
+1971,3,Asian High-Pressure Achiever
+1972,10,Continuing-Gen Cruiser
+1973,4,Asian First-Gen Navigator
+1974,10,Continuing-Gen Cruiser
+1975,10,Continuing-Gen Cruiser
+1976,10,Continuing-Gen Cruiser
+1977,6,White Residential Traditional
+1978,10,Continuing-Gen Cruiser
+1979,10,Continuing-Gen Cruiser
+1980,9,Hispanic On-Campus Transitioner
+1981,1,Latina Commuter Caretaker
+1982,3,Asian High-Pressure Achiever
+1983,9,Hispanic On-Campus Transitioner
+1984,3,Asian High-Pressure Achiever
+1985,2,Latino First-Gen Striver
+1986,2,Latino First-Gen Striver
+1987,10,Continuing-Gen Cruiser
+1988,1,Latina Commuter Caretaker
+1989,10,Continuing-Gen Cruiser
+1990,2,Latino First-Gen Striver
+1991,10,Continuing-Gen Cruiser
+1992,1,Latina Commuter Caretaker
+1993,2,Latino First-Gen Striver
+1994,6,White Residential Traditional
+1995,1,Latina Commuter Caretaker
+1996,10,Continuing-Gen Cruiser
+1997,10,Continuing-Gen Cruiser
+1998,1,Latina Commuter Caretaker
+1999,3,Asian High-Pressure Achiever
+2000,10,Continuing-Gen Cruiser
+2001,2,Latino First-Gen Striver
+2002,10,Continuing-Gen Cruiser
+2003,3,Asian High-Pressure Achiever
+2004,2,Latino First-Gen Striver
+2005,6,White Residential Traditional
+2006,1,Latina Commuter Caretaker
+2007,10,Continuing-Gen Cruiser
+2008,1,Latina Commuter Caretaker
+2009,9,Hispanic On-Campus Transitioner
+2010,2,Latino First-Gen Striver
+2011,10,Continuing-Gen Cruiser
+2012,8,Multiracial Bridge-Builder
+2013,4,Asian First-Gen Navigator
+2014,9,Hispanic On-Campus Transitioner
+2015,4,Asian First-Gen Navigator
+2016,10,Continuing-Gen Cruiser
+2017,10,Continuing-Gen Cruiser
+2018,10,Continuing-Gen Cruiser
+2019,7,White Commuter Working
+2020,7,White Commuter Working
+2021,6,White Residential Traditional
+2022,7,White Commuter Working
+2023,10,Continuing-Gen Cruiser
+2024,1,Latina Commuter Caretaker
+2025,1,Latina Commuter Caretaker
+2026,1,Latina Commuter Caretaker
+2027,10,Continuing-Gen Cruiser
+2028,8,Multiracial Bridge-Builder
+2029,2,Latino First-Gen Striver
+2030,8,Multiracial Bridge-Builder
+2031,2,Latino First-Gen Striver
+2032,1,Latina Commuter Caretaker
+2033,10,Continuing-Gen Cruiser
+2034,1,Latina Commuter Caretaker
+2035,10,Continuing-Gen Cruiser
+2036,1,Latina Commuter Caretaker
+2037,3,Asian High-Pressure Achiever
+2038,3,Asian High-Pressure Achiever
+2039,9,Hispanic On-Campus Transitioner
+2040,1,Latina Commuter Caretaker
+2041,9,Hispanic On-Campus Transitioner
+2042,9,Hispanic On-Campus Transitioner
+2043,3,Asian High-Pressure Achiever
+2044,1,Latina Commuter Caretaker
+2045,10,Continuing-Gen Cruiser
+2046,1,Latina Commuter Caretaker
+2047,10,Continuing-Gen Cruiser
+2048,2,Latino First-Gen Striver
+2049,6,White Residential Traditional
+2050,8,Multiracial Bridge-Builder
+2051,7,White Commuter Working
+2052,10,Continuing-Gen Cruiser
+2053,3,Asian High-Pressure Achiever
+2054,1,Latina Commuter Caretaker
+2055,1,Latina Commuter Caretaker
+2056,10,Continuing-Gen Cruiser
+2057,6,White Residential Traditional
+2058,1,Latina Commuter Caretaker
+2059,1,Latina Commuter Caretaker
+2060,6,White Residential Traditional
+2061,5,Black Campus Connector
+2062,1,Latina Commuter Caretaker
+2063,8,Multiracial Bridge-Builder
+2064,3,Asian High-Pressure Achiever
+2065,1,Latina Commuter Caretaker
+2066,10,Continuing-Gen Cruiser
+2067,6,White Residential Traditional
+2068,1,Latina Commuter Caretaker
+2069,9,Hispanic On-Campus Transitioner
+2070,4,Asian First-Gen Navigator
+2071,6,White Residential Traditional
+2072,3,Asian High-Pressure Achiever
+2073,5,Black Campus Connector
+2074,7,White Commuter Working
+2075,1,Latina Commuter Caretaker
+2076,1,Latina Commuter Caretaker
+2077,10,Continuing-Gen Cruiser
+2078,10,Continuing-Gen Cruiser
+2079,10,Continuing-Gen Cruiser
+2080,9,Hispanic On-Campus Transitioner
+2081,7,White Commuter Working
+2082,2,Latino First-Gen Striver
+2083,10,Continuing-Gen Cruiser
+2084,1,Latina Commuter Caretaker
+2085,10,Continuing-Gen Cruiser
+2086,1,Latina Commuter Caretaker
+2087,5,Black Campus Connector
+2088,5,Black Campus Connector
+2089,6,White Residential Traditional
+2090,2,Latino First-Gen Striver
+2091,8,Multiracial Bridge-Builder
+2092,6,White Residential Traditional
+2093,9,Hispanic On-Campus Transitioner
+2094,5,Black Campus Connector
+2095,1,Latina Commuter Caretaker
+2096,1,Latina Commuter Caretaker
+2097,9,Hispanic On-Campus Transitioner
+2098,10,Continuing-Gen Cruiser
+2099,1,Latina Commuter Caretaker
+2100,2,Latino First-Gen Striver
+2101,6,White Residential Traditional
+2102,8,Multiracial Bridge-Builder
+2103,6,White Residential Traditional
+2104,4,Asian First-Gen Navigator
+2105,7,White Commuter Working
+2106,4,Asian First-Gen Navigator
+2107,1,Latina Commuter Caretaker
+2108,10,Continuing-Gen Cruiser
+2109,9,Hispanic On-Campus Transitioner
+2110,10,Continuing-Gen Cruiser
+2111,4,Asian First-Gen Navigator
+2112,10,Continuing-Gen Cruiser
+2113,10,Continuing-Gen Cruiser
+2114,10,Continuing-Gen Cruiser
+2115,10,Continuing-Gen Cruiser
+2116,8,Multiracial Bridge-Builder
+2117,5,Black Campus Connector
+2118,9,Hispanic On-Campus Transitioner
+2119,6,White Residential Traditional
+2120,6,White Residential Traditional
+2121,10,Continuing-Gen Cruiser
+2122,10,Continuing-Gen Cruiser
+2123,3,Asian High-Pressure Achiever
+2124,6,White Residential Traditional
+2125,10,Continuing-Gen Cruiser
+2126,1,Latina Commuter Caretaker
+2127,8,Multiracial Bridge-Builder
+2128,2,Latino First-Gen Striver
+2129,2,Latino First-Gen Striver
+2130,2,Latino First-Gen Striver
+2131,1,Latina Commuter Caretaker
+2132,5,Black Campus Connector
+2133,6,White Residential Traditional
+2134,2,Latino First-Gen Striver
+2135,10,Continuing-Gen Cruiser
+2136,1,Latina Commuter Caretaker
+2137,10,Continuing-Gen Cruiser
+2138,1,Latina Commuter Caretaker
+2139,10,Continuing-Gen Cruiser
+2140,1,Latina Commuter Caretaker
+2141,1,Latina Commuter Caretaker
+2142,5,Black Campus Connector
+2143,6,White Residential Traditional
+2144,9,Hispanic On-Campus Transitioner
+2145,1,Latina Commuter Caretaker
+2146,10,Continuing-Gen Cruiser
+2147,3,Asian High-Pressure Achiever
+2148,10,Continuing-Gen Cruiser
+2149,2,Latino First-Gen Striver
+2150,1,Latina Commuter Caretaker
+2151,2,Latino First-Gen Striver
+2152,10,Continuing-Gen Cruiser
+2153,1,Latina Commuter Caretaker
+2154,3,Asian High-Pressure Achiever
+2155,10,Continuing-Gen Cruiser
+2156,2,Latino First-Gen Striver
+2157,6,White Residential Traditional
+2158,9,Hispanic On-Campus Transitioner
+2159,10,Continuing-Gen Cruiser
+2160,7,White Commuter Working
+2161,10,Continuing-Gen Cruiser
+2162,4,Asian First-Gen Navigator
+2163,3,Asian High-Pressure Achiever
+2164,10,Continuing-Gen Cruiser
+2165,1,Latina Commuter Caretaker
+2166,3,Asian High-Pressure Achiever
+2167,2,Latino First-Gen Striver
+2168,10,Continuing-Gen Cruiser
+2169,2,Latino First-Gen Striver
+2170,2,Latino First-Gen Striver
+2171,3,Asian High-Pressure Achiever
+2172,9,Hispanic On-Campus Transitioner
+2173,10,Continuing-Gen Cruiser
+2174,4,Asian First-Gen Navigator
+2175,9,Hispanic On-Campus Transitioner
+2176,6,White Residential Traditional
+2177,2,Latino First-Gen Striver
+2178,6,White Residential Traditional
+2179,6,White Residential Traditional
+2180,6,White Residential Traditional
+2181,2,Latino First-Gen Striver
+2182,7,White Commuter Working
+2183,9,Hispanic On-Campus Transitioner
+2184,10,Continuing-Gen Cruiser
+2185,6,White Residential Traditional
+2186,2,Latino First-Gen Striver
+2187,10,Continuing-Gen Cruiser
+2188,9,Hispanic On-Campus Transitioner
+2189,2,Latino First-Gen Striver
+2190,7,White Commuter Working
+2191,2,Latino First-Gen Striver
+2192,2,Latino First-Gen Striver
+2193,1,Latina Commuter Caretaker
+2194,9,Hispanic On-Campus Transitioner
+2195,3,Asian High-Pressure Achiever
+2196,1,Latina Commuter Caretaker
+2197,3,Asian High-Pressure Achiever
+2198,10,Continuing-Gen Cruiser
+2199,8,Multiracial Bridge-Builder
+2200,8,Multiracial Bridge-Builder
+2201,10,Continuing-Gen Cruiser
+2202,5,Black Campus Connector
+2203,1,Latina Commuter Caretaker
+2204,1,Latina Commuter Caretaker
+2205,3,Asian High-Pressure Achiever
+2206,10,Continuing-Gen Cruiser
+2207,1,Latina Commuter Caretaker
+2208,5,Black Campus Connector
+2209,8,Multiracial Bridge-Builder
+2210,7,White Commuter Working
+2211,1,Latina Commuter Caretaker
+2212,6,White Residential Traditional
+2213,6,White Residential Traditional
+2214,2,Latino First-Gen Striver
+2215,1,Latina Commuter Caretaker
+2216,9,Hispanic On-Campus Transitioner
+2217,6,White Residential Traditional
+2218,1,Latina Commuter Caretaker
+2219,2,Latino First-Gen Striver
+2220,2,Latino First-Gen Striver
+2221,9,Hispanic On-Campus Transitioner
+2222,3,Asian High-Pressure Achiever
+2223,10,Continuing-Gen Cruiser
+2224,5,Black Campus Connector
+2225,5,Black Campus Connector
+2226,6,White Residential Traditional
+2227,2,Latino First-Gen Striver
+2228,8,Multiracial Bridge-Builder
+2229,1,Latina Commuter Caretaker
+2230,3,Asian High-Pressure Achiever
+2231,6,White Residential Traditional
+2232,5,Black Campus Connector
+2233,6,White Residential Traditional
+2234,6,White Residential Traditional
+2235,9,Hispanic On-Campus Transitioner
+2236,3,Asian High-Pressure Achiever
+2237,3,Asian High-Pressure Achiever
+2238,10,Continuing-Gen Cruiser
+2239,8,Multiracial Bridge-Builder
+2240,10,Continuing-Gen Cruiser
+2241,1,Latina Commuter Caretaker
+2242,4,Asian First-Gen Navigator
+2243,10,Continuing-Gen Cruiser
+2244,1,Latina Commuter Caretaker
+2245,7,White Commuter Working
+2246,6,White Residential Traditional
+2247,6,White Residential Traditional
+2248,5,Black Campus Connector
+2249,10,Continuing-Gen Cruiser
+2250,3,Asian High-Pressure Achiever
+2251,3,Asian High-Pressure Achiever
+2252,10,Continuing-Gen Cruiser
+2253,1,Latina Commuter Caretaker
+2254,7,White Commuter Working
+2255,8,Multiracial Bridge-Builder
+2256,1,Latina Commuter Caretaker
+2257,10,Continuing-Gen Cruiser
+2258,6,White Residential Traditional
+2259,1,Latina Commuter Caretaker
+2260,2,Latino First-Gen Striver
+2261,5,Black Campus Connector
+2262,2,Latino First-Gen Striver
+2263,1,Latina Commuter Caretaker
+2264,10,Continuing-Gen Cruiser
+2265,1,Latina Commuter Caretaker
+2266,10,Continuing-Gen Cruiser
+2267,1,Latina Commuter Caretaker
+2268,1,Latina Commuter Caretaker
+2269,10,Continuing-Gen Cruiser
+2270,1,Latina Commuter Caretaker
+2271,7,White Commuter Working
+2272,2,Latino First-Gen Striver
+2273,10,Continuing-Gen Cruiser
+2274,10,Continuing-Gen Cruiser
+2275,10,Continuing-Gen Cruiser
+2276,10,Continuing-Gen Cruiser
+2277,9,Hispanic On-Campus Transitioner
+2278,2,Latino First-Gen Striver
+2279,10,Continuing-Gen Cruiser
+2280,1,Latina Commuter Caretaker
+2281,4,Asian First-Gen Navigator
+2282,3,Asian High-Pressure Achiever
+2283,6,White Residential Traditional
+2284,10,Continuing-Gen Cruiser
+2285,3,Asian High-Pressure Achiever
+2286,8,Multiracial Bridge-Builder
+2287,6,White Residential Traditional
+2288,9,Hispanic On-Campus Transitioner
+2289,10,Continuing-Gen Cruiser
+2290,4,Asian First-Gen Navigator
+2291,10,Continuing-Gen Cruiser
+2292,3,Asian High-Pressure Achiever
+2293,10,Continuing-Gen Cruiser
+2294,9,Hispanic On-Campus Transitioner
+2295,3,Asian High-Pressure Achiever
+2296,10,Continuing-Gen Cruiser
+2297,1,Latina Commuter Caretaker
+2298,3,Asian High-Pressure Achiever
+2299,1,Latina Commuter Caretaker
+2300,7,White Commuter Working
+2301,10,Continuing-Gen Cruiser
+2302,9,Hispanic On-Campus Transitioner
+2303,3,Asian High-Pressure Achiever
+2304,2,Latino First-Gen Striver
+2305,10,Continuing-Gen Cruiser
+2306,4,Asian First-Gen Navigator
+2307,1,Latina Commuter Caretaker
+2308,10,Continuing-Gen Cruiser
+2309,9,Hispanic On-Campus Transitioner
+2310,6,White Residential Traditional
+2311,2,Latino First-Gen Striver
+2312,1,Latina Commuter Caretaker
+2313,5,Black Campus Connector
+2314,10,Continuing-Gen Cruiser
+2315,10,Continuing-Gen Cruiser
+2316,3,Asian High-Pressure Achiever
+2317,7,White Commuter Working
+2318,9,Hispanic On-Campus Transitioner
+2319,3,Asian High-Pressure Achiever
+2320,10,Continuing-Gen Cruiser
+2321,2,Latino First-Gen Striver
+2322,9,Hispanic On-Campus Transitioner
+2323,7,White Commuter Working
+2324,9,Hispanic On-Campus Transitioner
+2325,4,Asian First-Gen Navigator
+2326,5,Black Campus Connector
+2327,5,Black Campus Connector
+2328,9,Hispanic On-Campus Transitioner
+2329,10,Continuing-Gen Cruiser
+2330,7,White Commuter Working
+2331,5,Black Campus Connector
+2332,6,White Residential Traditional
+2333,7,White Commuter Working
+2334,10,Continuing-Gen Cruiser
+2335,10,Continuing-Gen Cruiser
+2336,1,Latina Commuter Caretaker
+2337,9,Hispanic On-Campus Transitioner
+2338,6,White Residential Traditional
+2339,4,Asian First-Gen Navigator
+2340,1,Latina Commuter Caretaker
+2341,8,Multiracial Bridge-Builder
+2342,2,Latino First-Gen Striver
+2343,3,Asian High-Pressure Achiever
+2344,4,Asian First-Gen Navigator
+2345,1,Latina Commuter Caretaker
+2346,9,Hispanic On-Campus Transitioner
+2347,2,Latino First-Gen Striver
+2348,6,White Residential Traditional
+2349,8,Multiracial Bridge-Builder
+2350,9,Hispanic On-Campus Transitioner
+2351,2,Latino First-Gen Striver
+2352,9,Hispanic On-Campus Transitioner
+2353,10,Continuing-Gen Cruiser
+2354,6,White Residential Traditional
+2355,10,Continuing-Gen Cruiser
+2356,8,Multiracial Bridge-Builder
+2357,7,White Commuter Working
+2358,3,Asian High-Pressure Achiever
+2359,1,Latina Commuter Caretaker
+2360,4,Asian First-Gen Navigator
+2361,6,White Residential Traditional
+2362,2,Latino First-Gen Striver
+2363,1,Latina Commuter Caretaker
+2364,3,Asian High-Pressure Achiever
+2365,6,White Residential Traditional
+2366,2,Latino First-Gen Striver
+2367,10,Continuing-Gen Cruiser
+2368,3,Asian High-Pressure Achiever
+2369,10,Continuing-Gen Cruiser
+2370,4,Asian First-Gen Navigator
+2371,3,Asian High-Pressure Achiever
+2372,9,Hispanic On-Campus Transitioner
+2373,6,White Residential Traditional
+2374,2,Latino First-Gen Striver
+2375,8,Multiracial Bridge-Builder
+2376,1,Latina Commuter Caretaker
+2377,10,Continuing-Gen Cruiser
+2378,10,Continuing-Gen Cruiser
+2379,4,Asian First-Gen Navigator
+2380,7,White Commuter Working
+2381,1,Latina Commuter Caretaker
+2382,6,White Residential Traditional
+2383,3,Asian High-Pressure Achiever
+2384,1,Latina Commuter Caretaker
+2385,3,Asian High-Pressure Achiever
+2386,10,Continuing-Gen Cruiser
+2387,1,Latina Commuter Caretaker
+2388,7,White Commuter Working
+2389,10,Continuing-Gen Cruiser
+2390,6,White Residential Traditional
+2391,8,Multiracial Bridge-Builder
+2392,1,Latina Commuter Caretaker
+2393,5,Black Campus Connector
+2394,1,Latina Commuter Caretaker
+2395,10,Continuing-Gen Cruiser
+2396,10,Continuing-Gen Cruiser
+2397,8,Multiracial Bridge-Builder
+2398,6,White Residential Traditional
+2399,2,Latino First-Gen Striver
+2400,2,Latino First-Gen Striver
+2401,3,Asian High-Pressure Achiever
+2402,9,Hispanic On-Campus Transitioner
+2403,7,White Commuter Working
+2404,3,Asian High-Pressure Achiever
+2405,2,Latino First-Gen Striver
+2406,1,Latina Commuter Caretaker
+2407,2,Latino First-Gen Striver
+2408,1,Latina Commuter Caretaker
+2409,1,Latina Commuter Caretaker
+2410,1,Latina Commuter Caretaker
+2411,9,Hispanic On-Campus Transitioner
+2412,4,Asian First-Gen Navigator
+2413,10,Continuing-Gen Cruiser
+2414,1,Latina Commuter Caretaker
+2415,6,White Residential Traditional
+2416,10,Continuing-Gen Cruiser
+2417,4,Asian First-Gen Navigator
+2418,1,Latina Commuter Caretaker
+2419,10,Continuing-Gen Cruiser
+2420,1,Latina Commuter Caretaker
+2421,10,Continuing-Gen Cruiser
+2422,4,Asian First-Gen Navigator
+2423,1,Latina Commuter Caretaker
+2424,2,Latino First-Gen Striver
+2425,10,Continuing-Gen Cruiser
+2426,4,Asian First-Gen Navigator
+2427,10,Continuing-Gen Cruiser
+2428,3,Asian High-Pressure Achiever
+2429,10,Continuing-Gen Cruiser
+2430,5,Black Campus Connector
+2431,4,Asian First-Gen Navigator
+2432,1,Latina Commuter Caretaker
+2433,1,Latina Commuter Caretaker
+2434,10,Continuing-Gen Cruiser
+2435,6,White Residential Traditional
+2436,5,Black Campus Connector
+2437,6,White Residential Traditional
+2438,7,White Commuter Working
+2439,10,Continuing-Gen Cruiser
+2440,8,Multiracial Bridge-Builder
+2441,3,Asian High-Pressure Achiever
+2442,9,Hispanic On-Campus Transitioner
+2443,1,Latina Commuter Caretaker
+2444,8,Multiracial Bridge-Builder
+2445,9,Hispanic On-Campus Transitioner
+2446,1,Latina Commuter Caretaker
+2447,10,Continuing-Gen Cruiser
+2448,6,White Residential Traditional
+2449,2,Latino First-Gen Striver
+2450,1,Latina Commuter Caretaker
+2451,4,Asian First-Gen Navigator
+2452,10,Continuing-Gen Cruiser
+2453,9,Hispanic On-Campus Transitioner
+2454,3,Asian High-Pressure Achiever
+2455,2,Latino First-Gen Striver
+2456,9,Hispanic On-Campus Transitioner
+2457,1,Latina Commuter Caretaker
+2458,9,Hispanic On-Campus Transitioner
+2459,1,Latina Commuter Caretaker
+2460,6,White Residential Traditional
+2461,1,Latina Commuter Caretaker
+2462,7,White Commuter Working
+2463,7,White Commuter Working
+2464,8,Multiracial Bridge-Builder
+2465,10,Continuing-Gen Cruiser
+2466,7,White Commuter Working
+2467,7,White Commuter Working
+2468,9,Hispanic On-Campus Transitioner
+2469,1,Latina Commuter Caretaker
+2470,10,Continuing-Gen Cruiser
+2471,6,White Residential Traditional
+2472,5,Black Campus Connector
+2473,2,Latino First-Gen Striver
+2474,7,White Commuter Working
+2475,7,White Commuter Working
+2476,10,Continuing-Gen Cruiser
+2477,1,Latina Commuter Caretaker
+2478,9,Hispanic On-Campus Transitioner
+2479,9,Hispanic On-Campus Transitioner
+2480,1,Latina Commuter Caretaker
+2481,3,Asian High-Pressure Achiever
+2482,1,Latina Commuter Caretaker
+2483,6,White Residential Traditional
+2484,8,Multiracial Bridge-Builder
+2485,7,White Commuter Working
+2486,1,Latina Commuter Caretaker
+2487,6,White Residential Traditional
+2488,10,Continuing-Gen Cruiser
+2489,6,White Residential Traditional
+2490,7,White Commuter Working
+2491,4,Asian First-Gen Navigator
+2492,9,Hispanic On-Campus Transitioner
+2493,3,Asian High-Pressure Achiever
+2494,5,Black Campus Connector
+2495,1,Latina Commuter Caretaker
+2496,9,Hispanic On-Campus Transitioner
+2497,10,Continuing-Gen Cruiser
+2498,8,Multiracial Bridge-Builder
+2499,3,Asian High-Pressure Achiever
+2500,8,Multiracial Bridge-Builder
+2501,5,Black Campus Connector
+2502,8,Multiracial Bridge-Builder
+2503,10,Continuing-Gen Cruiser
+2504,1,Latina Commuter Caretaker
+2505,3,Asian High-Pressure Achiever
+2506,4,Asian First-Gen Navigator
+2507,6,White Residential Traditional
+2508,10,Continuing-Gen Cruiser
+2509,10,Continuing-Gen Cruiser
+2510,3,Asian High-Pressure Achiever
+2511,1,Latina Commuter Caretaker
+2512,9,Hispanic On-Campus Transitioner
+2513,10,Continuing-Gen Cruiser
+2514,1,Latina Commuter Caretaker
+2515,10,Continuing-Gen Cruiser
+2516,3,Asian High-Pressure Achiever
+2517,2,Latino First-Gen Striver
+2518,9,Hispanic On-Campus Transitioner
+2519,6,White Residential Traditional
+2520,8,Multiracial Bridge-Builder
+2521,10,Continuing-Gen Cruiser
+2522,1,Latina Commuter Caretaker
+2523,2,Latino First-Gen Striver
+2524,10,Continuing-Gen Cruiser
+2525,5,Black Campus Connector
+2526,10,Continuing-Gen Cruiser
+2527,8,Multiracial Bridge-Builder
+2528,9,Hispanic On-Campus Transitioner
+2529,4,Asian First-Gen Navigator
+2530,2,Latino First-Gen Striver
+2531,3,Asian High-Pressure Achiever
+2532,2,Latino First-Gen Striver
+2533,9,Hispanic On-Campus Transitioner
+2534,5,Black Campus Connector
+2535,10,Continuing-Gen Cruiser
+2536,2,Latino First-Gen Striver
+2537,10,Continuing-Gen Cruiser
+2538,4,Asian First-Gen Navigator
+2539,2,Latino First-Gen Striver
+2540,8,Multiracial Bridge-Builder
+2541,2,Latino First-Gen Striver
+2542,4,Asian First-Gen Navigator
+2543,1,Latina Commuter Caretaker
+2544,2,Latino First-Gen Striver
+2545,10,Continuing-Gen Cruiser
+2546,10,Continuing-Gen Cruiser
+2547,1,Latina Commuter Caretaker
+2548,1,Latina Commuter Caretaker
+2549,10,Continuing-Gen Cruiser
+2550,3,Asian High-Pressure Achiever
+2551,5,Black Campus Connector
+2552,3,Asian High-Pressure Achiever
+2553,10,Continuing-Gen Cruiser
+2554,1,Latina Commuter Caretaker
+2555,10,Continuing-Gen Cruiser
+2556,1,Latina Commuter Caretaker
+2557,2,Latino First-Gen Striver
+2558,8,Multiracial Bridge-Builder
+2559,10,Continuing-Gen Cruiser
+2560,2,Latino First-Gen Striver
+2561,9,Hispanic On-Campus Transitioner
+2562,2,Latino First-Gen Striver
+2563,10,Continuing-Gen Cruiser
+2564,3,Asian High-Pressure Achiever
+2565,9,Hispanic On-Campus Transitioner
+2566,8,Multiracial Bridge-Builder
+2567,1,Latina Commuter Caretaker
+2568,9,Hispanic On-Campus Transitioner
+2569,1,Latina Commuter Caretaker
+2570,7,White Commuter Working
+2571,7,White Commuter Working
+2572,7,White Commuter Working
+2573,4,Asian First-Gen Navigator
+2574,4,Asian First-Gen Navigator
+2575,9,Hispanic On-Campus Transitioner
+2576,8,Multiracial Bridge-Builder
+2577,6,White Residential Traditional
+2578,1,Latina Commuter Caretaker
+2579,4,Asian First-Gen Navigator
+2580,10,Continuing-Gen Cruiser
+2581,6,White Residential Traditional
+2582,10,Continuing-Gen Cruiser
+2583,10,Continuing-Gen Cruiser
+2584,3,Asian High-Pressure Achiever
+2585,2,Latino First-Gen Striver
+2586,2,Latino First-Gen Striver
+2587,1,Latina Commuter Caretaker
+2588,5,Black Campus Connector
+2589,7,White Commuter Working
+2590,7,White Commuter Working
+2591,1,Latina Commuter Caretaker
+2592,6,White Residential Traditional
+2593,10,Continuing-Gen Cruiser
+2594,2,Latino First-Gen Striver
+2595,2,Latino First-Gen Striver
+2596,2,Latino First-Gen Striver
+2597,10,Continuing-Gen Cruiser
+2598,8,Multiracial Bridge-Builder
+2599,9,Hispanic On-Campus Transitioner
+2600,6,White Residential Traditional
+2601,8,Multiracial Bridge-Builder
+2602,7,White Commuter Working
+2603,10,Continuing-Gen Cruiser
+2604,1,Latina Commuter Caretaker
+2605,2,Latino First-Gen Striver
+2606,1,Latina Commuter Caretaker
+2607,4,Asian First-Gen Navigator
+2608,10,Continuing-Gen Cruiser
+2609,8,Multiracial Bridge-Builder
+2610,9,Hispanic On-Campus Transitioner
+2611,2,Latino First-Gen Striver
+2612,1,Latina Commuter Caretaker
+2613,2,Latino First-Gen Striver
+2614,1,Latina Commuter Caretaker
+2615,9,Hispanic On-Campus Transitioner
+2616,1,Latina Commuter Caretaker
+2617,1,Latina Commuter Caretaker
+2618,6,White Residential Traditional
+2619,9,Hispanic On-Campus Transitioner
+2620,2,Latino First-Gen Striver
+2621,3,Asian High-Pressure Achiever
+2622,10,Continuing-Gen Cruiser
+2623,10,Continuing-Gen Cruiser
+2624,1,Latina Commuter Caretaker
+2625,6,White Residential Traditional
+2626,8,Multiracial Bridge-Builder
+2627,8,Multiracial Bridge-Builder
+2628,1,Latina Commuter Caretaker
+2629,9,Hispanic On-Campus Transitioner
+2630,2,Latino First-Gen Striver
+2631,7,White Commuter Working
+2632,1,Latina Commuter Caretaker
+2633,6,White Residential Traditional
+2634,2,Latino First-Gen Striver
+2635,8,Multiracial Bridge-Builder
+2636,2,Latino First-Gen Striver
+2637,10,Continuing-Gen Cruiser
+2638,2,Latino First-Gen Striver
+2639,10,Continuing-Gen Cruiser
+2640,9,Hispanic On-Campus Transitioner
+2641,10,Continuing-Gen Cruiser
+2642,1,Latina Commuter Caretaker
+2643,9,Hispanic On-Campus Transitioner
+2644,2,Latino First-Gen Striver
+2645,10,Continuing-Gen Cruiser
+2646,1,Latina Commuter Caretaker
+2647,2,Latino First-Gen Striver
+2648,4,Asian First-Gen Navigator
+2649,1,Latina Commuter Caretaker
+2650,3,Asian High-Pressure Achiever
+2651,10,Continuing-Gen Cruiser
+2652,10,Continuing-Gen Cruiser
+2653,9,Hispanic On-Campus Transitioner
+2654,1,Latina Commuter Caretaker
+2655,10,Continuing-Gen Cruiser
+2656,9,Hispanic On-Campus Transitioner
+2657,10,Continuing-Gen Cruiser
+2658,7,White Commuter Working
+2659,8,Multiracial Bridge-Builder
+2660,10,Continuing-Gen Cruiser
+2661,9,Hispanic On-Campus Transitioner
+2662,1,Latina Commuter Caretaker
+2663,1,Latina Commuter Caretaker
+2664,2,Latino First-Gen Striver
+2665,1,Latina Commuter Caretaker
+2666,8,Multiracial Bridge-Builder
+2667,1,Latina Commuter Caretaker
+2668,10,Continuing-Gen Cruiser
+2669,8,Multiracial Bridge-Builder
+2670,1,Latina Commuter Caretaker
+2671,8,Multiracial Bridge-Builder
+2672,8,Multiracial Bridge-Builder
+2673,1,Latina Commuter Caretaker
+2674,1,Latina Commuter Caretaker
+2675,4,Asian First-Gen Navigator
+2676,8,Multiracial Bridge-Builder
+2677,6,White Residential Traditional
+2678,2,Latino First-Gen Striver
+2679,1,Latina Commuter Caretaker
+2680,3,Asian High-Pressure Achiever
+2681,9,Hispanic On-Campus Transitioner
+2682,8,Multiracial Bridge-Builder
+2683,9,Hispanic On-Campus Transitioner
+2684,2,Latino First-Gen Striver
+2685,8,Multiracial Bridge-Builder
+2686,4,Asian First-Gen Navigator
+2687,7,White Commuter Working
+2688,1,Latina Commuter Caretaker
+2689,3,Asian High-Pressure Achiever
+2690,6,White Residential Traditional
+2691,1,Latina Commuter Caretaker
+2692,1,Latina Commuter Caretaker
+2693,3,Asian High-Pressure Achiever
+2694,6,White Residential Traditional
+2695,10,Continuing-Gen Cruiser
+2696,10,Continuing-Gen Cruiser
+2697,8,Multiracial Bridge-Builder
+2698,3,Asian High-Pressure Achiever
+2699,2,Latino First-Gen Striver
+2700,2,Latino First-Gen Striver
+2701,5,Black Campus Connector
+2702,1,Latina Commuter Caretaker
+2703,10,Continuing-Gen Cruiser
+2704,1,Latina Commuter Caretaker
+2705,1,Latina Commuter Caretaker
+2706,3,Asian High-Pressure Achiever
+2707,5,Black Campus Connector
+2708,3,Asian High-Pressure Achiever
+2709,10,Continuing-Gen Cruiser
+2710,1,Latina Commuter Caretaker
+2711,10,Continuing-Gen Cruiser
+2712,5,Black Campus Connector
+2713,10,Continuing-Gen Cruiser
+2714,2,Latino First-Gen Striver
+2715,9,Hispanic On-Campus Transitioner
+2716,1,Latina Commuter Caretaker
+2717,9,Hispanic On-Campus Transitioner
+2718,10,Continuing-Gen Cruiser
+2719,7,White Commuter Working
+2720,10,Continuing-Gen Cruiser
+2721,1,Latina Commuter Caretaker
+2722,7,White Commuter Working
+2723,1,Latina Commuter Caretaker
+2724,2,Latino First-Gen Striver
+2725,10,Continuing-Gen Cruiser
+2726,9,Hispanic On-Campus Transitioner
+2727,1,Latina Commuter Caretaker
+2728,7,White Commuter Working
+2729,10,Continuing-Gen Cruiser
+2730,3,Asian High-Pressure Achiever
+2731,6,White Residential Traditional
+2732,5,Black Campus Connector
+2733,10,Continuing-Gen Cruiser
+2734,10,Continuing-Gen Cruiser
+2735,1,Latina Commuter Caretaker
+2736,3,Asian High-Pressure Achiever
+2737,10,Continuing-Gen Cruiser
+2738,1,Latina Commuter Caretaker
+2739,1,Latina Commuter Caretaker
+2740,1,Latina Commuter Caretaker
+2741,2,Latino First-Gen Striver
+2742,9,Hispanic On-Campus Transitioner
+2743,3,Asian High-Pressure Achiever
+2744,10,Continuing-Gen Cruiser
+2745,8,Multiracial Bridge-Builder
+2746,5,Black Campus Connector
+2747,2,Latino First-Gen Striver
+2748,10,Continuing-Gen Cruiser
+2749,6,White Residential Traditional
+2750,6,White Residential Traditional
+2751,10,Continuing-Gen Cruiser
+2752,2,Latino First-Gen Striver
+2753,3,Asian High-Pressure Achiever
+2754,10,Continuing-Gen Cruiser
+2755,1,Latina Commuter Caretaker
+2756,10,Continuing-Gen Cruiser
+2757,3,Asian High-Pressure Achiever
+2758,10,Continuing-Gen Cruiser
+2759,3,Asian High-Pressure Achiever
+2760,2,Latino First-Gen Striver
+2761,1,Latina Commuter Caretaker
+2762,3,Asian High-Pressure Achiever
+2763,3,Asian High-Pressure Achiever
+2764,1,Latina Commuter Caretaker
+2765,6,White Residential Traditional
+2766,8,Multiracial Bridge-Builder
+2767,10,Continuing-Gen Cruiser
+2768,10,Continuing-Gen Cruiser
+2769,1,Latina Commuter Caretaker
+2770,1,Latina Commuter Caretaker
+2771,1,Latina Commuter Caretaker
+2772,6,White Residential Traditional
+2773,4,Asian First-Gen Navigator
+2774,1,Latina Commuter Caretaker
+2775,3,Asian High-Pressure Achiever
+2776,5,Black Campus Connector
+2777,10,Continuing-Gen Cruiser
+2778,8,Multiracial Bridge-Builder
+2779,1,Latina Commuter Caretaker
+2780,1,Latina Commuter Caretaker
+2781,7,White Commuter Working
+2782,2,Latino First-Gen Striver
+2783,6,White Residential Traditional
+2784,10,Continuing-Gen Cruiser
+2785,10,Continuing-Gen Cruiser
+2786,1,Latina Commuter Caretaker
+2787,8,Multiracial Bridge-Builder
+2788,6,White Residential Traditional
+2789,5,Black Campus Connector
+2790,2,Latino First-Gen Striver
+2791,2,Latino First-Gen Striver
+2792,2,Latino First-Gen Striver
+2793,10,Continuing-Gen Cruiser
+2794,10,Continuing-Gen Cruiser
+2795,2,Latino First-Gen Striver
+2796,10,Continuing-Gen Cruiser
+2797,4,Asian First-Gen Navigator
+2798,4,Asian First-Gen Navigator
+2799,6,White Residential Traditional
+2800,10,Continuing-Gen Cruiser
+2801,10,Continuing-Gen Cruiser
+2802,1,Latina Commuter Caretaker
+2803,4,Asian First-Gen Navigator
+2804,10,Continuing-Gen Cruiser
+2805,10,Continuing-Gen Cruiser
+2806,10,Continuing-Gen Cruiser
+2807,2,Latino First-Gen Striver
+2808,7,White Commuter Working
+2809,3,Asian High-Pressure Achiever
+2810,1,Latina Commuter Caretaker
+2811,1,Latina Commuter Caretaker
+2812,1,Latina Commuter Caretaker
+2813,4,Asian First-Gen Navigator
+2814,1,Latina Commuter Caretaker
+2815,4,Asian First-Gen Navigator
+2816,1,Latina Commuter Caretaker
+2817,2,Latino First-Gen Striver
+2818,7,White Commuter Working
+2819,2,Latino First-Gen Striver
+2820,3,Asian High-Pressure Achiever
+2821,9,Hispanic On-Campus Transitioner
+2822,2,Latino First-Gen Striver
+2823,1,Latina Commuter Caretaker
+2824,5,Black Campus Connector
+2825,9,Hispanic On-Campus Transitioner
+2826,8,Multiracial Bridge-Builder
+2827,7,White Commuter Working
+2828,10,Continuing-Gen Cruiser
+2829,3,Asian High-Pressure Achiever
+2830,6,White Residential Traditional
+2831,6,White Residential Traditional
+2832,4,Asian First-Gen Navigator
+2833,3,Asian High-Pressure Achiever
+2834,2,Latino First-Gen Striver
+2835,10,Continuing-Gen Cruiser
+2836,6,White Residential Traditional
+2837,10,Continuing-Gen Cruiser
+2838,10,Continuing-Gen Cruiser
+2839,3,Asian High-Pressure Achiever
+2840,5,Black Campus Connector
+2841,1,Latina Commuter Caretaker
+2842,10,Continuing-Gen Cruiser
+2843,1,Latina Commuter Caretaker
+2844,1,Latina Commuter Caretaker
+2845,1,Latina Commuter Caretaker
+2846,7,White Commuter Working
+2847,2,Latino First-Gen Striver
+2848,10,Continuing-Gen Cruiser
+2849,2,Latino First-Gen Striver
+2850,6,White Residential Traditional
+2851,7,White Commuter Working
+2852,10,Continuing-Gen Cruiser
+2853,7,White Commuter Working
+2854,10,Continuing-Gen Cruiser
+2855,10,Continuing-Gen Cruiser
+2856,10,Continuing-Gen Cruiser
+2857,1,Latina Commuter Caretaker
+2858,1,Latina Commuter Caretaker
+2859,6,White Residential Traditional
+2860,10,Continuing-Gen Cruiser
+2861,1,Latina Commuter Caretaker
+2862,7,White Commuter Working
+2863,1,Latina Commuter Caretaker
+2864,9,Hispanic On-Campus Transitioner
+2865,2,Latino First-Gen Striver
+2866,6,White Residential Traditional
+2867,8,Multiracial Bridge-Builder
+2868,9,Hispanic On-Campus Transitioner
+2869,2,Latino First-Gen Striver
+2870,6,White Residential Traditional
+2871,9,Hispanic On-Campus Transitioner
+2872,2,Latino First-Gen Striver
+2873,9,Hispanic On-Campus Transitioner
+2874,3,Asian High-Pressure Achiever
+2875,9,Hispanic On-Campus Transitioner
+2876,6,White Residential Traditional
+2877,8,Multiracial Bridge-Builder
+2878,7,White Commuter Working
+2879,10,Continuing-Gen Cruiser
+2880,2,Latino First-Gen Striver
+2881,1,Latina Commuter Caretaker
+2882,3,Asian High-Pressure Achiever
+2883,10,Continuing-Gen Cruiser
+2884,1,Latina Commuter Caretaker
+2885,6,White Residential Traditional
+2886,1,Latina Commuter Caretaker
+2887,10,Continuing-Gen Cruiser
+2888,1,Latina Commuter Caretaker
+2889,10,Continuing-Gen Cruiser
+2890,10,Continuing-Gen Cruiser
+2891,3,Asian High-Pressure Achiever
+2892,9,Hispanic On-Campus Transitioner
+2893,9,Hispanic On-Campus Transitioner
+2894,1,Latina Commuter Caretaker
+2895,2,Latino First-Gen Striver
+2896,10,Continuing-Gen Cruiser
+2897,7,White Commuter Working
+2898,10,Continuing-Gen Cruiser
+2899,10,Continuing-Gen Cruiser
+2900,1,Latina Commuter Caretaker
+2901,10,Continuing-Gen Cruiser
+2902,9,Hispanic On-Campus Transitioner
+2903,10,Continuing-Gen Cruiser
+2904,8,Multiracial Bridge-Builder
+2905,3,Asian High-Pressure Achiever
+2906,10,Continuing-Gen Cruiser
+2907,10,Continuing-Gen Cruiser
+2908,1,Latina Commuter Caretaker
+2909,2,Latino First-Gen Striver
+2910,9,Hispanic On-Campus Transitioner
+2911,2,Latino First-Gen Striver
+2912,4,Asian First-Gen Navigator
+2913,8,Multiracial Bridge-Builder
+2914,10,Continuing-Gen Cruiser
+2915,10,Continuing-Gen Cruiser
+2916,6,White Residential Traditional
+2917,1,Latina Commuter Caretaker
+2918,3,Asian High-Pressure Achiever
+2919,9,Hispanic On-Campus Transitioner
+2920,1,Latina Commuter Caretaker
+2921,6,White Residential Traditional
+2922,9,Hispanic On-Campus Transitioner
+2923,7,White Commuter Working
+2924,10,Continuing-Gen Cruiser
+2925,6,White Residential Traditional
+2926,9,Hispanic On-Campus Transitioner
+2927,1,Latina Commuter Caretaker
+2928,6,White Residential Traditional
+2929,10,Continuing-Gen Cruiser
+2930,10,Continuing-Gen Cruiser
+2931,1,Latina Commuter Caretaker
+2932,9,Hispanic On-Campus Transitioner
+2933,9,Hispanic On-Campus Transitioner
+2934,1,Latina Commuter Caretaker
+2935,2,Latino First-Gen Striver
+2936,1,Latina Commuter Caretaker
+2937,2,Latino First-Gen Striver
+2938,3,Asian High-Pressure Achiever
+2939,10,Continuing-Gen Cruiser
+2940,4,Asian First-Gen Navigator
+2941,4,Asian First-Gen Navigator
+2942,2,Latino First-Gen Striver
+2943,9,Hispanic On-Campus Transitioner
+2944,7,White Commuter Working
+2945,10,Continuing-Gen Cruiser
+2946,10,Continuing-Gen Cruiser
+2947,3,Asian High-Pressure Achiever
+2948,7,White Commuter Working
+2949,9,Hispanic On-Campus Transitioner
+2950,10,Continuing-Gen Cruiser
+2951,1,Latina Commuter Caretaker
+2952,1,Latina Commuter Caretaker
+2953,1,Latina Commuter Caretaker
+2954,9,Hispanic On-Campus Transitioner
+2955,3,Asian High-Pressure Achiever
+2956,10,Continuing-Gen Cruiser
+2957,3,Asian High-Pressure Achiever
+2958,10,Continuing-Gen Cruiser
+2959,10,Continuing-Gen Cruiser
+2960,1,Latina Commuter Caretaker
+2961,10,Continuing-Gen Cruiser
+2962,2,Latino First-Gen Striver
+2963,10,Continuing-Gen Cruiser
+2964,6,White Residential Traditional
+2965,2,Latino First-Gen Striver
+2966,10,Continuing-Gen Cruiser
+2967,2,Latino First-Gen Striver
+2968,10,Continuing-Gen Cruiser
+2969,9,Hispanic On-Campus Transitioner
+2970,10,Continuing-Gen Cruiser
+2971,3,Asian High-Pressure Achiever
+2972,7,White Commuter Working
+2973,9,Hispanic On-Campus Transitioner
+2974,1,Latina Commuter Caretaker
+2975,3,Asian High-Pressure Achiever
+2976,10,Continuing-Gen Cruiser
+2977,4,Asian First-Gen Navigator
+2978,2,Latino First-Gen Striver
+2979,10,Continuing-Gen Cruiser
+2980,1,Latina Commuter Caretaker
+2981,9,Hispanic On-Campus Transitioner
+2982,1,Latina Commuter Caretaker
+2983,2,Latino First-Gen Striver
+2984,4,Asian First-Gen Navigator
+2985,1,Latina Commuter Caretaker
+2986,8,Multiracial Bridge-Builder
+2987,10,Continuing-Gen Cruiser
+2988,3,Asian High-Pressure Achiever
+2989,2,Latino First-Gen Striver
+2990,7,White Commuter Working
+2991,7,White Commuter Working
+2992,10,Continuing-Gen Cruiser
+2993,2,Latino First-Gen Striver
+2994,2,Latino First-Gen Striver
+2995,10,Continuing-Gen Cruiser
+2996,1,Latina Commuter Caretaker
+2997,6,White Residential Traditional
+2998,2,Latino First-Gen Striver
+2999,10,Continuing-Gen Cruiser
+3000,2,Latino First-Gen Striver
+3001,2,Latino First-Gen Striver
+3002,8,Multiracial Bridge-Builder
+3003,3,Asian High-Pressure Achiever
+3004,10,Continuing-Gen Cruiser
+3005,10,Continuing-Gen Cruiser
+3006,4,Asian First-Gen Navigator
+3007,10,Continuing-Gen Cruiser
+3008,1,Latina Commuter Caretaker
+3009,4,Asian First-Gen Navigator
+3010,10,Continuing-Gen Cruiser
+3011,4,Asian First-Gen Navigator
+3012,10,Continuing-Gen Cruiser
+3013,10,Continuing-Gen Cruiser
+3014,10,Continuing-Gen Cruiser
+3015,10,Continuing-Gen Cruiser
+3016,10,Continuing-Gen Cruiser
+3017,10,Continuing-Gen Cruiser
+3018,4,Asian First-Gen Navigator
+3019,6,White Residential Traditional
+3020,1,Latina Commuter Caretaker
+3021,3,Asian High-Pressure Achiever
+3022,2,Latino First-Gen Striver
+3023,10,Continuing-Gen Cruiser
+3024,10,Continuing-Gen Cruiser
+3025,10,Continuing-Gen Cruiser
+3026,6,White Residential Traditional
+3027,10,Continuing-Gen Cruiser
+3028,8,Multiracial Bridge-Builder
+3029,10,Continuing-Gen Cruiser
+3030,2,Latino First-Gen Striver
+3031,2,Latino First-Gen Striver
+3032,8,Multiracial Bridge-Builder
+3033,8,Multiracial Bridge-Builder
+3034,10,Continuing-Gen Cruiser
+3035,6,White Residential Traditional
+3036,10,Continuing-Gen Cruiser
+3037,3,Asian High-Pressure Achiever
+3038,10,Continuing-Gen Cruiser
+3039,10,Continuing-Gen Cruiser
+3040,3,Asian High-Pressure Achiever
+3041,1,Latina Commuter Caretaker
+3042,1,Latina Commuter Caretaker
+3043,4,Asian First-Gen Navigator
+3044,10,Continuing-Gen Cruiser
+3045,2,Latino First-Gen Striver
+3046,6,White Residential Traditional
+3047,3,Asian High-Pressure Achiever
+3048,10,Continuing-Gen Cruiser
+3049,6,White Residential Traditional
+3050,6,White Residential Traditional
+3051,1,Latina Commuter Caretaker
+3052,1,Latina Commuter Caretaker
+3053,1,Latina Commuter Caretaker
+3054,10,Continuing-Gen Cruiser
+3055,6,White Residential Traditional
+3056,2,Latino First-Gen Striver
+3057,2,Latino First-Gen Striver
+3058,2,Latino First-Gen Striver
+3059,2,Latino First-Gen Striver
+3060,3,Asian High-Pressure Achiever
+3061,2,Latino First-Gen Striver
+3062,5,Black Campus Connector
+3063,7,White Commuter Working
+3064,1,Latina Commuter Caretaker
+3065,10,Continuing-Gen Cruiser
+3066,10,Continuing-Gen Cruiser
+3067,7,White Commuter Working
+3068,10,Continuing-Gen Cruiser
+3069,2,Latino First-Gen Striver
+3070,10,Continuing-Gen Cruiser
+3071,9,Hispanic On-Campus Transitioner
+3072,8,Multiracial Bridge-Builder
+3073,1,Latina Commuter Caretaker
+3074,10,Continuing-Gen Cruiser
+3075,3,Asian High-Pressure Achiever
+3076,1,Latina Commuter Caretaker
+3077,9,Hispanic On-Campus Transitioner
+3078,3,Asian High-Pressure Achiever
+3079,8,Multiracial Bridge-Builder
+3080,1,Latina Commuter Caretaker
+3081,10,Continuing-Gen Cruiser
+3082,8,Multiracial Bridge-Builder
+3083,1,Latina Commuter Caretaker
+3084,10,Continuing-Gen Cruiser
+3085,8,Multiracial Bridge-Builder
+3086,10,Continuing-Gen Cruiser
+3087,1,Latina Commuter Caretaker
+3088,6,White Residential Traditional
+3089,1,Latina Commuter Caretaker
+3090,8,Multiracial Bridge-Builder
+3091,3,Asian High-Pressure Achiever
+3092,10,Continuing-Gen Cruiser
+3093,7,White Commuter Working
+3094,1,Latina Commuter Caretaker
+3095,6,White Residential Traditional
+3096,4,Asian First-Gen Navigator
+3097,1,Latina Commuter Caretaker
+3098,9,Hispanic On-Campus Transitioner
+3099,6,White Residential Traditional
+3100,2,Latino First-Gen Striver
+3101,10,Continuing-Gen Cruiser
+3102,2,Latino First-Gen Striver
+3103,9,Hispanic On-Campus Transitioner
+3104,6,White Residential Traditional
+3105,6,White Residential Traditional
+3106,10,Continuing-Gen Cruiser
+3107,2,Latino First-Gen Striver
+3108,2,Latino First-Gen Striver
+3109,7,White Commuter Working
+3110,10,Continuing-Gen Cruiser
+3111,10,Continuing-Gen Cruiser
+3112,10,Continuing-Gen Cruiser
+3113,6,White Residential Traditional
+3114,6,White Residential Traditional
+3115,10,Continuing-Gen Cruiser
+3116,9,Hispanic On-Campus Transitioner
+3117,3,Asian High-Pressure Achiever
+3118,6,White Residential Traditional
+3119,6,White Residential Traditional
+3120,1,Latina Commuter Caretaker
+3121,6,White Residential Traditional
+3122,7,White Commuter Working
+3123,4,Asian First-Gen Navigator
+3124,1,Latina Commuter Caretaker
+3125,3,Asian High-Pressure Achiever
+3126,1,Latina Commuter Caretaker
+3127,1,Latina Commuter Caretaker
+3128,10,Continuing-Gen Cruiser
+3129,10,Continuing-Gen Cruiser
+3130,3,Asian High-Pressure Achiever
+3131,3,Asian High-Pressure Achiever
+3132,10,Continuing-Gen Cruiser
+3133,1,Latina Commuter Caretaker
+3134,6,White Residential Traditional
+3135,7,White Commuter Working
+3136,10,Continuing-Gen Cruiser
+3137,6,White Residential Traditional
+3138,7,White Commuter Working
+3139,10,Continuing-Gen Cruiser
+3140,1,Latina Commuter Caretaker
+3141,10,Continuing-Gen Cruiser
+3142,6,White Residential Traditional
+3143,1,Latina Commuter Caretaker
+3144,3,Asian High-Pressure Achiever
+3145,1,Latina Commuter Caretaker
+3146,10,Continuing-Gen Cruiser
+3147,1,Latina Commuter Caretaker
+3148,4,Asian First-Gen Navigator
+3149,8,Multiracial Bridge-Builder
+3150,9,Hispanic On-Campus Transitioner
+3151,3,Asian High-Pressure Achiever
+3152,4,Asian First-Gen Navigator
+3153,10,Continuing-Gen Cruiser
+3154,2,Latino First-Gen Striver
+3155,3,Asian High-Pressure Achiever
+3156,10,Continuing-Gen Cruiser
+3157,5,Black Campus Connector
+3158,1,Latina Commuter Caretaker
+3159,2,Latino First-Gen Striver
+3160,1,Latina Commuter Caretaker
+3161,8,Multiracial Bridge-Builder
+3162,1,Latina Commuter Caretaker
+3163,10,Continuing-Gen Cruiser
+3164,8,Multiracial Bridge-Builder
+3165,3,Asian High-Pressure Achiever
+3166,2,Latino First-Gen Striver
+3167,7,White Commuter Working
+3168,1,Latina Commuter Caretaker
+3169,5,Black Campus Connector
+3170,1,Latina Commuter Caretaker
+3171,9,Hispanic On-Campus Transitioner
+3172,10,Continuing-Gen Cruiser
+3173,1,Latina Commuter Caretaker
+3174,1,Latina Commuter Caretaker
+3175,1,Latina Commuter Caretaker
+3176,6,White Residential Traditional
+3177,9,Hispanic On-Campus Transitioner
+3178,1,Latina Commuter Caretaker
+3179,6,White Residential Traditional
+3180,1,Latina Commuter Caretaker
+3181,10,Continuing-Gen Cruiser
+3182,2,Latino First-Gen Striver
+3183,2,Latino First-Gen Striver
+3184,10,Continuing-Gen Cruiser
+3185,2,Latino First-Gen Striver
+3186,9,Hispanic On-Campus Transitioner
+3187,9,Hispanic On-Campus Transitioner
+3188,1,Latina Commuter Caretaker
+3189,3,Asian High-Pressure Achiever
+3190,1,Latina Commuter Caretaker
+3191,8,Multiracial Bridge-Builder
+3192,10,Continuing-Gen Cruiser
+3193,9,Hispanic On-Campus Transitioner
+3194,4,Asian First-Gen Navigator
+3195,2,Latino First-Gen Striver
+3196,10,Continuing-Gen Cruiser
+3197,3,Asian High-Pressure Achiever
+3198,10,Continuing-Gen Cruiser
+3199,6,White Residential Traditional
+3200,10,Continuing-Gen Cruiser
+3201,5,Black Campus Connector
+3202,1,Latina Commuter Caretaker
+3203,10,Continuing-Gen Cruiser
+3204,2,Latino First-Gen Striver
+3205,7,White Commuter Working
+3206,6,White Residential Traditional
+3207,9,Hispanic On-Campus Transitioner
+3208,10,Continuing-Gen Cruiser
+3209,10,Continuing-Gen Cruiser
+3210,9,Hispanic On-Campus Transitioner
+3211,1,Latina Commuter Caretaker
+3212,4,Asian First-Gen Navigator
+3213,1,Latina Commuter Caretaker
+3214,9,Hispanic On-Campus Transitioner
+3215,1,Latina Commuter Caretaker
+3216,3,Asian High-Pressure Achiever
+3217,6,White Residential Traditional
+3218,10,Continuing-Gen Cruiser
+3219,1,Latina Commuter Caretaker
+3220,3,Asian High-Pressure Achiever
+3221,6,White Residential Traditional
+3222,7,White Commuter Working
+3223,10,Continuing-Gen Cruiser
+3224,10,Continuing-Gen Cruiser
+3225,10,Continuing-Gen Cruiser
+3226,1,Latina Commuter Caretaker
+3227,9,Hispanic On-Campus Transitioner
+3228,9,Hispanic On-Campus Transitioner
+3229,10,Continuing-Gen Cruiser
+3230,1,Latina Commuter Caretaker
+3231,5,Black Campus Connector
+3232,3,Asian High-Pressure Achiever
+3233,10,Continuing-Gen Cruiser
+3234,10,Continuing-Gen Cruiser
+3235,5,Black Campus Connector
+3236,10,Continuing-Gen Cruiser
+3237,6,White Residential Traditional
+3238,3,Asian High-Pressure Achiever
+3239,10,Continuing-Gen Cruiser
+3240,2,Latino First-Gen Striver
+3241,10,Continuing-Gen Cruiser
+3242,3,Asian High-Pressure Achiever
+3243,10,Continuing-Gen Cruiser
+3244,9,Hispanic On-Campus Transitioner
+3245,1,Latina Commuter Caretaker
+3246,10,Continuing-Gen Cruiser
+3247,10,Continuing-Gen Cruiser
+3248,10,Continuing-Gen Cruiser
+3249,1,Latina Commuter Caretaker
+3250,2,Latino First-Gen Striver
+3251,7,White Commuter Working
+3252,1,Latina Commuter Caretaker
+3253,10,Continuing-Gen Cruiser
+3254,1,Latina Commuter Caretaker
+3255,6,White Residential Traditional
+3256,1,Latina Commuter Caretaker
+3257,9,Hispanic On-Campus Transitioner
+3258,10,Continuing-Gen Cruiser
+3259,8,Multiracial Bridge-Builder
+3260,10,Continuing-Gen Cruiser
+3261,10,Continuing-Gen Cruiser
+3262,8,Multiracial Bridge-Builder
+3263,3,Asian High-Pressure Achiever
+3264,3,Asian High-Pressure Achiever
+3265,6,White Residential Traditional
+3266,9,Hispanic On-Campus Transitioner
+3267,10,Continuing-Gen Cruiser
+3268,2,Latino First-Gen Striver
+3269,10,Continuing-Gen Cruiser
+3270,1,Latina Commuter Caretaker
+3271,10,Continuing-Gen Cruiser
+3272,10,Continuing-Gen Cruiser
+3273,1,Latina Commuter Caretaker
+3274,7,White Commuter Working
+3275,2,Latino First-Gen Striver
+3276,5,Black Campus Connector
+3277,1,Latina Commuter Caretaker
+3278,1,Latina Commuter Caretaker
+3279,1,Latina Commuter Caretaker
+3280,1,Latina Commuter Caretaker
+3281,10,Continuing-Gen Cruiser
+3282,3,Asian High-Pressure Achiever
+3283,3,Asian High-Pressure Achiever
+3284,10,Continuing-Gen Cruiser
+3285,10,Continuing-Gen Cruiser
+3286,10,Continuing-Gen Cruiser
+3287,6,White Residential Traditional
+3288,10,Continuing-Gen Cruiser
+3289,1,Latina Commuter Caretaker
+3290,3,Asian High-Pressure Achiever
+3291,10,Continuing-Gen Cruiser
+3292,10,Continuing-Gen Cruiser
+3293,10,Continuing-Gen Cruiser
+3294,10,Continuing-Gen Cruiser
+3295,2,Latino First-Gen Striver
+3296,6,White Residential Traditional
+3297,1,Latina Commuter Caretaker
+3298,4,Asian First-Gen Navigator
+3299,9,Hispanic On-Campus Transitioner
+3300,10,Continuing-Gen Cruiser
+3301,9,Hispanic On-Campus Transitioner
+3302,10,Continuing-Gen Cruiser
+3303,9,Hispanic On-Campus Transitioner
+3304,10,Continuing-Gen Cruiser
+3305,9,Hispanic On-Campus Transitioner
+3306,5,Black Campus Connector
+3307,9,Hispanic On-Campus Transitioner
+3308,10,Continuing-Gen Cruiser
+3309,2,Latino First-Gen Striver
+3310,1,Latina Commuter Caretaker
+3311,9,Hispanic On-Campus Transitioner
+3312,9,Hispanic On-Campus Transitioner
+3313,10,Continuing-Gen Cruiser
+3314,8,Multiracial Bridge-Builder
+3315,8,Multiracial Bridge-Builder
+3316,10,Continuing-Gen Cruiser
+3317,10,Continuing-Gen Cruiser
+3318,10,Continuing-Gen Cruiser
+3319,10,Continuing-Gen Cruiser
+3320,1,Latina Commuter Caretaker
+3321,9,Hispanic On-Campus Transitioner
+3322,9,Hispanic On-Campus Transitioner
+3323,7,White Commuter Working
+3324,1,Latina Commuter Caretaker
+3325,10,Continuing-Gen Cruiser
+3326,9,Hispanic On-Campus Transitioner
+3327,3,Asian High-Pressure Achiever
+3328,2,Latino First-Gen Striver
+3329,6,White Residential Traditional
+3330,1,Latina Commuter Caretaker
+3331,2,Latino First-Gen Striver
+3332,5,Black Campus Connector
+3333,2,Latino First-Gen Striver
+3334,6,White Residential Traditional
+3335,3,Asian High-Pressure Achiever
+3336,10,Continuing-Gen Cruiser
+3337,10,Continuing-Gen Cruiser
+3338,6,White Residential Traditional
+3339,7,White Commuter Working
+3340,8,Multiracial Bridge-Builder
+3341,9,Hispanic On-Campus Transitioner
+3342,7,White Commuter Working
+3343,1,Latina Commuter Caretaker
+3344,6,White Residential Traditional
+3345,3,Asian High-Pressure Achiever
+3346,1,Latina Commuter Caretaker
+3347,10,Continuing-Gen Cruiser
+3348,2,Latino First-Gen Striver
+3349,8,Multiracial Bridge-Builder
+3350,3,Asian High-Pressure Achiever
+3351,3,Asian High-Pressure Achiever
+3352,9,Hispanic On-Campus Transitioner
+3353,3,Asian High-Pressure Achiever
+3354,10,Continuing-Gen Cruiser
+3355,6,White Residential Traditional
+3356,10,Continuing-Gen Cruiser
+3357,2,Latino First-Gen Striver
+3358,10,Continuing-Gen Cruiser
+3359,10,Continuing-Gen Cruiser
+3360,10,Continuing-Gen Cruiser
+3361,4,Asian First-Gen Navigator
+3362,1,Latina Commuter Caretaker
+3363,7,White Commuter Working
+3364,6,White Residential Traditional
+3365,7,White Commuter Working
+3366,10,Continuing-Gen Cruiser
+3367,6,White Residential Traditional
+3368,9,Hispanic On-Campus Transitioner
+3369,10,Continuing-Gen Cruiser
+3370,8,Multiracial Bridge-Builder
+3371,10,Continuing-Gen Cruiser
+3372,3,Asian High-Pressure Achiever
+3373,2,Latino First-Gen Striver
+3374,10,Continuing-Gen Cruiser
+3375,2,Latino First-Gen Striver
+3376,5,Black Campus Connector
+3377,3,Asian High-Pressure Achiever
+3378,3,Asian High-Pressure Achiever
+3379,8,Multiracial Bridge-Builder
+3380,10,Continuing-Gen Cruiser
+3381,4,Asian First-Gen Navigator
+3382,1,Latina Commuter Caretaker
+3383,3,Asian High-Pressure Achiever
+3384,10,Continuing-Gen Cruiser
+3385,1,Latina Commuter Caretaker
+3386,10,Continuing-Gen Cruiser
+3387,10,Continuing-Gen Cruiser
+3388,1,Latina Commuter Caretaker
+3389,7,White Commuter Working
+3390,2,Latino First-Gen Striver
+3391,8,Multiracial Bridge-Builder
+3392,1,Latina Commuter Caretaker
+3393,10,Continuing-Gen Cruiser
+3394,8,Multiracial Bridge-Builder
+3395,8,Multiracial Bridge-Builder
+3396,4,Asian First-Gen Navigator
+3397,1,Latina Commuter Caretaker
+3398,2,Latino First-Gen Striver
+3399,2,Latino First-Gen Striver
+3400,10,Continuing-Gen Cruiser
+3401,3,Asian High-Pressure Achiever
+3402,4,Asian First-Gen Navigator
+3403,3,Asian High-Pressure Achiever
+3404,1,Latina Commuter Caretaker
+3405,5,Black Campus Connector
+3406,1,Latina Commuter Caretaker
+3407,2,Latino First-Gen Striver
+3408,10,Continuing-Gen Cruiser
+3409,9,Hispanic On-Campus Transitioner
+3410,10,Continuing-Gen Cruiser
+3411,10,Continuing-Gen Cruiser
+3412,2,Latino First-Gen Striver
+3413,4,Asian First-Gen Navigator
+3414,10,Continuing-Gen Cruiser
+3415,3,Asian High-Pressure Achiever
+3416,4,Asian First-Gen Navigator
+3417,7,White Commuter Working
+3418,10,Continuing-Gen Cruiser
+3419,10,Continuing-Gen Cruiser
+3420,1,Latina Commuter Caretaker
+3421,3,Asian High-Pressure Achiever
+3422,9,Hispanic On-Campus Transitioner
+3423,3,Asian High-Pressure Achiever
+3424,10,Continuing-Gen Cruiser
+3425,1,Latina Commuter Caretaker
+3426,1,Latina Commuter Caretaker
+3427,7,White Commuter Working
+3428,1,Latina Commuter Caretaker
+3429,3,Asian High-Pressure Achiever
+3430,10,Continuing-Gen Cruiser
+3431,1,Latina Commuter Caretaker
+3432,10,Continuing-Gen Cruiser
+3433,10,Continuing-Gen Cruiser
+3434,6,White Residential Traditional
+3435,10,Continuing-Gen Cruiser
+3436,8,Multiracial Bridge-Builder
+3437,1,Latina Commuter Caretaker
+3438,7,White Commuter Working
+3439,10,Continuing-Gen Cruiser
+3440,5,Black Campus Connector
+3441,10,Continuing-Gen Cruiser
+3442,7,White Commuter Working
+3443,10,Continuing-Gen Cruiser
+3444,10,Continuing-Gen Cruiser
+3445,1,Latina Commuter Caretaker
+3446,10,Continuing-Gen Cruiser
+3447,1,Latina Commuter Caretaker
+3448,5,Black Campus Connector
+3449,10,Continuing-Gen Cruiser
+3450,3,Asian High-Pressure Achiever
+3451,7,White Commuter Working
+3452,10,Continuing-Gen Cruiser
+3453,10,Continuing-Gen Cruiser
+3454,5,Black Campus Connector
+3455,10,Continuing-Gen Cruiser
+3456,1,Latina Commuter Caretaker
+3457,3,Asian High-Pressure Achiever
+3458,9,Hispanic On-Campus Transitioner
+3459,1,Latina Commuter Caretaker
+3460,10,Continuing-Gen Cruiser
+3461,6,White Residential Traditional
+3462,4,Asian First-Gen Navigator
+3463,9,Hispanic On-Campus Transitioner
+3464,7,White Commuter Working
+3465,1,Latina Commuter Caretaker
+3466,10,Continuing-Gen Cruiser
+3467,10,Continuing-Gen Cruiser
+3468,5,Black Campus Connector
+3469,1,Latina Commuter Caretaker
+3470,8,Multiracial Bridge-Builder
+3471,9,Hispanic On-Campus Transitioner
+3472,10,Continuing-Gen Cruiser
+3473,1,Latina Commuter Caretaker
+3474,10,Continuing-Gen Cruiser
+3475,3,Asian High-Pressure Achiever
+3476,1,Latina Commuter Caretaker
+3477,4,Asian First-Gen Navigator
+3478,8,Multiracial Bridge-Builder
+3479,1,Latina Commuter Caretaker
+3480,1,Latina Commuter Caretaker
+3481,8,Multiracial Bridge-Builder
+3482,8,Multiracial Bridge-Builder
+3483,3,Asian High-Pressure Achiever
+3484,9,Hispanic On-Campus Transitioner
+3485,2,Latino First-Gen Striver
+3486,6,White Residential Traditional
+3487,1,Latina Commuter Caretaker
+3488,1,Latina Commuter Caretaker
+3489,1,Latina Commuter Caretaker
+3490,10,Continuing-Gen Cruiser
+3491,10,Continuing-Gen Cruiser
+3492,6,White Residential Traditional
+3493,10,Continuing-Gen Cruiser
+3494,1,Latina Commuter Caretaker
+3495,10,Continuing-Gen Cruiser
+3496,3,Asian High-Pressure Achiever
+3497,7,White Commuter Working
+3498,3,Asian High-Pressure Achiever
+3499,1,Latina Commuter Caretaker
+3500,4,Asian First-Gen Navigator
+3501,9,Hispanic On-Campus Transitioner
+3502,5,Black Campus Connector
+3503,2,Latino First-Gen Striver
+3504,2,Latino First-Gen Striver
+3505,10,Continuing-Gen Cruiser
+3506,1,Latina Commuter Caretaker
+3507,3,Asian High-Pressure Achiever
+3508,6,White Residential Traditional
+3509,8,Multiracial Bridge-Builder
+3510,2,Latino First-Gen Striver
+3511,2,Latino First-Gen Striver
+3512,10,Continuing-Gen Cruiser
+3513,10,Continuing-Gen Cruiser
+3514,10,Continuing-Gen Cruiser
+3515,8,Multiracial Bridge-Builder
+3516,2,Latino First-Gen Striver
+3517,10,Continuing-Gen Cruiser
+3518,10,Continuing-Gen Cruiser
+3519,9,Hispanic On-Campus Transitioner
+3520,10,Continuing-Gen Cruiser
+3521,10,Continuing-Gen Cruiser
+3522,10,Continuing-Gen Cruiser
+3523,10,Continuing-Gen Cruiser
+3524,1,Latina Commuter Caretaker
+3525,1,Latina Commuter Caretaker
+3526,4,Asian First-Gen Navigator
+3527,10,Continuing-Gen Cruiser
+3528,8,Multiracial Bridge-Builder
+3529,2,Latino First-Gen Striver
+3530,10,Continuing-Gen Cruiser
+3531,1,Latina Commuter Caretaker
+3532,10,Continuing-Gen Cruiser
+3533,6,White Residential Traditional
+3534,10,Continuing-Gen Cruiser
+3535,3,Asian High-Pressure Achiever
+3536,7,White Commuter Working
+3537,2,Latino First-Gen Striver
+3538,10,Continuing-Gen Cruiser
+3539,1,Latina Commuter Caretaker
+3540,9,Hispanic On-Campus Transitioner
+3541,10,Continuing-Gen Cruiser
+3542,8,Multiracial Bridge-Builder
+3543,2,Latino First-Gen Striver
+3544,1,Latina Commuter Caretaker
+3545,5,Black Campus Connector
+3546,4,Asian First-Gen Navigator
+3547,8,Multiracial Bridge-Builder
+3548,10,Continuing-Gen Cruiser
+3549,8,Multiracial Bridge-Builder
+3550,1,Latina Commuter Caretaker
+3551,9,Hispanic On-Campus Transitioner
+3552,6,White Residential Traditional
+3553,7,White Commuter Working
+3554,4,Asian First-Gen Navigator
+3555,4,Asian First-Gen Navigator
+3556,3,Asian High-Pressure Achiever
+3557,1,Latina Commuter Caretaker
+3558,9,Hispanic On-Campus Transitioner
+3559,10,Continuing-Gen Cruiser
+3560,1,Latina Commuter Caretaker
+3561,3,Asian High-Pressure Achiever
+3562,1,Latina Commuter Caretaker
+3563,4,Asian First-Gen Navigator
+3564,6,White Residential Traditional
+3565,6,White Residential Traditional
+3566,3,Asian High-Pressure Achiever
+3567,10,Continuing-Gen Cruiser
+3568,10,Continuing-Gen Cruiser
+3569,10,Continuing-Gen Cruiser
+3570,10,Continuing-Gen Cruiser
+3571,1,Latina Commuter Caretaker
+3572,5,Black Campus Connector
+3573,2,Latino First-Gen Striver
+3574,7,White Commuter Working
+3575,10,Continuing-Gen Cruiser
+3576,3,Asian High-Pressure Achiever
+3577,8,Multiracial Bridge-Builder
+3578,5,Black Campus Connector
+3579,10,Continuing-Gen Cruiser
+3580,10,Continuing-Gen Cruiser
+3581,10,Continuing-Gen Cruiser
+3582,3,Asian High-Pressure Achiever
+3583,1,Latina Commuter Caretaker
+3584,1,Latina Commuter Caretaker
+3585,10,Continuing-Gen Cruiser
+3586,10,Continuing-Gen Cruiser
+3587,3,Asian High-Pressure Achiever
+3588,6,White Residential Traditional
+3589,1,Latina Commuter Caretaker
+3590,6,White Residential Traditional
+3591,4,Asian First-Gen Navigator
+3592,10,Continuing-Gen Cruiser
+3593,3,Asian High-Pressure Achiever
+3594,9,Hispanic On-Campus Transitioner
+3595,3,Asian High-Pressure Achiever
+3596,3,Asian High-Pressure Achiever
+3597,1,Latina Commuter Caretaker
+3598,2,Latino First-Gen Striver
+3599,10,Continuing-Gen Cruiser
+3600,10,Continuing-Gen Cruiser
+3601,10,Continuing-Gen Cruiser
+3602,6,White Residential Traditional
+3603,1,Latina Commuter Caretaker
+3604,2,Latino First-Gen Striver
+3605,2,Latino First-Gen Striver
+3606,2,Latino First-Gen Striver
+3607,2,Latino First-Gen Striver
+3608,3,Asian High-Pressure Achiever
+3609,6,White Residential Traditional
+3610,10,Continuing-Gen Cruiser
+3611,6,White Residential Traditional
+3612,10,Continuing-Gen Cruiser
+3613,2,Latino First-Gen Striver
+3614,3,Asian High-Pressure Achiever
+3615,9,Hispanic On-Campus Transitioner
+3616,7,White Commuter Working
+3617,1,Latina Commuter Caretaker
+3618,10,Continuing-Gen Cruiser
+3619,1,Latina Commuter Caretaker
+3620,4,Asian First-Gen Navigator
+3621,3,Asian High-Pressure Achiever
+3622,8,Multiracial Bridge-Builder
+3623,1,Latina Commuter Caretaker
+3624,8,Multiracial Bridge-Builder
+3625,2,Latino First-Gen Striver
+3626,3,Asian High-Pressure Achiever
+3627,2,Latino First-Gen Striver
+3628,1,Latina Commuter Caretaker
+3629,5,Black Campus Connector
+3630,1,Latina Commuter Caretaker
+3631,8,Multiracial Bridge-Builder
+3632,1,Latina Commuter Caretaker
+3633,1,Latina Commuter Caretaker
+3634,8,Multiracial Bridge-Builder
+3635,1,Latina Commuter Caretaker
+3636,1,Latina Commuter Caretaker
+3637,2,Latino First-Gen Striver
+3638,10,Continuing-Gen Cruiser
+3639,4,Asian First-Gen Navigator
+3640,1,Latina Commuter Caretaker
+3641,9,Hispanic On-Campus Transitioner
+3642,10,Continuing-Gen Cruiser
+3643,1,Latina Commuter Caretaker
+3644,7,White Commuter Working
+3645,3,Asian High-Pressure Achiever
+3646,6,White Residential Traditional
+3647,1,Latina Commuter Caretaker
+3648,6,White Residential Traditional
+3649,8,Multiracial Bridge-Builder
+3650,6,White Residential Traditional
+3651,10,Continuing-Gen Cruiser
+3652,3,Asian High-Pressure Achiever
+3653,2,Latino First-Gen Striver
+3654,2,Latino First-Gen Striver
+3655,1,Latina Commuter Caretaker
+3656,7,White Commuter Working
+3657,3,Asian High-Pressure Achiever
+3658,3,Asian High-Pressure Achiever
+3659,8,Multiracial Bridge-Builder
+3660,2,Latino First-Gen Striver
+3661,1,Latina Commuter Caretaker
+3662,8,Multiracial Bridge-Builder
+3663,2,Latino First-Gen Striver
+3664,2,Latino First-Gen Striver
+3665,10,Continuing-Gen Cruiser
+3666,3,Asian High-Pressure Achiever
+3667,1,Latina Commuter Caretaker
+3668,3,Asian High-Pressure Achiever
+3669,1,Latina Commuter Caretaker
+3670,10,Continuing-Gen Cruiser
+3671,4,Asian First-Gen Navigator
+3672,1,Latina Commuter Caretaker
+3673,2,Latino First-Gen Striver
+3674,2,Latino First-Gen Striver
+3675,7,White Commuter Working
+3676,3,Asian High-Pressure Achiever
+3677,10,Continuing-Gen Cruiser
+3678,6,White Residential Traditional
+3679,6,White Residential Traditional
+3680,7,White Commuter Working
+3681,10,Continuing-Gen Cruiser
+3682,2,Latino First-Gen Striver
+3683,10,Continuing-Gen Cruiser
+3684,1,Latina Commuter Caretaker
+3685,9,Hispanic On-Campus Transitioner
+3686,7,White Commuter Working
+3687,2,Latino First-Gen Striver
+3688,10,Continuing-Gen Cruiser
+3689,2,Latino First-Gen Striver
+3690,6,White Residential Traditional
+3691,8,Multiracial Bridge-Builder
+3692,9,Hispanic On-Campus Transitioner
+3693,10,Continuing-Gen Cruiser
+3694,9,Hispanic On-Campus Transitioner
+3695,4,Asian First-Gen Navigator
+3696,10,Continuing-Gen Cruiser
+3697,10,Continuing-Gen Cruiser
+3698,6,White Residential Traditional
+3699,1,Latina Commuter Caretaker
+3700,10,Continuing-Gen Cruiser
+3701,5,Black Campus Connector
+3702,10,Continuing-Gen Cruiser
+3703,10,Continuing-Gen Cruiser
+3704,10,Continuing-Gen Cruiser
+3705,10,Continuing-Gen Cruiser
+3706,2,Latino First-Gen Striver
+3707,8,Multiracial Bridge-Builder
+3708,1,Latina Commuter Caretaker
+3709,9,Hispanic On-Campus Transitioner
+3710,6,White Residential Traditional
+3711,3,Asian High-Pressure Achiever
+3712,10,Continuing-Gen Cruiser
+3713,7,White Commuter Working
+3714,9,Hispanic On-Campus Transitioner
+3715,4,Asian First-Gen Navigator
+3716,9,Hispanic On-Campus Transitioner
+3717,10,Continuing-Gen Cruiser
+3718,4,Asian First-Gen Navigator
+3719,10,Continuing-Gen Cruiser
+3720,10,Continuing-Gen Cruiser
+3721,9,Hispanic On-Campus Transitioner
+3722,10,Continuing-Gen Cruiser
+3723,1,Latina Commuter Caretaker
+3724,10,Continuing-Gen Cruiser
+3725,2,Latino First-Gen Striver
+3726,8,Multiracial Bridge-Builder
+3727,1,Latina Commuter Caretaker
+3728,2,Latino First-Gen Striver
+3729,6,White Residential Traditional
+3730,8,Multiracial Bridge-Builder
+3731,6,White Residential Traditional
+3732,10,Continuing-Gen Cruiser
+3733,4,Asian First-Gen Navigator
+3734,2,Latino First-Gen Striver
+3735,3,Asian High-Pressure Achiever
+3736,1,Latina Commuter Caretaker
+3737,10,Continuing-Gen Cruiser
+3738,10,Continuing-Gen Cruiser
+3739,10,Continuing-Gen Cruiser
+3740,2,Latino First-Gen Striver
+3741,10,Continuing-Gen Cruiser
+3742,10,Continuing-Gen Cruiser
+3743,2,Latino First-Gen Striver
+3744,9,Hispanic On-Campus Transitioner
+3745,10,Continuing-Gen Cruiser
+3746,10,Continuing-Gen Cruiser
+3747,8,Multiracial Bridge-Builder
+3748,8,Multiracial Bridge-Builder
+3749,10,Continuing-Gen Cruiser
+3750,10,Continuing-Gen Cruiser
+3751,10,Continuing-Gen Cruiser
+3752,7,White Commuter Working
+3753,3,Asian High-Pressure Achiever
+3754,10,Continuing-Gen Cruiser
+3755,1,Latina Commuter Caretaker
+3756,1,Latina Commuter Caretaker
+3757,2,Latino First-Gen Striver
+3758,1,Latina Commuter Caretaker
+3759,1,Latina Commuter Caretaker
+3760,10,Continuing-Gen Cruiser
+3761,6,White Residential Traditional
+3762,8,Multiracial Bridge-Builder
+3763,10,Continuing-Gen Cruiser
+3764,3,Asian High-Pressure Achiever
+3765,10,Continuing-Gen Cruiser
+3766,2,Latino First-Gen Striver
+3767,10,Continuing-Gen Cruiser
+3768,1,Latina Commuter Caretaker
+3769,6,White Residential Traditional
+3770,5,Black Campus Connector
+3771,2,Latino First-Gen Striver
+3772,3,Asian High-Pressure Achiever
+3773,10,Continuing-Gen Cruiser
+3774,1,Latina Commuter Caretaker
+3775,3,Asian High-Pressure Achiever
+3776,6,White Residential Traditional
+3777,9,Hispanic On-Campus Transitioner
+3778,3,Asian High-Pressure Achiever
+3779,1,Latina Commuter Caretaker
+3780,9,Hispanic On-Campus Transitioner
+3781,6,White Residential Traditional
+3782,2,Latino First-Gen Striver
+3783,10,Continuing-Gen Cruiser
+3784,4,Asian First-Gen Navigator
+3785,10,Continuing-Gen Cruiser
+3786,6,White Residential Traditional
+3787,10,Continuing-Gen Cruiser
+3788,1,Latina Commuter Caretaker
+3789,2,Latino First-Gen Striver
+3790,6,White Residential Traditional
+3791,2,Latino First-Gen Striver
+3792,4,Asian First-Gen Navigator
+3793,10,Continuing-Gen Cruiser
+3794,2,Latino First-Gen Striver
+3795,3,Asian High-Pressure Achiever
+3796,2,Latino First-Gen Striver
+3797,3,Asian High-Pressure Achiever
+3798,10,Continuing-Gen Cruiser
+3799,1,Latina Commuter Caretaker
+3800,10,Continuing-Gen Cruiser
+3801,9,Hispanic On-Campus Transitioner
+3802,10,Continuing-Gen Cruiser
+3803,10,Continuing-Gen Cruiser
+3804,8,Multiracial Bridge-Builder
+3805,1,Latina Commuter Caretaker
+3806,9,Hispanic On-Campus Transitioner
+3807,10,Continuing-Gen Cruiser
+3808,1,Latina Commuter Caretaker
+3809,2,Latino First-Gen Striver
+3810,10,Continuing-Gen Cruiser
+3811,4,Asian First-Gen Navigator
+3812,5,Black Campus Connector
+3813,10,Continuing-Gen Cruiser
+3814,1,Latina Commuter Caretaker
+3815,10,Continuing-Gen Cruiser
+3816,10,Continuing-Gen Cruiser
+3817,2,Latino First-Gen Striver
+3818,7,White Commuter Working
+3819,1,Latina Commuter Caretaker
+3820,2,Latino First-Gen Striver
+3821,4,Asian First-Gen Navigator
+3822,10,Continuing-Gen Cruiser
+3823,10,Continuing-Gen Cruiser
+3824,1,Latina Commuter Caretaker
+3825,3,Asian High-Pressure Achiever
+3826,10,Continuing-Gen Cruiser
+3827,6,White Residential Traditional
+3828,2,Latino First-Gen Striver
+3829,6,White Residential Traditional
+3830,10,Continuing-Gen Cruiser
+3831,10,Continuing-Gen Cruiser
+3832,1,Latina Commuter Caretaker
+3833,10,Continuing-Gen Cruiser
+3834,1,Latina Commuter Caretaker
+3835,4,Asian First-Gen Navigator
+3836,1,Latina Commuter Caretaker
+3837,9,Hispanic On-Campus Transitioner
+3838,1,Latina Commuter Caretaker
+3839,1,Latina Commuter Caretaker
+3840,10,Continuing-Gen Cruiser
+3841,1,Latina Commuter Caretaker
+3842,9,Hispanic On-Campus Transitioner
+3843,4,Asian First-Gen Navigator
+3844,10,Continuing-Gen Cruiser
+3845,4,Asian First-Gen Navigator
+3846,1,Latina Commuter Caretaker
+3847,2,Latino First-Gen Striver
+3848,1,Latina Commuter Caretaker
+3849,1,Latina Commuter Caretaker
+3850,3,Asian High-Pressure Achiever
+3851,4,Asian First-Gen Navigator
+3852,10,Continuing-Gen Cruiser
+3853,8,Multiracial Bridge-Builder
+3854,1,Latina Commuter Caretaker
+3855,8,Multiracial Bridge-Builder
+3856,9,Hispanic On-Campus Transitioner
+3857,10,Continuing-Gen Cruiser
+3858,7,White Commuter Working
+3859,2,Latino First-Gen Striver
+3860,10,Continuing-Gen Cruiser
+3861,8,Multiracial Bridge-Builder
+3862,6,White Residential Traditional
+3863,9,Hispanic On-Campus Transitioner
+3864,10,Continuing-Gen Cruiser
+3865,3,Asian High-Pressure Achiever
+3866,10,Continuing-Gen Cruiser
+3867,9,Hispanic On-Campus Transitioner
+3868,1,Latina Commuter Caretaker
+3869,2,Latino First-Gen Striver
+3870,2,Latino First-Gen Striver
+3871,2,Latino First-Gen Striver
+3872,10,Continuing-Gen Cruiser
+3873,9,Hispanic On-Campus Transitioner
+3874,6,White Residential Traditional
+3875,8,Multiracial Bridge-Builder
+3876,1,Latina Commuter Caretaker
+3877,1,Latina Commuter Caretaker
+3878,8,Multiracial Bridge-Builder
+3879,10,Continuing-Gen Cruiser
+3880,9,Hispanic On-Campus Transitioner
+3881,10,Continuing-Gen Cruiser
+3882,4,Asian First-Gen Navigator
+3883,1,Latina Commuter Caretaker
+3884,10,Continuing-Gen Cruiser
+3885,2,Latino First-Gen Striver
+3886,10,Continuing-Gen Cruiser
+3887,2,Latino First-Gen Striver
+3888,10,Continuing-Gen Cruiser
+3889,10,Continuing-Gen Cruiser
+3890,6,White Residential Traditional
+3891,3,Asian High-Pressure Achiever
+3892,10,Continuing-Gen Cruiser
+3893,1,Latina Commuter Caretaker
+3894,7,White Commuter Working
+3895,10,Continuing-Gen Cruiser
+3896,4,Asian First-Gen Navigator
+3897,6,White Residential Traditional
+3898,4,Asian First-Gen Navigator
+3899,10,Continuing-Gen Cruiser
+3900,2,Latino First-Gen Striver
+3901,1,Latina Commuter Caretaker
+3902,6,White Residential Traditional
+3903,8,Multiracial Bridge-Builder
+3904,10,Continuing-Gen Cruiser
+3905,5,Black Campus Connector
+3906,8,Multiracial Bridge-Builder
+3907,8,Multiracial Bridge-Builder
+3908,2,Latino First-Gen Striver
+3909,6,White Residential Traditional
+3910,3,Asian High-Pressure Achiever
+3911,4,Asian First-Gen Navigator
+3912,10,Continuing-Gen Cruiser
+3913,7,White Commuter Working
+3914,10,Continuing-Gen Cruiser
+3915,4,Asian First-Gen Navigator
+3916,9,Hispanic On-Campus Transitioner
+3917,10,Continuing-Gen Cruiser
+3918,1,Latina Commuter Caretaker
+3919,1,Latina Commuter Caretaker
+3920,10,Continuing-Gen Cruiser
+3921,4,Asian First-Gen Navigator
+3922,1,Latina Commuter Caretaker
+3923,9,Hispanic On-Campus Transitioner
+3924,1,Latina Commuter Caretaker
+3925,10,Continuing-Gen Cruiser
+3926,2,Latino First-Gen Striver
+3927,1,Latina Commuter Caretaker
+3928,6,White Residential Traditional
+3929,1,Latina Commuter Caretaker
+3930,3,Asian High-Pressure Achiever
+3931,8,Multiracial Bridge-Builder
+3932,10,Continuing-Gen Cruiser
+3933,2,Latino First-Gen Striver
+3934,9,Hispanic On-Campus Transitioner
+3935,6,White Residential Traditional
+3936,2,Latino First-Gen Striver
+3937,3,Asian High-Pressure Achiever
+3938,10,Continuing-Gen Cruiser
+3939,6,White Residential Traditional
+3940,1,Latina Commuter Caretaker
+3941,1,Latina Commuter Caretaker
+3942,10,Continuing-Gen Cruiser
+3943,2,Latino First-Gen Striver
+3944,2,Latino First-Gen Striver
+3945,4,Asian First-Gen Navigator
+3946,3,Asian High-Pressure Achiever
+3947,10,Continuing-Gen Cruiser
+3948,9,Hispanic On-Campus Transitioner
+3949,10,Continuing-Gen Cruiser
+3950,3,Asian High-Pressure Achiever
+3951,2,Latino First-Gen Striver
+3952,9,Hispanic On-Campus Transitioner
+3953,1,Latina Commuter Caretaker
+3954,2,Latino First-Gen Striver
+3955,10,Continuing-Gen Cruiser
+3956,7,White Commuter Working
+3957,10,Continuing-Gen Cruiser
+3958,1,Latina Commuter Caretaker
+3959,6,White Residential Traditional
+3960,2,Latino First-Gen Striver
+3961,1,Latina Commuter Caretaker
+3962,2,Latino First-Gen Striver
+3963,3,Asian High-Pressure Achiever
+3964,3,Asian High-Pressure Achiever
+3965,2,Latino First-Gen Striver
+3966,10,Continuing-Gen Cruiser
+3967,10,Continuing-Gen Cruiser
+3968,1,Latina Commuter Caretaker
+3969,3,Asian High-Pressure Achiever
+3970,3,Asian High-Pressure Achiever
+3971,3,Asian High-Pressure Achiever
+3972,1,Latina Commuter Caretaker
+3973,10,Continuing-Gen Cruiser
+3974,6,White Residential Traditional
+3975,9,Hispanic On-Campus Transitioner
+3976,4,Asian First-Gen Navigator
+3977,7,White Commuter Working
+3978,6,White Residential Traditional
+3979,2,Latino First-Gen Striver
+3980,10,Continuing-Gen Cruiser
+3981,10,Continuing-Gen Cruiser
+3982,10,Continuing-Gen Cruiser
+3983,1,Latina Commuter Caretaker
+3984,10,Continuing-Gen Cruiser
+3985,10,Continuing-Gen Cruiser
+3986,10,Continuing-Gen Cruiser
+3987,2,Latino First-Gen Striver
+3988,7,White Commuter Working
+3989,2,Latino First-Gen Striver
+3990,2,Latino First-Gen Striver
+3991,10,Continuing-Gen Cruiser
+3992,9,Hispanic On-Campus Transitioner
+3993,1,Latina Commuter Caretaker
+3994,4,Asian First-Gen Navigator
+3995,9,Hispanic On-Campus Transitioner
+3996,2,Latino First-Gen Striver
+3997,1,Latina Commuter Caretaker
+3998,2,Latino First-Gen Striver
+3999,1,Latina Commuter Caretaker
+4000,8,Multiracial Bridge-Builder
+4001,2,Latino First-Gen Striver
+4002,2,Latino First-Gen Striver
+4003,1,Latina Commuter Caretaker
+4004,8,Multiracial Bridge-Builder
+4005,4,Asian First-Gen Navigator
+4006,6,White Residential Traditional
+4007,10,Continuing-Gen Cruiser
+4008,7,White Commuter Working
+4009,6,White Residential Traditional
+4010,5,Black Campus Connector
+4011,2,Latino First-Gen Striver
+4012,10,Continuing-Gen Cruiser
+4013,10,Continuing-Gen Cruiser
+4014,9,Hispanic On-Campus Transitioner
+4015,7,White Commuter Working
+4016,5,Black Campus Connector
+4017,10,Continuing-Gen Cruiser
+4018,10,Continuing-Gen Cruiser
+4019,9,Hispanic On-Campus Transitioner
+4020,9,Hispanic On-Campus Transitioner
+4021,6,White Residential Traditional
+4022,10,Continuing-Gen Cruiser
+4023,8,Multiracial Bridge-Builder
+4024,1,Latina Commuter Caretaker
+4025,9,Hispanic On-Campus Transitioner
+4026,7,White Commuter Working
+4027,4,Asian First-Gen Navigator
+4028,10,Continuing-Gen Cruiser
+4029,3,Asian High-Pressure Achiever
+4030,1,Latina Commuter Caretaker
+4031,3,Asian High-Pressure Achiever
+4032,1,Latina Commuter Caretaker
+4033,2,Latino First-Gen Striver
+4034,1,Latina Commuter Caretaker
+4035,10,Continuing-Gen Cruiser
+4036,6,White Residential Traditional
+4037,10,Continuing-Gen Cruiser
+4038,1,Latina Commuter Caretaker
+4039,1,Latina Commuter Caretaker
+4040,9,Hispanic On-Campus Transitioner
+4041,8,Multiracial Bridge-Builder
+4042,9,Hispanic On-Campus Transitioner
+4043,8,Multiracial Bridge-Builder
+4044,9,Hispanic On-Campus Transitioner
+4045,4,Asian First-Gen Navigator
+4046,1,Latina Commuter Caretaker
+4047,10,Continuing-Gen Cruiser
+4048,10,Continuing-Gen Cruiser
+4049,6,White Residential Traditional
+4050,2,Latino First-Gen Striver
+4051,1,Latina Commuter Caretaker
+4052,3,Asian High-Pressure Achiever
+4053,2,Latino First-Gen Striver
+4054,10,Continuing-Gen Cruiser
+4055,1,Latina Commuter Caretaker
+4056,6,White Residential Traditional
+4057,7,White Commuter Working
+4058,5,Black Campus Connector
+4059,10,Continuing-Gen Cruiser
+4060,10,Continuing-Gen Cruiser
+4061,6,White Residential Traditional
+4062,4,Asian First-Gen Navigator
+4063,10,Continuing-Gen Cruiser
+4064,6,White Residential Traditional
+4065,6,White Residential Traditional
+4066,5,Black Campus Connector
+4067,2,Latino First-Gen Striver
+4068,9,Hispanic On-Campus Transitioner
+4069,4,Asian First-Gen Navigator
+4070,8,Multiracial Bridge-Builder
+4071,10,Continuing-Gen Cruiser
+4072,10,Continuing-Gen Cruiser
+4073,5,Black Campus Connector
+4074,1,Latina Commuter Caretaker
+4075,10,Continuing-Gen Cruiser
+4076,1,Latina Commuter Caretaker
+4077,8,Multiracial Bridge-Builder
+4078,3,Asian High-Pressure Achiever
+4079,9,Hispanic On-Campus Transitioner
+4080,2,Latino First-Gen Striver
+4081,1,Latina Commuter Caretaker
+4082,6,White Residential Traditional
+4083,2,Latino First-Gen Striver
+4084,1,Latina Commuter Caretaker
+4085,8,Multiracial Bridge-Builder
+4086,3,Asian High-Pressure Achiever
+4087,7,White Commuter Working
+4088,1,Latina Commuter Caretaker
+4089,3,Asian High-Pressure Achiever
+4090,10,Continuing-Gen Cruiser
+4091,5,Black Campus Connector
+4092,4,Asian First-Gen Navigator
+4093,10,Continuing-Gen Cruiser
+4094,2,Latino First-Gen Striver
+4095,6,White Residential Traditional
+4096,2,Latino First-Gen Striver
+4097,8,Multiracial Bridge-Builder
+4098,2,Latino First-Gen Striver
+4099,1,Latina Commuter Caretaker
+4100,2,Latino First-Gen Striver
+4101,1,Latina Commuter Caretaker
+4102,10,Continuing-Gen Cruiser
+4103,8,Multiracial Bridge-Builder
+4104,10,Continuing-Gen Cruiser
+4105,6,White Residential Traditional
+4106,2,Latino First-Gen Striver
+4107,10,Continuing-Gen Cruiser
+4108,10,Continuing-Gen Cruiser
+4109,10,Continuing-Gen Cruiser
+4110,2,Latino First-Gen Striver
+4111,7,White Commuter Working
+4112,2,Latino First-Gen Striver
+4113,2,Latino First-Gen Striver
+4114,5,Black Campus Connector
+4115,8,Multiracial Bridge-Builder
+4116,10,Continuing-Gen Cruiser
+4117,1,Latina Commuter Caretaker
+4118,8,Multiracial Bridge-Builder
+4119,10,Continuing-Gen Cruiser
+4120,6,White Residential Traditional
+4121,6,White Residential Traditional
+4122,3,Asian High-Pressure Achiever
+4123,10,Continuing-Gen Cruiser
+4124,1,Latina Commuter Caretaker
+4125,10,Continuing-Gen Cruiser
+4126,2,Latino First-Gen Striver
+4127,6,White Residential Traditional
+4128,4,Asian First-Gen Navigator
+4129,8,Multiracial Bridge-Builder
+4130,1,Latina Commuter Caretaker
+4131,4,Asian First-Gen Navigator
+4132,10,Continuing-Gen Cruiser
+4133,1,Latina Commuter Caretaker
+4134,10,Continuing-Gen Cruiser
+4135,5,Black Campus Connector
+4136,4,Asian First-Gen Navigator
+4137,6,White Residential Traditional
+4138,2,Latino First-Gen Striver
+4139,3,Asian High-Pressure Achiever
+4140,4,Asian First-Gen Navigator
+4141,6,White Residential Traditional
+4142,10,Continuing-Gen Cruiser
+4143,3,Asian High-Pressure Achiever
+4144,6,White Residential Traditional
+4145,6,White Residential Traditional
+4146,9,Hispanic On-Campus Transitioner
+4147,7,White Commuter Working
+4148,5,Black Campus Connector
+4149,10,Continuing-Gen Cruiser
+4150,10,Continuing-Gen Cruiser
+4151,2,Latino First-Gen Striver
+4152,4,Asian First-Gen Navigator
+4153,1,Latina Commuter Caretaker
+4154,1,Latina Commuter Caretaker
+4155,10,Continuing-Gen Cruiser
+4156,3,Asian High-Pressure Achiever
+4157,10,Continuing-Gen Cruiser
+4158,10,Continuing-Gen Cruiser
+4159,10,Continuing-Gen Cruiser
+4160,6,White Residential Traditional
+4161,1,Latina Commuter Caretaker
+4162,10,Continuing-Gen Cruiser
+4163,3,Asian High-Pressure Achiever
+4164,9,Hispanic On-Campus Transitioner
+4165,10,Continuing-Gen Cruiser
+4166,3,Asian High-Pressure Achiever
+4167,8,Multiracial Bridge-Builder
+4168,10,Continuing-Gen Cruiser
+4169,8,Multiracial Bridge-Builder
+4170,6,White Residential Traditional
+4171,6,White Residential Traditional
+4172,4,Asian First-Gen Navigator
+4173,3,Asian High-Pressure Achiever
+4174,1,Latina Commuter Caretaker
+4175,9,Hispanic On-Campus Transitioner
+4176,10,Continuing-Gen Cruiser
+4177,8,Multiracial Bridge-Builder
+4178,3,Asian High-Pressure Achiever
+4179,1,Latina Commuter Caretaker
+4180,10,Continuing-Gen Cruiser
+4181,2,Latino First-Gen Striver
+4182,10,Continuing-Gen Cruiser
+4183,3,Asian High-Pressure Achiever
+4184,3,Asian High-Pressure Achiever
+4185,9,Hispanic On-Campus Transitioner
+4186,9,Hispanic On-Campus Transitioner
+4187,10,Continuing-Gen Cruiser
+4188,1,Latina Commuter Caretaker
+4189,10,Continuing-Gen Cruiser
+4190,9,Hispanic On-Campus Transitioner
+4191,1,Latina Commuter Caretaker
+4192,6,White Residential Traditional
+4193,10,Continuing-Gen Cruiser
+4194,1,Latina Commuter Caretaker
+4195,10,Continuing-Gen Cruiser
+4196,9,Hispanic On-Campus Transitioner
+4197,4,Asian First-Gen Navigator
+4198,10,Continuing-Gen Cruiser
+4199,4,Asian First-Gen Navigator
+4200,1,Latina Commuter Caretaker
+4201,1,Latina Commuter Caretaker
+4202,6,White Residential Traditional
+4203,10,Continuing-Gen Cruiser
+4204,1,Latina Commuter Caretaker
+4205,1,Latina Commuter Caretaker
+4206,4,Asian First-Gen Navigator
+4207,9,Hispanic On-Campus Transitioner
+4208,10,Continuing-Gen Cruiser
+4209,1,Latina Commuter Caretaker
+4210,8,Multiracial Bridge-Builder
+4211,1,Latina Commuter Caretaker
+4212,2,Latino First-Gen Striver
+4213,10,Continuing-Gen Cruiser
+4214,5,Black Campus Connector
+4215,2,Latino First-Gen Striver
+4216,2,Latino First-Gen Striver
+4217,3,Asian High-Pressure Achiever
+4218,1,Latina Commuter Caretaker
+4219,3,Asian High-Pressure Achiever
+4220,2,Latino First-Gen Striver
+4221,8,Multiracial Bridge-Builder
+4222,7,White Commuter Working
+4223,7,White Commuter Working
+4224,8,Multiracial Bridge-Builder
+4225,3,Asian High-Pressure Achiever
+4226,3,Asian High-Pressure Achiever
+4227,1,Latina Commuter Caretaker
+4228,1,Latina Commuter Caretaker
+4229,10,Continuing-Gen Cruiser
+4230,2,Latino First-Gen Striver
+4231,1,Latina Commuter Caretaker
+4232,1,Latina Commuter Caretaker
+4233,5,Black Campus Connector
+4234,2,Latino First-Gen Striver
+4235,10,Continuing-Gen Cruiser
+4236,2,Latino First-Gen Striver
+4237,10,Continuing-Gen Cruiser
+4238,10,Continuing-Gen Cruiser
+4239,8,Multiracial Bridge-Builder
+4240,10,Continuing-Gen Cruiser
+4241,7,White Commuter Working
+4242,2,Latino First-Gen Striver
+4243,4,Asian First-Gen Navigator
+4244,3,Asian High-Pressure Achiever
+4245,7,White Commuter Working
+4246,10,Continuing-Gen Cruiser
+4247,1,Latina Commuter Caretaker
+4248,3,Asian High-Pressure Achiever
+4249,3,Asian High-Pressure Achiever
+4250,1,Latina Commuter Caretaker
+4251,3,Asian High-Pressure Achiever
+4252,3,Asian High-Pressure Achiever
+4253,4,Asian First-Gen Navigator
+4254,1,Latina Commuter Caretaker
+4255,9,Hispanic On-Campus Transitioner
+4256,8,Multiracial Bridge-Builder
+4257,3,Asian High-Pressure Achiever
+4258,3,Asian High-Pressure Achiever
+4259,1,Latina Commuter Caretaker
+4260,9,Hispanic On-Campus Transitioner
+4261,2,Latino First-Gen Striver
+4262,10,Continuing-Gen Cruiser
+4263,6,White Residential Traditional
+4264,6,White Residential Traditional
+4265,10,Continuing-Gen Cruiser
+4266,2,Latino First-Gen Striver
+4267,2,Latino First-Gen Striver
+4268,1,Latina Commuter Caretaker
+4269,10,Continuing-Gen Cruiser
+4270,1,Latina Commuter Caretaker
+4271,1,Latina Commuter Caretaker
+4272,1,Latina Commuter Caretaker
+4273,1,Latina Commuter Caretaker
+4274,10,Continuing-Gen Cruiser
+4275,6,White Residential Traditional
+4276,10,Continuing-Gen Cruiser
+4277,2,Latino First-Gen Striver
+4278,3,Asian High-Pressure Achiever
+4279,7,White Commuter Working
+4280,10,Continuing-Gen Cruiser
+4281,1,Latina Commuter Caretaker
+4282,4,Asian First-Gen Navigator
+4283,5,Black Campus Connector
+4284,7,White Commuter Working
+4285,10,Continuing-Gen Cruiser
+4286,1,Latina Commuter Caretaker
+4287,3,Asian High-Pressure Achiever
+4288,2,Latino First-Gen Striver
+4289,2,Latino First-Gen Striver
+4290,9,Hispanic On-Campus Transitioner
+4291,10,Continuing-Gen Cruiser
+4292,3,Asian High-Pressure Achiever
+4293,9,Hispanic On-Campus Transitioner
+4294,1,Latina Commuter Caretaker
+4295,1,Latina Commuter Caretaker
+4296,7,White Commuter Working
+4297,3,Asian High-Pressure Achiever
+4298,1,Latina Commuter Caretaker
+4299,3,Asian High-Pressure Achiever
+4300,6,White Residential Traditional
+4301,1,Latina Commuter Caretaker
+4302,10,Continuing-Gen Cruiser
+4303,10,Continuing-Gen Cruiser
+4304,1,Latina Commuter Caretaker
+4305,8,Multiracial Bridge-Builder
+4306,3,Asian High-Pressure Achiever
+4307,3,Asian High-Pressure Achiever
+4308,8,Multiracial Bridge-Builder
+4309,2,Latino First-Gen Striver
+4310,6,White Residential Traditional
+4311,10,Continuing-Gen Cruiser
+4312,10,Continuing-Gen Cruiser
+4313,2,Latino First-Gen Striver
+4314,10,Continuing-Gen Cruiser
+4315,5,Black Campus Connector
+4316,3,Asian High-Pressure Achiever
+4317,3,Asian High-Pressure Achiever
+4318,4,Asian First-Gen Navigator
+4319,1,Latina Commuter Caretaker
+4320,10,Continuing-Gen Cruiser
+4321,3,Asian High-Pressure Achiever
+4322,3,Asian High-Pressure Achiever
+4323,2,Latino First-Gen Striver
+4324,10,Continuing-Gen Cruiser
+4325,9,Hispanic On-Campus Transitioner
+4326,6,White Residential Traditional
+4327,1,Latina Commuter Caretaker
+4328,1,Latina Commuter Caretaker
+4329,4,Asian First-Gen Navigator
+4330,7,White Commuter Working
+4331,10,Continuing-Gen Cruiser
+4332,10,Continuing-Gen Cruiser
+4333,1,Latina Commuter Caretaker
+4334,8,Multiracial Bridge-Builder
+4335,1,Latina Commuter Caretaker
+4336,2,Latino First-Gen Striver
+4337,10,Continuing-Gen Cruiser
+4338,10,Continuing-Gen Cruiser
+4339,6,White Residential Traditional
+4340,4,Asian First-Gen Navigator
+4341,1,Latina Commuter Caretaker
+4342,1,Latina Commuter Caretaker
+4343,8,Multiracial Bridge-Builder
+4344,1,Latina Commuter Caretaker
+4345,10,Continuing-Gen Cruiser
+4346,10,Continuing-Gen Cruiser
+4347,10,Continuing-Gen Cruiser
+4348,1,Latina Commuter Caretaker
+4349,5,Black Campus Connector
+4350,10,Continuing-Gen Cruiser
+4351,7,White Commuter Working
+4352,10,Continuing-Gen Cruiser
+4353,10,Continuing-Gen Cruiser
+4354,9,Hispanic On-Campus Transitioner
+4355,8,Multiracial Bridge-Builder
+4356,10,Continuing-Gen Cruiser
+4357,9,Hispanic On-Campus Transitioner
+4358,1,Latina Commuter Caretaker
+4359,1,Latina Commuter Caretaker
+4360,10,Continuing-Gen Cruiser
+4361,4,Asian First-Gen Navigator
+4362,1,Latina Commuter Caretaker
+4363,10,Continuing-Gen Cruiser
+4364,6,White Residential Traditional
+4365,7,White Commuter Working
+4366,4,Asian First-Gen Navigator
+4367,1,Latina Commuter Caretaker
+4368,6,White Residential Traditional
+4369,4,Asian First-Gen Navigator
+4370,8,Multiracial Bridge-Builder
+4371,10,Continuing-Gen Cruiser
+4372,3,Asian High-Pressure Achiever
+4373,10,Continuing-Gen Cruiser
+4374,1,Latina Commuter Caretaker
+4375,3,Asian High-Pressure Achiever
+4376,2,Latino First-Gen Striver
+4377,1,Latina Commuter Caretaker
+4378,1,Latina Commuter Caretaker
+4379,8,Multiracial Bridge-Builder
+4380,10,Continuing-Gen Cruiser
+4381,10,Continuing-Gen Cruiser
+4382,1,Latina Commuter Caretaker
+4383,10,Continuing-Gen Cruiser
+4384,7,White Commuter Working
+4385,7,White Commuter Working
+4386,6,White Residential Traditional
+4387,10,Continuing-Gen Cruiser
+4388,10,Continuing-Gen Cruiser
+4389,1,Latina Commuter Caretaker
+4390,10,Continuing-Gen Cruiser
+4391,3,Asian High-Pressure Achiever
+4392,9,Hispanic On-Campus Transitioner
+4393,1,Latina Commuter Caretaker
+4394,10,Continuing-Gen Cruiser
+4395,10,Continuing-Gen Cruiser
+4396,4,Asian First-Gen Navigator
+4397,2,Latino First-Gen Striver
+4398,8,Multiracial Bridge-Builder
+4399,7,White Commuter Working
+4400,10,Continuing-Gen Cruiser
+4401,10,Continuing-Gen Cruiser
+4402,6,White Residential Traditional
+4403,1,Latina Commuter Caretaker
+4404,10,Continuing-Gen Cruiser
+4405,10,Continuing-Gen Cruiser
+4406,2,Latino First-Gen Striver
+4407,1,Latina Commuter Caretaker
+4408,1,Latina Commuter Caretaker
+4409,10,Continuing-Gen Cruiser
+4410,10,Continuing-Gen Cruiser
+4411,3,Asian High-Pressure Achiever
+4412,2,Latino First-Gen Striver
+4413,10,Continuing-Gen Cruiser
+4414,1,Latina Commuter Caretaker
+4415,10,Continuing-Gen Cruiser
+4416,9,Hispanic On-Campus Transitioner
+4417,1,Latina Commuter Caretaker
+4418,10,Continuing-Gen Cruiser
+4419,1,Latina Commuter Caretaker
+4420,1,Latina Commuter Caretaker
+4421,10,Continuing-Gen Cruiser
+4422,2,Latino First-Gen Striver
+4423,10,Continuing-Gen Cruiser
+4424,10,Continuing-Gen Cruiser
+4425,10,Continuing-Gen Cruiser
+4426,10,Continuing-Gen Cruiser
+4427,6,White Residential Traditional
+4428,9,Hispanic On-Campus Transitioner
+4429,2,Latino First-Gen Striver
+4430,2,Latino First-Gen Striver
+4431,6,White Residential Traditional
+4432,1,Latina Commuter Caretaker
+4433,10,Continuing-Gen Cruiser
+4434,9,Hispanic On-Campus Transitioner
+4435,1,Latina Commuter Caretaker
+4436,6,White Residential Traditional
+4437,6,White Residential Traditional
+4438,9,Hispanic On-Campus Transitioner
+4439,10,Continuing-Gen Cruiser
+4440,10,Continuing-Gen Cruiser
+4441,6,White Residential Traditional
+4442,2,Latino First-Gen Striver
+4443,3,Asian High-Pressure Achiever
+4444,1,Latina Commuter Caretaker
+4445,10,Continuing-Gen Cruiser
+4446,4,Asian First-Gen Navigator
+4447,6,White Residential Traditional
+4448,10,Continuing-Gen Cruiser
+4449,8,Multiracial Bridge-Builder
+4450,8,Multiracial Bridge-Builder
+4451,3,Asian High-Pressure Achiever
+4452,10,Continuing-Gen Cruiser
+4453,2,Latino First-Gen Striver
+4454,10,Continuing-Gen Cruiser
+4455,3,Asian High-Pressure Achiever
+4456,6,White Residential Traditional
+4457,3,Asian High-Pressure Achiever
+4458,1,Latina Commuter Caretaker
+4459,10,Continuing-Gen Cruiser
+4460,10,Continuing-Gen Cruiser
+4461,10,Continuing-Gen Cruiser
+4462,2,Latino First-Gen Striver
+4463,1,Latina Commuter Caretaker
+4464,10,Continuing-Gen Cruiser
+4465,2,Latino First-Gen Striver
+4466,9,Hispanic On-Campus Transitioner
+4467,1,Latina Commuter Caretaker
+4468,10,Continuing-Gen Cruiser
+4469,4,Asian First-Gen Navigator
+4470,6,White Residential Traditional
+4471,6,White Residential Traditional
+4472,10,Continuing-Gen Cruiser
+4473,5,Black Campus Connector
+4474,3,Asian High-Pressure Achiever
+4475,10,Continuing-Gen Cruiser
+4476,8,Multiracial Bridge-Builder
+4477,6,White Residential Traditional
+4478,2,Latino First-Gen Striver
+4479,10,Continuing-Gen Cruiser
+4480,6,White Residential Traditional
+4481,10,Continuing-Gen Cruiser
+4482,1,Latina Commuter Caretaker
+4483,10,Continuing-Gen Cruiser
+4484,10,Continuing-Gen Cruiser
+4485,10,Continuing-Gen Cruiser
+4486,10,Continuing-Gen Cruiser
+4487,10,Continuing-Gen Cruiser
+4488,2,Latino First-Gen Striver
+4489,4,Asian First-Gen Navigator
+4490,10,Continuing-Gen Cruiser
+4491,7,White Commuter Working
+4492,1,Latina Commuter Caretaker
+4493,10,Continuing-Gen Cruiser
+4494,3,Asian High-Pressure Achiever
+4495,10,Continuing-Gen Cruiser
+4496,3,Asian High-Pressure Achiever
+4497,2,Latino First-Gen Striver
+4498,9,Hispanic On-Campus Transitioner
+4499,6,White Residential Traditional
+4500,2,Latino First-Gen Striver
+4501,3,Asian High-Pressure Achiever
+4502,3,Asian High-Pressure Achiever
+4503,8,Multiracial Bridge-Builder
+4504,2,Latino First-Gen Striver
+4505,2,Latino First-Gen Striver
+4506,1,Latina Commuter Caretaker
+4507,6,White Residential Traditional
+4508,10,Continuing-Gen Cruiser
+4509,9,Hispanic On-Campus Transitioner
+4510,2,Latino First-Gen Striver
+4511,4,Asian First-Gen Navigator
+4512,9,Hispanic On-Campus Transitioner
+4513,2,Latino First-Gen Striver
+4514,6,White Residential Traditional
+4515,3,Asian High-Pressure Achiever
+4516,2,Latino First-Gen Striver
+4517,9,Hispanic On-Campus Transitioner
+4518,8,Multiracial Bridge-Builder
+4519,6,White Residential Traditional
+4520,6,White Residential Traditional
+4521,4,Asian First-Gen Navigator
+4522,1,Latina Commuter Caretaker
+4523,10,Continuing-Gen Cruiser
+4524,7,White Commuter Working
+4525,4,Asian First-Gen Navigator
+4526,8,Multiracial Bridge-Builder
+4527,1,Latina Commuter Caretaker
+4528,8,Multiracial Bridge-Builder
+4529,3,Asian High-Pressure Achiever
+4530,10,Continuing-Gen Cruiser
+4531,1,Latina Commuter Caretaker
+4532,2,Latino First-Gen Striver
+4533,4,Asian First-Gen Navigator
+4534,9,Hispanic On-Campus Transitioner
+4535,10,Continuing-Gen Cruiser
+4536,7,White Commuter Working
+4537,1,Latina Commuter Caretaker
+4538,3,Asian High-Pressure Achiever
+4539,1,Latina Commuter Caretaker
+4540,10,Continuing-Gen Cruiser
+4541,1,Latina Commuter Caretaker
+4542,5,Black Campus Connector
+4543,3,Asian High-Pressure Achiever
+4544,3,Asian High-Pressure Achiever
+4545,1,Latina Commuter Caretaker
+4546,4,Asian First-Gen Navigator
+4547,5,Black Campus Connector
+4548,1,Latina Commuter Caretaker
+4549,10,Continuing-Gen Cruiser
+4550,1,Latina Commuter Caretaker
+4551,2,Latino First-Gen Striver
+4552,2,Latino First-Gen Striver
+4553,10,Continuing-Gen Cruiser
+4554,6,White Residential Traditional
+4555,9,Hispanic On-Campus Transitioner
+4556,8,Multiracial Bridge-Builder
+4557,10,Continuing-Gen Cruiser
+4558,3,Asian High-Pressure Achiever
+4559,4,Asian First-Gen Navigator
+4560,1,Latina Commuter Caretaker
+4561,10,Continuing-Gen Cruiser
+4562,2,Latino First-Gen Striver
+4563,1,Latina Commuter Caretaker
+4564,10,Continuing-Gen Cruiser
+4565,1,Latina Commuter Caretaker
+4566,7,White Commuter Working
+4567,4,Asian First-Gen Navigator
+4568,10,Continuing-Gen Cruiser
+4569,8,Multiracial Bridge-Builder
+4570,9,Hispanic On-Campus Transitioner
+4571,10,Continuing-Gen Cruiser
+4572,1,Latina Commuter Caretaker
+4573,10,Continuing-Gen Cruiser
+4574,7,White Commuter Working
+4575,6,White Residential Traditional
+4576,10,Continuing-Gen Cruiser
+4577,1,Latina Commuter Caretaker
+4578,8,Multiracial Bridge-Builder
+4579,4,Asian First-Gen Navigator
+4580,10,Continuing-Gen Cruiser
+4581,2,Latino First-Gen Striver
+4582,1,Latina Commuter Caretaker
+4583,7,White Commuter Working
+4584,1,Latina Commuter Caretaker
+4585,1,Latina Commuter Caretaker
+4586,2,Latino First-Gen Striver
+4587,1,Latina Commuter Caretaker
+4588,10,Continuing-Gen Cruiser
+4589,9,Hispanic On-Campus Transitioner
+4590,1,Latina Commuter Caretaker
+4591,9,Hispanic On-Campus Transitioner
+4592,10,Continuing-Gen Cruiser
+4593,6,White Residential Traditional
+4594,10,Continuing-Gen Cruiser
+4595,2,Latino First-Gen Striver
+4596,2,Latino First-Gen Striver
+4597,2,Latino First-Gen Striver
+4598,10,Continuing-Gen Cruiser
+4599,3,Asian High-Pressure Achiever
+4600,1,Latina Commuter Caretaker
+4601,1,Latina Commuter Caretaker
+4602,10,Continuing-Gen Cruiser
+4603,6,White Residential Traditional
+4604,6,White Residential Traditional
+4605,5,Black Campus Connector
+4606,1,Latina Commuter Caretaker
+4607,10,Continuing-Gen Cruiser
+4608,3,Asian High-Pressure Achiever
+4609,9,Hispanic On-Campus Transitioner
+4610,6,White Residential Traditional
+4611,7,White Commuter Working
+4612,8,Multiracial Bridge-Builder
+4613,2,Latino First-Gen Striver
+4614,9,Hispanic On-Campus Transitioner
+4615,4,Asian First-Gen Navigator
+4616,10,Continuing-Gen Cruiser
+4617,9,Hispanic On-Campus Transitioner
+4618,10,Continuing-Gen Cruiser
+4619,10,Continuing-Gen Cruiser
+4620,10,Continuing-Gen Cruiser
+4621,10,Continuing-Gen Cruiser
+4622,5,Black Campus Connector
+4623,9,Hispanic On-Campus Transitioner
+4624,7,White Commuter Working
+4625,10,Continuing-Gen Cruiser
+4626,10,Continuing-Gen Cruiser
+4627,10,Continuing-Gen Cruiser
+4628,6,White Residential Traditional
+4629,10,Continuing-Gen Cruiser
+4630,3,Asian High-Pressure Achiever
+4631,9,Hispanic On-Campus Transitioner
+4632,5,Black Campus Connector
+4633,10,Continuing-Gen Cruiser
+4634,10,Continuing-Gen Cruiser
+4635,2,Latino First-Gen Striver
+4636,9,Hispanic On-Campus Transitioner
+4637,8,Multiracial Bridge-Builder
+4638,1,Latina Commuter Caretaker
+4639,5,Black Campus Connector
+4640,3,Asian High-Pressure Achiever
+4641,9,Hispanic On-Campus Transitioner
+4642,2,Latino First-Gen Striver
+4643,10,Continuing-Gen Cruiser
+4644,7,White Commuter Working
+4645,1,Latina Commuter Caretaker
+4646,2,Latino First-Gen Striver
+4647,10,Continuing-Gen Cruiser
+4648,1,Latina Commuter Caretaker
+4649,9,Hispanic On-Campus Transitioner
+4650,1,Latina Commuter Caretaker
+4651,10,Continuing-Gen Cruiser
+4652,6,White Residential Traditional
+4653,3,Asian High-Pressure Achiever
+4654,9,Hispanic On-Campus Transitioner
+4655,6,White Residential Traditional
+4656,9,Hispanic On-Campus Transitioner
+4657,10,Continuing-Gen Cruiser
+4658,7,White Commuter Working
+4659,7,White Commuter Working
+4660,10,Continuing-Gen Cruiser
+4661,1,Latina Commuter Caretaker
+4662,5,Black Campus Connector
+4663,6,White Residential Traditional
+4664,1,Latina Commuter Caretaker
+4665,2,Latino First-Gen Striver
+4666,2,Latino First-Gen Striver
+4667,10,Continuing-Gen Cruiser
+4668,1,Latina Commuter Caretaker
+4669,1,Latina Commuter Caretaker
+4670,5,Black Campus Connector
+4671,1,Latina Commuter Caretaker
+4672,7,White Commuter Working
+4673,10,Continuing-Gen Cruiser
+4674,9,Hispanic On-Campus Transitioner
+4675,6,White Residential Traditional
+4676,4,Asian First-Gen Navigator
+4677,1,Latina Commuter Caretaker
+4678,10,Continuing-Gen Cruiser
+4679,10,Continuing-Gen Cruiser
+4680,1,Latina Commuter Caretaker
+4681,10,Continuing-Gen Cruiser
+4682,10,Continuing-Gen Cruiser
+4683,6,White Residential Traditional
+4684,5,Black Campus Connector
+4685,8,Multiracial Bridge-Builder
+4686,1,Latina Commuter Caretaker
+4687,10,Continuing-Gen Cruiser
+4688,2,Latino First-Gen Striver
+4689,1,Latina Commuter Caretaker
+4690,9,Hispanic On-Campus Transitioner
+4691,10,Continuing-Gen Cruiser
+4692,3,Asian High-Pressure Achiever
+4693,1,Latina Commuter Caretaker
+4694,8,Multiracial Bridge-Builder
+4695,8,Multiracial Bridge-Builder
+4696,1,Latina Commuter Caretaker
+4697,5,Black Campus Connector
+4698,3,Asian High-Pressure Achiever
+4699,3,Asian High-Pressure Achiever
+4700,10,Continuing-Gen Cruiser
+4701,1,Latina Commuter Caretaker
+4702,1,Latina Commuter Caretaker
+4703,2,Latino First-Gen Striver
+4704,9,Hispanic On-Campus Transitioner
+4705,7,White Commuter Working
+4706,9,Hispanic On-Campus Transitioner
+4707,10,Continuing-Gen Cruiser
+4708,3,Asian High-Pressure Achiever
+4709,10,Continuing-Gen Cruiser
+4710,1,Latina Commuter Caretaker
+4711,3,Asian High-Pressure Achiever
+4712,3,Asian High-Pressure Achiever
+4713,10,Continuing-Gen Cruiser
+4714,10,Continuing-Gen Cruiser
+4715,1,Latina Commuter Caretaker
+4716,3,Asian High-Pressure Achiever
+4717,10,Continuing-Gen Cruiser
+4718,4,Asian First-Gen Navigator
+4719,1,Latina Commuter Caretaker
+4720,9,Hispanic On-Campus Transitioner
+4721,1,Latina Commuter Caretaker
+4722,6,White Residential Traditional
+4723,10,Continuing-Gen Cruiser
+4724,2,Latino First-Gen Striver
+4725,1,Latina Commuter Caretaker
+4726,10,Continuing-Gen Cruiser
+4727,6,White Residential Traditional
+4728,1,Latina Commuter Caretaker
+4729,7,White Commuter Working
+4730,1,Latina Commuter Caretaker
+4731,3,Asian High-Pressure Achiever
+4732,10,Continuing-Gen Cruiser
+4733,10,Continuing-Gen Cruiser
+4734,3,Asian High-Pressure Achiever
+4735,1,Latina Commuter Caretaker
+4736,7,White Commuter Working
+4737,2,Latino First-Gen Striver
+4738,10,Continuing-Gen Cruiser
+4739,10,Continuing-Gen Cruiser
+4740,2,Latino First-Gen Striver
+4741,3,Asian High-Pressure Achiever
+4742,10,Continuing-Gen Cruiser
+4743,2,Latino First-Gen Striver
+4744,10,Continuing-Gen Cruiser
+4745,9,Hispanic On-Campus Transitioner
+4746,6,White Residential Traditional
+4747,2,Latino First-Gen Striver
+4748,10,Continuing-Gen Cruiser
+4749,10,Continuing-Gen Cruiser
+4750,10,Continuing-Gen Cruiser
+4751,4,Asian First-Gen Navigator
+4752,1,Latina Commuter Caretaker
+4753,10,Continuing-Gen Cruiser
+4754,6,White Residential Traditional
+4755,1,Latina Commuter Caretaker
+4756,1,Latina Commuter Caretaker
+4757,10,Continuing-Gen Cruiser
+4758,3,Asian High-Pressure Achiever
+4759,10,Continuing-Gen Cruiser
+4760,2,Latino First-Gen Striver
+4761,2,Latino First-Gen Striver
+4762,9,Hispanic On-Campus Transitioner
+4763,1,Latina Commuter Caretaker
+4764,2,Latino First-Gen Striver
+4765,10,Continuing-Gen Cruiser
+4766,6,White Residential Traditional
+4767,5,Black Campus Connector
+4768,6,White Residential Traditional
+4769,1,Latina Commuter Caretaker
+4770,10,Continuing-Gen Cruiser
+4771,1,Latina Commuter Caretaker
+4772,2,Latino First-Gen Striver
+4773,9,Hispanic On-Campus Transitioner
+4774,1,Latina Commuter Caretaker
+4775,9,Hispanic On-Campus Transitioner
+4776,3,Asian High-Pressure Achiever
+4777,10,Continuing-Gen Cruiser
+4778,6,White Residential Traditional
+4779,10,Continuing-Gen Cruiser
+4780,1,Latina Commuter Caretaker
+4781,10,Continuing-Gen Cruiser
+4782,2,Latino First-Gen Striver
+4783,3,Asian High-Pressure Achiever
+4784,8,Multiracial Bridge-Builder
+4785,10,Continuing-Gen Cruiser
+4786,7,White Commuter Working
+4787,3,Asian High-Pressure Achiever
+4788,10,Continuing-Gen Cruiser
+4789,1,Latina Commuter Caretaker
+4790,10,Continuing-Gen Cruiser
+4791,6,White Residential Traditional
+4792,5,Black Campus Connector
+4793,1,Latina Commuter Caretaker
+4794,8,Multiracial Bridge-Builder
+4795,9,Hispanic On-Campus Transitioner
+4796,10,Continuing-Gen Cruiser
+4797,10,Continuing-Gen Cruiser
+4798,10,Continuing-Gen Cruiser
+4799,4,Asian First-Gen Navigator
+4800,9,Hispanic On-Campus Transitioner
+4801,3,Asian High-Pressure Achiever
+4802,10,Continuing-Gen Cruiser
+4803,1,Latina Commuter Caretaker
+4804,1,Latina Commuter Caretaker
+4805,10,Continuing-Gen Cruiser
+4806,10,Continuing-Gen Cruiser
+4807,1,Latina Commuter Caretaker
+4808,2,Latino First-Gen Striver
+4809,2,Latino First-Gen Striver
+4810,10,Continuing-Gen Cruiser
+4811,6,White Residential Traditional
+4812,10,Continuing-Gen Cruiser
+4813,10,Continuing-Gen Cruiser
+4814,10,Continuing-Gen Cruiser
+4815,10,Continuing-Gen Cruiser
+4816,2,Latino First-Gen Striver
+4817,7,White Commuter Working
+4818,5,Black Campus Connector
+4819,3,Asian High-Pressure Achiever
+4820,1,Latina Commuter Caretaker
+4821,10,Continuing-Gen Cruiser
+4822,1,Latina Commuter Caretaker
+4823,9,Hispanic On-Campus Transitioner
+4824,2,Latino First-Gen Striver
+4825,1,Latina Commuter Caretaker
+4826,6,White Residential Traditional
+4827,8,Multiracial Bridge-Builder
+4828,9,Hispanic On-Campus Transitioner
+4829,3,Asian High-Pressure Achiever
+4830,9,Hispanic On-Campus Transitioner
+4831,6,White Residential Traditional
+4832,3,Asian High-Pressure Achiever
+4833,8,Multiracial Bridge-Builder
+4834,1,Latina Commuter Caretaker
+4835,3,Asian High-Pressure Achiever
+4836,10,Continuing-Gen Cruiser
+4837,10,Continuing-Gen Cruiser
+4838,10,Continuing-Gen Cruiser
+4839,9,Hispanic On-Campus Transitioner
+4840,3,Asian High-Pressure Achiever
+4841,3,Asian High-Pressure Achiever
+4842,3,Asian High-Pressure Achiever
+4843,8,Multiracial Bridge-Builder
+4844,10,Continuing-Gen Cruiser
+4845,1,Latina Commuter Caretaker
+4846,10,Continuing-Gen Cruiser
+4847,1,Latina Commuter Caretaker
+4848,10,Continuing-Gen Cruiser
+4849,9,Hispanic On-Campus Transitioner
+4850,8,Multiracial Bridge-Builder
+4851,3,Asian High-Pressure Achiever
+4852,8,Multiracial Bridge-Builder
+4853,8,Multiracial Bridge-Builder
+4854,7,White Commuter Working
+4855,1,Latina Commuter Caretaker
+4856,9,Hispanic On-Campus Transitioner
+4857,10,Continuing-Gen Cruiser
+4858,9,Hispanic On-Campus Transitioner
+4859,6,White Residential Traditional
+4860,2,Latino First-Gen Striver
+4861,4,Asian First-Gen Navigator
+4862,2,Latino First-Gen Striver
+4863,3,Asian High-Pressure Achiever
+4864,2,Latino First-Gen Striver
+4865,3,Asian High-Pressure Achiever
+4866,2,Latino First-Gen Striver
+4867,8,Multiracial Bridge-Builder
+4868,9,Hispanic On-Campus Transitioner
+4869,10,Continuing-Gen Cruiser
+4870,10,Continuing-Gen Cruiser
+4871,10,Continuing-Gen Cruiser
+4872,1,Latina Commuter Caretaker
+4873,2,Latino First-Gen Striver
+4874,9,Hispanic On-Campus Transitioner
+4875,10,Continuing-Gen Cruiser
+4876,1,Latina Commuter Caretaker
+4877,3,Asian High-Pressure Achiever
+4878,10,Continuing-Gen Cruiser
+4879,6,White Residential Traditional
+4880,10,Continuing-Gen Cruiser
+4881,1,Latina Commuter Caretaker
+4882,8,Multiracial Bridge-Builder
+4883,1,Latina Commuter Caretaker
+4884,9,Hispanic On-Campus Transitioner
+4885,1,Latina Commuter Caretaker
+4886,8,Multiracial Bridge-Builder
+4887,7,White Commuter Working
+4888,2,Latino First-Gen Striver
+4889,10,Continuing-Gen Cruiser
+4890,3,Asian High-Pressure Achiever
+4891,2,Latino First-Gen Striver
+4892,7,White Commuter Working
+4893,1,Latina Commuter Caretaker
+4894,6,White Residential Traditional
+4895,5,Black Campus Connector
+4896,10,Continuing-Gen Cruiser
+4897,3,Asian High-Pressure Achiever
+4898,9,Hispanic On-Campus Transitioner
+4899,10,Continuing-Gen Cruiser
+4900,2,Latino First-Gen Striver
+4901,6,White Residential Traditional
+4902,10,Continuing-Gen Cruiser
+4903,10,Continuing-Gen Cruiser
+4904,10,Continuing-Gen Cruiser
+4905,8,Multiracial Bridge-Builder
+4906,10,Continuing-Gen Cruiser
+4907,10,Continuing-Gen Cruiser
+4908,1,Latina Commuter Caretaker
+4909,2,Latino First-Gen Striver
+4910,8,Multiracial Bridge-Builder
+4911,8,Multiracial Bridge-Builder
+4912,6,White Residential Traditional
+4913,10,Continuing-Gen Cruiser
+4914,2,Latino First-Gen Striver
+4915,9,Hispanic On-Campus Transitioner
+4916,1,Latina Commuter Caretaker
+4917,1,Latina Commuter Caretaker
+4918,10,Continuing-Gen Cruiser
+4919,2,Latino First-Gen Striver
+4920,3,Asian High-Pressure Achiever
+4921,9,Hispanic On-Campus Transitioner
+4922,2,Latino First-Gen Striver
+4923,9,Hispanic On-Campus Transitioner
+4924,10,Continuing-Gen Cruiser
+4925,10,Continuing-Gen Cruiser
+4926,2,Latino First-Gen Striver
+4927,3,Asian High-Pressure Achiever
+4928,10,Continuing-Gen Cruiser
+4929,2,Latino First-Gen Striver
+4930,3,Asian High-Pressure Achiever
+4931,10,Continuing-Gen Cruiser
+4932,2,Latino First-Gen Striver
+4933,1,Latina Commuter Caretaker
+4934,5,Black Campus Connector
+4935,10,Continuing-Gen Cruiser
+4936,1,Latina Commuter Caretaker
+4937,1,Latina Commuter Caretaker
+4938,10,Continuing-Gen Cruiser
+4939,3,Asian High-Pressure Achiever
+4940,1,Latina Commuter Caretaker
+4941,6,White Residential Traditional
+4942,8,Multiracial Bridge-Builder
+4943,1,Latina Commuter Caretaker
+4944,8,Multiracial Bridge-Builder
+4945,8,Multiracial Bridge-Builder
+4946,5,Black Campus Connector
+4947,9,Hispanic On-Campus Transitioner
+4948,6,White Residential Traditional
+4949,8,Multiracial Bridge-Builder
+4950,6,White Residential Traditional
+4951,10,Continuing-Gen Cruiser
+4952,3,Asian High-Pressure Achiever
+4953,5,Black Campus Connector
+4954,1,Latina Commuter Caretaker
+4955,1,Latina Commuter Caretaker
+4956,5,Black Campus Connector
+4957,1,Latina Commuter Caretaker
+4958,4,Asian First-Gen Navigator
+4959,9,Hispanic On-Campus Transitioner
+4960,10,Continuing-Gen Cruiser
+4961,2,Latino First-Gen Striver
+4962,2,Latino First-Gen Striver
+4963,1,Latina Commuter Caretaker
+4964,1,Latina Commuter Caretaker
+4965,9,Hispanic On-Campus Transitioner
+4966,4,Asian First-Gen Navigator
+4967,1,Latina Commuter Caretaker
+4968,9,Hispanic On-Campus Transitioner
+4969,1,Latina Commuter Caretaker
+4970,3,Asian High-Pressure Achiever
+4971,2,Latino First-Gen Striver
+4972,10,Continuing-Gen Cruiser
+4973,1,Latina Commuter Caretaker
+4974,2,Latino First-Gen Striver
+4975,10,Continuing-Gen Cruiser
+4976,3,Asian High-Pressure Achiever
+4977,8,Multiracial Bridge-Builder
+4978,9,Hispanic On-Campus Transitioner
+4979,2,Latino First-Gen Striver
+4980,1,Latina Commuter Caretaker
+4981,5,Black Campus Connector
+4982,6,White Residential Traditional
+4983,1,Latina Commuter Caretaker
+4984,5,Black Campus Connector
+4985,1,Latina Commuter Caretaker
+4986,6,White Residential Traditional
+4987,10,Continuing-Gen Cruiser
+4988,7,White Commuter Working
+4989,1,Latina Commuter Caretaker
+4990,1,Latina Commuter Caretaker
+4991,1,Latina Commuter Caretaker
+4992,10,Continuing-Gen Cruiser
+4993,9,Hispanic On-Campus Transitioner
+4994,7,White Commuter Working
+4995,10,Continuing-Gen Cruiser
+4996,7,White Commuter Working
+4997,3,Asian High-Pressure Achiever
+4998,4,Asian First-Gen Navigator
+4999,1,Latina Commuter Caretaker
+5000,10,Continuing-Gen Cruiser

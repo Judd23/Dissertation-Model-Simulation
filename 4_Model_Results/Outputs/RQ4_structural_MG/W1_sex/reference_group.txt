@@ -1,6 +1,0 @@
-W_index = 1
-W = sex
-reference = Female
-levels:
-- Female
-- Male
