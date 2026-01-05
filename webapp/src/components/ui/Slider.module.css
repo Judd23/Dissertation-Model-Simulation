@@ -148,6 +148,18 @@
   opacity: 0.7;
 }
 
+/* Hide tick labels on mobile to prevent overlapping */
+@media (max-width: 480px) {
+  .tickLabel {
+    display: none;
+  }
+  
+  .tickMark {
+    height: 14px;
+    width: 3px;
+  }
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .slider::-webkit-slider-thumb {

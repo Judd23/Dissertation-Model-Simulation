@@ -37,7 +37,7 @@ const nodeDescriptions: Record<string, { title: string; description: string }> =
   },
   Dose: {
     title: 'Credit Dose (Moderator)',
-    description: 'The number of transfer credits earned. More credits may intensify or weaken these effects.'
+    description: 'The number of dual enrollment credits earned. More credits may intensify or weaken these effects.'
   }
 };
 
@@ -68,23 +68,24 @@ export default function PathwayDiagram({
   const { resolvedTheme } = useTheme();
   const { paths, doseCoefficients } = useModelData();
 
-  // Responsive sizing with mobile-friendly constraints
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        // Allow diagram to shrink to mobile width without horizontal scroll
-        const responsiveWidth = Math.max(320, Math.min(initialWidth, containerWidth - 40));
-        const aspectRatio = initialHeight / initialWidth;
-        const responsiveHeight = responsiveWidth * aspectRatio;
-        setDimensions({ width: responsiveWidth, height: responsiveHeight });
-      }
-    };
+  // Memoized dimension updater to prevent memory leaks from recreating listener
+  const updateDimensions = useCallback(() => {
+    if (containerRef.current) {
+      const containerWidth = containerRef.current.offsetWidth;
+      // Allow diagram to shrink to mobile width without horizontal scroll
+      const responsiveWidth = Math.max(320, Math.min(initialWidth, containerWidth - 40));
+      const aspectRatio = initialHeight / initialWidth;
+      const responsiveHeight = responsiveWidth * aspectRatio;
+      setDimensions({ width: responsiveWidth, height: responsiveHeight });
+    }
+  }, [initialWidth, initialHeight]);
 
+  // Responsive sizing with stable listener reference
+  useEffect(() => {
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
-  }, [initialWidth, initialHeight]);
+  }, [updateDimensions]);
   const [tooltip, setTooltip] = useState<{
     show: boolean;
     x: number;

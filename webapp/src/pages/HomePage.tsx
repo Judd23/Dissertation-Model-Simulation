@@ -47,7 +47,7 @@ export default function HomePage() {
             How College Credits Earned in High School Affect First-Year Success
           </h1>
           <p className={styles.lead}>
-            Explore what happens when students enter college with <GlossaryTerm term="Transfer Credits" definition="College credits earned while in high school through dual enrollment, AP exams, or other programs that can be applied toward a college degree.">transfer credits</GlossaryTerm> from
+            Explore what happens when students enter college with <GlossaryTerm term="Dual Enrollment Credits" definition="College credits earned while in high school through dual enrollment programs, allowing students to take college courses before graduating high school.">dual enrollment credits</GlossaryTerm> from
             high school. We studied California State University students to understand
             how earning credits early affects their stress levels, campus involvement,
             and overall <GlossaryTerm term="Developmental Adjustment" definition="A student's overall success in transitioning to college, including sense of belonging, personal growth, feeling supported, and satisfaction with their college experience.">adjustment to college life</GlossaryTerm>.
@@ -81,7 +81,7 @@ export default function HomePage() {
               <h3 className={styles.demoCardTitle}>Race & Ethnicity</h3>
               <div className={styles.demoStats}>
                 {Object.entries(demographics.race).map(([group, data]) => (
-                  <div key={group} className={styles.demoStat}>
+                  <div key={`${group}-${showComparison ? 'compare' : 'default'}`} className={styles.demoStat}>
                     {!showComparison ? (
                       <>
                         <div className={styles.demoBar}>
@@ -306,7 +306,7 @@ export default function HomePage() {
                 {!showComparison ? (
                   <div className={styles.demoHighlight}>
                     <div className={styles.demoHighlightValue}>{demographics.transferCredits.mean.toFixed(1)}</div>
-                    <div className={styles.demoHighlightLabel}>Average Transfer Credits</div>
+                    <div className={styles.demoHighlightLabel}>Average Dual Enrollment Credits</div>
                     <div className={styles.demoHighlightRange}>
                       Range: {demographics.transferCredits.min}–{demographics.transferCredits.max} credits
                     </div>
@@ -334,7 +334,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className={styles.demoHighlightLabel} style={{ marginTop: 'var(--spacing-sm)' }}>
-                      Average Transfer Credits
+                      Average Dual Enrollment Credits
                     </div>
                   </div>
                 )}
@@ -419,9 +419,9 @@ export default function HomePage() {
               <div className={styles.findingText}>
                 <h3>Campus Involvement Matters</h3>
                 <p>
-                  There's a <strong>sweet spot</strong> for transfer credits: students with a
+                  There's a <strong>sweet spot</strong> for dual enrollment credits: students with a
                   moderate amount engage more on campus, while those with lots of credits
-                  tend to be less involved. This is called a <GlossaryTerm term="Dose-Response Effect" definition="The relationship between the amount of something (like transfer credits) and its impact. In this study, we examine how different amounts of credits produce different effects on student outcomes.">dose-response effect</GlossaryTerm>.
+                  tend to be less involved. This is called a <GlossaryTerm term="Dose-Response Effect" definition="The relationship between the amount of something (like dual enrollment credits) and its impact. In this study, we examine how different amounts of credits produce different effects on student outcomes.">dose-response effect</GlossaryTerm>.
                 </p>
                 <p className={styles.implication}>
                   How many credits you earn in high school can shape how connected you feel
@@ -463,7 +463,7 @@ export default function HomePage() {
           <p className={styles.previewText}>
             We studied how earning college credits in high school affects student success
             through two main paths: stress levels and campus involvement. The diagram below
-            shows these connections using a <GlossaryTerm term="Mediation Model" definition="A statistical approach that examines how one variable affects another through intermediate pathways. In this study, we test whether transfer credits affect college adjustment indirectly through stress and engagement.">mediation model</GlossaryTerm>, revealing how the number of credits changes the story.
+            shows these connections using a <GlossaryTerm term="Mediation Model" definition="A statistical approach that examines how one variable affects another through intermediate pathways. In this study, we test whether dual enrollment credits affect college adjustment indirectly through stress and engagement.">mediation model</GlossaryTerm>, revealing how the number of credits changes the story.
           </p>
           <div className={styles.diagramContainer}>
             <PathwayDiagram />

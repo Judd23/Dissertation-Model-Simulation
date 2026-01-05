@@ -46,11 +46,13 @@ export default function Header() {
         />
       )}
       <div className={styles.container}>
-        <div className={styles.brand}>
-          <h1 className={styles.title}>Dual Credit & Developmental Adjustment</h1>
-          <span className={styles.subtitle}>Psychosocial Effects Among California's Equity-Impacted Students</span>
-        </div>
-        <nav className={styles.nav}>
+        <NavLink to="/home" className={styles.brandLink} aria-label="Go to home">
+          <div className={styles.brand}>
+            <h1 className={styles.title}>Dual Credit & Developmental Adjustment</h1>
+            <span className={styles.subtitle}>Psychosocial Effects Among California's Equity-Impacted Students</span>
+          </div>
+        </NavLink>
+        <nav className={styles.nav} aria-label="Primary navigation">
           {navItems.map((item) => (
             <NavLink
               key={item.to}

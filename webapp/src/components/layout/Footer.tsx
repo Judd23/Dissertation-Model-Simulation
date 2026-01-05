@@ -28,7 +28,7 @@ export default function Footer() {
             Website designed and developed by <strong>J. Johnson</strong>
           </span>
           <span className={styles.separator}>|</span>
-          <span className={styles.company}>Echo Analytics</span>
+          <span className={styles.company}>ECHO Insite Analytics™</span>
           <span className={styles.separator}>|</span>
           <span className={styles.contact}>For inquiries, please contact: <a href="mailto:Judd23@gmail.com" className={styles.link}>Judd23@gmail.com</a></span>
         </div>

@@ -36,6 +36,21 @@
   gap: var(--spacing-xs);
 }
 
+.brandLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.brandLink:hover {
+  text-decoration: none;
+}
+
+.brandLink:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
 .title {
   font-family: var(--font-heading);
   font-size: var(--font-size-lg);

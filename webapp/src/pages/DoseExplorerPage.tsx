@@ -94,7 +94,7 @@ export default function DoseExplorerPage() {
           <div className={`${styles.chartContainer} reveal`}>
             <h3>Stress Levels by Credit Amount</h3>
             <p className={styles.chartDescription}>
-              Students with transfer credits report higher stress regardless of how many
+              Students with FASt status report higher stress regardless of how many
               credits they earned. The number of credits doesn't significantly change
               this pattern—whether you have 12 or 40 credits, the stress increase is similar.
             </p>
@@ -144,7 +144,7 @@ export default function DoseExplorerPage() {
 
         {/* Key Takeaway */}
         <KeyTakeaway>
-          The <strong>amount of transfer credits matters</strong>—12 credits create different effects than 30+ credits, with higher doses amplifying both stress and engagement impacts.
+          The <strong>amount of dual enrollment credits matters</strong>—12 credits create different effects than 30+ credits, with higher doses amplifying both stress and engagement impacts.
         </KeyTakeaway>
       </div>
     </div>

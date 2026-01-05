@@ -203,7 +203,7 @@ export default function DoseResponseCurve({
       .attr('text-anchor', 'middle')
       .attr('fill', 'var(--color-text-muted)')
       .attr('font-size', 12)
-      .text('Transfer Credits');
+      .text('Dual Enrollment Credits');
 
     g.append('text')
       .attr('transform', 'rotate(-90)')

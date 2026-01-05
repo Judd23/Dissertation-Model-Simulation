@@ -35,8 +35,8 @@ export default function DemographicsPage() {
           <span className={styles.eyebrow}>Equity Framework</span>
           <h1>Do Effects Differ for Different Students?</h1>
           <p className="lead">
-            An important question: Do transfer credits affect all students the same way?
-            We use <GlossaryTerm term="Multi-Group Analysis" definition="A statistical technique that tests whether relationships in our model differ across student groups (e.g., race, income, first-generation status). This helps identify whether some students benefit more or less from transfer credits.">multi-group analysis</GlossaryTerm>{' '}
+            An important question: Do dual enrollment credits affect all students the same way?
+            We use <GlossaryTerm term="Multi-Group Analysis" definition="A statistical technique that tests whether relationships in our model differ across student groups (e.g., race, income, first-generation status). This helps identify whether some students benefit more or less from dual enrollment credits.">multi-group analysis</GlossaryTerm>{' '}
             to compare whether <GlossaryTerm term="Emotional Distress" definition="A latent construct measuring students' challenges during their first year, including academic difficulties, loneliness, mental health concerns, exhaustion, sleep problems, and financial stress.">stress</GlossaryTerm>{' '}
             and <GlossaryTerm term="Quality of Engagement" definition="A latent construct measuring the quality of students' interactions on campus with other students, advisors, faculty, staff, and administrators.">engagement</GlossaryTerm> patterns differ across
             student backgrounds.
@@ -201,7 +201,7 @@ export default function DemographicsPage() {
           <div className={`${styles.chartContainer} reveal`} style={{ transitionDelay: '0ms' }}>
             <h2>Effect on Stress by {groupingOptions.find((o) => o.value === groupingVariable)?.label}</h2>
             <p className={styles.chartDescription}>
-              Does earning transfer credits lead to different stress levels across equity groups?
+              Does earning dual enrollment credits lead to different stress levels across equity groups?
             </p>
             <GroupComparison grouping={groupingVariable} pathway="a1" />
           </div>
@@ -209,7 +209,7 @@ export default function DemographicsPage() {
           <div className={`${styles.chartContainer} reveal`} style={{ transitionDelay: '100ms' }}>
             <h2>Effect on Engagement by {groupingOptions.find((o) => o.value === groupingVariable)?.label}</h2>
             <p className={styles.chartDescription}>
-              Does earning transfer credits change campus engagement differently across equity groups?
+              Does earning dual enrollment credits change campus engagement differently across equity groups?
             </p>
             <GroupComparison grouping={groupingVariable} pathway="a2" />
           </div>
@@ -231,7 +231,7 @@ export default function DemographicsPage() {
               <h3>Looking for Differences</h3>
               <p>
                 If the <GlossaryTerm term="Effect Size" definition="A standardized measure of how strong a relationship is. In forest plots, effect sizes near zero indicate little to no effect, while larger values (positive or negative) indicate stronger effects.">effect sizes</GlossaryTerm>{' '}
-                look similar across groups, it means transfer credits
+                look similar across groups, it means dual enrollment credits
                 affect students similarly regardless of background. If they differ,
                 some students might need different support.
               </p>
@@ -240,7 +240,7 @@ export default function DemographicsPage() {
               <h3>Targeted Support</h3>
               <p>
                 If effects are similar for everyone, universal programs may work best.
-                If <GlossaryTerm term="Moderation" definition="When the relationship between two variables changes depending on a third variable. For example, if the effect of transfer credits on stress is stronger for first-generation students than continuing-generation students.">moderation by demographics</GlossaryTerm> exists, colleges might need specialized support for
+                If <GlossaryTerm term="Moderation" definition="When the relationship between two variables changes depending on a third variable. For example, if the effect of dual enrollment credits on stress is stronger for first-generation students than continuing-generation students.">moderation by demographics</GlossaryTerm> exists, colleges might need specialized support for
                 specific student populations.
               </p>
             </article>

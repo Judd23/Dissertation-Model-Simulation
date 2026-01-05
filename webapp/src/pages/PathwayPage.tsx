@@ -24,13 +24,13 @@ export default function PathwayPage() {
   const coefficientsRef = useStaggeredReveal<HTMLElement>();
   const summaryRef = useStaggeredReveal<HTMLElement>();
 
-  // Detect sticky state
+  // Detect sticky state (using -10px rootMargin for reliable triggering across zoom levels)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsStuck(!entry.isIntersecting);
       },
-      { threshold: [1], rootMargin: '-1px 0px 0px 0px' }
+      { threshold: [1], rootMargin: '-10px 0px 0px 0px' }
     );
 
     if (controlsRef.current) {
@@ -44,11 +44,11 @@ export default function PathwayPage() {
   const pathData = useMemo(() => [
     {
       id: 'a1',
-      label: 'Transfer Credits → Stress',
+      label: 'FASt Status → Stress',
       estimate: paths.a1?.estimate ?? 0,
       se: paths.a1?.se ?? 0,
       pvalue: paths.a1?.pvalue ?? 1,
-      interpretation: 'Students who earned college credits in high school report somewhat higher stress levels during their first year.',
+      interpretation: 'Students who earned dual enrollment credits in high school report somewhat higher stress levels during their first year.',
       type: 'distress',
     },
     {
@@ -62,11 +62,11 @@ export default function PathwayPage() {
     },
     {
       id: 'a2',
-      label: 'Transfer Credits → Engagement',
+      label: 'FASt Status → Engagement',
       estimate: paths.a2?.estimate ?? 0,
       se: paths.a2?.se ?? 0,
       pvalue: paths.a2?.pvalue ?? 1,
-      interpretation: 'Transfer credits alone don\'t significantly change how engaged students are with campus life.',
+      interpretation: 'Dual enrollment credits alone don\'t significantly change how engaged students are with campus life.',
       type: 'engagement',
     },
     {
@@ -98,11 +98,11 @@ export default function PathwayPage() {
     },
     {
       id: 'c',
-      label: 'Transfer Credits → Success (Direct)',
+      label: 'FASt Status → Success (Direct)',
       estimate: paths.c?.estimate ?? 0,
       se: paths.c?.se ?? 0,
       pvalue: paths.c?.pvalue ?? 1,
-      interpretation: 'Beyond the stress and engagement effects, transfer credits give a small direct boost to college success.',
+      interpretation: 'Beyond the stress and engagement effects, dual enrollment credits give a small direct boost to college success.',
       type: 'direct',
     },
     {
@@ -129,11 +129,11 @@ export default function PathwayPage() {
       <div className="container">
         <header ref={headerRef} className={`${styles.header} reveal`}>
           <span className={styles.eyebrow}>Interactive Model</span>
-          <h1>How Transfer Credits Affect First-Year Success</h1>
+          <h1>How Dual Enrollment Credits Affect First-Year Success</h1>
           <p className="lead">
             This diagram shows the different ways that earning college credits in high school
             can influence a student's first-year college experience. The model uses {' '}
-            <GlossaryTerm term="Mediation Analysis" definition="A statistical technique that examines whether an independent variable (transfer credits) affects an outcome (adjustment) through intermediate variables (stress and engagement). It reveals the 'how' of cause and effect.">mediation analysis</GlossaryTerm>{' '}
+            <GlossaryTerm term="Mediation Analysis" definition="A statistical technique that examines whether an independent variable (dual enrollment credits) affects an outcome (adjustment) through intermediate variables (stress and engagement). It reveals the 'how' of cause and effect.">mediation analysis</GlossaryTerm>{' '}
             to trace effects through <GlossaryTerm term="Emotional Distress" definition="A latent construct measuring students' challenges during their first year, including academic difficulties, loneliness, mental health concerns, exhaustion, sleep problems, and financial stress.">stress</GlossaryTerm>{' '}
             and <GlossaryTerm term="Quality of Engagement" definition="A latent construct measuring the quality of students' interactions on campus with other students, advisors, faculty, staff, and administrators.">engagement</GlossaryTerm> pathways.
           </p>
@@ -177,7 +177,7 @@ export default function PathwayPage() {
                   <span className={styles.sampleLabel}>FASt Students</span>
                   <span className={styles.sampleCount}>{fastComparison.overall.fast_n.toLocaleString()}</span>
                 </div>
-                <div className={styles.sampleDetail}>12+ transfer credits from high school</div>
+                <div className={styles.sampleDetail}>12+ dual enrollment credits from high school</div>
                 <div className={styles.sampleStats}>
                   <div>Avg credits: <strong>{fastComparison.demographics.transferCredits.fast.mean}</strong></div>
                   <div>First-Gen: <strong>{fastComparison.demographics.firstgen.yes.fast.pct}%</strong></div>
@@ -189,7 +189,7 @@ export default function PathwayPage() {
                   <span className={styles.sampleLabel}>Non-FASt Students</span>
                   <span className={styles.sampleCount}>{fastComparison.overall.nonfast_n.toLocaleString()}</span>
                 </div>
-                <div className={styles.sampleDetail}>Fewer than 12 transfer credits</div>
+                <div className={styles.sampleDetail}>Fewer than 12 dual enrollment credits</div>
                 <div className={styles.sampleStats}>
                   <div>Avg credits: <strong>{fastComparison.demographics.transferCredits.nonfast.mean}</strong></div>
                   <div>First-Gen: <strong>{fastComparison.demographics.firstgen.yes.nonfast.pct}%</strong></div>
@@ -266,16 +266,16 @@ export default function PathwayPage() {
             <article className={`${styles.summaryCard} reveal`} style={{ transitionDelay: '0ms' }}>
               <h3>The Stress Route</h3>
               <p>
-                Students with transfer credits report <strong>higher stress</strong> in their first year.
+                Students with FASt status report <strong>higher stress</strong> in their first year.
                 Since stress hurts college adjustment, this creates a{' '}
-                <GlossaryTerm term="Indirect Effect" definition="The portion of the total effect that works through an intermediate variable. Here, transfer credits affect adjustment indirectly by first increasing stress, which then reduces adjustment.">negative indirect effect</GlossaryTerm>.
+                <GlossaryTerm term="Indirect Effect" definition="The portion of the total effect that works through an intermediate variable. Here, FASt status affects adjustment indirectly by first increasing stress, which then reduces adjustment.">negative indirect effect</GlossaryTerm>.
                 This is the "cost" side of accelerated credit.
               </p>
             </article>
             <article className={`${styles.summaryCard} reveal`} style={{ transitionDelay: '100ms' }}>
               <h3>The Engagement Route</h3>
               <p>
-                Transfer credits don't clearly change how engaged students are with campus life.
+                Dual enrollment credits don't clearly change how engaged students are with campus life.
                 However, engagement is <strong>really important</strong> for success—the{' '}
                 <GlossaryTerm term="Path Coefficient" definition="A standardized measure of the strength and direction of a relationship between two variables in our model. Values range from -1 to +1, with larger absolute values indicating stronger relationships.">path from engagement to adjustment</GlossaryTerm>{' '}
                 is one of the strongest in our model.
@@ -284,8 +284,8 @@ export default function PathwayPage() {
             <article className={`${styles.summaryCard} reveal`} style={{ transitionDelay: '200ms' }}>
               <h3>Direct Benefits</h3>
               <p>
-                Beyond stress and engagement, transfer credits provide a{' '}
-                <GlossaryTerm term="Direct Effect" definition="The portion of the total effect that doesn't go through the mediators (stress and engagement). It represents other ways transfer credits might help students that we didn't explicitly measure.">small direct boost</GlossaryTerm>{' '}
+                Beyond stress and engagement, dual enrollment credits provide a{' '}
+                <GlossaryTerm term="Direct Effect" definition="The portion of the total effect that doesn't go through the mediators (stress and engagement). It represents other ways dual enrollment credits might help students that we didn't explicitly measure.">small direct boost</GlossaryTerm>{' '}
                 to college success. This might reflect academic preparation, confidence, or
                 other benefits we didn't measure directly.
               </p>
@@ -295,7 +295,7 @@ export default function PathwayPage() {
 
         {/* Key Takeaway */}
         <KeyTakeaway>
-          Transfer credits create <strong>competing forces</strong>: they increase stress (hurting adjustment) while offering direct academic benefits—with the balance shifting based on credit dose.
+          Dual enrollment credits create <strong>competing forces</strong>: they increase stress (hurting adjustment) while offering direct academic benefits—with the balance shifting based on credit dose.
         </KeyTakeaway>
       </div>
     </div>

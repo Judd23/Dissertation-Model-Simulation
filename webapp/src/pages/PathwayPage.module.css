@@ -59,7 +59,7 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: var(--spacing-md) 0;
-  z-index: 10;
+  z-index: 100;
   border-bottom: 1px solid transparent;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }

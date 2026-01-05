@@ -254,8 +254,6 @@ Add these terms to `.vscode/settings.json` or project cSpell config to suppress 
 
 ### 🔮 Future Roadmap
 - Guided tour/walkthrough for first-time visitors
-- Keyboard navigation for D3 pathway diagram
-- Print-friendly CSS for research summaries
 - PDF export for key findings
 - Advanced filtering on DemographicsPage
 - Methods page table of contents sidebar
@@ -556,3 +554,59 @@ Made the ResearcherPage significantly more artistic and dynamic with layered ani
 - Build time: ~940ms
 
 **Deployed:** https://judd23.github.io/Dissertation-Model-Simulation/#/researcher
+
+---
+
+### January 5, 2026 (Afternoon) - Bug Fix Sprint
+
+#### 5 Bugs Fixed
+
+| # | Priority | Issue | Fix |
+|---|----------|-------|-----|
+| 1 | HIGH | PathwayDiagram resize listener memory leak | Wrapped `updateDimensions` in `useCallback` to stabilize function reference |
+| 2 | MEDIUM | GlossaryTerm tooltip z-index stacking | Increased tooltip z-index to `100000`, sticky controls to `100` |
+| 3 | LOW | PathwayPage sticky observer edge case | Changed rootMargin from `-1px` to `-10px` for reliable triggering |
+| 4 | MEDIUM | Slider tick marks overlapping on mobile | Added media query to hide labels and enlarge marks on screens < 480px |
+| 5 | LOW | HomePage missing React keys in comparison mode | Added composite key `${group}-${showComparison ? 'compare' : 'default'}` |
+
+#### Technical Details
+
+**#1 - Memory Leak Fix (PathwayDiagram.tsx)**
+- Problem: `updateDimensions` was recreated on every render, causing resize listener to be added/removed repeatedly
+- Solution: Wrapped in `useCallback` with `[initialWidth, initialHeight]` dependencies
+- Impact: Prevents performance degradation and memory leaks on window resize
+
+**#2 - Z-Index Stacking Fix (GlossaryTerm.module.css, PathwayPage.module.css)**
+- Problem: Tooltips could appear behind sticky headers due to stacking context inheritance
+- Solution: Boosted tooltip z-index from `9999` to `100000`, sticky controls from `10` to `100`
+- Impact: Tooltips now reliably appear above all other UI elements
+
+**#3 - Sticky Observer Reliability (PathwayPage.tsx)**
+- Problem: `-1px` rootMargin could fail on certain zoom levels due to sub-pixel rendering
+- Solution: Increased to `-10px` for more reliable intersection detection
+- Impact: Sticky control visual feedback triggers consistently across browsers/zoom levels
+
+**#4 - Mobile Slider Tick Labels (Slider.module.css)**
+- Problem: 5 tick marks [12, 24, 36, 48, 60] overlapped on narrow screens (~320px)
+- Solution: Added `@media (max-width: 480px)` to hide labels and enlarge tick marks
+- Impact: Slider remains usable and readable on mobile devices
+
+**#5 - React Keys Stability (HomePage.tsx)**
+- Problem: Conditional rendering in demographics comparison mode could cause reconciliation issues
+- Solution: Changed key from `group` to `${group}-${showComparison ? 'compare' : 'default'}`
+- Impact: Prevents potential React strict mode warnings and ensures clean re-renders
+
+#### Files Modified
+- `webapp/src/components/charts/PathwayDiagram.tsx` - useCallback for resize handler
+- `webapp/src/components/ui/GlossaryTerm.module.css` - z-index: 100000
+- `webapp/src/components/ui/Slider.module.css` - mobile media query
+- `webapp/src/pages/PathwayPage.tsx` - rootMargin: -10px
+- `webapp/src/pages/PathwayPage.module.css` - z-index: 100
+- `webapp/src/pages/HomePage.tsx` - stable composite keys
+
+**Build Stats:**
+- CSS: 103.20 KB (gzip: 15.40 KB)
+- JS: 406.58 KB (gzip: 125.53 KB)
+- Build time: ~950ms
+
+**Deployed:** https://judd23.github.io/Dissertation-Model-Simulation
