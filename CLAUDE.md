@@ -206,6 +206,34 @@ R lavaan model → run_all_RQs_official.R → JSON exports → webapp/src/data/
 - **Dark mode broken**: Clear browser cache, check CSS custom properties in DevTools
 - **Animations janky**: Verify `prefers-reduced-motion` isn't enabled, check browser support for Intersection Observer
 
+## Browser Support
+
+The webapp is tested on:
+- Chrome 120+ (primary)
+- Safari 17+ (macOS/iOS)
+- Firefox 121+
+- Edge 120+
+
+**Required APIs**: Intersection Observer (98%+ support), CSS custom properties, CSS `color-mix()`
+
+## cSpell Dictionary
+
+Add these terms to `.vscode/settings.json` or project cSpell config to suppress warnings:
+```json
+{
+  "cSpell.words": [
+    "codebooks",
+    "glassmorphism",
+    "lavaan",
+    "semTools",
+    "FIML",
+    "RMSEA",
+    "SRMR",
+    "multigroup"
+  ]
+}
+```
+
 ## UX Implementation Status
 
 ### ✅ Completed (January 2026)
@@ -242,6 +270,8 @@ R lavaan model → run_all_RQs_official.R → JSON exports → webapp/src/data/
 | `2_Codebooks/Variable_Table.csv` | Variable meanings and coding |
 
 ## Session Changelog
+
+> **Note**: Consider moving detailed session notes to `.claude/session-notes/` to keep CLAUDE.md focused on reference material.
 
 ### January 4, 2026 - Full Pipeline Run & Data Transparency
 
