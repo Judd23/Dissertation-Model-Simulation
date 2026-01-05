@@ -1,4 +1,5 @@
 import { useResearch } from '../context/ResearchContext';
+import { useModelData } from '../context/ModelDataContext';
 import Slider from '../components/ui/Slider';
 import Toggle from '../components/ui/Toggle';
 import DoseResponseCurve from '../components/charts/DoseResponseCurve';
@@ -7,12 +8,13 @@ import styles from './DoseExplorerPage.module.css';
 
 export default function DoseExplorerPage() {
   const { selectedDose, setSelectedDose, showCIs, toggleCIs } = useResearch();
+  const { doseCoefficients } = useModelData();
 
-  // Calculate conditional effects at selected dose
+  // Calculate conditional effects at selected dose (from dynamic pipeline data)
   // These formulas come from the model: effect = main + (dose * moderation)
   const doseInUnits = (selectedDose - 12) / 10; // 10-credit units above threshold
-  const distressEffect = 0.127 + (doseInUnits * 0.003);
-  const engagementEffect = -0.010 + (doseInUnits * -0.014);
+  const distressEffect = doseCoefficients.distress.main + (doseInUnits * doseCoefficients.distress.moderation);
+  const engagementEffect = doseCoefficients.engagement.main + (doseInUnits * doseCoefficients.engagement.moderation);
 
   return (
     <div className={styles.page}>

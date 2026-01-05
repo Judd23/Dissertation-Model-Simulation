@@ -3,69 +3,69 @@
   "demographics": {
     "race": {
       "Hispanic/Latino": {
-        "n": 1900,
-        "pct": 38.0
+        "n": 2350,
+        "pct": 47.0
       },
       "White": {
-        "n": 1506,
-        "pct": 30.1
+        "n": 1069,
+        "pct": 21.4
       },
       "Asian": {
-        "n": 964,
-        "pct": 19.3
+        "n": 835,
+        "pct": 16.7
       },
       "Other/Multiracial/Unknown": {
-        "n": 380,
-        "pct": 7.6
+        "n": 546,
+        "pct": 10.9
       },
       "Black/African American": {
-        "n": 250,
-        "pct": 5.0
+        "n": 200,
+        "pct": 4.0
       }
     },
     "firstgen": {
       "yes": {
-        "n": 2958,
-        "pct": 59.2
+        "n": 2353,
+        "pct": 47.1
       },
       "no": {
-        "n": 2042,
-        "pct": 40.8
+        "n": 2647,
+        "pct": 52.9
       }
     },
     "pell": {
       "yes": {
-        "n": 2939,
-        "pct": 58.8
+        "n": 2158,
+        "pct": 43.2
       },
       "no": {
-        "n": 2061,
-        "pct": 41.2
+        "n": 2842,
+        "pct": 56.8
       }
     },
     "fast": {
       "yes": {
-        "n": 2249,
-        "pct": 45.0
+        "n": 2176,
+        "pct": 43.5
       },
       "no": {
-        "n": 2751,
-        "pct": 55.0
+        "n": 2824,
+        "pct": 56.5
       }
     },
     "sex": {
       "women": {
-        "n": 2952,
-        "pct": 59.0
+        "n": 3104,
+        "pct": 62.1
       },
       "men": {
-        "n": 2048,
-        "pct": 41.0
+        "n": 1896,
+        "pct": 37.9
       }
     },
     "transferCredits": {
-      "mean": 18.9,
-      "sd": 18.9,
+      "mean": 18.3,
+      "sd": 18.7,
       "min": 0,
       "max": 80,
       "median": 10.0
@@ -73,8 +73,8 @@
   },
   "outcomes": {
     "distress": {
-      "mean": 3.71,
-      "sd": 1.17,
+      "mean": 3.81,
+      "sd": 1.1,
       "range": [
         1,
         6
@@ -84,44 +84,44 @@
         {
           "name": "MHWdacad",
           "label": "Academic Difficulties",
-          "mean": 3.72,
-          "sd": 1.17
+          "mean": 3.82,
+          "sd": 1.11
         },
         {
           "name": "MHWdlonely",
           "label": "Loneliness",
-          "mean": 3.7,
-          "sd": 1.16
+          "mean": 3.79,
+          "sd": 1.07
         },
         {
           "name": "MHWdmental",
           "label": "Mental Health",
-          "mean": 3.71,
-          "sd": 1.14
+          "mean": 3.81,
+          "sd": 1.07
         },
         {
           "name": "MHWdexhaust",
           "label": "Exhaustion",
-          "mean": 3.72,
-          "sd": 1.17
+          "mean": 3.81,
+          "sd": 1.08
         },
         {
           "name": "MHWdsleep",
           "label": "Sleep Problems",
-          "mean": 3.72,
-          "sd": 1.17
+          "mean": 3.81,
+          "sd": 1.09
         },
         {
           "name": "MHWdfinancial",
           "label": "Financial Stress",
-          "mean": 3.71,
-          "sd": 1.23
+          "mean": 3.82,
+          "sd": 1.16
         }
       ]
     },
     "engagement": {
-      "mean": 4.88,
-      "sd": 1.13,
+      "mean": 4.82,
+      "sd": 1.09,
       "range": [
         1,
         7
@@ -131,53 +131,53 @@
         {
           "name": "QIadmin",
           "label": "Administrative Staff",
-          "mean": 4.87,
-          "sd": 1.15
+          "mean": 4.83,
+          "sd": 1.12
         },
         {
           "name": "QIstudent",
           "label": "Other Students",
-          "mean": 4.88,
-          "sd": 1.14
+          "mean": 4.82,
+          "sd": 1.1
         },
         {
           "name": "QIadvisor",
           "label": "Academic Advisors",
-          "mean": 4.89,
-          "sd": 1.13
+          "mean": 4.82,
+          "sd": 1.09
         },
         {
           "name": "QIfaculty",
           "label": "Faculty",
-          "mean": 4.88,
-          "sd": 1.11
+          "mean": 4.82,
+          "sd": 1.07
         },
         {
           "name": "QIstaff",
           "label": "Student Services Staff",
-          "mean": 4.89,
-          "sd": 1.12
+          "mean": 4.82,
+          "sd": 1.09
         }
       ]
     },
     "belonging": {
-      "mean": 2.72,
-      "sd": 0.8,
+      "mean": 2.69,
+      "sd": 0.79,
       "n_items": 3
     },
     "gains": {
-      "mean": 2.91,
+      "mean": 2.93,
       "sd": 0.7,
       "n_items": 5
     },
     "support": {
       "mean": 2.71,
-      "sd": 0.79,
+      "sd": 0.78,
       "n_items": 5
     },
     "satisfaction": {
-      "mean": 2.92,
-      "sd": 0.69,
+      "mean": 2.88,
+      "sd": 0.68,
       "n_items": 2
     }
   }

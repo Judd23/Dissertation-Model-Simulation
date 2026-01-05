@@ -1,51 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import * as d3 from 'd3';
 import { useResearch } from '../../context/ResearchContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useModelData } from '../../context/ModelDataContext';
 import { colors } from '../../utils/colorScales';
 import { formatNumber } from '../../utils/formatters';
 import styles from './PathwayDiagram.module.css';
-
-// Model coefficients with plain language descriptions
-const modelData = {
-  paths: [
-    { 
-      from: 'FASt', to: 'Distress', id: 'a1', estimate: 0.127, pvalue: 0.0007, label: 'a₁',
-      title: 'FASt Status → Stress',
-      description: 'Students with FASt status report slightly higher stress during their first year. This may reflect the challenge of balancing higher expectations.',
-      finding: 'Significant increase'
-    },
-    { 
-      from: 'FASt', to: 'Engagement', id: 'a2', estimate: -0.010, pvalue: 0.778, label: 'a₂',
-      title: 'FASt Status → Engagement',
-      description: 'FASt status alone doesn\'t significantly change how much students engage with campus life.',
-      finding: 'No significant effect'
-    },
-    { 
-      from: 'Distress', to: 'Adjustment', id: 'b1', estimate: -0.203, pvalue: 0, label: 'b₁',
-      title: 'Stress → College Success',
-      description: 'Higher stress strongly predicts lower adjustment. Students struggling with stress have a harder time thriving in college.',
-      finding: 'Strong negative effect'
-    },
-    { 
-      from: 'Engagement', to: 'Adjustment', id: 'b2', estimate: 0.160, pvalue: 0, label: 'b₂',
-      title: 'Engagement → College Success',
-      description: 'Students who engage more with campus activities, faculty, and peers adjust better to college life.',
-      finding: 'Strong positive effect'
-    },
-    { 
-      from: 'FASt', to: 'Adjustment', id: 'c', estimate: 0.041, pvalue: 0.002, label: "c'",
-      title: 'Direct Benefit of FASt Status',
-      description: 'Beyond the indirect effects through stress and engagement, FASt status provides a small but meaningful direct boost to college success.',
-      finding: 'Small positive effect'
-    },
-  ],
-  moderation: [
-    { path: 'a1z', estimate: 0.003, pvalue: 0.854, label: 'a₁z' },
-    { path: 'a2z', estimate: -0.014, pvalue: 0.319, label: 'a₂z' },
-    { path: 'cz', estimate: -0.009, pvalue: 0.060, label: "c'z" },
-  ],
-};
 
 // Node positions (relative coordinates, will be scaled)
 const nodePositions: Record<string, { x: number; y: number }> = {
@@ -103,6 +63,7 @@ export default function PathwayDiagram({
   const svgRef = useRef<SVGSVGElement>(null);
   const { highlightedPath, setHighlightedPath, selectedDose } = useResearch();
   const { resolvedTheme } = useTheme();
+  const { paths, doseCoefficients } = useModelData();
   const [tooltip, setTooltip] = useState<{
     show: boolean;
     x: number;
@@ -110,14 +71,60 @@ export default function PathwayDiagram({
     content: TooltipContent;
   } | null>(null);
 
+  // Build model data from context (dynamic from JSON)
+  const modelData = useMemo(() => {
+    const pathDescriptions: Record<string, { title: string; description: string; finding: string }> = {
+      a1: {
+        title: 'FASt Status → Stress',
+        description: 'Students with FASt status report slightly higher stress during their first year.',
+        finding: paths.a1 && paths.a1.pvalue < 0.05 ? 'Significant increase' : 'No significant effect'
+      },
+      a2: {
+        title: 'FASt Status → Engagement', 
+        description: 'FASt status alone doesn\'t significantly change how much students engage with campus life.',
+        finding: paths.a2 && paths.a2.pvalue < 0.05 ? 'Significant effect' : 'No significant effect'
+      },
+      b1: {
+        title: 'Stress → College Success',
+        description: 'Higher stress strongly predicts lower adjustment.',
+        finding: paths.b1 && paths.b1.pvalue < 0.05 ? 'Strong negative effect' : 'No significant effect'
+      },
+      b2: {
+        title: 'Engagement → College Success',
+        description: 'Students who engage more with campus adjust better to college life.',
+        finding: paths.b2 && paths.b2.pvalue < 0.05 ? 'Strong positive effect' : 'No significant effect'
+      },
+      c: {
+        title: 'Direct Benefit of FASt Status',
+        description: 'Beyond indirect effects, FASt status provides a direct boost to college success.',
+        finding: paths.c && paths.c.pvalue < 0.05 ? 'Small positive effect' : 'No significant effect'
+      },
+    };
+
+    return {
+      paths: [
+        { from: 'FASt', to: 'Distress', id: 'a1', estimate: paths.a1?.estimate ?? 0, pvalue: paths.a1?.pvalue ?? 1, label: 'a₁', ...pathDescriptions.a1 },
+        { from: 'FASt', to: 'Engagement', id: 'a2', estimate: paths.a2?.estimate ?? 0, pvalue: paths.a2?.pvalue ?? 1, label: 'a₂', ...pathDescriptions.a2 },
+        { from: 'Distress', to: 'Adjustment', id: 'b1', estimate: paths.b1?.estimate ?? 0, pvalue: paths.b1?.pvalue ?? 1, label: 'b₁', ...pathDescriptions.b1 },
+        { from: 'Engagement', to: 'Adjustment', id: 'b2', estimate: paths.b2?.estimate ?? 0, pvalue: paths.b2?.pvalue ?? 1, label: 'b₂', ...pathDescriptions.b2 },
+        { from: 'FASt', to: 'Adjustment', id: 'c', estimate: paths.c?.estimate ?? 0, pvalue: paths.c?.pvalue ?? 1, label: "c'", ...pathDescriptions.c },
+      ],
+      moderation: [
+        { path: 'a1z', estimate: paths.a1z?.estimate ?? 0, pvalue: paths.a1z?.pvalue ?? 1, label: 'a₁z' },
+        { path: 'a2z', estimate: paths.a2z?.estimate ?? 0, pvalue: paths.a2z?.pvalue ?? 1, label: 'a₂z' },
+        { path: 'cz', estimate: paths.cz?.estimate ?? 0, pvalue: paths.cz?.pvalue ?? 1, label: "c'z" },
+      ],
+    };
+  }, [paths]);
+
   // Mirror the Dose Explorer convention: interpret the slider in 10-credit units above/below the 12-credit threshold.
   const doseInUnits = (selectedDose - 12) / 10;
 
   const getAdjustedEstimate = (pathId: string, baseEstimate: number) => {
     const moderation =
-      pathId === 'a1' ? 0.003 :
-      pathId === 'a2' ? -0.014 :
-      pathId === 'c' ? -0.009 :
+      pathId === 'a1' ? doseCoefficients.distress.moderation :
+      pathId === 'a2' ? doseCoefficients.engagement.moderation :
+      pathId === 'c' ? doseCoefficients.adjustment.moderation :
       0;
     return baseEstimate + moderation * doseInUnits;
   };
@@ -147,6 +154,7 @@ export default function PathwayDiagram({
     const g = svg
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
 
     // Scale positions
     const scaledNodes = Object.entries(nodePositions).map(([id, pos]) => ({
@@ -219,7 +227,11 @@ export default function PathwayDiagram({
       const color = pathType === 'distress' ? colors.distress :
                    pathType === 'engagement' ? colors.engagement : colors.nonfast;
 
-      const isHighlighted = !highlightedPath || highlightedPath === pathType;
+      // Handle serial pathway highlighting (both mediation routes)
+      const isSerialPath = path.id === 'a1' || path.id === 'b1' || path.id === 'a2' || path.id === 'b2';
+      const isHighlighted = !highlightedPath || 
+                           highlightedPath === pathType || 
+                           (highlightedPath === 'serial' && isSerialPath);
       const opacity = isHighlighted ? 1 : 0.15;
       const adjustedEstimate = getAdjustedEstimate(path.id, path.estimate);
       const strokeWidth = Math.max(2.5, Math.abs(adjustedEstimate) * 12);

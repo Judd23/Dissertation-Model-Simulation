@@ -18,8 +18,8 @@ interface ResearchContextType {
   toggleCIs: () => void;
 
   // Highlighted pathway in diagram
-  highlightedPath: 'distress' | 'engagement' | 'direct' | null;
-  setHighlightedPath: (path: 'distress' | 'engagement' | 'direct' | null) => void;
+  highlightedPath: 'distress' | 'engagement' | 'direct' | 'serial' | null;
+  setHighlightedPath: (path: 'distress' | 'engagement' | 'direct' | 'serial' | null) => void;
 }
 
 const ResearchContext = createContext<ResearchContextType | null>(null);
@@ -29,7 +29,7 @@ export function ResearchProvider({ children }: { children: ReactNode }) {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [groupingVariable, setGroupingVariable] = useState<'race' | 'firstgen' | 'pell' | 'sex' | 'living'>('race');
   const [showCIs, setShowCIs] = useState(true);
-  const [highlightedPath, setHighlightedPath] = useState<'distress' | 'engagement' | 'direct' | null>(null);
+  const [highlightedPath, setHighlightedPath] = useState<'distress' | 'engagement' | 'direct' | 'serial' | null>(null);
 
   const toggleCIs = () => setShowCIs(!showCIs);
 

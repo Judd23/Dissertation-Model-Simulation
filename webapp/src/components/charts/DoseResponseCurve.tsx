@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { useResearch } from '../../context/ResearchContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useModelData } from '../../context/ModelDataContext';
 import { colors } from '../../utils/colorScales';
 import styles from './DoseResponseCurve.module.css';
 
@@ -12,13 +13,6 @@ interface DoseResponseCurveProps {
   height?: number;
 }
 
-// Model coefficients for computing conditional effects
-const coefficients = {
-  distress: { main: 0.127, moderation: 0.003, se: 0.037 },
-  engagement: { main: -0.010, moderation: -0.014, se: 0.036 },
-  adjustment: { main: 0.041, moderation: -0.009, se: 0.013 },
-};
-
 export default function DoseResponseCurve({
   outcome,
   selectedDose,
@@ -28,6 +22,7 @@ export default function DoseResponseCurve({
   const svgRef = useRef<SVGSVGElement>(null);
   const { showCIs } = useResearch();
   const { resolvedTheme } = useTheme();
+  const { doseCoefficients } = useModelData();
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -51,8 +46,8 @@ export default function DoseResponseCurve({
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-    // Generate data points
-    const coef = coefficients[outcome];
+    // Generate data points (from dynamic context)
+    const coef = doseCoefficients[outcome];
     const doseRange = d3.range(0, 81, 1);
     const data = doseRange.map((dose) => {
       const doseUnits = (dose - 12) / 10;

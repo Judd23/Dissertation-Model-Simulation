@@ -1,92 +1,96 @@
+import { useMemo } from 'react';
 import { useResearch } from '../context/ResearchContext';
+import { useModelData } from '../context/ModelDataContext';
 import PathwayDiagram from '../components/charts/PathwayDiagram';
 import Toggle from '../components/ui/Toggle';
 import Slider from '../components/ui/Slider';
 import styles from './PathwayPage.module.css';
 
-// Path coefficient data with plain-language labels
-const pathData = [
-  {
-    id: 'a1',
-    label: 'Transfer Credits → Stress',
-    estimate: 0.127,
-    se: 0.037,
-    pvalue: 0.0007,
-    interpretation: 'Students who earned college credits in high school report somewhat higher stress levels during their first year.',
-    type: 'distress',
-  },
-  {
-    id: 'a1z',
-    label: 'Does credit amount change stress?',
-    estimate: 0.003,
-    se: 0.015,
-    pvalue: 0.854,
-    interpretation: 'The number of credits earned doesn\'t change this pattern—stress levels are similar whether students earned 12 or 40 credits.',
-    type: 'moderation',
-  },
-  {
-    id: 'a2',
-    label: 'Transfer Credits → Engagement',
-    estimate: -0.010,
-    se: 0.036,
-    pvalue: 0.778,
-    interpretation: 'Transfer credits alone don\'t significantly change how engaged students are with campus life.',
-    type: 'engagement',
-  },
-  {
-    id: 'a2z',
-    label: 'Does credit amount change engagement?',
-    estimate: -0.014,
-    se: 0.014,
-    pvalue: 0.319,
-    interpretation: 'There\'s a hint that students with many credits engage less with campus, but we\'re not confident this pattern is real.',
-    type: 'moderation',
-  },
-  {
-    id: 'b1',
-    label: 'Stress → College Success',
-    estimate: -0.203,
-    se: 0.008,
-    pvalue: 0,
-    interpretation: 'Strong connection: students with more stress have a harder time adjusting to college life.',
-    type: 'distress',
-  },
-  {
-    id: 'b2',
-    label: 'Engagement → College Success',
-    estimate: 0.160,
-    se: 0.007,
-    pvalue: 0,
-    interpretation: 'Strong connection: students who engage more with campus do better overall.',
-    type: 'engagement',
-  },
-  {
-    id: 'c',
-    label: 'Transfer Credits → Success (Direct)',
-    estimate: 0.041,
-    se: 0.013,
-    pvalue: 0.002,
-    interpretation: 'Beyond the stress and engagement effects, transfer credits give a small direct boost to college success.',
-    type: 'direct',
-  },
-  {
-    id: 'cz',
-    label: 'Does credit amount change the direct benefit?',
-    estimate: -0.009,
-    se: 0.005,
-    pvalue: 0.060,
-    interpretation: 'There\'s a hint that the direct benefit decreases when students have many credits, but we need more evidence.',
-    type: 'moderation',
-  },
-];
-
 export default function PathwayPage() {
   const { highlightedPath, setHighlightedPath, showCIs, toggleCIs, selectedDose, setSelectedDose } = useResearch();
+  const { paths } = useModelData();
+
+  // Build path data dynamically from pipeline outputs
+  const pathData = useMemo(() => [
+    {
+      id: 'a1',
+      label: 'Transfer Credits → Stress',
+      estimate: paths.a1?.estimate ?? 0,
+      se: paths.a1?.se ?? 0,
+      pvalue: paths.a1?.pvalue ?? 1,
+      interpretation: 'Students who earned college credits in high school report somewhat higher stress levels during their first year.',
+      type: 'distress',
+    },
+    {
+      id: 'a1z',
+      label: 'Does credit amount change stress?',
+      estimate: paths.a1z?.estimate ?? 0,
+      se: paths.a1z?.se ?? 0,
+      pvalue: paths.a1z?.pvalue ?? 1,
+      interpretation: 'The number of credits earned doesn\'t change this pattern—stress levels are similar whether students earned 12 or 40 credits.',
+      type: 'moderation',
+    },
+    {
+      id: 'a2',
+      label: 'Transfer Credits → Engagement',
+      estimate: paths.a2?.estimate ?? 0,
+      se: paths.a2?.se ?? 0,
+      pvalue: paths.a2?.pvalue ?? 1,
+      interpretation: 'Transfer credits alone don\'t significantly change how engaged students are with campus life.',
+      type: 'engagement',
+    },
+    {
+      id: 'a2z',
+      label: 'Does credit amount change engagement?',
+      estimate: paths.a2z?.estimate ?? 0,
+      se: paths.a2z?.se ?? 0,
+      pvalue: paths.a2z?.pvalue ?? 1,
+      interpretation: 'There\'s a hint that students with many credits engage less with campus, but we\'re not confident this pattern is real.',
+      type: 'moderation',
+    },
+    {
+      id: 'b1',
+      label: 'Stress → College Success',
+      estimate: paths.b1?.estimate ?? 0,
+      se: paths.b1?.se ?? 0,
+      pvalue: paths.b1?.pvalue ?? 1,
+      interpretation: 'Strong connection: students with more stress have a harder time adjusting to college life.',
+      type: 'distress',
+    },
+    {
+      id: 'b2',
+      label: 'Engagement → College Success',
+      estimate: paths.b2?.estimate ?? 0,
+      se: paths.b2?.se ?? 0,
+      pvalue: paths.b2?.pvalue ?? 1,
+      interpretation: 'Strong connection: students who engage more with campus do better overall.',
+      type: 'engagement',
+    },
+    {
+      id: 'c',
+      label: 'Transfer Credits → Success (Direct)',
+      estimate: paths.c?.estimate ?? 0,
+      se: paths.c?.se ?? 0,
+      pvalue: paths.c?.pvalue ?? 1,
+      interpretation: 'Beyond the stress and engagement effects, transfer credits give a small direct boost to college success.',
+      type: 'direct',
+    },
+    {
+      id: 'cz',
+      label: 'Does credit amount change the direct benefit?',
+      estimate: paths.cz?.estimate ?? 0,
+      se: paths.cz?.se ?? 0,
+      pvalue: paths.cz?.pvalue ?? 1,
+      interpretation: 'There\'s a hint that the direct benefit decreases when students have many credits, but we need more evidence.',
+      type: 'moderation',
+    },
+  ], [paths]);
 
   const pathwayButtons = [
     { id: null, label: 'Show All', color: 'var(--color-text)' },
     { id: 'distress', label: 'Stress Route', color: 'var(--color-distress)' },
     { id: 'engagement', label: 'Engagement Route', color: 'var(--color-engagement)' },
+    { id: 'serial', label: 'Serial Mediation', color: 'var(--color-belonging)' },
     { id: 'direct', label: 'Direct Benefit', color: 'var(--color-nonfast)' },
   ] as const;
 
@@ -158,6 +162,7 @@ export default function PathwayPage() {
               const isHighlighted = !highlightedPath ||
                 (highlightedPath === 'distress' && (path.id === 'a1' || path.id === 'b1' || path.id === 'a1z')) ||
                 (highlightedPath === 'engagement' && (path.id === 'a2' || path.id === 'b2' || path.id === 'a2z')) ||
+                (highlightedPath === 'serial' && (path.id === 'a1' || path.id === 'b1' || path.id === 'a2' || path.id === 'b2')) ||
                 (highlightedPath === 'direct' && (path.id === 'c' || path.id === 'cz'));
 
               const strengthBadge = path.pvalue < 0.001 ? 'Strong evidence' :

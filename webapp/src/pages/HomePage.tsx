@@ -1,19 +1,21 @@
 import { Link } from 'react-router-dom';
 import StatCard from '../components/ui/StatCard';
 import PathwayDiagram from '../components/charts/PathwayDiagram';
+import { useModelData } from '../context/ModelDataContext';
 import styles from './HomePage.module.css';
 
-// Inline data for initial display - will be replaced with JSON import
-const keyFindings = {
-  totalN: 5000,
-  fastPct: 27,
-  cfi: 0.997,
-  distressEffect: 0.127,
-  engagementEffect: -0.010,
-  adjustmentDirect: 0.041,
-};
-
 export default function HomePage() {
+  const { sampleSize, fitMeasures, paths, fastPercent } = useModelData();
+
+  // Derive key findings dynamically from pipeline data
+  const keyFindings = {
+    totalN: sampleSize,
+    fastPct: fastPercent,
+    cfi: fitMeasures.cfi ?? 0.997,
+    distressEffect: paths.a1?.estimate ?? 0,
+    engagementEffect: paths.a2?.estimate ?? 0,
+    adjustmentDirect: paths.c?.estimate ?? 0,
+  };
   return (
     <div className={styles.page}>
       <div className="container">

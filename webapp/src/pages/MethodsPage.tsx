@@ -1,14 +1,6 @@
+import { useMemo } from 'react';
+import { useModelData } from '../context/ModelDataContext';
 import styles from './MethodsPage.module.css';
-
-const fitMeasures = [
-  { name: 'Chi-Square (χ²)', description: 'Overall model test', value: '897.36', criterion: '—', interpretation: 'Baseline test statistic' },
-  { name: 'Degrees of Freedom', description: 'Model complexity', value: '523', criterion: '—', interpretation: '—' },
-  { name: 'Chi-Square p-value', description: 'Significance test', value: '< .001', criterion: 'Non-significant preferred', interpretation: 'Expected with large samples' },
-  { name: 'CFI', description: 'Comparative fit', value: '0.997', criterion: '≥ 0.95', interpretation: 'Excellent' },
-  { name: 'TLI', description: 'Tucker-Lewis fit', value: '0.996', criterion: '≥ 0.95', interpretation: 'Excellent' },
-  { name: 'RMSEA', description: 'Approximation error', value: '0.012', criterion: '≤ 0.05', interpretation: 'Excellent' },
-  { name: 'SRMR', description: 'Residual size', value: '0.047', criterion: '≤ 0.08', interpretation: 'Good' },
-];
 
 const modelSpecs = [
   { label: 'Estimator', value: 'Maximum Likelihood (ML)', description: 'Standard method for finding best-fitting parameters' },
@@ -20,6 +12,26 @@ const modelSpecs = [
 ];
 
 export default function MethodsPage() {
+  const { fitMeasures: fits } = useModelData();
+
+  // Build fit measures table dynamically from pipeline data
+  const fitMeasures = useMemo(() => {
+    const checkResult = (val: number | undefined, threshold: number, higher: boolean = true) => {
+      if (val === undefined) return '—';
+      return higher ? (val >= threshold ? 'Excellent' : 'Below threshold') 
+                    : (val <= threshold ? 'Excellent' : 'Below threshold');
+    };
+
+    return [
+      { name: 'Chi-Square (χ²)', description: 'Overall model test', value: fits.chisq?.toFixed(2) ?? '—', criterion: '—', interpretation: 'Baseline test statistic' },
+      { name: 'Degrees of Freedom', description: 'Model complexity', value: fits.df?.toString() ?? '—', criterion: '—', interpretation: '—' },
+      { name: 'Chi-Square p-value', description: 'Significance test', value: fits.pvalue !== undefined ? (fits.pvalue < 0.001 ? '< .001' : fits.pvalue.toFixed(3)) : '—', criterion: 'Non-significant preferred', interpretation: 'Expected with large samples' },
+      { name: 'CFI', description: 'Comparative fit', value: fits.cfi?.toFixed(3) ?? '—', criterion: '≥ 0.95', interpretation: checkResult(fits.cfi, 0.95, true) },
+      { name: 'TLI', description: 'Tucker-Lewis fit', value: fits.tli?.toFixed(3) ?? '—', criterion: '≥ 0.95', interpretation: checkResult(fits.tli, 0.95, true) },
+      { name: 'RMSEA', description: 'Approximation error', value: fits.rmsea?.toFixed(3) ?? '—', criterion: '≤ 0.05', interpretation: checkResult(fits.rmsea, 0.05, false) },
+      { name: 'SRMR', description: 'Residual size', value: fits.srmr?.toFixed(3) ?? '—', criterion: '≤ 0.08', interpretation: fits.srmr !== undefined ? (fits.srmr <= 0.08 ? 'Good' : 'Below threshold') : '—' },
+    ];
+  }, [fits]);
   return (
     <div className={styles.page}>
       <div className="container">
