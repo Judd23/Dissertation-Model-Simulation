@@ -91,12 +91,12 @@ export default function ResearcherPage() {
             <div className={styles.quotePanel}>
               <blockquote className={styles.pullQuote}>
                 <p>
-                  “The arts taught me what statistics later confirmed: people make meaning before they make decisions.”
+                  "The arts taught me what statistics later confirmed: people make <em>meaning</em> before they make decisions."
                 </p>
               </blockquote>
               <blockquote className={styles.pullQuoteAlt}>
                 <p>
-                  “Belonging is made in the quiet minutes, in the ordinary grace of being remembered, of being welcomed, of being regarded as worthy of attention.”
+                  "Belonging is made in the quiet minutes, in the ordinary grace of being remembered, of being welcomed, of being regarded as worthy of <em>attention</em>."
                 </p>
               </blockquote>
             </div>

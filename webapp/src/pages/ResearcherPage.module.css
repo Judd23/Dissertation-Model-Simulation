@@ -271,19 +271,23 @@
 
 .pullQuoteAlt {
   margin: 0;
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--color-border);
-  justify-self: end;
-  max-width: 28rem;
+  padding-right: var(--spacing-xl);
+  border-right: 3px solid var(--color-accent);
   text-align: right;
 }
 
 .pullQuoteAlt p {
   font-family: var(--font-heading);
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
-  line-height: 1.5;
-  color: var(--color-text-muted);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.35;
+  color: var(--color-text);
   margin: 0;
+}
+
+.pullQuoteAlt em {
+  font-style: normal;
+  color: var(--color-accent);
+  font-weight: 600;
 }
 
 .blockC {
