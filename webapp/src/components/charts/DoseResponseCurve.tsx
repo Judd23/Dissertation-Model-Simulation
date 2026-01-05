@@ -4,6 +4,7 @@ import { useResearch } from '../../context/ResearchContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useModelData } from '../../context/ModelDataContext';
 import { colors } from '../../utils/colorScales';
+import DataTimestamp from '../ui/DataTimestamp';
 import styles from './DoseResponseCurve.module.css';
 
 interface DoseResponseCurveProps {
@@ -203,6 +204,7 @@ export default function DoseResponseCurve({
   return (
     <div className={styles.container}>
       <svg ref={svgRef} width={width} height={height} className={styles.svg} />
+      <DataTimestamp />
     </div>
   );
 }

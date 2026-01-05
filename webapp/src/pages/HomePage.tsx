@@ -3,15 +3,19 @@ import StatCard from '../components/ui/StatCard';
 import Icon from '../components/ui/Icon';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import PathwayDiagram from '../components/charts/PathwayDiagram';
+import DataTimestamp from '../components/ui/DataTimestamp';
 import { useModelData } from '../context/ModelDataContext';
 import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
+import sampleDescriptives from '../data/sampleDescriptives.json';
 import styles from './HomePage.module.css';
 
 export default function HomePage() {
   const { sampleSize, fitMeasures, paths, fastPercent } = useModelData();
+  const demographics = sampleDescriptives.demographics;
 
   // Scroll reveal refs
   const heroRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
+  const demographicsRef = useStaggeredReveal<HTMLElement>();
   const statsRef = useStaggeredReveal<HTMLElement>();
   const finding1Ref = useScrollReveal<HTMLElement>();
   const finding2Ref = useScrollReveal<HTMLElement>();
@@ -46,6 +50,151 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Sample Demographics */}
+      <section ref={demographicsRef} className={`${styles.demographics} stagger-children`}>
+        <div className="container">
+          <div className={styles.demographicsHeader}>
+            <h2>Our Student Population</h2>
+            <p className={styles.demographicsLead}>
+              {sampleSize.toLocaleString()} California State University first-year students representing diverse backgrounds and experiences
+            </p>
+          </div>
+
+          <div className={styles.demographicsGrid}>
+            {/* Race/Ethnicity */}
+            <div className={`${styles.demoCard} reveal`}>
+              <h3 className={styles.demoCardTitle}>Race & Ethnicity</h3>
+              <div className={styles.demoStats}>
+                {Object.entries(demographics.race).map(([group, data]) => (
+                  <div key={group} className={styles.demoStat}>
+                    <div className={styles.demoBar}>
+                      <div
+                        className={styles.demoBarFill}
+                        style={{ width: `${data.pct}%` }}
+                        aria-label={`${group}: ${data.pct}%`}
+                      />
+                    </div>
+                    <div className={styles.demoLabel}>
+                      <span className={styles.demoGroup}>{group}</span>
+                      <span className={styles.demoPct}>{data.pct}%</span>
+                    </div>
+                    <div className={styles.demoCount}>{data.n.toLocaleString()} students</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* First-Gen & Pell */}
+            <div className={`${styles.demoCard} reveal`}>
+              <h3 className={styles.demoCardTitle}>Access & Equity</h3>
+              <div className={styles.demoStats}>
+                <div className={styles.demoStat}>
+                  <div className={styles.demoCircle}>
+                    <svg viewBox="0 0 36 36" className={styles.demoDonut}>
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="var(--color-border-light)"
+                        strokeWidth="3"
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="var(--color-accent)"
+                        strokeWidth="3"
+                        strokeDasharray={`${demographics.firstgen.yes.pct}, 100`}
+                      />
+                      <text x="18" y="20.5" className={styles.demoPercentage}>
+                        {demographics.firstgen.yes.pct}%
+                      </text>
+                    </svg>
+                  </div>
+                  <div className={styles.demoLabel}>
+                    <span className={styles.demoGroup}>First-Generation</span>
+                    <span className={styles.demoCount}>{demographics.firstgen.yes.n.toLocaleString()} students</span>
+                  </div>
+                </div>
+
+                <div className={styles.demoStat}>
+                  <div className={styles.demoCircle}>
+                    <svg viewBox="0 0 36 36" className={styles.demoDonut}>
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="var(--color-border-light)"
+                        strokeWidth="3"
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="var(--color-engagement)"
+                        strokeWidth="3"
+                        strokeDasharray={`${demographics.pell.yes.pct}, 100`}
+                      />
+                      <text x="18" y="20.5" className={styles.demoPercentage}>
+                        {demographics.pell.yes.pct}%
+                      </text>
+                    </svg>
+                  </div>
+                  <div className={styles.demoLabel}>
+                    <span className={styles.demoGroup}>Pell Grant Recipients</span>
+                    <span className={styles.demoCount}>{demographics.pell.yes.n.toLocaleString()} students</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Gender & STEM (if needed, we can add living situation instead) */}
+            <div className={`${styles.demoCard} reveal`}>
+              <h3 className={styles.demoCardTitle}>Student Profile</h3>
+              <div className={styles.demoStats}>
+                <div className={styles.demoStat}>
+                  <div className={styles.demoLabel}>
+                    <span className={styles.demoGroup}>Female</span>
+                    <span className={styles.demoPct}>{demographics.sex.women.pct}%</span>
+                  </div>
+                  <div className={styles.demoBar}>
+                    <div
+                      className={styles.demoBarFill}
+                      style={{
+                        width: `${demographics.sex.women.pct}%`,
+                        backgroundColor: 'var(--color-distress)'
+                      }}
+                    />
+                  </div>
+                  <div className={styles.demoCount}>{demographics.sex.women.n.toLocaleString()} students</div>
+                </div>
+
+                <div className={styles.demoStat}>
+                  <div className={styles.demoLabel}>
+                    <span className={styles.demoGroup}>Male</span>
+                    <span className={styles.demoPct}>{demographics.sex.men.pct}%</span>
+                  </div>
+                  <div className={styles.demoBar}>
+                    <div
+                      className={styles.demoBarFill}
+                      style={{
+                        width: `${demographics.sex.men.pct}%`,
+                        backgroundColor: 'var(--color-engagement)'
+                      }}
+                    />
+                  </div>
+                  <div className={styles.demoCount}>{demographics.sex.men.n.toLocaleString()} students</div>
+                </div>
+
+                <div className={styles.demoHighlight}>
+                  <div className={styles.demoHighlightValue}>{demographics.transferCredits.mean.toFixed(1)}</div>
+                  <div className={styles.demoHighlightLabel}>Average Transfer Credits</div>
+                  <div className={styles.demoHighlightRange}>
+                    Range: {demographics.transferCredits.min}–{demographics.transferCredits.max} credits
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Key Stats */}
       <section ref={statsRef} className={`${styles.stats} stagger-children`}>
         <div className="container">
@@ -77,6 +226,7 @@ export default function HomePage() {
               />
             </div>
           </div>
+          <DataTimestamp />
         </div>
       </section>
 

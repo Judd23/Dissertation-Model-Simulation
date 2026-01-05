@@ -22,6 +22,7 @@ import os
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from datetime import datetime
 
 # Paths
 PROJECT_ROOT = Path(__file__).parent.parent.parent
@@ -501,6 +502,23 @@ def main():
     with open(OUTPUT_DIR / "variableMetadata.json", "w") as f:
         json.dump(variable_metadata, f, indent=2)
     print(f"  ✓ Wrote variableMetadata.json ({len(variable_metadata.get('variables', {}))} variables)")
+
+    # 6. Write metadata with timestamp
+    print("\n[6/6] Writing data metadata...")
+    now = datetime.now()
+    metadata = {
+        "generatedAt": now.isoformat(),
+        "generatedAtFormatted": now.strftime("%B %d, %Y at %I:%M %p"),
+        "generatedAtShort": now.strftime("%Y-%m-%d %H:%M"),
+        "pipelineVersion": "1.0.0",
+        "dataSource": "run_all_RQs_official.R",
+        "bootstrapReplicates": 2000,
+        "ciType": "bca.simple"
+    }
+    
+    with open(OUTPUT_DIR / "dataMetadata.json", "w") as f:
+        json.dump(metadata, f, indent=2)
+    print(f"  ✓ Wrote dataMetadata.json (generated: {metadata['generatedAtShort']})")
 
     print("\n" + "=" * 60)
     print("Done! JSON files written to:", OUTPUT_DIR)

@@ -1,0 +1,54 @@
+.timestamp {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary, #9ca3af);
+  font-family: var(--font-mono, ui-monospace, 'SF Mono', 'Monaco', 'Inconsolata', monospace);
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  width: 100%;
+  opacity: 0.7;
+}
+
+.label {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.6rem;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.time {
+  color: var(--color-text-secondary, #4b5563);
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .timestamp {
+    font-size: 0.65rem;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .label {
+    font-size: 0.55rem;
+  }
+}
+
+/* Dark mode support via CSS variables - theme context handles this */
+[data-theme="dark"] .timestamp,
+.dark .timestamp {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .label,
+.dark .label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .time,
+.dark .time {
+  color: #9ca3af;
+}

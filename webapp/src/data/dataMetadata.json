@@ -1,0 +1,9 @@
+{
+  "generatedAt": "2026-01-04T22:22:07.513224",
+  "generatedAtFormatted": "January 04, 2026 at 10:22 PM",
+  "generatedAtShort": "2026-01-04 22:22",
+  "pipelineVersion": "1.0.0",
+  "dataSource": "run_all_RQs_official.R",
+  "bootstrapReplicates": 2000,
+  "ciType": "bca.simple"
+}

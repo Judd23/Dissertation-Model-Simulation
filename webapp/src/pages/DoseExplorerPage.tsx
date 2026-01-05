@@ -4,6 +4,7 @@ import Slider from '../components/ui/Slider';
 import Toggle from '../components/ui/Toggle';
 import DoseResponseCurve from '../components/charts/DoseResponseCurve';
 import StatCard from '../components/ui/StatCard';
+import DataTimestamp from '../components/ui/DataTimestamp';
 import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import styles from './DoseExplorerPage.module.css';
 
@@ -78,6 +79,7 @@ export default function DoseExplorerPage() {
               color={engagementEffect > 0 ? 'positive' : 'negative'}
             />
           </div>
+          <DataTimestamp />
         </section>
 
         <section ref={chartsRef} className={`${styles.charts} stagger-children`}>

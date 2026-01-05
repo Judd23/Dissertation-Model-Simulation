@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { useTheme } from '../../context/ThemeContext';
 import { colors, getRaceColor } from '../../utils/colorScales';
+import DataTimestamp from '../ui/DataTimestamp';
 import styles from './GroupComparison.module.css';
 
 // Sample group comparison data (would be imported from JSON)
@@ -259,6 +260,7 @@ export default function GroupComparison({
       <p className={styles.note}>
         * p &lt; .05. Error bars represent 95% confidence intervals.
       </p>
+      <DataTimestamp />
     </div>
   );
 }
