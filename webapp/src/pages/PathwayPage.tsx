@@ -3,24 +3,20 @@ import { useResearch } from '../context/ResearchContext';
 import { useModelData } from '../context/ModelDataContext';
 import PathwayDiagram from '../components/charts/PathwayDiagram';
 import Toggle from '../components/ui/Toggle';
-import Slider from '../components/ui/Slider';
 import KeyTakeaway from '../components/ui/KeyTakeaway';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
-import fastComparison from '../data/fastComparison.json';
 import styles from './PathwayPage.module.css';
 
 export default function PathwayPage() {
-  const { highlightedPath, setHighlightedPath, showCIs, toggleCIs, selectedDose, setSelectedDose } = useResearch();
+  const { highlightedPath, setHighlightedPath, showCIs, toggleCIs } = useResearch();
   const { paths } = useModelData();
   const [isStuck, setIsStuck] = useState(false);
-  const [showSampleInfo, setShowSampleInfo] = useState(false);
   const controlsRef = useRef<HTMLElement>(null);
 
   // Scroll reveal refs
   const headerRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
   const diagramRef = useScrollReveal<HTMLElement>({ threshold: 0.1 });
-  const doseRef = useScrollReveal<HTMLElement>();
   const coefficientsRef = useStaggeredReveal<HTMLElement>();
   const summaryRef = useStaggeredReveal<HTMLElement>();
 
@@ -116,13 +112,20 @@ export default function PathwayPage() {
     },
   ], [paths]);
 
-  const pathwayButtons = [
-    { id: null, label: 'Show All', color: 'var(--color-text)' },
+  type PathwayButton = {
+    id: 'distress' | 'engagement' | 'serial' | 'direct' | null;
+    label: string;
+    color: string;
+    textColor?: string;
+  };
+
+  const pathwayButtons: PathwayButton[] = [
+    { id: null, label: 'Show All', color: 'var(--color-text)', textColor: 'var(--color-background)' },
     { id: 'distress', label: 'Stress Route', color: 'var(--color-distress)' },
     { id: 'engagement', label: 'Engagement Route', color: 'var(--color-engagement)' },
     { id: 'serial', label: 'Serial Mediation', color: 'var(--color-belonging)' },
     { id: 'direct', label: 'Direct Benefit', color: 'var(--color-nonfast)' },
-  ] as const;
+  ];
 
   return (
     <div className={styles.page}>
@@ -146,7 +149,10 @@ export default function PathwayPage() {
                 key={btn.id || 'all'}
                 className={`${styles.pathwayButton} ${highlightedPath === btn.id ? styles.active : ''}`}
                 onClick={() => setHighlightedPath(btn.id)}
-                style={{ '--button-color': btn.color } as React.CSSProperties}
+                style={{
+                  '--button-color': btn.color,
+                  '--button-text': btn.textColor ?? 'white',
+                } as React.CSSProperties}
               >
                 {btn.label}
               </button>
@@ -159,72 +165,11 @@ export default function PathwayPage() {
               checked={showCIs}
               onChange={toggleCIs}
             />
-            <Toggle
-              id="show-sample-info-pathway"
-              label="Show Sample Breakdown"
-              checked={showSampleInfo}
-              onChange={() => setShowSampleInfo(!showSampleInfo)}
-            />
           </div>
         </section>
-
-        {showSampleInfo && (
-          <section className={styles.sampleInfo}>
-            <h3>Sample Composition: FASt vs Non-FASt Students</h3>
-            <div className={styles.sampleGrid}>
-              <div className={styles.sampleCard} style={{ transitionDelay: '0ms' }}>
-                <div className={styles.sampleHeader}>
-                  <span className={styles.sampleLabel}>FASt Students</span>
-                  <span className={styles.sampleCount}>{fastComparison.overall.fast_n.toLocaleString()}</span>
-                </div>
-                <div className={styles.sampleDetail}>12+ dual enrollment credits from high school</div>
-                <div className={styles.sampleStats}>
-                  <div>Avg credits: <strong>{fastComparison.demographics.transferCredits.fast.mean}</strong></div>
-                  <div>First-Gen: <strong>{fastComparison.demographics.firstgen.yes.fast.pct}%</strong></div>
-                  <div>Pell: <strong>{fastComparison.demographics.pell.yes.fast.pct}%</strong></div>
-                </div>
-              </div>
-              <div className={styles.sampleCard} style={{ transitionDelay: '100ms' }}>
-                <div className={styles.sampleHeader}>
-                  <span className={styles.sampleLabel}>Non-FASt Students</span>
-                  <span className={styles.sampleCount}>{fastComparison.overall.nonfast_n.toLocaleString()}</span>
-                </div>
-                <div className={styles.sampleDetail}>Fewer than 12 dual enrollment credits</div>
-                <div className={styles.sampleStats}>
-                  <div>Avg credits: <strong>{fastComparison.demographics.transferCredits.nonfast.mean}</strong></div>
-                  <div>First-Gen: <strong>{fastComparison.demographics.firstgen.yes.nonfast.pct}%</strong></div>
-                  <div>Pell: <strong>{fastComparison.demographics.pell.yes.nonfast.pct}%</strong></div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
 
         <section ref={diagramRef} className={`${styles.diagram} reveal-scale`}>
           <PathwayDiagram width={800} height={450} interactive />
-        </section>
-
-        <section ref={doseRef} className={`${styles.doseControl} reveal`}>
-          <h2>How Many Credits Matter?</h2>
-          <p className={styles.doseDescription}>
-            Not all students earn the same number of credits. Use the slider to see
-            how the effects might change for students with different credit totals.
-          </p>
-          <div className={styles.sliderContainer}>
-            <Slider
-              id="pathway-dose"
-              label="College Credits Earned"
-              value={selectedDose}
-              onChange={setSelectedDose}
-              min={0}
-              max={80}
-              step={1}
-              formatValue={(v) => `${v} credits`}
-              showThreshold={12}
-              thresholdLabel="12+ = FASt Student"
-              tickMarks={[12, 24, 36, 48, 60]}
-            />
-          </div>
         </section>
 
         <section ref={coefficientsRef} className={`${styles.coefficients} stagger-children`}>

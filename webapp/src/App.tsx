@@ -6,6 +6,7 @@ import Layout from './components/layout/Layout';
 import ScrollToTop from './components/ui/ScrollToTop';
 import LandingPage from './pages/LandingPage';
 import HomePage from './pages/HomePage';
+import SoWhatPage from './pages/SoWhatPage';
 import DoseExplorerPage from './pages/DoseExplorerPage';
 import DemographicsPage from './pages/DemographicsPage';
 import PathwayPage from './pages/PathwayPage';
@@ -24,6 +25,7 @@ function App() {
               <Route index element={<LandingPage />} />
               <Route path="/" element={<Layout />}>
                 <Route path="home" element={<HomePage />} />
+                <Route path="so-what" element={<SoWhatPage />} />
                 <Route path="dose" element={<DoseExplorerPage />} />
                 <Route path="demographics" element={<DemographicsPage />} />
                 <Route path="pathway" element={<PathwayPage />} />

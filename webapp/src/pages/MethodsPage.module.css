@@ -21,6 +21,29 @@
   z-index: 0;
 }
 
+/* Second background orb for visual depth */
+.page::after {
+  content: '';
+  position: absolute;
+  top: 600px;
+  right: -200px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-engagement) 10%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: floatSubtle 20s ease-in-out infinite;
+}
+
+@keyframes floatSubtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(30px); }
+}
+
 .header {
   text-align: center;
   max-width: 800px;
@@ -50,10 +73,29 @@
   position: relative;
 }
 
+.section:not(:first-of-type) {
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--spacing-3xl);
+}
+
 .section h2 {
   border-bottom: 2px solid var(--color-border);
   padding-bottom: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
+  text-align: center;
+  position: relative;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-engagement));
+  border-radius: 1px;
 }
 
 .sectionIntro {
@@ -82,6 +124,19 @@
 .table td {
   padding: var(--spacing-md);
   border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast);
+}
+
+.table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+.table tbody tr:hover {
+  background-color: color-mix(in srgb, var(--color-accent) 5%, var(--color-surface));
+}
+
+.table tbody tr:hover td:first-child {
+  color: var(--color-accent);
 }
 
 .mono {
@@ -100,16 +155,36 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
   transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.specCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--color-accent), var(--color-engagement));
+  transform: scaleY(0);
+  transition: transform var(--transition-normal);
+  transform-origin: bottom;
 }
 
 .specCard:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
   border-color: var(--color-accent);
+}
+
+.specCard:hover::before {
+  transform: scaleY(1);
 }
 
 .specLabel {
@@ -144,6 +219,7 @@
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   margin-top: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
   transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast),
@@ -186,6 +262,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
   transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast),

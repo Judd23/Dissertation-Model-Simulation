@@ -17,6 +17,14 @@ const nodePositions: Record<string, { x: number; y: number }> = {
   Dose: { x: 0.12, y: 0.12 },
 };
 
+const mobileNodePositions: Record<string, { x: number; y: number }> = {
+  Dose: { x: 0.5, y: 0.08 },
+  FASt: { x: 0.5, y: 0.28 },
+  Distress: { x: 0.32, y: 0.5 },
+  Engagement: { x: 0.68, y: 0.5 },
+  Adjustment: { x: 0.5, y: 0.82 },
+};
+
 // Node descriptions for tooltips
 const nodeDescriptions: Record<string, { title: string; description: string }> = {
   FASt: {
@@ -54,16 +62,19 @@ interface PathwayDiagramProps {
   width?: number;
   height?: number;
   interactive?: boolean;
+  showLegend?: boolean;
 }
 
 export default function PathwayDiagram({
   width: initialWidth = 700,
   height: initialHeight = 400,
   interactive = true,
+  showLegend = true,
 }: PathwayDiagramProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState({ width: initialWidth, height: initialHeight });
+  const [isMobile, setIsMobile] = useState(false);
   const { highlightedPath, setHighlightedPath, selectedDose } = useResearch();
   const { resolvedTheme } = useTheme();
   const { paths, doseCoefficients } = useModelData();
@@ -72,10 +83,18 @@ export default function PathwayDiagram({
   const updateDimensions = useCallback(() => {
     if (containerRef.current) {
       const containerWidth = containerRef.current.offsetWidth;
-      // Allow diagram to shrink to mobile width without horizontal scroll
-      const responsiveWidth = Math.max(320, Math.min(initialWidth, containerWidth - 40));
+      const computed = getComputedStyle(containerRef.current);
+      const paddingLeft = parseFloat(computed.paddingLeft) || 0;
+      const paddingRight = parseFloat(computed.paddingRight) || 0;
+      const usableWidth = Math.max(0, containerWidth - paddingLeft - paddingRight);
+      const mobile = usableWidth < 520;
+      setIsMobile(mobile);
+      const responsiveWidth = mobile
+        ? Math.max(320, usableWidth)
+        : Math.max(320, Math.min(initialWidth, usableWidth));
       const aspectRatio = initialHeight / initialWidth;
-      const responsiveHeight = responsiveWidth * aspectRatio;
+      const tunedRatio = mobile ? Math.max(aspectRatio, 1.05) : aspectRatio;
+      const responsiveHeight = Math.max(520, responsiveWidth * tunedRatio);
       setDimensions({ width: responsiveWidth, height: responsiveHeight });
     }
   }, [initialWidth, initialHeight]);
@@ -180,7 +199,8 @@ export default function PathwayDiagram({
 
 
     // Scale positions
-    const scaledNodes = Object.entries(nodePositions).map(([id, pos]) => ({
+    const layoutNodes = isMobile ? mobileNodePositions : nodePositions;
+    const scaledNodes = Object.entries(layoutNodes).map(([id, pos]) => ({
       id,
       x: pos.x * innerWidth,
       y: pos.y * innerHeight,
@@ -313,54 +333,48 @@ export default function PathwayDiagram({
           });
       }
 
-      // Path coefficient label - position away from the line
-      let labelX: number, labelY: number;
-      if (path.id === 'a1') {
-        // FASt → Distress: label above
-        labelX = (from.x + to.x) / 2 - 20;
-        labelY = (from.y + to.y) / 2 - 15;
-      } else if (path.id === 'a2') {
-        // FASt → Engagement: label below
-        labelX = (from.x + to.x) / 2 - 20;
-        labelY = (from.y + to.y) / 2 + 25;
-      } else if (path.id === 'b1') {
-        // Distress → Adjustment: label above
-        labelX = (from.x + to.x) / 2;
-        labelY = (from.y + to.y) / 2 - 15;
-      } else if (path.id === 'b2') {
-        // Engagement → Adjustment: label below
-        labelX = (from.x + to.x) / 2;
-        labelY = (from.y + to.y) / 2 + 25;
-      } else {
-        // Direct path c': label below center
-        labelX = (from.x + to.x) / 2;
-        labelY = from.y + 20;
-      }
+      if (!isMobile) {
+        let labelX: number, labelY: number;
+        if (path.id === 'a1') {
+          labelX = (from.x + to.x) / 2 - 20;
+          labelY = (from.y + to.y) / 2 - 15;
+        } else if (path.id === 'a2') {
+          labelX = (from.x + to.x) / 2 - 20;
+          labelY = (from.y + to.y) / 2 + 25;
+        } else if (path.id === 'b1') {
+          labelX = (from.x + to.x) / 2;
+          labelY = (from.y + to.y) / 2 - 15;
+        } else if (path.id === 'b2') {
+          labelX = (from.x + to.x) / 2;
+          labelY = (from.y + to.y) / 2 + 25;
+        } else {
+          labelX = (from.x + to.x) / 2;
+          labelY = from.y + 20;
+        }
 
-      // Add background rect for label readability
-      const labelText = `${path.label} = ${formatNumber(path.estimate)}${path.pvalue < 0.05 ? '*' : ''}`;
-      const textNode = pathsGroup
-        .append('text')
-        .attr('x', labelX)
-        .attr('y', labelY)
-        .attr('text-anchor', 'middle')
-        .attr('font-family', 'var(--font-mono)')
-        .attr('font-size', 11)
-        .attr('font-weight', 500)
-        .attr('fill', color)
-        .attr('opacity', opacity)
-        .text(labelText);
+        const labelText = `${path.label} = ${formatNumber(path.estimate)}${path.pvalue < 0.05 ? '*' : ''}`;
+        const textNode = pathsGroup
+          .append('text')
+          .attr('x', labelX)
+          .attr('y', labelY)
+          .attr('text-anchor', 'middle')
+          .attr('font-family', 'var(--font-mono)')
+          .attr('font-size', 11)
+          .attr('font-weight', 500)
+          .attr('fill', color)
+          .attr('opacity', opacity)
+          .text(labelText);
 
-      // Add background for better readability
-      const bbox = (textNode.node() as SVGTextElement)?.getBBox();
-      if (bbox) {
-        pathsGroup.insert('rect', 'text')
-          .attr('x', bbox.x - 3)
-          .attr('y', bbox.y - 1)
-          .attr('width', bbox.width + 6)
-          .attr('height', bbox.height + 2)
-          .attr('fill', chartBg)
-          .attr('opacity', opacity * 0.9);
+        const bbox = (textNode.node() as SVGTextElement)?.getBBox();
+        if (bbox) {
+          pathsGroup.insert('rect', 'text')
+            .attr('x', bbox.x - 3)
+            .attr('y', bbox.y - 1)
+            .attr('width', bbox.width + 6)
+            .attr('height', bbox.height + 2)
+            .attr('fill', chartBg)
+            .attr('opacity', opacity * 0.9);
+        }
       }
     });
 
@@ -472,62 +486,79 @@ export default function PathwayDiagram({
       });
     });
 
-    // Add legend with better styling - position inside safe area
-    const legendX = Math.min(width - 160, width - 155);
-    const legendBg = svg.append('g')
-      .attr('transform', `translate(${legendX}, 12)`);
-    
-    legendBg.append('rect')
-      .attr('x', -8)
-      .attr('y', -8)
-      .attr('width', 145)
-      .attr('height', 80)
-      .attr('fill', chartBg)
-      .attr('stroke', 'var(--color-border)')
-      .attr('stroke-width', 1)
-      .attr('rx', 6)
-      .attr('opacity', 0.95);
+    if (showLegend && !isMobile) {
+      const legendX = Math.min(width - 160, width - 155);
+      const legendBg = svg.append('g')
+        .attr('transform', `translate(${legendX}, 12)`);
 
-    const legend = legendBg.append('g');
+      legendBg.append('rect')
+        .attr('x', -8)
+        .attr('y', -8)
+        .attr('width', 145)
+        .attr('height', 80)
+        .attr('fill', chartBg)
+        .attr('stroke', 'var(--color-border)')
+        .attr('stroke-width', 1)
+        .attr('rx', 6)
+        .attr('opacity', 0.95);
 
-    const legendItems = [
-      { label: 'Stress route', color: colors.distress, desc: '(indirect)' },
-      { label: 'Engagement route', color: colors.engagement, desc: '(indirect)' },
-      { label: 'Direct benefit', color: colors.nonfast, desc: '' },
-    ];
+      const legend = legendBg.append('g');
 
-    legendItems.forEach((item, i) => {
-      const itemG = legend.append('g').attr('transform', `translate(0, ${i * 22})`);
-      itemG
-        .append('line')
-        .attr('x1', 0)
-        .attr('y1', 0)
-        .attr('x2', 28)
-        .attr('y2', 0)
-        .attr('stroke', item.color)
-        .attr('stroke-width', 3)
-        .attr('stroke-linecap', 'round');
-      itemG
-        .append('circle')
-        .attr('cx', 28)
-        .attr('cy', 0)
-        .attr('r', 3)
-        .attr('fill', item.color);
-      itemG
-        .append('text')
-        .attr('x', 36)
-        .attr('y', 4)
-        .attr('font-size', 11)
-        .attr('font-weight', 500)
-        .attr('fill', 'var(--color-text)')
-        .text(item.label);
-    });
+      const legendItems = [
+        { label: 'Stress route', color: colors.distress, desc: '(indirect)' },
+        { label: 'Engagement route', color: colors.engagement, desc: '(indirect)' },
+        { label: 'Direct benefit', color: colors.nonfast, desc: '' },
+      ];
 
-  }, [dimensions, highlightedPath, interactive, setHighlightedPath, resolvedTheme, selectedDose, modelData, getAdjustedEstimate]);
+      legendItems.forEach((item, i) => {
+        const itemG = legend.append('g').attr('transform', `translate(0, ${i * 22})`);
+        itemG
+          .append('line')
+          .attr('x1', 0)
+          .attr('y1', 0)
+          .attr('x2', 28)
+          .attr('y2', 0)
+          .attr('stroke', item.color)
+          .attr('stroke-width', 3)
+          .attr('stroke-linecap', 'round');
+        itemG
+          .append('circle')
+          .attr('cx', 28)
+          .attr('cy', 0)
+          .attr('r', 3)
+          .attr('fill', item.color);
+        itemG
+          .append('text')
+          .attr('x', 36)
+          .attr('y', 4)
+          .attr('font-size', 11)
+          .attr('font-weight', 500)
+          .attr('fill', 'var(--color-text)')
+          .text(item.label);
+      });
+    }
+
+  }, [dimensions, highlightedPath, interactive, setHighlightedPath, resolvedTheme, selectedDose, modelData, getAdjustedEstimate, isMobile, showLegend]);
 
   return (
     <div ref={containerRef} className={styles.container}>
       <svg ref={svgRef} width={dimensions.width} height={dimensions.height} className={styles.svg} />
+      {showLegend && isMobile && (
+        <div className={styles.mobileLegend} aria-hidden="true">
+          <div className={styles.legendItem}>
+            <span className={styles.legendLine} style={{ background: colors.distress }} />
+            <span className={styles.legendLabel}>Stress route</span>
+          </div>
+          <div className={styles.legendItem}>
+            <span className={styles.legendLine} style={{ background: colors.engagement }} />
+            <span className={styles.legendLabel}>Engagement route</span>
+          </div>
+          <div className={styles.legendItem}>
+            <span className={styles.legendLine} style={{ background: colors.nonfast }} />
+            <span className={styles.legendLabel}>Direct benefit</span>
+          </div>
+        </div>
+      )}
       {tooltip?.show && (
         <div
           className={`${styles.tooltip} ${tooltip.content.type === 'path' ? styles.pathTooltip : styles.nodeTooltip}`}

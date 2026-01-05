@@ -138,7 +138,7 @@ webapp/src/
 ├── context/          # ThemeContext, ResearchContext, ModelDataContext
 ├── data/             # JSON from R pipeline (modelResults, doseEffects, dataMetadata, etc.)
 ├── hooks/            # useScrollReveal, useStaggeredReveal (Intersection Observer animations)
-├── pages/            # 7 pages: Landing, Home, Dose, Demographics, Pathway, Methods, Researcher
+├── pages/            # 8 pages: Landing, Home, SoWhat, Dose, Demographics, Pathway, Methods, Researcher
 └── styles/           # variables.css (design tokens), global.css (bounce animation system)
 ```
 
@@ -239,24 +239,34 @@ Add these terms to `.vscode/settings.json` or project cSpell config to suppress 
 ### ✅ Completed (January 2026)
 - **Touch targets**: 44px minimum on all interactive elements (WCAG 2.1 AA)
 - **Slider tick marks**: Visual markers at credit thresholds on PathwayPage
-- **Icon components**: 4 SVG icons (chart, users, network, microscope)
+- **Icon components**: 5 SVG icons (chart, users, network, microscope, lightbulb)
 - **Glossary tooltips**: 5 key terms with auto-positioning tooltips (HomePage)
 - **Bounce animations**: Global `--ease-out-back` spring easing on all reveals
 - **Functional scroll indicator**: LandingPage "Scroll to explore" button
 - **ResearcherPage enhancements**: Scroll reveals and hover animations on all blocks
 - **Demographics section**: Bar/donut charts on HomePage with sample data
+- **StatCard animations**: Animated count-up on intersection (supports formatted values)
+- **Johnson-Neyman plot**: New visualization on DoseExplorerPage
+- **CI ribbons**: Confidence interval boundaries on DoseResponseCurve
+- **Dose zones**: Low/Moderate/High credit band indicators
+- **Research questions**: 4 key questions displayed on LandingPage
+- **SoWhatPage**: New dedicated implications page for stakeholders
+- **Badge component**: 6 variants, 3 sizes, pulse animation option
 
 ### 🔧 Needs Work
 - **PathwayDiagram mobile**: Fixed 700px width causes horizontal scroll on mobile
 - **Sticky control feedback**: `.stuck` class defined but not applied via JS
-- **StatCard animations**: No count-up animation on number reveal
 - **Header nav overflow**: Horizontal scroll works but lacks visual indicators
+- **MethodsPage**: Needs accordion component and visual flowchart
+- **DemographicsPage**: Needs visual polish (currently 7/10)
 
 ### 🔮 Future Roadmap
 - Guided tour/walkthrough for first-time visitors
 - PDF export for key findings
 - Advanced filtering on DemographicsPage
 - Methods page table of contents sidebar
+- Student Profile Builder interactive tool
+- Effect decomposition chart (Total = Direct + Indirect)
 
 ## Additional Documentation
 
@@ -610,3 +620,141 @@ Made the ResearcherPage significantly more artistic and dynamic with layered ani
 - Build time: ~950ms
 
 **Deployed:** https://judd23.github.io/Dissertation-Model-Simulation
+
+---
+
+### January 5, 2026 (Evening) - Webapp Enhancement Sprint 1 & 2
+
+#### Sprint 1 Completed (Foundation & Quick Wins)
+| Task | Status | Notes |
+|------|--------|-------|
+| StatCard animated count-up | ✅ | Intersection-triggered, supports formatted values |
+| DoseExplorerPage slider animations | ✅ | Dose zones (low/moderate/high) with color indicators |
+| "Why This Matters" section | ✅ | Created, then moved to dedicated SoWhatPage |
+| MethodsPage scroll reveals | ✅ | Floating orbs, gradient accents, table hover effects |
+| Badge component | ✅ | 6 variants, 3 sizes, pulse animation option |
+| All pages: consistent hover effects | ✅ | Unified lift + shadow + border transitions |
+
+#### Sprint 2 Progress (Visualizations & Educational Content)
+| Task | Status | Notes |
+|------|--------|-------|
+| Johnson-Neyman visualization | ✅ | New JohnsonNeymanPlot component on DoseExplorerPage |
+| Confidence interval ribbons | ✅ | Enhanced DoseResponseCurve with CI boundaries |
+| Research Questions on LandingPage | ✅ | 4 questions in 2x2 grid with hover effects |
+| Accordion component | ⏳ Pending | For MethodsPage collapsible sections |
+| ProgressRing component | ⏳ Pending | For fit indices visualization |
+| Outcome survey item examples | ⏳ Pending | Show what constructs actually measure |
+
+#### New Page Created: "So, What?" (SoWhatPage)
+- **Route:** `/so-what` (navigation label: "So, What?", shortLabel: "Impact")
+- **Content:** Stakeholder implications (Students, Advisors, Policy Makers)
+- **Features:** 4 actionable takeaways, limitations section, CTAs
+- **Moved from:** HomePage "Why This Matters" section (to shorten HomePage)
+
+#### Additional Changes
+- Added `lightbulb` icon to Icon component
+- Updated explore cards grid from 4 to 5 columns
+- HomePage KeyTakeaway now links to SoWhatPage
+- Navigation updated with new page
+
+#### Files Created
+- `webapp/src/pages/SoWhatPage.tsx` - New implications page
+- `webapp/src/pages/SoWhatPage.module.css` - Styles for SoWhatPage
+
+#### Files Modified
+- `webapp/src/App.tsx` - Added SoWhatPage route
+- `webapp/src/components/layout/navItems.ts` - Added "So, What?" nav item
+- `webapp/src/components/ui/Icon.tsx` - Added lightbulb icon
+- `webapp/src/pages/LandingPage.tsx` - Added research questions section
+- `webapp/src/pages/LandingPage.module.css` - Research questions styles
+- `webapp/src/pages/HomePage.tsx` - Removed "Why This Matters", added SoWhatPage link
+- `webapp/src/pages/HomePage.module.css` - Removed unused CSS, updated grid
+
+**Build Stats:**
+- CSS: 125.53 KB (gzip: 18.40 KB)
+- JS: 436.83 KB (gzip: 133.37 KB)
+
+**Deployed:** https://judd23.github.io/Dissertation-Model-Simulation
+
+---
+
+## Webapp Enhancement Roadmap - Remaining Sprints
+
+### Sprint 2 Remaining (Est. 2-3 hours)
+
+| # | Task | Priority | Description | Files |
+|---|------|----------|-------------|-------|
+| 1 | **Accordion component** | HIGH | Collapsible sections for dense content on MethodsPage | `ui/Accordion.tsx`, `ui/Accordion.module.css` |
+| 2 | **ProgressRing component** | MEDIUM | Circular progress indicator for CFI/TLI/RMSEA fit indices | `ui/ProgressRing.tsx`, `ui/ProgressRing.module.css` |
+| 3 | **Outcome survey examples** | MEDIUM | Show actual survey items for Distress, Engagement, Adjustment | `HomePage.tsx` or new section |
+
+### Sprint 3: Polish & Atmosphere (Est. 4-5 hours)
+
+| # | Task | Priority | Description | Files |
+|---|------|----------|-------------|-------|
+| 4 | **MethodsPage visual flowchart** | HIGH | Analysis pipeline diagram (Propensity → SEM → Bootstrap) | `MethodsPage.tsx`, new SVG/D3 component |
+| 5 | **Background enhancements** | MEDIUM | Consistent floating orbs/gradients across all pages | Multiple page CSS files |
+| 6 | **Indirect effect calculations** | MEDIUM | Display a1×b1 mediation math on PathwayPage | `PathwayPage.tsx`, `PathwayDiagram.tsx` |
+| 7 | **Breadcrumb navigation** | LOW | Context indicator on interior pages | `ui/Breadcrumb.tsx`, Layout integration |
+| 8 | **Mobile polish pass** | HIGH | Verify all new features work on 320px-480px screens | Multiple files |
+
+### Sprint 4: Advanced Features (Est. 3-4 hours)
+
+| # | Task | Priority | Description | Files |
+|---|------|----------|-------------|-------|
+| 9 | **PathwayDiagram glow effects** | MEDIUM | Animated glow follows path selection | `PathwayDiagram.tsx`, `PathwayDiagram.module.css` |
+| 10 | **DoseResponseCurve annotations** | LOW | "Sweet spot", "Diminishing returns" labels on curves | `DoseResponseCurve.tsx` |
+| 11 | **Effect decomposition chart** | LOW | Stacked bar: Total = Direct + Indirect(Stress) + Indirect(Engagement) | New chart component |
+| 12 | **Chart hover tooltips** | MEDIUM | Detailed data display on all D3 charts | Multiple chart files |
+
+### Future Enhancements (Post-Core)
+
+| Task | Priority | Description |
+|------|----------|-------------|
+| Student Profile Builder | LOW | Interactive tool: select demographics, see predicted outcomes |
+| First-time visitor tour | LOW | Guided walkthrough for new users |
+| PDF export | LOW | Export key findings as downloadable PDF |
+| Page transition animations | LOW | Smooth route transitions with Framer Motion |
+| Parallax scrolling | LOW | Subtle depth effects on hero sections |
+| AAA color contrast audit | MEDIUM | Verify all colors meet WCAG AAA (7:1 ratio) |
+| Screen reader testing | MEDIUM | Full VoiceOver/NVDA compatibility verification |
+
+### Success Criteria
+
+- [ ] All pages have consistent animation sophistication (target: 9+/10)
+- [ ] Visitor can understand key findings without statistics background
+- [ ] Complete narrative arc: Landing → Home → So What? → Explore
+- [ ] All interactive elements have smooth, delightful feedback
+- [ ] Mobile experience is feature-complete (no horizontal scroll issues)
+- [ ] Bundle size stays under 150KB gzipped JS
+- [ ] WCAG 2.1 AA compliance verified on all pages
+
+### Component Status Summary
+
+| Component | Status | Location |
+|-----------|--------|----------|
+| StatCard (animated) | ✅ Complete | `ui/StatCard.tsx` |
+| Badge | ✅ Complete | `ui/Badge.tsx` |
+| Icon (5 icons) | ✅ Complete | `ui/Icon.tsx` |
+| GlossaryTerm | ✅ Complete | `ui/GlossaryTerm.tsx` |
+| Slider (tick marks) | ✅ Complete | `ui/Slider.tsx` |
+| DataTimestamp | ✅ Complete | `ui/DataTimestamp.tsx` |
+| JohnsonNeymanPlot | ✅ Complete | `charts/JohnsonNeymanPlot.tsx` |
+| DoseResponseCurve (CI ribbons) | ✅ Complete | `charts/DoseResponseCurve.tsx` |
+| Accordion | ⏳ Pending | Sprint 2 |
+| ProgressRing | ⏳ Pending | Sprint 2 |
+| Breadcrumb | ⏳ Pending | Sprint 3 |
+| EffectDecomposition | 🔮 Future | Sprint 4 |
+
+### Page Status Summary
+
+| Page | Visual Polish | Educational Content | Mobile Ready |
+|------|--------------|---------------------|--------------|
+| LandingPage | ✅ 9/10 | ✅ Research questions | ✅ |
+| HomePage | ✅ 9/10 | ✅ Demographics, findings | ✅ |
+| SoWhatPage | ✅ 9/10 | ✅ Implications, takeaways | ✅ |
+| DoseExplorerPage | ✅ 9/10 | ✅ JN plot, dose zones | ✅ |
+| DemographicsPage | ⚠️ 7/10 | ⚠️ Needs examples | ✅ |
+| PathwayPage | ⚠️ 8/10 | ⚠️ Needs indirect calc | ⚠️ Scroll issues |
+| MethodsPage | ⚠️ 7/10 | ⏳ Needs flowchart, accordion | ✅ |
+| ResearcherPage | ✅ 10/10 | ✅ Complete | ✅ |

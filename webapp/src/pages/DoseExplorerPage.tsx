@@ -1,14 +1,30 @@
+import { useMemo } from 'react';
 import { useResearch } from '../context/ResearchContext';
 import { useModelData } from '../context/ModelDataContext';
 import Slider from '../components/ui/Slider';
 import Toggle from '../components/ui/Toggle';
 import DoseResponseCurve from '../components/charts/DoseResponseCurve';
+import JohnsonNeymanPlot from '../components/charts/JohnsonNeymanPlot';
 import StatCard from '../components/ui/StatCard';
 import KeyTakeaway from '../components/ui/KeyTakeaway';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import DataTimestamp from '../components/ui/DataTimestamp';
 import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import styles from './DoseExplorerPage.module.css';
+
+// Dose zone definitions
+const DOSE_ZONES = [
+  { id: 'low', label: 'Low Dose', range: '0–11 credits', min: 0, max: 11 },
+  { id: 'moderate', label: 'Moderate', range: '12–35 credits', min: 12, max: 35 },
+  { id: 'high', label: 'High Dose', range: '36+ credits', min: 36, max: 80 },
+] as const;
+
+// Get the current dose zone
+function getDoseZone(dose: number): typeof DOSE_ZONES[number]['id'] {
+  if (dose < 12) return 'low';
+  if (dose < 36) return 'moderate';
+  return 'high';
+}
 
 export default function DoseExplorerPage() {
   const { selectedDose, setSelectedDose, showCIs, toggleCIs } = useResearch();
@@ -19,7 +35,11 @@ export default function DoseExplorerPage() {
   const controlsRef = useScrollReveal<HTMLElement>({ threshold: 0.3 });
   const effectsRef = useStaggeredReveal<HTMLElement>();
   const chartsRef = useStaggeredReveal<HTMLElement>();
+  const jnRef = useStaggeredReveal<HTMLElement>();
   const interpretRef = useStaggeredReveal<HTMLElement>();
+
+  // Current dose zone
+  const currentZone = useMemo(() => getDoseZone(selectedDose), [selectedDose]);
 
   // Calculate conditional effects at selected dose (from dynamic pipeline data)
   // These formulas come from the model: effect = main + (dose * moderation)
@@ -56,6 +76,19 @@ export default function DoseExplorerPage() {
               thresholdLabel="FASt (12+)"
               tickMarks={[24, 36, 48, 60]}
             />
+            {/* Dose Zone Indicators */}
+            <div className={styles.doseZones}>
+              {DOSE_ZONES.map((zone) => (
+                <div
+                  key={zone.id}
+                  className={`${styles.doseZone} ${styles[zone.id]} ${currentZone === zone.id ? styles.active : ''}`}
+                >
+                  <span className={styles.zoneDot} />
+                  <span className={styles.zoneLabel}>{zone.label}</span>
+                  <span className={styles.zoneRange}>{zone.range}</span>
+                </div>
+              ))}
+            </div>
           </div>
           <div className={styles.toggleContainer}>
             <Toggle
@@ -76,6 +109,7 @@ export default function DoseExplorerPage() {
                 value={distressEffect > 0 ? `+${distressEffect.toFixed(2)}` : distressEffect.toFixed(2)}
                 subtext={distressEffect > 0 ? '↑ Higher stress' : '↓ Lower stress'}
                 color={distressEffect > 0 ? 'negative' : 'positive'}
+                animate={false}
               />
             </div>
             <div className="reveal">
@@ -84,6 +118,7 @@ export default function DoseExplorerPage() {
                 value={engagementEffect > 0 ? `+${engagementEffect.toFixed(2)}` : engagementEffect.toFixed(2)}
                 subtext={engagementEffect > 0 ? '↑ More engaged' : '↓ Less engaged'}
                 color={engagementEffect > 0 ? 'positive' : 'negative'}
+                animate={false}
               />
             </div>
           </div>
@@ -109,6 +144,23 @@ export default function DoseExplorerPage() {
               engage slightly less. However, we'd need more evidence to be confident.
             </p>
             <DoseResponseCurve outcome="engagement" selectedDose={selectedDose} />
+          </div>
+        </section>
+
+        {/* Johnson-Neyman Analysis */}
+        <section ref={jnRef} className={`${styles.jnSection} stagger-children`}>
+          <h2 className="reveal">When Do Effects Become Significant?</h2>
+          <p className={`${styles.jnIntro} reveal`}>
+            The <GlossaryTerm term="Johnson-Neyman Technique" definition="A statistical method that identifies the exact point(s) where a conditional effect becomes statistically significant. It shows where the confidence interval crosses zero.">Johnson-Neyman technique</GlossaryTerm> identifies
+            the exact credit threshold where effects become statistically significant—where we can be confident the effect isn't just random variation.
+          </p>
+          <div className={styles.jnCharts}>
+            <div className="reveal">
+              <JohnsonNeymanPlot outcome="engagement" selectedDose={selectedDose} />
+            </div>
+            <div className="reveal">
+              <JohnsonNeymanPlot outcome="distress" selectedDose={selectedDose} />
+            </div>
           </div>
         </section>
 

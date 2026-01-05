@@ -6,9 +6,11 @@ export default function Footer() {
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.citation}>
-            <strong>Citation:</strong> Johnson, J. (2025). <em>Conditional-process SEM analysis of
-            accelerated dual credit participation effects on first-year developmental adjustment
-            among equity-impacted CSU students.</em> Ed.D. Dissertation.
+            <span className={styles.citationLabel}>Citation</span>
+            <span className={styles.citationTitle}>
+              Johnson, J. (2025). <em>Conditional-process SEM analysis of accelerated dual credit participation effects on first-year developmental adjustment among equity-impacted CSU students.</em>
+            </span>
+            <span className={styles.citationSub}>Ed.D. Dissertation, San Diego State University.</span>
           </div>
           <div className={styles.note}>
             Note: Data simulated to reflect CSU demographics and theorized treatment effects.

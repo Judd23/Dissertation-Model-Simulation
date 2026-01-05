@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { useTheme } from '../../context/ThemeContext';
-import { colors, getRaceColor } from '../../utils/colorScales';
+import { getRaceColor, getSignificanceColor } from '../../utils/colorScales';
 import DataTimestamp from '../ui/DataTimestamp';
 import groupComparisons from '../../data/groupComparisons.json';
 import sampleDescriptives from '../../data/sampleDescriptives.json';
@@ -211,8 +211,7 @@ export default function GroupComparison({
     // Draw forest plot
     data.forEach((d) => {
       const y = yScale(d.label)! + yScale.bandwidth() / 2;
-      const color = grouping === 'race' ? getRaceColor(d.label) :
-                   d.pvalue < 0.05 ? colors.significant : colors.nonsignificant;
+      const color = grouping === 'race' ? getRaceColor(d.label) : getSignificanceColor(d.pvalue);
 
       // CI whisker
       g.append('line')

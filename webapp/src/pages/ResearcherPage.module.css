@@ -245,6 +245,7 @@
 .heroIntro {
   grid-column: 8 / -1;
   padding-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .institutionPanel {
@@ -254,6 +255,8 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
+  margin-left: auto;
+  margin-right: auto;
   transition: 
     transform var(--transition-fast),
     box-shadow var(--transition-fast);
@@ -326,6 +329,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--spacing-sm);
+  justify-content: center;
   color: var(--color-text-muted);
   font-size: var(--font-size-lg);
 }

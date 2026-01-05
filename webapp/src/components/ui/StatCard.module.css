@@ -4,6 +4,7 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   text-align: center;
+  box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
@@ -46,6 +47,13 @@
   font-weight: 700;
   color: var(--color-text);
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.1s ease-out, text-shadow 0.3s ease-out;
+}
+
+/* Subtle glow on the value when card is hovered */
+.card:hover .value {
+  text-shadow: 0 0 20px color-mix(in srgb, currentColor 30%, transparent);
 }
 
 .subtext {

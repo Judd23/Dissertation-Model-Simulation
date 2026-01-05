@@ -24,6 +24,7 @@ export default function DemographicsPage() {
   // Scroll reveal refs
   const headerRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
   const demographicsRef = useStaggeredReveal<HTMLElement>();
+  const sampleRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
   const controlsRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
   const chartsRef = useStaggeredReveal<HTMLElement>();
   const interpretRef = useStaggeredReveal<HTMLElement>();
@@ -174,6 +175,39 @@ export default function DemographicsPage() {
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section ref={sampleRef} className={`${styles.sampleInfo} reveal`}>
+          <h2>FASt vs Non-FASt Snapshot</h2>
+          <p className={styles.sampleIntro}>
+            A quick look at sample size and baseline characteristics for each group.
+          </p>
+          <div className={styles.sampleGrid}>
+            <div className={styles.sampleCard}>
+              <div className={styles.sampleHeader}>
+                <span className={styles.sampleLabel}>FASt Students</span>
+                <span className={styles.sampleCount}>{fastComparison.overall.fast_n.toLocaleString()}</span>
+              </div>
+              <div className={styles.sampleDetail}>12+ dual enrollment credits from high school</div>
+              <div className={styles.sampleStats}>
+                <div>Avg credits: <strong>{fastComparison.demographics.transferCredits.fast.mean}</strong></div>
+                <div>First-Gen: <strong>{fastComparison.demographics.firstgen.yes.fast.pct}%</strong></div>
+                <div>Pell: <strong>{fastComparison.demographics.pell.yes.fast.pct}%</strong></div>
+              </div>
+            </div>
+            <div className={styles.sampleCard}>
+              <div className={styles.sampleHeader}>
+                <span className={styles.sampleLabel}>Non-FASt Students</span>
+                <span className={styles.sampleCount}>{fastComparison.overall.nonfast_n.toLocaleString()}</span>
+              </div>
+              <div className={styles.sampleDetail}>Fewer than 12 dual enrollment credits</div>
+              <div className={styles.sampleStats}>
+                <div>Avg credits: <strong>{fastComparison.demographics.transferCredits.nonfast.mean}</strong></div>
+                <div>First-Gen: <strong>{fastComparison.demographics.firstgen.yes.nonfast.pct}%</strong></div>
+                <div>Pell: <strong>{fastComparison.demographics.pell.yes.nonfast.pct}%</strong></div>
               </div>
             </div>
           </div>

@@ -69,6 +69,20 @@
       "min": 0,
       "max": 80,
       "median": 10.0
+    },
+    "living": {
+      "With family (commuting)": {
+        "n": 2946,
+        "pct": 58.9
+      },
+      "On-campus (residence hall)": {
+        "n": 1109,
+        "pct": 22.2
+      },
+      "Off-campus (rent/apartment)": {
+        "n": 945,
+        "pct": 18.9
+      }
     }
   },
   "outcomes": {

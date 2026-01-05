@@ -50,7 +50,7 @@
 @media (max-width: 768px) {
   .button {
     right: var(--spacing-md);
-    bottom: var(--spacing-md);
+    bottom: calc(var(--spacing-md) + 64px + env(safe-area-inset-bottom));
   }
 }
 

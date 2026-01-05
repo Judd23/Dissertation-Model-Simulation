@@ -1,16 +1,8 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import ThemeToggle from '../ui/ThemeToggle';
+import { navItems } from './navItems';
 import styles from './Header.module.css';
-
-const navItems = [
-  { to: '/home', label: 'Home' },
-  { to: '/dose', label: 'Credit Levels' },
-  { to: '/demographics', label: 'Equity Frame' },
-  { to: '/pathway', label: 'How It Works' },
-  { to: '/methods', label: 'Methods' },
-  { to: '/researcher', label: 'Researcher' },
-];
 
 export default function Header() {
   const [scrollProgress, setScrollProgress] = useState(0);

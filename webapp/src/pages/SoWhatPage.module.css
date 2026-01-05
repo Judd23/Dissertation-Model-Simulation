@@ -1,0 +1,407 @@
+.page {
+  padding-bottom: var(--spacing-4xl);
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  text-align: center;
+  padding: var(--spacing-4xl) 0 var(--spacing-3xl);
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-fast) 20%, transparent) 0%,
+    transparent 60%
+  );
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-fast);
+  margin-bottom: var(--spacing-lg);
+  display: block;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, var(--font-size-4xl));
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 800px;
+  margin: 0 auto var(--spacing-xl);
+  font-weight: 700;
+}
+
+.lead {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   SECTION TITLES
+   ============================================ */
+.sectionTitle {
+  font-size: var(--font-size-2xl);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-fast));
+  border-radius: 2px;
+}
+
+/* ============================================
+   STAKEHOLDER CARDS
+   ============================================ */
+.stakeholders {
+  padding: var(--spacing-4xl) 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-background) 0%,
+    var(--color-surface) 50%,
+    var(--color-background) 100%
+  );
+}
+
+.stakeholderGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+}
+
+.stakeholderCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  transition: all var(--transition-fast);
+}
+
+.stakeholderCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-accent);
+}
+
+.cardIcon {
+  width: 56px;
+  height: 56px;
+  background: var(--color-accent-light);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-fast);
+}
+
+.cardIcon svg {
+  width: 28px;
+  height: 28px;
+  color: var(--color-accent);
+}
+
+.stakeholderCard:hover .cardIcon {
+  background: var(--color-accent);
+}
+
+.stakeholderCard:hover .cardIcon svg {
+  color: white;
+}
+
+.stakeholderCard h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.cardLead {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.cardList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.cardList li {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  padding-left: var(--spacing-lg);
+  position: relative;
+}
+
+.cardList li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+  border-radius: 50%;
+}
+
+.cardList li strong {
+  color: var(--color-text);
+  display: block;
+  margin-bottom: var(--spacing-xs);
+}
+
+/* ============================================
+   ACTION CARDS
+   ============================================ */
+.actions {
+  padding: var(--spacing-4xl) 0;
+}
+
+.actionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.actionCard {
+  display: flex;
+  gap: var(--spacing-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  transition: all var(--transition-fast);
+}
+
+.actionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-fast);
+}
+
+.actionNumber {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--color-fast), var(--color-accent));
+  color: white;
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.actionContent h4 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.actionContent p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================
+   LIMITATIONS
+   ============================================ */
+.limitations {
+  padding: var(--spacing-4xl) 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.limitationsContent {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.limitationItem {
+  text-align: center;
+}
+
+.limitationItem h4 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-muted);
+}
+
+.limitationItem p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================
+   CTA SECTION
+   ============================================ */
+.cta {
+  padding: var(--spacing-4xl) 0;
+  text-align: center;
+}
+
+.cta h2 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.cta p {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-2xl);
+  line-height: 1.7;
+}
+
+.ctaButtons {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .stakeholderGrid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  .limitationsContent {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: var(--spacing-3xl) 0 var(--spacing-2xl);
+  }
+
+  .hero::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .lead {
+    font-size: var(--font-size-base);
+  }
+
+  .sectionTitle {
+    font-size: var(--font-size-xl);
+  }
+
+  .actionGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .stakeholderCard {
+    padding: var(--spacing-xl);
+  }
+
+  .stakeholders,
+  .actions,
+  .limitations,
+  .cta {
+    padding: var(--spacing-3xl) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .ctaButtons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actionCard {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .actionNumber {
+    margin: 0 auto;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .stakeholderCard,
+  .actionCard {
+    transition: none;
+  }
+
+  .stakeholderCard:hover,
+  .actionCard:hover {
+    transform: none;
+  }
+}
+
+/* ============================================
+   TOUCH STATES
+   ============================================ */
+.stakeholderCard:active,
+.actionCard:active {
+  transform: scale(0.99);
+}
+
+@media (hover: none) {
+  .stakeholderCard:hover,
+  .actionCard:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

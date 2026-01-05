@@ -77,23 +77,24 @@
 }
 
 .groupButton {
-  background: var(--color-background);
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--spacing-sm) var(--spacing-lg);
   font-family: var(--font-body);
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   cursor: pointer;
   transition: all var(--transition-fast);
   min-height: 44px; /* WCAG touch target */
+  box-shadow: var(--shadow-sm);
 }
 
 .groupButton:hover {
   border-color: var(--color-accent);
-  color: var(--color-accent);
-  background: color-mix(in srgb, var(--color-accent) 5%, transparent);
+  color: var(--color-text);
+  background: var(--color-accent-light);
 }
 
 .groupButton:focus-visible {
@@ -102,9 +103,9 @@
 }
 
 .groupButton.active {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: white;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+  border-color: var(--color-accent-hover);
+  color: #ffffff;
 }
 
 .groupDescription {
@@ -116,6 +117,8 @@
 /* Demographics Breakdown */
 .demographicsBreakdown {
   margin-bottom: var(--spacing-3xl);
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--spacing-3xl);
 }
 
 .demographicsHeader {
@@ -212,11 +215,100 @@
   letter-spacing: 0.05em;
 }
 
+/* Sample Snapshot */
+.sampleInfo {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-fast) 10%, transparent) 0%,
+    color-mix(in srgb, var(--color-accent) 10%, transparent) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-3xl);
+  text-align: center;
+}
+
+.sampleInfo h2 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.sampleIntro {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0 auto var(--spacing-lg);
+  max-width: 640px;
+}
+
+.sampleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  text-align: left;
+}
+
+.sampleCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.sampleCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-accent);
+}
+
+.sampleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-border-light);
+}
+
+.sampleLabel {
+  font-weight: 700;
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.sampleCount {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.sampleDetail {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.sampleStats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.sampleStats strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
 /* Charts */
 .charts {
   display: grid;
   gap: var(--spacing-xl);
   margin-bottom: var(--spacing-3xl);
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--spacing-3xl);
 }
 
 .chartContainer {
@@ -224,6 +316,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
@@ -236,6 +329,7 @@
 .chartContainer h2 {
   font-size: var(--font-size-xl);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .chartDescription {
@@ -250,6 +344,11 @@
   margin-bottom: var(--spacing-xl);
 }
 
+.interpretation {
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--spacing-3xl);
+}
+
 .interpretationGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -261,6 +360,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
@@ -300,6 +400,10 @@
   }
 
   .demographicsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sampleGrid {
     grid-template-columns: 1fr;
   }
 
@@ -364,6 +468,18 @@
     font-size: var(--font-size-base);
   }
 
+  .sampleInfo {
+    padding: var(--spacing-lg);
+  }
+
+  .sampleInfo h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .sampleCard {
+    padding: var(--spacing-lg);
+  }
+
   .chartContainer {
     padding: var(--spacing-md);
   }
@@ -391,6 +507,7 @@
 
 /* Touch states */
 .demoCard:active,
+.sampleCard:active,
 .chartContainer:active,
 .interpretationCard:active,
 .groupButton:active {
@@ -399,6 +516,7 @@
 
 @media (hover: none) {
   .demoCard:hover,
+  .sampleCard:hover,
   .chartContainer:hover,
   .interpretationCard:hover,
   .groupButton:hover {
@@ -410,6 +528,7 @@
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .demoCard,
+  .sampleCard,
   .chartContainer,
   .interpretationCard,
   .groupButton,

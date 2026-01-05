@@ -104,19 +104,51 @@ export default function DoseResponseCurve({
       .call((g) => g.selectAll('line').attr('stroke', gridColor).attr('stroke-dasharray', '2,2'))
       .call((g) => g.select('.domain').remove());
 
-    // Confidence interval area
     if (showCIs) {
       const area = d3
         .area<(typeof data)[0]>()
         .x((d) => xScale(d.dose))
         .y0((d) => yScale(d.ciLower))
-        .y1((d) => yScale(d.ciUpper));
+        .y1((d) => yScale(d.ciUpper))
+        .curve(d3.curveMonotoneX);
 
+      // CI ribbon fill
       g.append('path')
         .datum(data)
         .attr('fill', color)
         .attr('opacity', 0.15)
-        .attr('d', area);
+        .attr('d', area)
+        .attr('class', 'ci-area');
+
+      const upperLine = d3
+        .line<(typeof data)[0]>()
+        .x((d) => xScale(d.dose))
+        .y((d) => yScale(d.ciUpper))
+        .curve(d3.curveMonotoneX);
+
+      const lowerLine = d3
+        .line<(typeof data)[0]>()
+        .x((d) => xScale(d.dose))
+        .y((d) => yScale(d.ciLower))
+        .curve(d3.curveMonotoneX);
+
+      g.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', color)
+        .attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '4,3')
+        .attr('opacity', 0.5)
+        .attr('d', upperLine);
+
+      g.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', color)
+        .attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '4,3')
+        .attr('opacity', 0.5)
+        .attr('d', lowerLine);
     }
 
     // Main line

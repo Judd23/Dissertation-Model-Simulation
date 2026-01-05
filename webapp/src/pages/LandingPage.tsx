@@ -13,10 +13,12 @@ export default function LandingPage() {
       <main className={styles.content}>
         <div className={styles.titleBlock}>
           <h1 className={styles.title}>
-            The Psychosocial Effects of Dual Credit Accumulation on Developmental Adjustment Among Equity Impacted Student Populations in California
+            Dual Credit & Developmental Adjustment
           </h1>
-          <p className={styles.subtitle}>
-            A Conditional Process Structural Equation Model Analysis
+          <div className={styles.titleDivider} />
+          <p className={styles.subtitle}>A Conditional Process Structural Equation Model Analysis</p>
+          <p className={styles.longTitle}>
+            The Psychosocial Effects of Dual Credit Accumulation on Developmental Adjustment Among Equity Impacted Student Populations in California
           </p>
         </div>
 
@@ -25,9 +27,17 @@ export default function LandingPage() {
           <p className={styles.author}>Jay Johnson</p>
           <p className={styles.affiliation}>San Diego State University</p>
           <p className={styles.degree}>Doctoral Candidate</p>
+          <div className={styles.logoWrap} aria-hidden="true">
+            <img
+              className={styles.logo}
+              src={`${import.meta.env.BASE_URL}researcher/sdsu_primary-logo_rgb_horizontal_reverse.png`}
+              alt=""
+              loading="lazy"
+            />
+          </div>
         </div>
 
-        <button 
+        <button
           className={styles.enterButton}
           onClick={() => navigate('/home')}
         >

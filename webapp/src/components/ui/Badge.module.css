@@ -1,0 +1,163 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-body);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+/* Sizes */
+.sm {
+  font-size: 10px;
+  padding: 2px 6px;
+  letter-spacing: 0.03em;
+}
+
+.md {
+  font-size: var(--font-size-xs);
+  padding: 4px 10px;
+  letter-spacing: 0.02em;
+}
+
+.lg {
+  font-size: var(--font-size-sm);
+  padding: 6px 14px;
+  letter-spacing: 0.01em;
+}
+
+/* Pill shape */
+.pill {
+  border-radius: 9999px;
+}
+
+/* Dot indicator */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.sm .dot {
+  width: 5px;
+  height: 5px;
+}
+
+.lg .dot {
+  width: 8px;
+  height: 8px;
+}
+
+/* Icon styling */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sm .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.md .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.lg .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Text */
+.text {
+  line-height: 1;
+}
+
+/* Variants */
+.default {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.positive {
+  background: color-mix(in srgb, var(--color-positive) 15%, var(--color-surface));
+  color: var(--color-positive);
+  border: 1px solid color-mix(in srgb, var(--color-positive) 30%, transparent);
+}
+
+.negative {
+  background: color-mix(in srgb, var(--color-negative) 15%, var(--color-surface));
+  color: var(--color-negative);
+  border: 1px solid color-mix(in srgb, var(--color-negative) 30%, transparent);
+}
+
+.accent {
+  background: color-mix(in srgb, var(--color-accent) 15%, var(--color-surface));
+  color: var(--color-accent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.warning {
+  background: color-mix(in srgb, var(--color-fast) 15%, var(--color-surface));
+  color: var(--color-fast);
+  border: 1px solid color-mix(in srgb, var(--color-fast) 30%, transparent);
+}
+
+.muted {
+  background: var(--color-border-light);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+/* Hover effects - subtle for badges */
+.badge:hover {
+  filter: brightness(0.95);
+}
+
+/* Significance indicators - special styling */
+.positive .dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+/* Dark mode adjustments - slightly reduce background intensity */
+@media (prefers-color-scheme: dark) {
+  .positive {
+    background: color-mix(in srgb, var(--color-positive) 10%, var(--color-surface));
+  }
+
+  .negative {
+    background: color-mix(in srgb, var(--color-negative) 10%, var(--color-surface));
+  }
+
+  .accent {
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+  }
+
+  .warning {
+    background: color-mix(in srgb, var(--color-fast) 10%, var(--color-surface));
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .badge {
+    transition: none;
+  }
+
+  .positive .dot {
+    animation: none;
+  }
+}

@@ -9,16 +9,15 @@
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  padding: var(--spacing-sm);
 }
 
 @media (max-width: 768px) {
   .container {
-    min-height: 300px;
-    align-items: flex-start;
+    min-height: 360px;
+    align-items: center;
     padding-bottom: var(--spacing-sm);
-    /* Visual hint for scrollability */
-    mask-image: linear-gradient(to right, black 90%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    overflow-x: hidden;
   }
 
   .container::-webkit-scrollbar {
@@ -44,6 +43,39 @@
   border-radius: var(--radius-lg);
 }
 
+.mobileLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  width: 100%;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.legendLine {
+  width: 20px;
+  height: 4px;
+  border-radius: 999px;
+}
+
+.legendLabel {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
 .tooltip {
   position: fixed;
   background: var(--color-surface);
@@ -52,7 +84,7 @@
   padding: var(--spacing-md) var(--spacing-lg);
   box-shadow: var(--shadow-xl);
   pointer-events: none;
-  z-index: 1000;
+  z-index: 1000000;
   max-width: 320px;
   animation: tooltipFadeIn 0.15s ease-out;
 }

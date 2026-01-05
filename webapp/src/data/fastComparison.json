@@ -138,6 +138,38 @@
         "max": 11,
         "median": 6.0
       }
+    },
+    "living": {
+      "With family (commuting)": {
+        "fast": {
+          "n": 1336,
+          "pct": 59.4
+        },
+        "nonfast": {
+          "n": 1610,
+          "pct": 58.5
+        }
+      },
+      "On-campus (residence hall)": {
+        "fast": {
+          "n": 542,
+          "pct": 24.1
+        },
+        "nonfast": {
+          "n": 567,
+          "pct": 20.6
+        }
+      },
+      "Off-campus (rent/apartment)": {
+        "fast": {
+          "n": 371,
+          "pct": 16.5
+        },
+        "nonfast": {
+          "n": 574,
+          "pct": 20.9
+        }
+      }
     }
   }
 }

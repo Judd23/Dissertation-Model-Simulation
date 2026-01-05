@@ -2,6 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: color-mix(in srgb, var(--color-chart-background) 92%, transparent);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .svg {

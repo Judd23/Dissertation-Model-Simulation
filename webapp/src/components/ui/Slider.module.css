@@ -20,6 +20,15 @@
   font-size: var(--font-size-lg);
   font-weight: 600;
   color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  min-width: 5ch;
+  text-align: right;
+  transition: transform 0.1s ease-out, text-shadow 0.2s ease-out;
+}
+
+/* Subtle glow on value when slider is focused */
+.container:focus-within .value {
+  text-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .sliderWrapper {
@@ -60,6 +69,16 @@
 
 .slider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
+  box-shadow: var(--shadow-lg), 0 0 0 8px color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.slider::-webkit-slider-thumb:active {
+  transform: scale(1.15);
+  box-shadow: var(--shadow-lg), 0 0 0 12px color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+
+.slider:focus::-webkit-slider-thumb {
+  box-shadow: var(--shadow-lg), 0 0 0 4px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 .slider::-moz-range-thumb {
