@@ -75,7 +75,7 @@ export default function PathwayDiagram({
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState({ width: initialWidth, height: initialHeight });
   const [isMobile, setIsMobile] = useState(false);
-  const { highlightedPath, setHighlightedPath, selectedDose } = useResearch();
+  const { highlightedPath, setHighlightedPath, selectedDose, showPathLabels } = useResearch();
   const { resolvedTheme } = useTheme();
   const { paths, doseCoefficients } = useModelData();
 
@@ -275,9 +275,14 @@ export default function PathwayDiagram({
       const isHighlighted = !highlightedPath || 
                            highlightedPath === pathType || 
                            (highlightedPath === 'serial' && isSerialPath);
+      const allowHoverHighlight = !highlightedPath;
+      const isSelected = !!highlightedPath &&
+        (highlightedPath === pathType || (highlightedPath === 'serial' && isSerialPath));
       const opacity = isHighlighted ? 1 : 0.15;
       const adjustedEstimate = getAdjustedEstimate(path.id, path.estimate);
       const strokeWidth = Math.max(2.5, Math.abs(adjustedEstimate) * 12);
+      const baseStrokeWidth = isSelected ? strokeWidth + 1.5 : strokeWidth;
+      const selectedFilter = isSelected ? 'url(#glow)' : null;
 
       // Calculate path - all straight lines
       const dx = to.x - from.x;
@@ -296,20 +301,23 @@ export default function PathwayDiagram({
         .attr('d', d)
         .attr('fill', 'none')
         .attr('stroke', color)
-        .attr('stroke-width', strokeWidth)
+        .attr('stroke-width', baseStrokeWidth)
         .attr('stroke-linecap', 'round')
         .attr('opacity', opacity)
         .attr('marker-end', `url(#arrow-${pathType})`)
         .attr('cursor', interactive ? 'pointer' : 'default')
-        .style('transition', 'opacity 0.2s ease, filter 0.2s ease');
+        .attr('filter', selectedFilter)
+        .style('transition', 'opacity 0.2s ease, filter 0.2s ease, stroke-width 0.2s ease');
 
       if (interactive) {
         pathElement
           .on('mouseenter', function(event) {
             d3.select(this)
               .attr('filter', 'url(#glow)')
-              .attr('stroke-width', strokeWidth + 2);
-            setHighlightedPath(pathType);
+              .attr('stroke-width', baseStrokeWidth + 2);
+            if (allowHoverHighlight) {
+              setHighlightedPath(pathType);
+            }
             setTooltip({
               show: true,
               x: event.clientX,
@@ -326,14 +334,16 @@ export default function PathwayDiagram({
           })
           .on('mouseleave', function() {
             d3.select(this)
-              .attr('filter', null)
-              .attr('stroke-width', strokeWidth);
-            setHighlightedPath(null);
+              .attr('filter', selectedFilter)
+              .attr('stroke-width', baseStrokeWidth);
+            if (allowHoverHighlight) {
+              setHighlightedPath(null);
+            }
             setTooltip(null);
           });
       }
 
-      if (!isMobile) {
+      if (!isMobile && showPathLabels) {
         let labelX: number, labelY: number;
         if (path.id === 'a1') {
           labelX = (from.x + to.x) / 2 - 20;
@@ -538,7 +548,7 @@ export default function PathwayDiagram({
       });
     }
 
-  }, [dimensions, highlightedPath, interactive, setHighlightedPath, resolvedTheme, selectedDose, modelData, getAdjustedEstimate, isMobile, showLegend]);
+  }, [dimensions, highlightedPath, interactive, setHighlightedPath, resolvedTheme, selectedDose, modelData, getAdjustedEstimate, isMobile, showLegend, showPathLabels]);
 
   return (
     <div ref={containerRef} className={styles.container}>

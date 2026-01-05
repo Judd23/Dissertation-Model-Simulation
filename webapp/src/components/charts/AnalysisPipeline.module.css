@@ -1,0 +1,249 @@
+.container {
+  margin: var(--spacing-3xl) 0;
+}
+
+/* Desktop horizontal layout */
+.pipeline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.stepBox {
+  background: var(--color-surface);
+  border: 2px solid var(--step-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  width: 100%;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.stepBox::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--step-color);
+}
+
+.stepBox:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--step-color);
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--step-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+}
+
+.stepTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.stepDescription {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
+}
+
+.stepDetails {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+.stepDetails li {
+  padding-left: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+  position: relative;
+  color: var(--color-text);
+}
+
+.stepDetails li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--step-color);
+  font-weight: 600;
+}
+
+/* Arrow between steps */
+.arrow {
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  margin: 0 var(--spacing-sm);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.arrow svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(4px);
+    opacity: 1;
+  }
+}
+
+/* Mobile vertical layout */
+.pipelineMobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .pipeline {
+    display: none;
+  }
+
+  .pipelineMobile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .stepMobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stepBoxMobile {
+    background: var(--color-surface);
+    border: 2px solid var(--step-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stepBoxMobile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--step-color);
+  }
+
+  .stepNumberMobile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--step-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .stepTitleMobile {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text);
+  }
+
+  .stepDescriptionMobile {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.5;
+  }
+
+  .stepDetailsMobile {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--font-size-sm);
+  }
+
+  .stepDetailsMobile li {
+    padding-left: var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+    position: relative;
+    color: var(--color-text);
+  }
+
+  .stepDetailsMobile li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--step-color);
+    font-weight: 600;
+  }
+
+  .arrowMobile {
+    width: 32px;
+    height: 32px;
+    color: var(--color-text-muted);
+    margin: var(--spacing-sm) 0;
+    animation: pulseVertical 2s ease-in-out infinite;
+  }
+
+  .arrowMobile svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes pulseVertical {
+    0%, 100% {
+      transform: translateY(0);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(4px);
+      opacity: 1;
+    }
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .arrowMobile {
+    animation: none;
+  }
+
+  .stepBox:hover {
+    transform: none;
+  }
+}

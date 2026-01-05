@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 import * as d3 from 'd3';
 import doseEffects from '../../data/doseEffects.json';
 import styles from './JohnsonNeymanPlot.module.css';
@@ -16,7 +16,16 @@ export default function JohnsonNeymanPlot({
   width = 600,
   height = 350,
 }: JohnsonNeymanPlotProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const [tooltip, setTooltip] = useState<{
+    x: number;
+    y: number;
+    dose: number;
+    effect: number;
+    ciLower: number;
+    ciUpper: number;
+  } | null>(null);
 
   // Get the JN point for this outcome
   const jnPoint = useMemo(() => {
@@ -325,6 +334,32 @@ export default function JohnsonNeymanPlot({
       .attr('font-size', '11px')
       .attr('fill', 'var(--color-text)')
       .text('Zero (null)');
+
+    const overlay = g.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', innerWidth)
+      .attr('height', innerHeight)
+      .attr('fill', 'transparent')
+      .attr('cursor', 'crosshair');
+
+    overlay
+      .on('mousemove', (event) => {
+        const [x] = d3.pointer(event);
+        const dose = Math.max(0, Math.min(80, Math.round(xScale.invert(x))));
+        const point = data[dose];
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (!rect || !point) return;
+        setTooltip({
+          x: event.clientX - rect.left + 12,
+          y: event.clientY - rect.top + 12,
+          dose: point.dose,
+          effect: point.effect,
+          ciLower: point.ciLower,
+          ciUpper: point.ciUpper,
+        });
+      })
+      .on('mouseleave', () => setTooltip(null));
   }, [data, width, height, outcome, selectedDose, jnPoint, color]);
 
   const outcomeLabel = outcome === 'distress' ? 'Emotional Distress' : 'Campus Engagement';
@@ -336,7 +371,7 @@ export default function JohnsonNeymanPlot({
   }, [outcome, jnPoint, outcomeLabel]);
 
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       <div className={styles.header}>
         <h3 className={styles.title}>
           Johnson-Neyman Analysis: {outcomeLabel}
@@ -346,6 +381,15 @@ export default function JohnsonNeymanPlot({
         </p>
       </div>
       <svg ref={svgRef} width={width} height={height} className={styles.svg} />
+      {tooltip && (
+        <div className={styles.tooltip} style={{ left: tooltip.x, top: tooltip.y }}>
+          <div className={styles.tooltipTitle}>{tooltip.dose} credits</div>
+          <div className={styles.tooltipRow}>Effect: {tooltip.effect.toFixed(3)}</div>
+          <div className={styles.tooltipRow}>
+            95% CI: {tooltip.ciLower.toFixed(3)} to {tooltip.ciUpper.toFixed(3)}
+          </div>
+        </div>
+      )}
       <div className={styles.interpretation}>
         <div className={styles.interpretationIcon}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

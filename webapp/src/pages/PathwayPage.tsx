@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect, useRef } from 'react';
 import { useResearch } from '../context/ResearchContext';
 import { useModelData } from '../context/ModelDataContext';
 import PathwayDiagram from '../components/charts/PathwayDiagram';
+import EffectDecomposition from '../components/charts/EffectDecomposition';
 import Toggle from '../components/ui/Toggle';
 import KeyTakeaway from '../components/ui/KeyTakeaway';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
@@ -9,7 +10,7 @@ import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import styles from './PathwayPage.module.css';
 
 export default function PathwayPage() {
-  const { highlightedPath, setHighlightedPath, showCIs, toggleCIs } = useResearch();
+  const { highlightedPath, setHighlightedPath, showPathLabels, togglePathLabels } = useResearch();
   const { paths } = useModelData();
   const [isStuck, setIsStuck] = useState(false);
   const controlsRef = useRef<HTMLElement>(null);
@@ -18,6 +19,7 @@ export default function PathwayPage() {
   const headerRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
   const diagramRef = useScrollReveal<HTMLElement>({ threshold: 0.1 });
   const coefficientsRef = useStaggeredReveal<HTMLElement>();
+  const indirectRef = useStaggeredReveal<HTMLElement>();
   const summaryRef = useStaggeredReveal<HTMLElement>();
 
   // Detect sticky state (using -10px rootMargin for reliable triggering across zoom levels)
@@ -160,10 +162,10 @@ export default function PathwayPage() {
           </div>
           <div className={styles.toggleContainer}>
             <Toggle
-              id="show-cis-pathway"
-              label="Show Uncertainty Ranges"
-              checked={showCIs}
-              onChange={toggleCIs}
+              id="show-path-labels"
+              label="Show Path Labels"
+              checked={showPathLabels}
+              onChange={togglePathLabels}
             />
           </div>
         </section>
@@ -202,6 +204,80 @@ export default function PathwayPage() {
                 </article>
               );
             })}
+          </div>
+        </section>
+
+        <section ref={indirectRef} className={`${styles.indirectEffects} stagger-children`}>
+          <h2>Understanding Indirect Effects</h2>
+          <p className={styles.indirectIntro}>
+            Indirect effects show how FASt status affects adjustment <em>through</em> stress and engagement.
+            They're calculated by multiplying path coefficients together.
+          </p>
+          <div className={styles.indirectGrid}>
+            <article className={`${styles.indirectCard} reveal`}>
+              <div className={styles.indirectHeader}>
+                <h3>Stress Route (Indirect)</h3>
+                <span className={styles.indirectBadge} style={{ backgroundColor: 'var(--color-distress)' }}>
+                  a₁ × b₁
+                </span>
+              </div>
+              <div className={styles.indirectFormula}>
+                <div className={styles.formulaRow}>
+                  <span className={styles.formulaLabel}>FASt → Stress</span>
+                  <span className={styles.formulaValue}>a₁ = {paths.a1?.estimate?.toFixed(3) ?? '—'}</span>
+                </div>
+                <div className={styles.formulaMultiply}>×</div>
+                <div className={styles.formulaRow}>
+                  <span className={styles.formulaLabel}>Stress → Adjustment</span>
+                  <span className={styles.formulaValue}>b₁ = {paths.b1?.estimate?.toFixed(3) ?? '—'}</span>
+                </div>
+                <div className={styles.formulaEquals}>=</div>
+                <div className={styles.formulaResult}>
+                  <span className={styles.resultLabel}>Indirect Effect</span>
+                  <span className={styles.resultValue}>
+                    {((paths.a1?.estimate ?? 0) * (paths.b1?.estimate ?? 0)).toFixed(3)}
+                  </span>
+                </div>
+              </div>
+              <p className={styles.indirectInterpretation}>
+                This <strong>negative indirect effect</strong> means FASt status increases stress,
+                which in turn reduces adjustment. This is the "cost" pathway.
+              </p>
+            </article>
+
+            <article className={`${styles.indirectCard} reveal`}>
+              <div className={styles.indirectHeader}>
+                <h3>Engagement Route (Indirect)</h3>
+                <span className={styles.indirectBadge} style={{ backgroundColor: 'var(--color-engagement)' }}>
+                  a₂ × b₂
+                </span>
+              </div>
+              <div className={styles.indirectFormula}>
+                <div className={styles.formulaRow}>
+                  <span className={styles.formulaLabel}>FASt → Engagement</span>
+                  <span className={styles.formulaValue}>a₂ = {paths.a2?.estimate?.toFixed(3) ?? '—'}</span>
+                </div>
+                <div className={styles.formulaMultiply}>×</div>
+                <div className={styles.formulaRow}>
+                  <span className={styles.formulaLabel}>Engagement → Adjustment</span>
+                  <span className={styles.formulaValue}>b₂ = {paths.b2?.estimate?.toFixed(3) ?? '—'}</span>
+                </div>
+                <div className={styles.formulaEquals}>=</div>
+                <div className={styles.formulaResult}>
+                  <span className={styles.resultLabel}>Indirect Effect</span>
+                  <span className={styles.resultValue}>
+                    {((paths.a2?.estimate ?? 0) * (paths.b2?.estimate ?? 0)).toFixed(3)}
+                  </span>
+                </div>
+              </div>
+              <p className={styles.indirectInterpretation}>
+                This indirect effect is <strong>close to zero</strong> because FASt status doesn't
+                significantly change engagement. The benefit comes through the direct path instead.
+              </p>
+            </article>
+          </div>
+          <div className={`${styles.decompositionChart} reveal`}>
+            <EffectDecomposition />
           </div>
         </section>
 

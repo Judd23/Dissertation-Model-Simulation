@@ -2,6 +2,9 @@ import { useMemo } from 'react';
 import { useModelData } from '../context/ModelDataContext';
 import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
+import ProgressRing from '../components/ui/ProgressRing';
+import Accordion from '../components/ui/Accordion';
+import AnalysisPipeline from '../components/charts/AnalysisPipeline';
 import styles from './MethodsPage.module.css';
 
 const modelSpecs = [
@@ -13,11 +16,85 @@ const modelSpecs = [
   { label: 'Model Framework', value: 'Hayes Model 59', description: 'Moderated parallel mediation design' },
 ];
 
+const surveyItems = [
+  {
+    id: 'distress-items',
+    title: 'Emotional Distress (6 items)',
+    content: (
+      <ul className={styles.surveyList}>
+        <li>Academic difficulties</li>
+        <li>Loneliness</li>
+        <li>Mental health concerns</li>
+        <li>Exhaustion</li>
+        <li>Sleep problems</li>
+        <li>Financial stress</li>
+      </ul>
+    ),
+  },
+  {
+    id: 'engagement-items',
+    title: 'Quality of Engagement (5 items)',
+    content: (
+      <ul className={styles.surveyList}>
+        <li>Interactions with other students</li>
+        <li>Interactions with advisors</li>
+        <li>Interactions with faculty</li>
+        <li>Interactions with staff</li>
+        <li>Interactions with administrators</li>
+      </ul>
+    ),
+  },
+  {
+    id: 'adjustment-items',
+    title: 'Developmental Adjustment (15 items across 4 domains)',
+    content: (
+      <div className={styles.surveyColumns}>
+        <div>
+          <div className={styles.surveyLabel}>Belonging</div>
+          <ul className={styles.surveyList}>
+            <li>Feel part of campus community</li>
+            <li>Feel respected on campus</li>
+            <li>Feel you matter here</li>
+          </ul>
+        </div>
+        <div>
+          <div className={styles.surveyLabel}>Gains</div>
+          <ul className={styles.surveyList}>
+            <li>Grew intellectually</li>
+            <li>Gained academic confidence</li>
+            <li>Improved problem-solving</li>
+            <li>Learned to manage time</li>
+            <li>Strengthened academic goals</li>
+          </ul>
+        </div>
+        <div>
+          <div className={styles.surveyLabel}>Support</div>
+          <ul className={styles.surveyList}>
+            <li>Academic support available</li>
+            <li>Well‑being support available</li>
+            <li>Advising resources available</li>
+            <li>Faculty support available</li>
+            <li>Peer support available</li>
+          </ul>
+        </div>
+        <div>
+          <div className={styles.surveyLabel}>Satisfaction</div>
+          <ul className={styles.surveyList}>
+            <li>Satisfied with college choice</li>
+            <li>Satisfied with first-year experience</li>
+          </ul>
+        </div>
+      </div>
+    ),
+  },
+];
+
 export default function MethodsPage() {
   const { fitMeasures: fits } = useModelData();
 
   // Scroll reveal refs for each section
   const headerRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
+  const pipelineRef = useScrollReveal<HTMLElement>();
   const fitRef = useScrollReveal<HTMLElement>();
   const settingsRef = useStaggeredReveal<HTMLElement>();
   const pswRef = useScrollReveal<HTMLElement>();
@@ -44,6 +121,31 @@ export default function MethodsPage() {
       { name: 'SRMR', description: 'Residual size', value: fits.srmr?.toFixed(3) ?? '—', criterion: '≤ 0.08', interpretation: fits.srmr !== undefined ? (fits.srmr <= 0.08 ? 'Good' : 'Below threshold') : '—' },
     ];
   }, [fits]);
+
+  const fitRings = useMemo(() => {
+    const buildRing = (label: string, value: number | undefined, threshold: number, higherIsBetter: boolean) => {
+      if (value === undefined) {
+        return { label, value: 0, display: '—', color: 'var(--color-border)' };
+      }
+      const passes = higherIsBetter ? value >= threshold : value <= threshold;
+      const score = higherIsBetter
+        ? Math.max(0, Math.min(1, value))
+        : Math.max(0, Math.min(1, 1 - value / threshold));
+      return {
+        label,
+        value: score,
+        display: value.toFixed(3),
+        color: passes ? 'var(--color-positive)' : 'var(--color-negative)',
+      };
+    };
+
+    return [
+      buildRing('CFI', fits.cfi, 0.95, true),
+      buildRing('TLI', fits.tli, 0.95, true),
+      buildRing('RMSEA', fits.rmsea, 0.05, false),
+      buildRing('SRMR', fits.srmr, 0.08, false),
+    ];
+  }, [fits]);
   return (
     <div className={styles.page}>
       <div className="container">
@@ -62,6 +164,15 @@ export default function MethodsPage() {
             Technical details are provided for researchers who want to evaluate our methods.
           </p>
         </header>
+
+        <section ref={pipelineRef} className={`${styles.section} reveal`}>
+          <h2>Analysis Pipeline</h2>
+          <p className={styles.sectionIntro}>
+            Our analysis follows a three-stage process to ensure valid causal inferences
+            from observational data. Each stage builds on the previous one.
+          </p>
+          <AnalysisPipeline />
+        </section>
 
         <section ref={fitRef} className={`${styles.section} reveal`}>
           <h2>How Well Does the Model Fit?</h2>
@@ -83,6 +194,17 @@ export default function MethodsPage() {
             </GlossaryTerm>{' '}
             indicate better fit. Our model meets all recommended standards.
           </p>
+          <div className={styles.fitRings}>
+            {fitRings.map((ring) => (
+              <ProgressRing
+                key={ring.label}
+                label={ring.label}
+                value={ring.value}
+                displayValue={ring.display}
+                color={ring.color}
+              />
+            ))}
+          </div>
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <thead>
@@ -202,6 +324,15 @@ export default function MethodsPage() {
               </ul>
             </article>
           </div>
+        </section>
+
+        <section className={`${styles.section} ${styles.surveyExamples} reveal`}>
+          <h2>Survey Item Examples</h2>
+          <p className={styles.sectionIntro}>
+            These are representative items used to measure each construct in the model.
+            Full scales are available in the project codebook.
+          </p>
+          <Accordion items={surveyItems} allowMultiple />
         </section>
 
         <section ref={bootstrapRef} className={`${styles.section} reveal`}>

@@ -22,6 +22,14 @@ export default function DoseResponseCurve({
   const { resolvedTheme } = useTheme();
   const { doseCoefficients } = useModelData();
   const [dimensions, setDimensions] = useState({ width: 500, height: 300 });
+  const [tooltip, setTooltip] = useState<{
+    x: number;
+    y: number;
+    dose: number;
+    effect: number;
+    ciLower: number;
+    ciUpper: number;
+  } | null>(null);
 
   // Responsive sizing
   useEffect(() => {
@@ -192,6 +200,42 @@ export default function DoseResponseCurve({
       .attr('font-size', 11)
       .text('FASt threshold');
 
+    if (outcome === 'engagement') {
+      const isCompact = innerWidth < 360;
+      const sweetStart = 12;
+      const sweetEnd = 35;
+      const diminishStart = 36;
+      const labelY = 28;
+
+      g.append('line')
+        .attr('x1', xScale(diminishStart))
+        .attr('x2', xScale(diminishStart))
+        .attr('y1', 0)
+        .attr('y2', innerHeight)
+        .attr('stroke', colors.engagement)
+        .attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '6,4')
+        .attr('opacity', 0.6);
+
+      g.append('text')
+        .attr('x', xScale((sweetStart + sweetEnd) / 2))
+        .attr('y', labelY)
+        .attr('text-anchor', 'middle')
+        .attr('fill', colors.engagement)
+        .attr('font-size', 11)
+        .attr('font-weight', 600)
+        .text(isCompact ? 'Sweet spot' : 'Sweet spot (12–35)');
+
+      g.append('text')
+        .attr('x', xScale((diminishStart + 80) / 2))
+        .attr('y', labelY)
+        .attr('text-anchor', 'middle')
+        .attr('fill', colors.engagement)
+        .attr('font-size', 11)
+        .attr('font-weight', 600)
+        .text(isCompact ? 'Diminishing' : 'Diminishing returns');
+    }
+
     // Selected dose indicator
     const selectedData = data.find((d) => d.dose === selectedDose);
     if (selectedData) {
@@ -246,11 +290,48 @@ export default function DoseResponseCurve({
       .attr('font-size', 12)
       .text(`Effect on ${outcome === 'distress' ? 'Distress' : outcome === 'engagement' ? 'Engagement' : 'Adjustment'}`);
 
+    const overlay = g.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', innerWidth)
+      .attr('height', innerHeight)
+      .attr('fill', 'transparent')
+      .attr('cursor', 'crosshair');
+
+    overlay
+      .on('mousemove', (event) => {
+        const [x] = d3.pointer(event);
+        const dose = Math.max(0, Math.min(80, Math.round(xScale.invert(x))));
+        const point = data[dose];
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (!rect || !point) return;
+        setTooltip({
+          x: event.clientX - rect.left + 12,
+          y: event.clientY - rect.top + 12,
+          dose: point.dose,
+          effect: point.effect,
+          ciLower: point.ciLower,
+          ciUpper: point.ciUpper,
+        });
+      })
+      .on('mouseleave', () => setTooltip(null));
+
   }, [outcome, selectedDose, dimensions, showCIs, resolvedTheme, doseCoefficients]);
 
   return (
     <div ref={containerRef} className={styles.container}>
       <svg ref={svgRef} width={dimensions.width} height={dimensions.height} className={styles.svg} />
+      {tooltip && (
+        <div className={styles.tooltip} style={{ left: tooltip.x, top: tooltip.y }}>
+          <div className={styles.tooltipTitle}>{tooltip.dose} credits</div>
+          <div className={styles.tooltipRow}>Effect: {tooltip.effect.toFixed(3)}</div>
+          {showCIs && (
+            <div className={styles.tooltipRow}>
+              95% CI: {tooltip.ciLower.toFixed(3)} to {tooltip.ciUpper.toFixed(3)}
+            </div>
+          )}
+        </div>
+      )}
       <DataTimestamp />
     </div>
   );

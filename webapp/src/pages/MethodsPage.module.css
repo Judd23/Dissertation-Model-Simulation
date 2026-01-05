@@ -103,6 +103,39 @@
   margin-bottom: var(--spacing-lg);
 }
 
+.fitRings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) 0 var(--spacing-xl);
+  align-items: center;
+}
+
+.surveyExamples {
+  margin-bottom: var(--spacing-3xl);
+}
+
+.surveyColumns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.surveyLabel {
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.surveyList {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+  display: grid;
+  gap: var(--spacing-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
 /* Table */
 .tableWrapper {
   overflow-x: auto;

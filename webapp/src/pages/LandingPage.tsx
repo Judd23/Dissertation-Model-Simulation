@@ -1,8 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 import styles from './LandingPage.module.css';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { resolvedTheme } = useTheme();
+  const logoSrc = resolvedTheme === 'light'
+    ? `${import.meta.env.BASE_URL}researcher/SDSUPrmary Bar.png`
+    : `${import.meta.env.BASE_URL}researcher/sdsu_primary-logo_rgb_horizontal_reverse.png`;
 
   return (
     <div className={styles.landing}>
@@ -30,7 +35,7 @@ export default function LandingPage() {
           <div className={styles.logoWrap} aria-hidden="true">
             <img
               className={styles.logo}
-              src={`${import.meta.env.BASE_URL}researcher/sdsu_primary-logo_rgb_horizontal_reverse.png`}
+              src={logoSrc}
               alt=""
               loading="lazy"
             />

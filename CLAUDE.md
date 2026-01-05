@@ -640,10 +640,10 @@ Made the ResearcherPage significantly more artistic and dynamic with layered ani
 |------|--------|-------|
 | Johnson-Neyman visualization | ✅ | New JohnsonNeymanPlot component on DoseExplorerPage |
 | Confidence interval ribbons | ✅ | Enhanced DoseResponseCurve with CI boundaries |
-| Research Questions on LandingPage | ✅ | 4 questions in 2x2 grid with hover effects |
-| Accordion component | ⏳ Pending | For MethodsPage collapsible sections |
-| ProgressRing component | ⏳ Pending | For fit indices visualization |
-| Outcome survey item examples | ⏳ Pending | Show what constructs actually measure |
+| Research Questions on LandingPage | ✅ | Removed; Landing now intro-only |
+| Accordion component | ✅ | For MethodsPage collapsible sections |
+| ProgressRing component | ✅ | Fit indices visualization (CFI/TLI/RMSEA/SRMR) |
+| Outcome survey item examples | ✅ | Survey example section added to MethodsPage |
 
 #### New Page Created: "So, What?" (SoWhatPage)
 - **Route:** `/so-what` (navigation label: "So, What?", shortLabel: "Impact")
@@ -678,15 +678,55 @@ Made the ResearcherPage significantly more artistic and dynamic with layered ani
 
 ---
 
+---
+
+### January 6, 2026 - Navigation + Content Reorg + Bug Fixes
+
+#### Navigation & Page Organization
+- Reordered nav: Home → Demographics → Methods → Pathway → Credit Levels → So What → Researcher
+- Moved FASt vs Non-FASt snapshot panel from Pathway to Demographics
+- Removed duplicate dose slider from Pathway (DoseExplorer owns dose control)
+- Landing page now contains only the title/author/entry (no research questions section)
+
+#### Bug Fix Sweep
+- Restored CI toggle behavior (CIs hidden when off) in DoseResponseCurve
+- Re-enabled p-value significance coloring for non-race comparisons in GroupComparison
+- PathwayDiagram mobile sizing now accounts for container padding to prevent clipping
+
+#### Deployment
+- Published updates to GitHub Pages
+
+### January 6, 2026 - Sprint 2 Components Completed
+
+#### New Components
+- Accordion (collapsible sections for technical content)
+- ProgressRing (fit indices visualization)
+
+#### MethodsPage Updates
+- Fit index rings added above fit table
+- Survey item examples added with Accordion
+
+#### Build
+- `npm run build` passed
+
+### January 6, 2026 - Sprint 4 (Partial)
+
+#### Advanced Visuals
+- Added glow emphasis for selected paths in PathwayDiagram
+- Added dose curve annotations ("Sweet spot", "Diminishing returns")
+- Added effect decomposition chart component and integrated on PathwayPage
+- Added hover tooltips to DoseResponseCurve, GroupComparison, and JohnsonNeymanPlot
+
+#### Build
+- `npm run build` passed
+
 ## Webapp Enhancement Roadmap - Remaining Sprints
 
 ### Sprint 2 Remaining (Est. 2-3 hours)
 
 | # | Task | Priority | Description | Files |
 |---|------|----------|-------------|-------|
-| 1 | **Accordion component** | HIGH | Collapsible sections for dense content on MethodsPage | `ui/Accordion.tsx`, `ui/Accordion.module.css` |
-| 2 | **ProgressRing component** | MEDIUM | Circular progress indicator for CFI/TLI/RMSEA fit indices | `ui/ProgressRing.tsx`, `ui/ProgressRing.module.css` |
-| 3 | **Outcome survey examples** | MEDIUM | Show actual survey items for Distress, Engagement, Adjustment | `HomePage.tsx` or new section |
+| 1 | **MethodsPage visual flowchart** | HIGH | Analysis pipeline diagram (Propensity → SEM → Bootstrap) | `MethodsPage.tsx`, new SVG/D3 component |
 
 ### Sprint 3: Polish & Atmosphere (Est. 4-5 hours)
 
@@ -741,20 +781,20 @@ Made the ResearcherPage significantly more artistic and dynamic with layered ani
 | DataTimestamp | ✅ Complete | `ui/DataTimestamp.tsx` |
 | JohnsonNeymanPlot | ✅ Complete | `charts/JohnsonNeymanPlot.tsx` |
 | DoseResponseCurve (CI ribbons) | ✅ Complete | `charts/DoseResponseCurve.tsx` |
-| Accordion | ⏳ Pending | Sprint 2 |
-| ProgressRing | ⏳ Pending | Sprint 2 |
+| Accordion | ✅ Complete | `ui/Accordion.tsx` |
+| ProgressRing | ✅ Complete | `ui/ProgressRing.tsx` |
 | Breadcrumb | ⏳ Pending | Sprint 3 |
-| EffectDecomposition | 🔮 Future | Sprint 4 |
+| EffectDecomposition | ✅ Complete | `charts/EffectDecomposition.tsx` |
 
 ### Page Status Summary
 
 | Page | Visual Polish | Educational Content | Mobile Ready |
 |------|--------------|---------------------|--------------|
-| LandingPage | ✅ 9/10 | ✅ Research questions | ✅ |
+| LandingPage | ✅ 9/10 | ✅ Overview only | ✅ |
 | HomePage | ✅ 9/10 | ✅ Demographics, findings | ✅ |
 | SoWhatPage | ✅ 9/10 | ✅ Implications, takeaways | ✅ |
 | DoseExplorerPage | ✅ 9/10 | ✅ JN plot, dose zones | ✅ |
 | DemographicsPage | ⚠️ 7/10 | ⚠️ Needs examples | ✅ |
 | PathwayPage | ⚠️ 8/10 | ⚠️ Needs indirect calc | ⚠️ Scroll issues |
-| MethodsPage | ⚠️ 7/10 | ⏳ Needs flowchart, accordion | ✅ |
+| MethodsPage | ⚠️ 8/10 | ⏳ Needs flowchart | ✅ |
 | ResearcherPage | ✅ 10/10 | ✅ Complete | ✅ |

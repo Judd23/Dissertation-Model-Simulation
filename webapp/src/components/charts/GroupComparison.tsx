@@ -122,6 +122,15 @@ export default function GroupComparison({
   const containerRef = useRef<HTMLDivElement>(null);
   const { resolvedTheme } = useTheme();
   const [dimensions, setDimensions] = useState({ width: 600, height: 300 });
+  const [tooltip, setTooltip] = useState<{
+    x: number;
+    y: number;
+    label: string;
+    estimate: number;
+    se: number;
+    pvalue: number;
+    n: number;
+  } | null>(null);
 
   // Responsive sizing
   useEffect(() => {
@@ -240,13 +249,30 @@ export default function GroupComparison({
         .attr('stroke-width', 2);
 
       // Point estimate
-      g.append('circle')
+      const point = g.append('circle')
         .attr('cx', xScale(d.estimate))
         .attr('cy', y)
         .attr('r', 8)
         .attr('fill', color)
         .attr('stroke', 'white')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('cursor', 'pointer');
+
+      point
+        .on('mouseenter', (event) => {
+          const rect = containerRef.current?.getBoundingClientRect();
+          if (!rect) return;
+          setTooltip({
+            x: event.clientX - rect.left + 12,
+            y: event.clientY - rect.top + 12,
+            label: d.label,
+            estimate: d.estimate,
+            se: d.se,
+            pvalue: d.pvalue,
+            n: d.n,
+          });
+        })
+        .on('mouseleave', () => setTooltip(null));
 
       // Value label
       g.append('text')
@@ -303,6 +329,15 @@ export default function GroupComparison({
   return (
     <div ref={containerRef} className={styles.container}>
       <svg ref={svgRef} width={dimensions.width} height={dimensions.height} className={styles.svg} />
+      {tooltip && (
+        <div className={styles.tooltip} style={{ left: tooltip.x, top: tooltip.y }}>
+          <div className={styles.tooltipTitle}>{tooltip.label}</div>
+          <div className={styles.tooltipRow}>Effect: {tooltip.estimate.toFixed(3)}</div>
+          <div className={styles.tooltipRow}>SE: {tooltip.se.toFixed(3)}</div>
+          <div className={styles.tooltipRow}>p: {tooltip.pvalue.toFixed(3)}</div>
+          <div className={styles.tooltipRow}>n: {tooltip.n.toLocaleString()}</div>
+        </div>
+      )}
       <p className={styles.note}>
         * p &lt; .05. Error bars represent 95% confidence intervals.
       </p>

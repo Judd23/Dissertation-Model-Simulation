@@ -51,7 +51,7 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
   flex-wrap: wrap;
   position: sticky;
   top: calc(var(--header-height) + var(--spacing-sm));
@@ -137,7 +137,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
   display: flex;
   justify-content: center;
   overflow-x: auto;
@@ -183,9 +183,9 @@
 
 /* Coefficients */
 .coefficients {
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
   border-top: 1px solid var(--color-border-light);
-  padding-top: var(--spacing-3xl);
+  padding-top: var(--spacing-2xl);
 }
 
 .coefficients h2 {
@@ -270,6 +270,137 @@
   margin: 0;
 }
 
+/* Indirect Effects */
+.indirectEffects {
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.indirectEffects h2 {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.indirectIntro {
+  text-align: center;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.indirectGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.decompositionChart {
+  margin-top: var(--spacing-xl);
+}
+
+.indirectCard {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.indirectCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-accent);
+}
+
+.indirectHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.indirectHeader h3 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.indirectBadge {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: white;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.indirectFormula {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.formulaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) 0;
+}
+
+.formulaLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.formulaValue {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.formulaMultiply,
+.formulaEquals {
+  text-align: center;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-accent);
+  padding: var(--spacing-xs) 0;
+}
+
+.formulaResult {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 2px solid var(--color-accent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resultLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.resultValue {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.indirectInterpretation {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* Summary */
 .summary h2 {
   text-align: center;
@@ -278,7 +409,7 @@
 
 .summary {
   border-top: 1px solid var(--color-border-light);
-  padding-top: var(--spacing-3xl);
+  padding-top: var(--spacing-2xl);
 }
 
 .summaryGrid {

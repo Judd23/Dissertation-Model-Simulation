@@ -20,6 +20,10 @@ interface ResearchContextType {
   // Highlighted pathway in diagram
   highlightedPath: 'distress' | 'engagement' | 'direct' | 'serial' | null;
   setHighlightedPath: (path: 'distress' | 'engagement' | 'direct' | 'serial' | null) => void;
+
+  // Toggle coefficient labels on PathwayDiagram
+  showPathLabels: boolean;
+  togglePathLabels: () => void;
 }
 
 const ResearchContext = createContext<ResearchContextType | null>(null);
@@ -30,8 +34,10 @@ export function ResearchProvider({ children }: { children: ReactNode }) {
   const [groupingVariable, setGroupingVariable] = useState<'race' | 'firstgen' | 'pell' | 'sex' | 'living'>('race');
   const [showCIs, setShowCIs] = useState(true);
   const [highlightedPath, setHighlightedPath] = useState<'distress' | 'engagement' | 'direct' | 'serial' | null>(null);
+  const [showPathLabels, setShowPathLabels] = useState(true);
 
   const toggleCIs = () => setShowCIs(!showCIs);
+  const togglePathLabels = () => setShowPathLabels(!showPathLabels);
 
   return (
     <ResearchContext.Provider
@@ -46,6 +52,8 @@ export function ResearchProvider({ children }: { children: ReactNode }) {
         toggleCIs,
         highlightedPath,
         setHighlightedPath,
+        showPathLabels,
+        togglePathLabels,
       }}
     >
       {children}
