@@ -160,9 +160,9 @@ export default function PathwayPage() {
                 (highlightedPath === 'engagement' && (path.id === 'a2' || path.id === 'b2' || path.id === 'a2z')) ||
                 (highlightedPath === 'direct' && (path.id === 'c' || path.id === 'cz'));
 
-              const strengthBadge = path.pvalue < 0.001 ? '✅ Strong evidence' :
-                                    path.pvalue < 0.05 ? '✓ Good evidence' :
-                                    path.pvalue < 0.10 ? '~ Suggestive' : '✗ Uncertain';
+              const strengthBadge = path.pvalue < 0.001 ? 'Strong evidence' :
+                                    path.pvalue < 0.05 ? 'Good evidence' :
+                                    path.pvalue < 0.10 ? 'Suggestive' : 'Uncertain';
 
               return (
                 <article

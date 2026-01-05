@@ -59,8 +59,8 @@ export default function HomePage() {
           <h2>Key Findings</h2>
           <div className={styles.findingCards}>
             <article className={styles.findingCard}>
-              <div className={styles.findingIcon} style={{ background: 'var(--color-distress)' }}>
-                <span>📈</span>
+              <div className={styles.findingNumber} style={{ color: 'var(--color-distress)' }}>
+                <span>01</span>
               </div>
               <h3>The Stress Connection</h3>
               <p>
@@ -75,8 +75,8 @@ export default function HomePage() {
             </article>
 
             <article className={styles.findingCard}>
-              <div className={styles.findingIcon} style={{ background: 'var(--color-engagement)' }}>
-                <span>🎓</span>
+              <div className={styles.findingNumber} style={{ color: 'var(--color-engagement)' }}>
+                <span>02</span>
               </div>
               <h3>Campus Involvement Matters</h3>
               <p>
@@ -91,8 +91,8 @@ export default function HomePage() {
             </article>
 
             <article className={styles.findingCard}>
-              <div className={styles.findingIcon} style={{ background: 'var(--color-fast)' }}>
-                <span>📊</span>
+              <div className={styles.findingNumber} style={{ color: 'var(--color-fast)' }}>
+                <span>03</span>
               </div>
               <h3>More Credits = Bigger Impact</h3>
               <p>

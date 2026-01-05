@@ -6,27 +6,38 @@ export default function ResearcherPage() {
       <header className={styles.hero}>
         <div className={styles.heroGrid}>
           <figure className={styles.heroFigure}>
-            <picture>
-              <source
-                srcSet={
-                  `${import.meta.env.BASE_URL}researcher/researcher-800.jpg 800w, ` +
-                  `${import.meta.env.BASE_URL}researcher/researcher-1600.jpg 1600w, ` +
-                  `${import.meta.env.BASE_URL}researcher/researcher-2400.jpg 2400w, ` +
-                  `${import.meta.env.BASE_URL}researcher/researcher-3200.jpg 3200w`
-                }
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-                type="image/jpeg"
-              />
-              <img
-                src={`${import.meta.env.BASE_URL}researcher/researcher-1600.jpg`}
-                alt="Jay Johnson"
-                loading="eager"
-              />
-            </picture>
-            <div className={styles.heroOverlay} />
+            <div className={styles.heroMedia}>
+              <picture>
+                <source
+                  srcSet={
+                    `${import.meta.env.BASE_URL}researcher/researcher-800.jpg 800w, ` +
+                    `${import.meta.env.BASE_URL}researcher/researcher-1600.jpg 1600w, ` +
+                    `${import.meta.env.BASE_URL}researcher/researcher-2400.jpg 2400w, ` +
+                    `${import.meta.env.BASE_URL}researcher/researcher-3200.jpg 3200w`
+                  }
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 680px"
+                  type="image/jpeg"
+                />
+                <img
+                  src={`${import.meta.env.BASE_URL}researcher/researcher-1600.jpg`}
+                  alt="Jay Johnson"
+                  loading="eager"
+                />
+              </picture>
+            </div>
+            <figcaption className={styles.heroCaption}>
+              <span className={styles.captionKicker}>Doctoral Candidate</span>
+            </figcaption>
           </figure>
 
           <div className={styles.heroIntro}>
+            <div className={styles.institutionPanel}>
+              <img
+                src={`${import.meta.env.BASE_URL}researcher/sdsu-logo.png`}
+                alt="SDSU College of Education - Community College Leadership Ed.D"
+                className={styles.institutionLogo}
+              />
+            </div>
             <div className={styles.kicker}>Researcher</div>
             <h1 className={styles.name}>Jay Johnson</h1>
             <div className={styles.metaLine}>
@@ -65,23 +76,28 @@ export default function ResearcherPage() {
               <h2>Background</h2>
             </div>
             <p>
-              My work sits at the intersection of faculty practice, applied research, and student-facing
-              administration—with a creative background that keeps the work human, narrative-driven,
-              and grounded in lived experience.
+              I came to research through teaching and advising. Years of watching students navigate
+              systems that weren't built for them made me want to understand the patterns underneath.
             </p>
             <p>
-              I study how accelerated pathways and policy choices shape the transition into college—
-              not just academically, but psychologically and socially—especially for first-generation
-              and low-income students.
+              Now I study how early college experiences shape who stays, who thrives, and who feels
+              like they belong. The numbers matter, but so do the stories behind them.
             </p>
           </article>
 
           <aside className={styles.blockB}>
-            <blockquote className={styles.pullQuote}>
-              <p>
-                “Every student deserves to <em>thrive</em> in college, not just survive.”
-              </p>
-            </blockquote>
+            <div className={styles.quotePanel}>
+              <blockquote className={styles.pullQuote}>
+                <p>
+                  “The arts taught me what statistics later confirmed: people make meaning before they make decisions.”
+                </p>
+              </blockquote>
+              <blockquote className={styles.pullQuoteAlt}>
+                <p>
+                  “Belonging is made in the quiet minutes, in the ordinary grace of being remembered, of being welcomed, of being regarded as worthy of attention.”
+                </p>
+              </blockquote>
+            </div>
           </aside>
 
           <article className={styles.blockC}>

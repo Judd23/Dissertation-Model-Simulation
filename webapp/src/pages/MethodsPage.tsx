@@ -4,10 +4,10 @@ const fitMeasures = [
   { name: 'Chi-Square (χ²)', description: 'Overall model test', value: '897.36', criterion: '—', interpretation: 'Baseline test statistic' },
   { name: 'Degrees of Freedom', description: 'Model complexity', value: '523', criterion: '—', interpretation: '—' },
   { name: 'Chi-Square p-value', description: 'Significance test', value: '< .001', criterion: 'Non-significant preferred', interpretation: 'Expected with large samples' },
-  { name: 'CFI', description: 'Comparative fit', value: '0.997', criterion: '≥ 0.95', interpretation: '✅ Excellent fit' },
-  { name: 'TLI', description: 'Tucker-Lewis fit', value: '0.996', criterion: '≥ 0.95', interpretation: '✅ Excellent fit' },
-  { name: 'RMSEA', description: 'Approximation error', value: '0.012', criterion: '≤ 0.05', interpretation: '✅ Excellent fit' },
-  { name: 'SRMR', description: 'Residual size', value: '0.047', criterion: '≤ 0.08', interpretation: '✅ Good fit' },
+  { name: 'CFI', description: 'Comparative fit', value: '0.997', criterion: '≥ 0.95', interpretation: 'Excellent' },
+  { name: 'TLI', description: 'Tucker-Lewis fit', value: '0.996', criterion: '≥ 0.95', interpretation: 'Excellent' },
+  { name: 'RMSEA', description: 'Approximation error', value: '0.012', criterion: '≤ 0.05', interpretation: 'Excellent' },
+  { name: 'SRMR', description: 'Residual size', value: '0.047', criterion: '≤ 0.08', interpretation: 'Good' },
 ];
 
 const modelSpecs = [
