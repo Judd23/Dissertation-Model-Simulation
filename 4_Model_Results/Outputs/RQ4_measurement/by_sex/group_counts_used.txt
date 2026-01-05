@@ -1,3 +1,3 @@
 level	n
-Female	2952
-Male	2048
+Female	3104
+Male	1896

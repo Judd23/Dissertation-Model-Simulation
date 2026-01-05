@@ -1,70 +1,70 @@
 $Asian
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.786         0.740         0.816         0.530         0.628 
+        0.777         0.709         0.790         0.522         0.623 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.604         0.505         0.604         0.735         0.728 
+        0.564         0.509         0.596         0.690         0.640 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.627         0.610         0.663         0.782         0.773 
+        0.583         0.584         0.599         0.744         0.771 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.880         0.902         0.929         0.918         0.878 
+        0.836         0.878         0.890         0.891         0.859 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.822         0.807         0.810         0.858         0.877 
+        0.797         0.796         0.827         0.838         0.859 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.859         0.340         0.147         0.373         0.386 
-
-$`Other/Multiracial/Unknown`
-     sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.724         0.697         0.754         0.535         0.607 
-       pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.526         0.468         0.532         0.652         0.645 
-    SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.575         0.520         0.588         0.672         0.667 
-     MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.796         0.838         0.879         0.842         0.831 
-MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.706         0.781         0.817         0.849         0.865 
-      QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.842         0.108         0.045         0.130         0.157 
+        0.813         0.255         0.118         0.241         0.308 
 
 $White
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.787         0.742         0.819         0.538         0.613 
+        0.791         0.734         0.830         0.519         0.620 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.557         0.505         0.595         0.762         0.719 
+        0.536         0.499         0.602         0.746         0.713 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.670         0.639         0.696         0.808         0.800 
+        0.638         0.623         0.675         0.816         0.804 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.800         0.861         0.884         0.862         0.833 
+        0.796         0.832         0.879         0.854         0.831 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.731         0.831         0.865         0.886         0.901 
+        0.748         0.843         0.843         0.865         0.884 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.874         0.453         0.211         0.471         0.507 
+        0.869         0.418         0.229         0.387         0.476 
 
 $`Hispanic/Latino`
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.729         0.674         0.755         0.501         0.573 
+        0.740         0.680         0.790         0.526         0.621 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.544         0.462         0.558         0.676         0.658 
+        0.542         0.507         0.597         0.673         0.666 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.573         0.541         0.611         0.748         0.707 
+        0.591         0.554         0.617         0.728         0.753 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.800         0.830         0.873         0.853         0.810 
+        0.798         0.841         0.868         0.851         0.827 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.700         0.783         0.804         0.839         0.863 
+        0.691         0.798         0.829         0.843         0.867 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.845         0.193         0.073         0.208         0.221 
+        0.845         0.184         0.082         0.163         0.221 
+
+$`Other/Multiracial/Unknown`
+     sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
+        0.724         0.672         0.807         0.496         0.598 
+       pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
+        0.483         0.443         0.587         0.570         0.606 
+    SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
+        0.496         0.518         0.563         0.693         0.699 
+     MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
+        0.750         0.817         0.866         0.827         0.803 
+MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
+        0.682         0.771         0.779         0.807         0.844 
+      QIstaff        Belong         Gains    SupportEnv        Satisf 
+        0.815         0.092         0.044         0.097         0.137 
 
 $`Black/African American`
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.668         0.558         0.764         0.537         0.650 
+        0.669         0.649         0.803         0.495         0.589 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.571         0.469         0.638         0.674         0.655 
+        0.496         0.463         0.548         0.672         0.686 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.620         0.554         0.597         0.692         0.684 
+        0.592         0.567         0.607         0.699         0.768 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.768         0.791         0.858         0.851         0.794 
+        0.752         0.810         0.840         0.792         0.776 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.645         0.732         0.757         0.813         0.836 
+        0.639         0.807         0.816         0.850         0.845 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.793         0.048         0.012         0.035         0.044 
+        0.858         0.081         0.035         0.065         0.091 
 

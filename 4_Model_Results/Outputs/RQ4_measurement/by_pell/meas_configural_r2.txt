@@ -1,28 +1,28 @@
 $Pell
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.748         0.697         0.781         0.534         0.576 
+        0.739         0.710         0.801         0.522         0.619 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.555         0.468         0.583         0.712         0.681 
+        0.531         0.505         0.603         0.667         0.663 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.600         0.574         0.622         0.737         0.755 
+        0.572         0.577         0.615         0.736         0.748 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.814         0.855         0.887         0.868         0.829 
+        0.807         0.849         0.886         0.866         0.841 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.732         0.792         0.824         0.849         0.871 
+        0.714         0.800         0.825         0.840         0.862 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.850         0.252         0.113         0.268         0.297 
+        0.849         0.214         0.119         0.223         0.272 
 
 $`Non-Pell`
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.779         0.729         0.816         0.494         0.635 
+        0.779         0.701         0.814         0.519         0.622 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.559         0.501         0.568         0.705         0.692 
+        0.545         0.493         0.590         0.696         0.674 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.626         0.588         0.657         0.777         0.747 
+        0.609         0.575         0.628         0.758         0.782 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.854         0.885         0.916         0.900         0.872 
+        0.831         0.867         0.891         0.875         0.853 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.792         0.805         0.818         0.862         0.879 
+        0.771         0.812         0.831         0.849         0.872 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.856         0.375         0.073         0.349         0.390 
+        0.841         0.275         0.101         0.227         0.329 
 

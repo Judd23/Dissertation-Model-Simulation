@@ -1,3 +1,3 @@
 level	n
-Continuing-gen	2042
-First-gen	2958
+Continuing-gen	2647
+First-gen	2353
