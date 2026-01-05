@@ -67,7 +67,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
 
     if (theme === 'system') {
-      root.removeAttribute('data-theme');
+      // Apply the resolved system theme
+      root.setAttribute('data-theme', resolvedTheme);
     } else {
       root.setAttribute('data-theme', theme);
     }

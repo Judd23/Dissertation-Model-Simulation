@@ -2,9 +2,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .svg {
   max-width: 100%;
   height: auto;
+  min-width: 320px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    justify-content: flex-start;
+  }
 }

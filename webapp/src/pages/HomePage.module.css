@@ -140,7 +140,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: visible;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .diagramContainer {
+    padding: var(--spacing-md);
+    min-height: 300px;
+    justify-content: flex-start;
+  }
 }
 
 .actions {
@@ -241,5 +250,29 @@
   .findingCards,
   .exploreCards {
     grid-template-columns: 1fr;
+  }
+  
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .hero {
+    margin-bottom: var(--spacing-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    text-align: center;
   }
 }

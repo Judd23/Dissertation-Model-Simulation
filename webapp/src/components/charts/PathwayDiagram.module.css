@@ -5,6 +5,15 @@
   align-items: center;
   width: 100%;
   min-height: 400px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .container {
+    min-height: 300px;
+    justify-content: flex-start;
+  }
 }
 
 .svg {

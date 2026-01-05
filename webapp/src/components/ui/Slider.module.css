@@ -62,6 +62,23 @@
   transform: scale(1.1);
 }
 
+/* Larger touch target on mobile */
+@media (max-width: 768px) {
+  .slider::-webkit-slider-thumb {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .slider {
+    height: 12px;
+  }
+}
+
 .slider::-moz-range-thumb {
   width: 24px;
   height: 24px;

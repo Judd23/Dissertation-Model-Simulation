@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { useResearch } from '../../context/ResearchContext';
+import { useTheme } from '../../context/ThemeContext';
 import { colors } from '../../utils/colorScales';
 import { formatNumber } from '../../utils/formatters';
 import styles from './PathwayDiagram.module.css';
@@ -101,6 +102,7 @@ export default function PathwayDiagram({
 }: PathwayDiagramProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { highlightedPath, setHighlightedPath } = useResearch();
+  const { resolvedTheme } = useTheme();
   const [tooltip, setTooltip] = useState<{
     show: boolean;
     x: number;
@@ -472,7 +474,7 @@ export default function PathwayDiagram({
         .text(item.label);
     });
 
-  }, [width, height, highlightedPath, interactive, setHighlightedPath]);
+  }, [width, height, highlightedPath, interactive, setHighlightedPath, resolvedTheme]);
 
   return (
     <div className={styles.container}>

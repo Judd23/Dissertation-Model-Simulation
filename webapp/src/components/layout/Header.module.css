@@ -75,22 +75,45 @@
 
 @media (max-width: 768px) {
   .container {
-    flex-direction: column;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 
   .brand {
-    text-align: center;
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .title {
+    font-size: var(--font-size-base);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .subtitle {
+    display: none;
   }
 
   .nav {
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    gap: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .nav > :last-child {
+    margin-left: var(--spacing-xs);
+    padding-left: var(--spacing-sm);
   }
 
   .navLink {
     padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
   }
 }

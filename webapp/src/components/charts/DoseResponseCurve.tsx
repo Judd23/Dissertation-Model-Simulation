@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { useResearch } from '../../context/ResearchContext';
+import { useTheme } from '../../context/ThemeContext';
 import { colors } from '../../utils/colorScales';
 import styles from './DoseResponseCurve.module.css';
 
@@ -26,6 +27,7 @@ export default function DoseResponseCurve({
 }: DoseResponseCurveProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { showCIs } = useResearch();
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -201,7 +203,7 @@ export default function DoseResponseCurve({
       .attr('font-size', 12)
       .text(`Effect on ${outcome === 'distress' ? 'Distress' : outcome === 'engagement' ? 'Engagement' : 'Adjustment'}`);
 
-  }, [outcome, selectedDose, width, height, showCIs]);
+  }, [outcome, selectedDose, width, height, showCIs, resolvedTheme]);
 
   return (
     <div className={styles.container}>

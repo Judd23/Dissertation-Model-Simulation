@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import { useTheme } from '../../context/ThemeContext';
 import { colors, getRaceColor } from '../../utils/colorScales';
 import styles from './GroupComparison.module.css';
 
@@ -99,6 +100,7 @@ export default function GroupComparison({
   height = 300,
 }: GroupComparisonProps) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -249,7 +251,7 @@ export default function GroupComparison({
       .attr('font-size', 12)
       .text('Effect Size (β)');
 
-  }, [grouping, pathway, width, height]);
+  }, [grouping, pathway, width, height, resolvedTheme]);
 
   return (
     <div className={styles.container}>
