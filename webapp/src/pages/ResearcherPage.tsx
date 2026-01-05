@@ -2,10 +2,7 @@ import { useTheme } from '../context/ThemeContext';
 import styles from './ResearcherPage.module.css';
 
 export default function ResearcherPage() {
-  const { resolvedTheme } = useTheme();
-  const sdsuLogo = resolvedTheme === 'dark'
-    ? `${import.meta.env.BASE_URL}researcher/SDSUforDark.png`
-    : `${import.meta.env.BASE_URL}researcher/SDSUColor.png`;
+  const sdsuLogo = `${import.meta.env.BASE_URL}researcher/SDSUCCLEAD.png`;
 
   return (
     <div className={styles.page}>

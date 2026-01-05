@@ -78,10 +78,6 @@
 
 .institutionPanel {
   margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: white;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
   display: inline-block;
 }
 
