@@ -150,57 +150,33 @@ export default function HomePage() {
                 {!showComparison ? (
                   <>
                     <div className={styles.demoStat}>
-                      <div className={styles.demoCircle}>
-                        <svg viewBox="0 0 36 36" className={styles.demoDonut}>
-                          <path
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                            fill="none"
-                            stroke="var(--color-border-light)"
-                            strokeWidth="3"
-                          />
-                          <path
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                            fill="none"
-                            stroke="var(--color-accent)"
-                            strokeWidth="3"
-                            strokeDasharray={`${demographics.firstgen.yes.pct}, 100`}
-                          />
-                          <text x="18" y="20.5" className={styles.demoPercentage}>
-                            {demographics.firstgen.yes.pct}%
-                          </text>
-                        </svg>
+                      <div className={styles.demoBar}>
+                        <div
+                          className={styles.demoBarFill}
+                          style={{ width: `${demographics.firstgen.yes.pct}%`, backgroundColor: 'var(--color-fast)' }}
+                          aria-label={`First-Generation: ${demographics.firstgen.yes.pct}%`}
+                        />
                       </div>
                       <div className={styles.demoLabel}>
                         <span className={styles.demoGroup}>First-Generation</span>
-                        <span className={styles.demoCount}>{demographics.firstgen.yes.n.toLocaleString()} of {(demographics.firstgen.yes.n + demographics.firstgen.no.n).toLocaleString()} students</span>
+                        <span className={styles.demoPct}>{demographics.firstgen.yes.pct}%</span>
                       </div>
+                      <div className={styles.demoCount}>{demographics.firstgen.yes.n.toLocaleString()} students</div>
                     </div>
 
                     <div className={styles.demoStat}>
-                      <div className={styles.demoCircle}>
-                        <svg viewBox="0 0 36 36" className={styles.demoDonut}>
-                          <path
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                            fill="none"
-                            stroke="var(--color-border-light)"
-                            strokeWidth="3"
-                          />
-                          <path
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                            fill="none"
-                            stroke="var(--color-engagement)"
-                            strokeWidth="3"
-                            strokeDasharray={`${demographics.pell.yes.pct}, 100`}
-                          />
-                          <text x="18" y="20.5" className={styles.demoPercentage}>
-                            {demographics.pell.yes.pct}%
-                          </text>
-                        </svg>
+                      <div className={styles.demoBar}>
+                        <div
+                          className={styles.demoBarFill}
+                          style={{ width: `${demographics.pell.yes.pct}%`, backgroundColor: 'var(--color-fast)' }}
+                          aria-label={`Pell Grant Recipients: ${demographics.pell.yes.pct}%`}
+                        />
                       </div>
                       <div className={styles.demoLabel}>
                         <span className={styles.demoGroup}>Pell Grant Recipients</span>
-                        <span className={styles.demoCount}>{demographics.pell.yes.n.toLocaleString()} of {(demographics.pell.yes.n + demographics.pell.no.n).toLocaleString()} students</span>
+                        <span className={styles.demoPct}>{demographics.pell.yes.pct}%</span>
                       </div>
+                      <div className={styles.demoCount}>{demographics.pell.yes.n.toLocaleString()} students</div>
                     </div>
                   </>
                 ) : (
@@ -297,7 +273,7 @@ export default function HomePage() {
                       className={styles.demoBarFill}
                       style={{
                         width: `${demographics.sex.women.pct}%`,
-                        backgroundColor: 'var(--color-distress)'
+                        backgroundColor: 'var(--color-fast)'
                       }}
                     />
                   </div>
@@ -314,7 +290,7 @@ export default function HomePage() {
                       className={styles.demoBarFill}
                       style={{
                         width: `${demographics.sex.men.pct}%`,
-                        backgroundColor: 'var(--color-engagement)'
+                        backgroundColor: 'var(--color-fast)'
                       }}
                     />
                   </div>
