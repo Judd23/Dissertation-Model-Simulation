@@ -3,6 +3,17 @@ import { useModelData } from '../../context/ModelDataContext';
 import { colors } from '../../utils/colorScales';
 import styles from './EffectDecomposition.module.css';
 
+interface Segment {
+  key: string;
+  value: number;
+  color: string;
+}
+
+interface Bar extends Segment {
+  x: number;
+  width: number;
+}
+
 export default function EffectDecomposition() {
   const { paths } = useModelData();
 
@@ -20,11 +31,11 @@ export default function EffectDecomposition() {
     };
   }, [paths]);
 
-  const segments = [
+  const segments: Segment[] = useMemo(() => [
     { key: 'Stress (indirect)', value: metrics.indirectStress, color: colors.distress },
     { key: 'Engagement (indirect)', value: metrics.indirectEngagement, color: colors.engagement },
     { key: 'Direct', value: metrics.direct, color: colors.nonfast },
-  ];
+  ], [metrics]);
 
   const { width, height, bars, zeroX, min, max } = useMemo(() => {
     const width = 520;
@@ -36,20 +47,29 @@ export default function EffectDecomposition() {
     const range = max - min || 1;
     const scale = (val: number) => ((val - min) / range) * width;
 
-    let pos = 0;
-    let neg = 0;
-    const bars = segments.map((segment) => {
-      if (segment.value >= 0) {
-        const start = scale(pos);
-        const end = scale(pos + segment.value);
-        pos += segment.value;
-        return { ...segment, x: start, width: end - start };
-      }
-      const start = scale(neg + segment.value);
-      const end = scale(neg);
-      neg += segment.value;
-      return { ...segment, x: start, width: end - start };
-    });
+    // Separate positive and negative segments for proper stacking
+    const positiveSegments = segments.filter((s) => s.value >= 0);
+    const negativeSegments = segments.filter((s) => s.value < 0);
+
+    const bars: Bar[] = [];
+
+    // Stack positive segments from zero going right
+    let posOffset = 0;
+    for (const segment of positiveSegments) {
+      const start = scale(posOffset);
+      const end = scale(posOffset + segment.value);
+      bars.push({ ...segment, x: start, width: end - start });
+      posOffset += segment.value;
+    }
+
+    // Stack negative segments from zero going left
+    let negOffset = 0;
+    for (const segment of negativeSegments) {
+      const start = scale(negOffset + segment.value);
+      const end = scale(negOffset);
+      bars.push({ ...segment, x: start, width: end - start });
+      negOffset += segment.value;
+    }
 
     return {
       width,
