@@ -1,28 +1,42 @@
-// Color scales matching the matplotlib figures
-export const colors = {
+/**
+ * Color scales for D3 charts - reads from CSS variables for theme consistency.
+ * Fallback values match the CSS defaults for SSR/initial render.
+ */
+
+// Helper to get CSS variable value (with fallback for SSR/tests)
+function getCSSColor(name: string, fallback: string): string {
+  if (typeof document === 'undefined') return fallback;
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(`--color-${name}`)
+    .trim();
+  return value || fallback;
+}
+
+// Static fallback colors (match CSS :root defaults)
+const fallbackColors = {
   // Construct colors - semantic meaning
-  distress: '#d62728',      // Red - Emotional Distress mediator
-  engagement: '#1f77b4',    // Blue - Quality of Engagement mediator
-  fast: '#ff7f0e',          // Orange - FASt treatment status
-  nonfast: '#7f7f7f',       // Gray - Non-FASt control
-  credits: '#f0c000',       // Yellow - Credit dose
+  distress: '#dc2626',      // Red - Emotional Distress mediator
+  engagement: '#2563eb',    // Blue - Quality of Engagement mediator
+  fast: '#f97316',          // Orange - FASt treatment status
+  nonfast: '#6b7280',       // Gray - Non-FASt control
+  credits: '#eab308',       // Yellow - Credit dose
 
   // Outcome subdimensions
-  belonging: '#2ca02c',     // Green
-  gains: '#000080',         // Navy
-  support: '#9467bd',       // Purple
-  satisfaction: '#8c564b',  // Brown
+  belonging: '#16a34a',     // Green
+  gains: '#3b82f6',         // Blue (adjusted for visibility)
+  support: '#8b5cf6',       // Purple
+  satisfaction: '#a16207',  // Brown
 
   // Adjustment overall
-  adjustment: '#2ca02c',    // Green (positive outcome)
+  adjustment: '#16a34a',    // Green (positive outcome)
 
   // Significance
-  significant: '#2ca02c',
-  nonsignificant: '#cccccc',
-  positive: '#2ca02c',
-  negative: '#d62728',
+  significant: '#16a34a',
+  nonsignificant: '#6b7280',
+  positive: '#16a34a',
+  negative: '#dc2626',
 
-  // Race/ethnicity palette
+  // Race/ethnicity palette (not in CSS, keep static)
   hispanic: '#e377c2',
   white: '#7f7f7f',
   asian: '#bcbd22',
@@ -30,25 +44,34 @@ export const colors = {
   other: '#9467bd',
 } as const;
 
+// Dynamic color getter that reads CSS variables
+export function getColor(name: keyof typeof fallbackColors): string {
+  return getCSSColor(name, fallbackColors[name]);
+}
+
+// Static colors object for backward compatibility
+// Use getColor() for theme-aware colors in D3 charts
+export const colors = fallbackColors;
+
 // Get color for a pathway
 export function getPathwayColor(pathway: 'distress' | 'engagement' | 'direct'): string {
   switch (pathway) {
-    case 'distress': return colors.distress;
-    case 'engagement': return colors.engagement;
-    case 'direct': return colors.nonfast;
+    case 'distress': return getColor('distress');
+    case 'engagement': return getColor('engagement');
+    case 'direct': return getColor('nonfast');
   }
 }
 
 // Get color for effect direction
 export function getEffectColor(value: number): string {
-  if (value > 0) return colors.positive;
-  if (value < 0) return colors.negative;
-  return colors.nonsignificant;
+  if (value > 0) return getColor('positive');
+  if (value < 0) return getColor('negative');
+  return getColor('nonsignificant');
 }
 
 // Get color for significance
 export function getSignificanceColor(pvalue: number, threshold = 0.05): string {
-  return pvalue < threshold ? colors.significant : colors.nonsignificant;
+  return pvalue < threshold ? getColor('significant') : getColor('nonsignificant');
 }
 
 // Race/ethnicity color mapping

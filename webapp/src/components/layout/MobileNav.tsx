@@ -14,6 +14,14 @@ export default function MobileNav() {
           }
           end={item.to === '/home'}
         >
+          <svg 
+            className={styles.icon} 
+            viewBox="0 0 24 24" 
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d={item.icon} />
+          </svg>
           <span className={styles.label}>{item.shortLabel}</span>
         </NavLink>
       ))}

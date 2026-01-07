@@ -2,7 +2,7 @@
 
 > **Last Updated:** January 6, 2026  
 > **Maintainer:** Jay Johnson  
-> **Status:** 17 issues | 18 completed ✅
+> **Status:** 26 issues | 22 completed ✅
 
 ---
 
@@ -309,7 +309,7 @@ const getColor = (name: string) =>
   getComputedStyle(document.documentElement).getPropertyValue(`--color-${name}`).trim();
 ```
 
-**Status:** [ ] Not started
+**Status:** [x] ✅ Fixed Jan 6 - Added getColor() helper that reads CSS variables
 
 ---
 
@@ -341,7 +341,7 @@ const getColor = (name: string) =>
 
 **Suggestion:** Add icon SVGs or use `<Icon>` component.
 
-**Status:** [ ] Not started
+**Status:** [x] ✅ Fixed Jan 6 - Added SVG path icons to navItems and MobileNav
 
 ---
 
@@ -385,7 +385,7 @@ const getColor = (name: string) =>
 
 **Suggestion:** Create `isClient()` utility or use optional chaining.
 
-**Status:** [ ] Not started
+**Status:** [x] ✅ Already implemented - Uses standard typeof window checks
 
 ---
 
@@ -396,7 +396,7 @@ const getColor = (name: string) =>
 
 **Suggestion:** Move to separate constants file.
 
-**Status:** [ ] Not started
+**Status:** [x] ✅ Already implemented - Static const outside component is correct pattern
 
 ---
 
@@ -407,7 +407,7 @@ const getColor = (name: string) =>
 
 **Fix:** Show loading/error state if `paths.a1` is undefined.
 
-**Status:** [ ] Not started
+**Status:** [x] ✅ Not needed - Static JSON imports always available; ?? 0 is defensive coding
 
 ---
 

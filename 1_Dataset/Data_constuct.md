@@ -168,18 +168,59 @@ Approval rule: I will request approval before starting each new phase (Treatment
 ---
 
 ## Treatment 3: Missingness
-- [ ] MCAR missingness applied (report % by variable)  
+- [x] ~~MCAR missingness applied (report % by variable)~~  
   **Evidence:**  
-- [ ] MAR missingness applied (report % by group)  
+  ```
+  SEdiverse        2.2
+  pgvalues         2.1
+  ```
+- [x] ~~MAR missingness applied (report % by group)~~  
   **Evidence:**  
-- [ ] PS model still fits with missingness strategy  
+  ```
+  Missingness by race (%):
+  Asian (MHWdmental=10.20, MHWdlonely=13.33)
+  Hispanic/Latino (MHWdmental=6.09, MHWdlonely=6.60)
+  ```
+- [x] ~~PS model still fits with missingness strategy~~  
   **Evidence:**  
+  ```
+  PS covariates (hacadpr13, tcare, StemMaj) missingness = 0.00%
+  ```
 
 ### Validation Gate 3
-- [ ] Missingness summary table created (overall + by key groups)  
+- [x] ~~Missingness summary table created (overall + by key groups)~~  
   **Evidence:**  
-- [ ] No accidental 0% or runaway missingness  
+  ```
+  Overall missingness (%):
+  hacadpr13        0.00
+  tcare            0.00
+  StemMaj          0.00
+  MHWdacad         5.66
+  MHWdlonely       7.30
+  MHWdmental       6.90
+  MHWdexhaust      6.14
+  MHWdsleep        5.88
+  MHWdfinancial    5.74
+  QIadmin          3.84
+  QIstudent        3.54
+  QIadvisor        4.60
+  QIfaculty        4.00
+  QIstaff          3.74
+
+  Missingness by race (%):
+  Asian: MHWdacad=10.08, MHWdlonely=13.33, MHWdmental=10.20
+  Hispanic/Latino: MHWdacad=4.17, MHWdlonely=6.60, MHWdmental=6.09
+  White: MHWdacad=4.73, MHWdlonely=5.66, MHWdmental=6.96
+
+  Missingness by archetype (%):
+  Asian High-Pressure Achiever: MHWdacad=11.27, MHWdlonely=12.00, MHWdmental=10.73
+  Latina Commuter Caretaker: MHWdacad=3.45, MHWdlonely=6.91, MHWdmental=7.36
+  ```
+- [x] ~~No accidental 0% or runaway missingness~~  
   **Evidence:**  
+  ```
+  New PS covariates missingness = 0.00%; max MHW missingness = 13.33%
+  ```
 
 ---
 
