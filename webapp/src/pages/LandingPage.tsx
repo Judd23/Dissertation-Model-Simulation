@@ -1,7 +1,6 @@
 import { useTheme } from '../context/ThemeContext';
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SharedElement from '../components/transitions/SharedElement';
 import styles from './LandingPage.module.css';
 
 // Generate tiny dust particles with gentle floating motion
@@ -37,8 +36,8 @@ export default function LandingPage() {
     ? `${import.meta.env.BASE_URL}researcher/SDSUPrmary Bar.png`
     : `${import.meta.env.BASE_URL}researcher/sdsu_primary-logo_rgb_horizontal_reverse.png`;
 
-  // Generate dust particles once - many tiny motes
-  const dustParticles = useMemo(() => generateDustParticles(60), []);
+  // Generate dust particles once - reduced for performance
+  const dustParticles = useMemo(() => generateDustParticles(30), []);
 
   useEffect(() => {
     // Trigger animations after mount
@@ -114,14 +113,11 @@ export default function LandingPage() {
         <div className={styles.titleGhost} aria-hidden="true">
           Dual Credit Outcomes &amp; First Year Achievement
         </div>
-        {/* Kicker - FROM TOP */}
-        <SharedElement id="page-kicker">
-          <p className={`${styles.kicker} ${styles.fromTop}`}>Ed.D. Dissertation Research</p>
-        </SharedElement>
+        {/* Kicker */}
+        <p className={`${styles.kicker} ${styles.fromTop}`}>Ed.D. Dissertation Research</p>
 
-        {/* Title - FROM TOP */}
-        <SharedElement id="page-title">
-          <h1 className={`${styles.title} ${styles.fromTop}`}>
+        {/* Title */}
+        <h1 className={`${styles.title} ${styles.fromTop}`}>
             <span className={styles.titleLine}>Dual Credit Outcomes</span>
             <span className={styles.titleLine}>
               <span className={styles.titleAccent}>
@@ -129,9 +125,8 @@ export default function LandingPage() {
               </span>
             </span>
           </h1>
-        </SharedElement>
 
-        {/* Subtitle - FROM TOP */}
+        {/* Subtitle */}
         <p className={`${styles.subtitle} ${styles.fromTop}`}>
           A Conditional Process SEM Analysis
         </p>
@@ -145,22 +140,20 @@ export default function LandingPage() {
           psychosocial development among equity-impacted California students.
         </p>
 
-        {/* Author Nameplate - FROM BOTTOM */}
-        <SharedElement id="page-panel">
-          <div className={`${styles.nameplate} ${styles.fromBottom}`}>
-            <h2 className={styles.authorName}>Jay Johnson</h2>
-            <p className={styles.authorTitle}>Doctoral Candidate</p>
-            <div className={styles.institution}>
-              <img
-                className={styles.logo}
-                src={logoSrc}
-                alt="San Diego State University"
-              />
-            </div>
+        {/* Author Nameplate */}
+        <div className={`${styles.nameplate} ${styles.fromBottom}`}>
+          <h2 className={styles.authorName}>Jay Johnson</h2>
+          <p className={styles.authorTitle}>Doctoral Candidate</p>
+          <div className={styles.institution}>
+            <img
+              className={styles.logo}
+              src={logoSrc}
+              alt="San Diego State University"
+            />
           </div>
-        </SharedElement>
+        </div>
 
-        {/* CTA Button - FROM BOTTOM */}
+        {/* CTA Button */}
         <button
           className={`${styles.cta} ${styles.fromBottom}`}
           onClick={handleEnter}

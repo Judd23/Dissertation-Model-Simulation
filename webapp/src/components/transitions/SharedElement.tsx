@@ -2,17 +2,16 @@ import { useEffect, useRef } from 'react';
 import { motion, type HTMLMotionProps } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { useTransition } from '../../context/TransitionContext';
+import { DANCE_SPRING_HEAVY } from '../../config/transitionConfig';
 
 interface SharedElementProps extends HTMLMotionProps<'div'> {
   id: string;
   children: React.ReactNode;
-  fallback?: 'fade' | 'scale' | 'none';
 }
 
 export default function SharedElement({
   id,
   children,
-  // fallback prop available for future animation fallback modes
   ...motionProps
 }: SharedElementProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -52,10 +51,8 @@ export default function SharedElement({
       layoutId={id}
       layout
       transition={{
-        type: 'spring',
-        stiffness: 120,
-        damping: 22,
-        mass: 1.4,
+        ...DANCE_SPRING_HEAVY,
+        layout: DANCE_SPRING_HEAVY,
       }}
       {...motionProps}
     >

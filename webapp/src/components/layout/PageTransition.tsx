@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import type { Transition } from 'framer-motion';
+import { DANCE_SPRING_HEAVY } from '../../config/transitionConfig';
 import styles from './PageTransition.module.css';
 
 interface PageTransitionProps {
@@ -9,9 +9,9 @@ interface PageTransitionProps {
 
 export default function PageTransition({ children }: PageTransitionProps) {
   const reduceMotion = useReducedMotion();
-  const transition: Transition = reduceMotion
+  const transition = reduceMotion
     ? { duration: 0 }
-    : { duration: 0.35, ease: [0.25, 0.9, 0.3, 1] as const };
+    : DANCE_SPRING_HEAVY;
 
   return (
     <div className={styles.transitionWrap} aria-live="polite">

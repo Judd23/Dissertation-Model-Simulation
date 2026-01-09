@@ -4,26 +4,26 @@
    Based on Apple Liquid Glass design system
    ============================================ */
 
-/* Base glass surface effect - applied via inheritance */
+/* Base glass surface effect - applied via inheritance - 50% MORE TRANSPARENT */
 .glass-panel {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.012) 0%,
-    rgba(255, 255, 255, 0.006) 50%,
-    rgba(255, 255, 255, 0.008) 100%
+    rgba(255, 255, 255, 0.0035) 0%,
+    rgba(255, 255, 255, 0.002) 50%,
+    rgba(255, 255, 255, 0.0025) 100%
   );
-  -webkit-backdrop-filter: saturate(150%) blur(20px);
-  backdrop-filter: saturate(150%) blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  -webkit-backdrop-filter: saturate(150%) blur(16px);
+  backdrop-filter: saturate(150%) blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.02);
   box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.02),
-    0 1px 4px rgba(0, 0, 0, 0.01),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.01);
+    0 4px 20px rgba(0, 0, 0, 0.01),
+    0 1px 4px rgba(0, 0, 0, 0.005),
+    inset 0 1px 0 rgba(255, 255, 255, 0.015),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.005);
   position: relative;
 }
 
-/* Top edge highlight */
+/* Top edge highlight - 50% MORE TRANSPARENT */
 .glass-panel::before {
   content: '';
   position: absolute;
@@ -34,9 +34,9 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.08) 20%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.08) 80%,
+    rgba(255, 255, 255, 0.04) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.04) 80%,
     transparent 100%
   );
   pointer-events: none;
@@ -57,20 +57,21 @@
   content: '';
   position: absolute;
   inset: 8px;
+  /* 50% MORE TRANSPARENT */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.004) 0%,
-    rgba(255, 255, 255, 0.002) 50%,
-    rgba(255, 255, 255, 0.003) 100%
+    rgba(255, 255, 255, 0.0012) 0%,
+    rgba(255, 255, 255, 0.0006) 50%,
+    rgba(255, 255, 255, 0.0009) 100%
   );
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
-  backdrop-filter: saturate(140%) blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.02);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  backdrop-filter: saturate(140%) blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.01);
   border-radius: calc(var(--glass-radius, 16px) - 4px);
   box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.01),
-    0 0 8px rgba(0, 0, 0, 0.01);
+    inset 0 1px 0 rgba(255, 255, 255, 0.015),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.005),
+    0 0 8px rgba(0, 0, 0, 0.005);
   pointer-events: none;
   z-index: -1;
 }
@@ -87,26 +88,26 @@
 }
 
 /* ============================================
-   DARK MODE ADJUSTMENTS
+   DARK MODE ADJUSTMENTS - 50% MORE TRANSPARENT
    ============================================ */
 
 [data-theme="dark"] .glass-panel {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.01) 0%,
-    rgba(255, 255, 255, 0.005) 50%,
-    rgba(255, 255, 255, 0.008) 100%
+    rgba(255, 255, 255, 0.003) 0%,
+    rgba(255, 255, 255, 0.0015) 50%,
+    rgba(255, 255, 255, 0.0025) 100%
   );
-  border-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.01);
 }
 
 [data-theme="dark"] .glass-panel::before {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.05) 20%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.05) 80%,
+    rgba(255, 255, 255, 0.025) 20%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(255, 255, 255, 0.025) 80%,
     transparent 100%
   );
 }
@@ -114,55 +115,57 @@
 [data-theme="dark"] .glass-panel-double::after {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.006) 0%,
-    rgba(255, 255, 255, 0.003) 50%,
-    rgba(255, 255, 255, 0.004) 100%
+    rgba(255, 255, 255, 0.0018) 0%,
+    rgba(255, 255, 255, 0.0009) 50%,
+    rgba(255, 255, 255, 0.0012) 100%
   );
-  border-color: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.006);
 }
 
 /* ============================================
-   LIGHT MODE ADJUSTMENTS
+   LIGHT MODE ADJUSTMENTS - 100% MORE TRANSPARENT (2x reduction)
    ============================================ */
 
 [data-theme="light"] .glass-panel {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.02) 50%,
-    rgba(255, 255, 255, 0.03) 100%
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.003) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
   );
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.015);
   box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.02),
-    0 1px 4px rgba(0, 0, 0, 0.01),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -0.5px 0 rgba(0, 0, 0, 0.01);
+    0 4px 20px rgba(0, 0, 0, 0.005),
+    0 1px 4px rgba(0, 0, 0, 0.0025),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.0025);
 }
 
 [data-theme="light"] .glass-panel::before {
+  /* Edge reflection - 100% MORE TRANSPARENT */
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.6) 20%,
-    rgba(255, 255, 255, 0.9) 50%,
-    rgba(255, 255, 255, 0.6) 80%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0.225) 50%,
+    rgba(255, 255, 255, 0.15) 80%,
     transparent 100%
   );
 }
 
 [data-theme="light"] .glass-panel-double::after {
+  /* 100% MORE TRANSPARENT */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0.03) 50%,
-    rgba(255, 255, 255, 0.04) 100%
+    rgba(255, 255, 255, 0.009) 0%,
+    rgba(255, 255, 255, 0.0045) 50%,
+    rgba(255, 255, 255, 0.006) 100%
   );
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.03);
   box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.01),
-    0 0 8px rgba(0, 0, 0, 0.01);
+    inset 0 1px 0 rgba(255, 255, 255, 0.0375),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.0025),
+    0 0 8px rgba(0, 0, 0, 0.0025);
 }
 
 /* ============================================
@@ -172,15 +175,15 @@
 
 @media (max-width: 768px) {
   .glass-panel {
-    /* Clear glass on mobile */
+    /* Clear glass on mobile - 40% MORE TRANSPARENT */
     -webkit-backdrop-filter: saturate(140%) blur(12px);
     backdrop-filter: saturate(140%) blur(12px);
-    /* Stronger background to compensate for less blur */
+    /* 40% more transparent */
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.04) 50%,
-      rgba(255, 255, 255, 0.06) 100%
+      rgba(255, 255, 255, 0.048) 0%,
+      rgba(255, 255, 255, 0.024) 50%,
+      rgba(255, 255, 255, 0.036) 100%
     );
   }
   
@@ -203,29 +206,32 @@
   }
 
   [data-theme="dark"] .glass-panel {
+    /* 50% MORE TRANSPARENT */
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0.05) 50%,
-      rgba(255, 255, 255, 0.08) 100%
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.015) 50%,
+      rgba(255, 255, 255, 0.024) 100%
     );
   }
 
   [data-theme="light"] .glass-panel {
+    /* 50% MORE TRANSPARENT */
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0.08) 50%,
-      rgba(255, 255, 255, 0.1) 100%
+      rgba(255, 255, 255, 0.045) 0%,
+      rgba(255, 255, 255, 0.024) 50%,
+      rgba(255, 255, 255, 0.03) 100%
     );
   }
   
   [data-theme="light"] .glass-panel-double::after {
+    /* 50% MORE TRANSPARENT */
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.04) 50%,
-      rgba(255, 255, 255, 0.06) 100%
+      rgba(255, 255, 255, 0.04) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(255, 255, 255, 0.03) 100%
     );
   }
 }
@@ -279,11 +285,12 @@
   }
   
   [data-theme="light"] .glass-panel {
+    /* 50% MORE TRANSPARENT - fallback */
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.95) 0%,
-      rgba(248, 250, 252, 0.9) 50%,
-      rgba(255, 255, 255, 0.95) 100%
+      rgba(255, 255, 255, 0.475) 0%,
+      rgba(248, 250, 252, 0.45) 50%,
+      rgba(255, 255, 255, 0.475) 100%
     );
   }
 }

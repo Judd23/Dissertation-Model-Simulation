@@ -19,10 +19,10 @@
   --color-positive: #16a34a;
   --color-negative: #dc2626;
 
-  /* UI colors - Light Mode (default) - 30% more vibrant */
-  --color-background: #d4e4ff;
-  --color-surface: #e8f2ff;
-  --color-surface-elevated: #dfeaff;
+  /* UI colors - Light Mode (default) - 30% bolder background, 50% MORE transparent surfaces */
+  --color-background: #a8c8ff;
+  --color-surface: rgba(232, 242, 255, 0.30);
+  --color-surface-elevated: rgba(223, 234, 255, 0.30);
   --color-text: #1a1f26;
   --color-text-muted: #4a5260;
   --color-text-light: #6a7280;
@@ -117,10 +117,10 @@
    DARK MODE
    ============================================ */
 [data-theme="dark"] {
-  /* UI colors - Dark Mode - 30% more vibrant */
-  --color-background: #060d1a;
-  --color-surface: #0c1625;
-  --color-surface-elevated: #152030;
+  /* UI colors - Dark Mode - 30% bolder background, 40% transparent surfaces */
+  --color-background: #041228;
+  --color-surface: rgba(12, 22, 37, 0.60);
+  --color-surface-elevated: rgba(21, 32, 48, 0.60);
   --color-text: #f0f4f8;
   --color-text-muted: #a4b3c8;
   --color-text-light: #7488a0;
@@ -162,9 +162,9 @@
 /* System preference detection */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-background: #0b1222;
-    --color-surface: #131c2b;
-    --color-surface-elevated: #1d2738;
+    --color-background: #041228;
+    --color-surface: rgba(19, 28, 43, 0.60);
+    --color-surface-elevated: rgba(29, 39, 56, 0.60);
     --color-text: #e8eef5;
     --color-text-muted: #94a3b8;
     --color-text-light: #64748b;

@@ -19,17 +19,17 @@ DevAdj ~ c*x_FASt + cz*XZ_c + b1*EmoDiss + b2*QualEngag + g3*cohort +
          hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c
 
 # conditional direct effects of FASt on DevAdj at Z values
-dir_z_low  := c + cz*-1.86672233877
+dir_z_low  := c + cz*-1.79563062746
 dir_z_mid  := c + cz*0
-dir_z_high := c + cz*1.86672233877
+dir_z_high := c + cz*1.79563062746
 
 # conditional a-paths at Z values (FASt -> mediator)
-a1_z_low  := a1 + a1z*-1.86672233877
+a1_z_low  := a1 + a1z*-1.79563062746
 a1_z_mid  := a1 + a1z*0
-a1_z_high := a1 + a1z*1.86672233877
-a2_z_low  := a2 + a2z*-1.86672233877
+a1_z_high := a1 + a1z*1.79563062746
+a2_z_low  := a2 + a2z*-1.79563062746
 a2_z_mid  := a2 + a2z*0
-a2_z_high := a2 + a2z*1.86672233877
+a2_z_high := a2 + a2z*1.79563062746
 
 # conditional indirect effects at Z values
 ind_EmoDiss_z_low  := a1_z_low*b1

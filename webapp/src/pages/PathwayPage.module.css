@@ -85,8 +85,9 @@
 }
 
 .pathwayButton {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* 50% MORE TRANSPARENT */
+  background: rgba(255, 255, 255, 0.006);
+  border: 1px solid rgba(255, 255, 255, 0.024);
   border-radius: var(--radius-md);
   padding: var(--spacing-sm) var(--spacing-lg);
   font-family: var(--font-body);
@@ -97,10 +98,32 @@
   transition: all var(--transition-fast);
   min-height: 44px; /* WCAG touch target */
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 2px 8px rgba(0, 0, 0, 0.012),
+    inset 0 1px 0 rgba(255, 255, 255, 0.012);
   -webkit-backdrop-filter: saturate(150%) blur(12px);
   backdrop-filter: saturate(150%) blur(12px);
+  position: relative;
+}
+
+/* Edge reflection - 50% MORE TRANSPARENT */
+.pathwayButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 20%,
+    rgba(255, 255, 255, 0.105) 50%,
+    rgba(255, 255, 255, 0.12) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 @media (max-width: 480px) {
@@ -139,17 +162,17 @@
   gap: var(--spacing-md);
 }
 
-/* Diagram */
+/* Diagram - 50% MORE TRANSPARENT */
 .diagram {
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--color-accent) 6%, rgba(255, 255, 255, 0.04)) 0%,
-    rgba(255, 255, 255, 0.025) 50%,
-    color-mix(in srgb, var(--color-engagement) 4%, rgba(255, 255, 255, 0.03)) 100%
+    color-mix(in srgb, var(--color-accent) 3%, rgba(255, 255, 255, 0.012)) 0%,
+    rgba(255, 255, 255, 0.0075) 50%,
+    color-mix(in srgb, var(--color-engagement) 2%, rgba(255, 255, 255, 0.009)) 100%
   );
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.036);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   margin-bottom: var(--spacing-xl);
@@ -159,10 +182,10 @@
   -webkit-overflow-scrolling: touch;
   position: relative;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.06),
-    0 2px 8px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+    0 8px 32px rgba(0, 0, 0, 0.018),
+    0 2px 8px rgba(0, 0, 0, 0.009),
+    inset 0 1px 0 rgba(255, 255, 255, 0.036),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.006);
   transition: 
     transform var(--transition-fast), 
     box-shadow var(--transition-fast), 
@@ -171,12 +194,12 @@
 
 .diagram:hover {
   transform: translateY(-3px) scale(1.005);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.06);
   box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.1),
-    0 6px 16px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+    0 16px 48px rgba(0, 0, 0, 0.03),
+    0 6px 16px rgba(0, 0, 0, 0.015),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.006);
 }
 
 .diagram::before {
@@ -186,12 +209,13 @@
   left: 0;
   right: 0;
   height: 1px;
+  /* Edge reflection - 50% MORE TRANSPARENT */
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.4) 50%,
-    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0.06) 20%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 80%,
     transparent 100%
   );
   pointer-events: none;
@@ -199,22 +223,22 @@
   border-radius: inherit;
 }
 
-/* Inner glass layer for depth (desktop only) */
+/* Inner glass layer for depth (desktop only) - 50% MORE TRANSPARENT */
 .diagram::after {
   content: '';
   position: absolute;
   inset: 8px;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.015) 0%,
-    rgba(255, 255, 255, 0.008) 50%,
-    rgba(255, 255, 255, 0.01) 100%
+    rgba(255, 255, 255, 0.0045) 0%,
+    rgba(255, 255, 255, 0.0024) 50%,
+    rgba(255, 255, 255, 0.003) 100%
   );
   -webkit-backdrop-filter: saturate(130%) blur(8px);
   backdrop-filter: saturate(130%) blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.018);
   border-radius: calc(var(--radius-lg) - 4px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.024);
   pointer-events: none;
   z-index: -1;
 }
@@ -281,22 +305,23 @@
 }
 
 .coefficientCard {
+  /* 40% MORE TRANSPARENT */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.01) 50%,
-    rgba(255, 255, 255, 0.015) 100%
+    rgba(255, 255, 255, 0.012) 0%,
+    rgba(255, 255, 255, 0.006) 50%,
+    rgba(255, 255, 255, 0.009) 100%
   );
   -webkit-backdrop-filter: saturate(140%) blur(16px);
   backdrop-filter: saturate(140%) blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.048);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.048),
+    0 2px 8px rgba(0, 0, 0, 0.024),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
   position: relative;
   transition: opacity var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
@@ -308,12 +333,13 @@
   left: 0;
   right: 0;
   height: 1px;
+  /* Edge reflection - 40% MORE TRANSPARENT */
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0.12) 20%,
+    rgba(255, 255, 255, 0.21) 50%,
+    rgba(255, 255, 255, 0.12) 80%,
     transparent 100%
   );
   pointer-events: none;
@@ -323,12 +349,12 @@
 
 .coefficientCard:not(.dimmed):hover {
   transform: translateY(-4px) scale(1.01);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.1),
-    0 4px 16px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 16px 48px rgba(0, 0, 0, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .coefficientCard.dimmed {
@@ -424,6 +450,28 @@
   padding: var(--spacing-xl);
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+}
+
+/* Edge reflection - 40% MORE TRANSPARENT */
+.indirectCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 20%,
+    rgba(255, 255, 255, 0.21) 50%,
+    rgba(255, 255, 255, 0.12) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 .indirectCard:hover {
@@ -542,6 +590,28 @@
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+}
+
+/* Edge reflection - 40% MORE TRANSPARENT */
+.summaryCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 20%,
+    rgba(255, 255, 255, 0.21) 50%,
+    rgba(255, 255, 255, 0.12) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 .summaryCard:hover {
@@ -720,23 +790,135 @@
   }
 }
 
-/* Light mode button adjustments */
+/* Light mode button adjustments - 100% MORE TRANSPARENT */
 :global([data-theme="light"]) .pathwayButton {
-  background: rgba(255, 255, 255, 0.5);
-  border-color: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.125);
+  border-color: rgba(0, 0, 0, 0.025);
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 2px 8px rgba(0, 0, 0, 0.01),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+:global([data-theme="light"]) .pathwayButton::before {
+  /* Edge reflection - 100% lighter */
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.0525) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
 }
 
 :global([data-theme="light"]) .pathwayButton:hover {
-  background: color-mix(in srgb, var(--button-color, var(--color-accent)) 15%, rgba(255, 255, 255, 0.6));
-  border-color: color-mix(in srgb, var(--button-color, var(--color-accent)) 40%, transparent);
+  background: color-mix(in srgb, var(--button-color, var(--color-accent)) 3.75%, rgba(255, 255, 255, 0.15));
+  border-color: color-mix(in srgb, var(--button-color, var(--color-accent)) 10%, transparent);
 }
 
 :global([data-theme="light"]) .pathwayButton.active {
-  background: color-mix(in srgb, var(--button-color, var(--color-accent)) 85%, transparent);
-  border-color: color-mix(in srgb, var(--button-color, var(--color-accent)) 60%, transparent);
+  background: color-mix(in srgb, var(--button-color, var(--color-accent)) 21.25%, transparent);
+  border-color: color-mix(in srgb, var(--button-color, var(--color-accent)) 15%, transparent);
+}
+
+:global([data-theme="light"]) .diagram {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-accent) 1.5%, rgba(255, 255, 255, 0.006)) 0%,
+    rgba(255, 255, 255, 0.00375) 50%,
+    color-mix(in srgb, var(--color-engagement) 1%, rgba(255, 255, 255, 0.0045)) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.009),
+    0 2px 8px rgba(0, 0, 0, 0.0045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.018),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.003);
+}
+
+:global([data-theme="light"]) .diagram::before {
+  /* Edge reflection - 100% lighter */
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
+}
+
+:global([data-theme="light"]) .diagram::after {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.00225) 0%,
+    rgba(255, 255, 255, 0.0012) 50%,
+    rgba(255, 255, 255, 0.0015) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.009);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.012);
+}
+
+:global([data-theme="light"]) .coefficientCard {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.00375) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+}
+
+/* Edge reflection for coefficientCard */
+:global([data-theme="light"]) .coefficientCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+:global([data-theme="light"]) .summaryCard {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.00375) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+}
+
+/* Edge reflection for summaryCard */
+:global([data-theme="light"]) .summaryCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 20%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 /* Reduced Motion */

@@ -7,6 +7,7 @@ import {
   useEffect,
   type ReactNode,
 } from 'react';
+import { TIMING } from '../config/transitionConfig';
 
 type TransitionMode = 'none' | 'particles' | 'morph' | 'auto';
 type TransitionPhase = 'idle' | 'exiting' | 'transitioning' | 'entering';
@@ -141,13 +142,13 @@ export function TransitionProvider({ children }: TransitionProviderProps) {
       setTargetRoute(to);
       setPhase('exiting');
 
-      // Wait for exit animation
-      await new Promise((resolve) => setTimeout(resolve, 400));
+      // Wait for exit animation - uses centralized timing
+      await new Promise((resolve) => setTimeout(resolve, TIMING.exit));
 
       setPhase('transitioning');
 
-      // Wait for transition
-      await new Promise((resolve) => setTimeout(resolve, 400));
+      // Wait for morph/particle transition - uses centralized timing
+      await new Promise((resolve) => setTimeout(resolve, TIMING.morph));
 
       setPhase('entering');
     },

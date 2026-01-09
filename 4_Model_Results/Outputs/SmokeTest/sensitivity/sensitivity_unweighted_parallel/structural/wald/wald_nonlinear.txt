@@ -1,12 +1,12 @@
 Wald tests: nonlinear constraints (conditional indirect/total differences: high vs low Z)
 $stat
-[1] 153.1239
+[1] 8.558412
 
 $df
 [1] 3
 
 $p.value
-[1] 0
+[1] 0.0357764
 
 $se
 [1] "standard"

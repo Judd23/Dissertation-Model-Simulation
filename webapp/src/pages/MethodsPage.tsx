@@ -5,7 +5,6 @@ import GlossaryTerm from '../components/ui/GlossaryTerm';
 import ProgressRing from '../components/ui/ProgressRing';
 import Accordion from '../components/ui/Accordion';
 import AnalysisPipeline from '../components/charts/AnalysisPipeline';
-import SharedElement from '../components/transitions/SharedElement';
 import useParallax from '../hooks/useParallax';
 import { Link } from 'react-router-dom';
 import styles from './MethodsPage.module.css';
@@ -150,6 +149,7 @@ export default function MethodsPage() {
       buildRing('SRMR', fits.srmr, 0.08, false),
     ];
   }, [fits]);
+
   return (
     <div
       className={`${styles.page} page-fade`}
@@ -157,12 +157,8 @@ export default function MethodsPage() {
     >
       <div className="container">
         <header ref={headerRef} className={styles.header}>
-          <SharedElement id="page-kicker" className={styles.eyebrow}>
-            Technical Methods
-          </SharedElement>
-          <SharedElement id="page-title">
-            <h1>About This Study</h1>
-          </SharedElement>
+          <p className={styles.eyebrow}>Technical Methods</p>
+          <h1>About This Study</h1>
           <p className="lead">
             This page explains how we analyzed the data using{' '}
             <GlossaryTerm
@@ -176,20 +172,18 @@ export default function MethodsPage() {
           </p>
         </header>
 
-        <SharedElement id="page-panel">
-          <section ref={pipelineRef} className={`${styles.section} reveal`}>
-            <h2>Analysis Pipeline</h2>
-            <p className={styles.sectionIntro}>
-              Our analysis follows a three-stage process to ensure valid causal inferences
-              from observational data. Each stage builds on the previous one.
-            </p>
-            <p className={styles.plainTalk}>
-              Plain talk: we first make the FASt and non‑FASt groups comparable, then run the model,
-              then check how stable the results are.
-            </p>
-            <AnalysisPipeline />
-          </section>
-        </SharedElement>
+        <section ref={pipelineRef} className={`${styles.section} reveal`}>
+          <h2>Analysis Pipeline</h2>
+          <p className={styles.sectionIntro}>
+            Our analysis follows a three-stage process to ensure valid causal inferences
+            from observational data. Each stage builds on the previous one.
+          </p>
+          <p className={styles.plainTalk}>
+            Plain talk: we first make the FASt and non‑FASt groups comparable, then run the model,
+            then check how stable the results are.
+          </p>
+          <AnalysisPipeline />
+        </section>
 
         <section ref={fitRef} className={`${styles.section} reveal`}>
           <h2>How Well Does the Model Fit?</h2>
@@ -283,7 +277,7 @@ export default function MethodsPage() {
           </p>
           <p className={styles.plainTalk}>
             Plain talk: we compare students who look similar on background factors, so the credit effect
-            isn’t just about who they were before college.
+            isn't just about who they were before college.
           </p>
           <div className={styles.codeBlock}>
             <h4>Factors We Controlled For</h4>

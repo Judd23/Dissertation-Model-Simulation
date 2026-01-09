@@ -298,89 +298,14 @@ def generate_hs_background(archetype_id, n):
     return hgrades, bparented, hapcl, hprecalc13, hchallenge, cSFcareer
 
 
-def generate_time_use_categories(n, probs):
-    """Generate 1-8 categorical time-use responses with provided probabilities."""
-    categories = np.arange(1, 9)
+def sample_time_use_midpoints(n, probs):
+    """Sample time-use bins and return numeric midpoint recodes."""
     probs = np.array(probs, dtype=float)
-    probs = probs / probs.sum()
-    return np.random.choice(categories, n, p=probs)
-
-
-def time_use_midpoints(values):
-    """Map 1-8 categorical time-use responses to numeric midpoint hours."""
-    midpoint_map = {
-        1: 0,
-        2: 3,
-        3: 8,
-        4: 13,
-        5: 18,
-        6: 23,
-        7: 28,
-        8: 35,
-    }
-    return pd.Series(values).map(midpoint_map).astype(float).to_numpy()
-
-
-def shift_time_use(values, indices_up, indices_down, max_val=8, min_val=1):
-    """Shift selected indices up/down by one category, preserving global marginal."""
-    values = values.copy()
-    values[indices_up] = np.minimum(values[indices_up] + 1, max_val)
-    values[indices_down] = np.maximum(values[indices_down] - 1, min_val)
-    return values
-
-
-def adjust_by_archetype(df, archetype_ids):
-    """Apply archetype conditioning while preserving overall marginals."""
-    rng = np.random.default_rng(42)
-
-    def swap_values(col, idx_a, idx_b, n_max=None):
-        if len(idx_a) == 0 or len(idx_b) == 0:
-            return
-        n = min(len(idx_a), len(idx_b))
-        if n_max is not None:
-            n = min(n, n_max)
-        if n == 0:
-            return
-        sel_a = rng.choice(idx_a, n, replace=False)
-        sel_b = rng.choice(idx_b, n, replace=False)
-        tmp = df.loc[sel_a, col].to_numpy()
-        df.loc[sel_a, col] = df.loc[sel_b, col].to_numpy()
-        df.loc[sel_b, col] = tmp
-
-    # hacadpr13: higher for Asian High-Pressure Achiever (3), lower for Latina Commuter Caretaker (1)
-    high_idx = np.where(archetype_ids == 3)[0]
-    low_idx = np.where(archetype_ids == 1)[0]
-    high_lowvals = high_idx[df.loc[high_idx, 'hacadpr13'] <= 3]
-    low_highvals = low_idx[df.loc[low_idx, 'hacadpr13'] >= 6]
-    swap_values('hacadpr13', high_lowvals, low_highvals, n_max=int(0.30 * len(high_idx)))
-
-    # tcare: higher for Latina Commuter Caretaker (1), lower for Asian High-Pressure Achiever (3)
-    high_idx = np.where(archetype_ids == 1)[0]
-    low_idx = np.where(archetype_ids == 3)[0]
-    high_lowvals = high_idx[df.loc[high_idx, 'tcare'] <= 2]
-    low_highvals = low_idx[df.loc[low_idx, 'tcare'] >= 4]
-    swap_values('tcare', high_lowvals, low_highvals, n_max=int(0.20 * len(high_idx)))
-
-    # StemMaj: higher for Asian High-Pressure Achiever (3), lower for Latina Commuter Caretaker (1)
-    high_idx = np.where(archetype_ids == 3)[0]
-    low_idx = np.where(archetype_ids == 1)[0]
-    high_zeros = high_idx[df.loc[high_idx, 'StemMaj'] == 0]
-    low_ones = low_idx[df.loc[low_idx, 'StemMaj'] == 1]
-    swap_values('StemMaj', high_zeros, low_ones, n_max=int(0.15 * len(high_idx)))
-
-    # Correlate HS study hours with academic prep (hgrades)
-    high_prep = df.index[df['hgrades'] >= 7].to_numpy()
-    low_prep = df.index[df['hgrades'] <= 5].to_numpy()
-    high_lowvals = high_prep[df.loc[high_prep, 'hacadpr13'] <= 3]
-    low_highvals = low_prep[df.loc[low_prep, 'hacadpr13'] >= 6]
-    swap_values('hacadpr13', high_lowvals, low_highvals, n_max=int(0.10 * len(high_prep)))
-
-    # Correlate STEM intent with academic prep (hgrades)
-    high_zeros = high_prep[df.loc[high_prep, 'StemMaj'] == 0]
-    low_ones = low_prep[df.loc[low_prep, 'StemMaj'] == 1]
-    swap_values('StemMaj', high_zeros, low_ones, n_max=int(0.08 * len(high_prep)))
-
-    return df
+    total = probs.sum()
+    if total > 0 and not np.isclose(total, 1.0):
+        probs = probs / total
+    midpoints = np.array([0, 3, 8, 13, 18, 23, 28, 35])
+    return np.random.choice(midpoints, size=n, p=probs)
 
 
 def generate_treatment_and_dose(archetype_id, hgrades, hapcl, bparented, n):
@@ -531,15 +456,17 @@ def apply_missingness(df, archetype_ids):
     """
     n = len(df)
 
-    # PSW COVARIATES - Keep complete for pipeline compatibility
+    # W moderators + PSW/SEM covariates - Keep complete for pipeline compatibility
     # These would have missingness in real data, handled by MIte pipeline:
     # cohort, hgrades, bparented, hapcl, hprecalc13, hchallenge, cSFcareer,
     # hacadpr13, tcare, StemMaj, pell, firstgen
 
-    # MCAR on a limited set of non-critical items (2%)
-    for col in ['SEactivities', 'SEdiverse', 'pgvalues']:
-        mask = np.random.random(n) < 0.02
-        df.loc[mask, col] = np.nan
+    # For realistic testing, we CAN add small missingness to non-critical PSW covariates
+    # but keep the core ones complete. Uncomment below for more realistic missingness:
+    #
+    # for col in ['hchallenge', 'cSFcareer']:
+    #     mask = np.random.random(n) < 0.02
+    #     df.loc[mask, col] = np.nan
 
     # MAR on MHW items - higher for Asian archetypes (stigma)
     mhw_items = ['MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial']
@@ -598,6 +525,10 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
     for arch_id, n in archetype_ns.items():
         print(f"  {arch_id}. {ARCHETYPES[arch_id]['name']}: n={n}")
 
+    # Time-use distributions (midpoint recodes)
+    hacadpr13_probs = np.array([0.01, 0.32, 0.30, 0.18, 0.10, 0.05, 0.02, 0.03])
+    tcare_probs = np.array([0.72, 0.12, 0.07, 0.04, 0.025, 0.015, 0.006, 0.004])
+
     # Initialize data storage
     all_data = []
     archetype_ids = []
@@ -649,15 +580,9 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
         # HS Background
         hgrades, bparented, hapcl, hprecalc13, hchallenge, cSFcareer = generate_hs_background(arch_id, n)
 
-        # HS study hours (hacadpr13) target distribution
-        hacadpr13 = generate_time_use_categories(
-            n, probs=[0.01, 0.32, 0.30, 0.18, 0.10, 0.05, 0.02, 0.03]
-        )
-
-        # Caregiving hours (tcare) conservative zero-inflated assumption
-        tcare = generate_time_use_categories(
-            n, probs=[0.70, 0.15, 0.07, 0.04, 0.02, 0.01, 0.005, 0.005]
-        )
+        # HS time-use covariates (midpoint recodes)
+        hacadpr13 = sample_time_use_midpoints(n, hacadpr13_probs)
+        tcare = sample_time_use_midpoints(n, tcare_probs)
 
         # Treatment assignment (with confounding!)
         x_FASt, credit_dose = generate_treatment_and_dose(arch_id, hgrades, hapcl, bparented, n)
@@ -709,6 +634,10 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
     df['bparented_c'] = df['bparented'] - df['bparented'].mean()
     df['hchallenge_c'] = df['hchallenge'] - df['hchallenge'].mean()
     df['cSFcareer_c'] = df['cSFcareer'] - df['cSFcareer'].mean()
+    df['hapcl_c'] = df['hapcl'] - df['hapcl'].mean()
+    df['hprecalc13_c'] = df['hprecalc13'] - df['hprecalc13'].mean()
+    df['hacadpr13_c'] = df['hacadpr13'] - df['hacadpr13'].mean()
+    df['tcare_c'] = df['tcare'] - df['tcare'].mean()
     df['credit_dose_c'] = df['credit_dose'] - df['credit_dose'].mean()
     df['XZ_c'] = df['x_FASt'] * df['credit_dose_c']
 
@@ -739,15 +668,6 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
 
     # STEM major
     df['StemMaj'] = np.random.binomial(1, 0.25, len(df))
-
-    # Archetype conditioning (time-load + STEM intent)
-    df = adjust_by_archetype(df, archetype_ids)
-
-    # Time-use numeric versions + centered variants (post-conditioning)
-    df['hacadpr13_num'] = time_use_midpoints(df['hacadpr13'])
-    df['hacadpr13_num_c'] = df['hacadpr13_num'] - df['hacadpr13_num'].mean()
-    df['tcare_num'] = time_use_midpoints(df['tcare'])
-    df['tcare_num_c'] = df['tcare_num'] - df['tcare_num'].mean()
     df['StemMaj_c'] = df['StemMaj'] - df['StemMaj'].mean()
 
     # Additional SFcareer items for completeness
@@ -768,9 +688,10 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
     # Reorder columns to match original dataset
     col_order = [
         'cohort', 'hgrades', 'hgrades_c', 'Cgrades', 'bparented', 'bparented_c',
-        'pell', 'hapcl', 'hprecalc13', 'hchallenge', 'hchallenge_c',
-        'cSFcareer', 'cSFcareer_c', 'hacadpr13', 'hacadpr13_num', 'hacadpr13_num_c',
-        'tcare', 'tcare_num', 'tcare_num_c', 'firstgen', 're_all', 'living18', 'sex',
+        'pell', 'hapcl', 'hapcl_c', 'hprecalc13', 'hprecalc13_c',
+        'hchallenge', 'hchallenge_c',
+        'cSFcareer', 'cSFcareer_c', 'hacadpr13', 'hacadpr13_c', 'tcare', 'tcare_c',
+        'firstgen', 're_all', 'living18', 'sex',
         'StemMaj', 'StemMaj_c', 'trnsfr_cr', 'x_FASt', 'credit_dose', 'credit_dose_c', 'XZ_c',
         'r', 'r_minus', 'r_plus',
         'sbmyself', 'sbvalued', 'sbcommunity',

@@ -252,37 +252,60 @@
 }
 
 .institutionPanel {
+  /* 50% MORE TRANSPARENT */
   margin-bottom: var(--spacing-lg);
   display: inline-block;
   padding: var(--spacing-md) var(--spacing-lg);
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.02) 50%,
-    rgba(255, 255, 255, 0.03) 100%
+    rgba(255, 255, 255, 0.012) 0%,
+    rgba(255, 255, 255, 0.006) 50%,
+    rgba(255, 255, 255, 0.009) 100%
   );
   -webkit-backdrop-filter: saturate(140%) blur(12px);
   backdrop-filter: saturate(140%) blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.036);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.024),
+    0 2px 8px rgba(0, 0, 0, 0.012),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   margin-left: 0;
   margin-right: 0;
   transition: 
     transform var(--transition-fast),
     box-shadow var(--transition-fast);
+  position: relative;
+}
+
+/* Edge reflection - 50% MORE TRANSPARENT */
+.institutionPanel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 20%,
+    rgba(255, 255, 255, 0.105) 50%,
+    rgba(255, 255, 255, 0.06) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 .institutionPanel:hover {
   transform: translateY(-2px);
   box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.1),
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 12px 40px rgba(0, 0, 0, 0.03),
+    0 4px 12px rgba(0, 0, 0, 0.015),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
 }
 
 .institutionLogo {
@@ -568,22 +591,23 @@
 }
 
 .blockA {
+  /* 50% MORE TRANSPARENT */
   grid-column: 1 / span 5;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.024);
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.01) 50%,
-    rgba(255, 255, 255, 0.015) 100%
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.003) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
   );
   -webkit-backdrop-filter: saturate(140%) blur(16px);
   backdrop-filter: saturate(140%) blur(16px);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.024),
+    0 2px 8px rgba(0, 0, 0, 0.012),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -650,22 +674,23 @@
 }
 
 .blockB {
+  /* 50% MORE TRANSPARENT */
   grid-column: 6 / span 7;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.024);
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.01) 50%,
-    rgba(255, 255, 255, 0.015) 100%
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.003) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
   );
   -webkit-backdrop-filter: saturate(140%) blur(16px);
   backdrop-filter: saturate(140%) blur(16px);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.024),
+    0 2px 8px rgba(0, 0, 0, 0.012),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -827,22 +852,23 @@
 }
 
 .blockC {
+  /* 50% MORE TRANSPARENT */
   grid-column: 1 / span 7;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.01) 50%,
-    rgba(255, 255, 255, 0.015) 100%
+    rgba(255, 255, 255, 0.01) 0%,
+    rgba(255, 255, 255, 0.005) 50%,
+    rgba(255, 255, 255, 0.0075) 100%
   );
   -webkit-backdrop-filter: saturate(140%) blur(16px);
   backdrop-filter: saturate(140%) blur(16px);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.04),
+    0 2px 8px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.025);
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -956,22 +982,23 @@
 }
 
 .blockD {
+  /* 50% MORE TRANSPARENT */
   grid-column: 8 / span 5;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.01) 50%,
-    rgba(255, 255, 255, 0.015) 100%
+    rgba(255, 255, 255, 0.01) 0%,
+    rgba(255, 255, 255, 0.005) 50%,
+    rgba(255, 255, 255, 0.0075) 100%
   );
   -webkit-backdrop-filter: saturate(140%) blur(16px);
   backdrop-filter: saturate(140%) blur(16px);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.04),
+    0 2px 8px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.025);
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -1420,4 +1447,133 @@
     transform: none;
     animation: none;
   }
+}
+
+/* ============================================
+   LIGHT MODE - 100% MORE TRANSPARENT
+   ============================================ */
+
+:global([data-theme="light"]) .heroFigure {
+  background: rgba(255, 255, 255, 0.125);
+  border-color: rgba(0, 0, 0, 0.025);
+}
+
+:global([data-theme="light"]) .fact {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.00375) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+}
+
+/* Edge reflection for fact cards */
+:global([data-theme="light"]) .fact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+:global([data-theme="light"]) .blockA,
+:global([data-theme="light"]) .blockB,
+:global([data-theme="light"]) .blockC,
+:global([data-theme="light"]) .blockD {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.00375) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+}
+
+/* Edge reflections for blocks */
+:global([data-theme="light"]) .blockA::before,
+:global([data-theme="light"]) .blockB::before,
+:global([data-theme="light"]) .blockC::before,
+:global([data-theme="light"]) .blockD::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+:global([data-theme="light"]) .pullQuote,
+:global([data-theme="light"]) .pullQuoteAlt {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.0075) 0%,
+    rgba(255, 255, 255, 0.0045) 50%,
+    rgba(255, 255, 255, 0.006) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+}
+
+:global([data-theme="light"]) .institutionPanel {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.00375) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+}
+
+/* Edge reflection for institutionPanel */
+:global([data-theme="light"]) .institutionPanel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+:global([data-theme="light"]) .cta {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.175) 0%,
+    rgba(59, 130, 246, 0.15) 50%,
+    rgba(37, 99, 235, 0.175) 100%
+  );
+  border-color: rgba(37, 99, 235, 0.075);
 }

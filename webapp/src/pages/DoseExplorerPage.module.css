@@ -44,17 +44,17 @@
   margin-bottom: var(--spacing-md);
 }
 
-/* Controls */
+/* Controls - 50% MORE TRANSPARENT */
 .controls {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.01) 50%,
-    rgba(255, 255, 255, 0.015) 100%
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.003) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
   );
   -webkit-backdrop-filter: saturate(140%) blur(16px);
   backdrop-filter: saturate(140%) blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.024);
   border-radius: var(--radius-lg);
   padding: var(--spacing-2xl);
   margin-bottom: var(--spacing-2xl);
@@ -63,10 +63,10 @@
   align-items: flex-end;
   flex-wrap: wrap;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.024),
+    0 2px 8px rgba(0, 0, 0, 0.012),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   position: relative;
   transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
@@ -78,12 +78,13 @@
   left: 0;
   right: 0;
   height: 1px;
+  /* Edge reflection - 50% MORE TRANSPARENT */
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0.06) 20%,
+    rgba(255, 255, 255, 0.105) 50%,
+    rgba(255, 255, 255, 0.06) 80%,
     transparent 100%
   );
   pointer-events: none;
@@ -91,33 +92,33 @@
   border-radius: inherit;
 }
 
-/* Inner glass layer for depth */
+/* Inner glass layer for depth - 50% MORE TRANSPARENT */
 .controls::after {
   content: '';
   position: absolute;
   inset: 8px;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.015) 0%,
-    rgba(255, 255, 255, 0.008) 50%,
-    rgba(255, 255, 255, 0.01) 100%
+    rgba(255, 255, 255, 0.0045) 0%,
+    rgba(255, 255, 255, 0.0024) 50%,
+    rgba(255, 255, 255, 0.003) 100%
   );
   -webkit-backdrop-filter: saturate(130%) blur(8px);
   backdrop-filter: saturate(130%) blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.018);
   border-radius: calc(var(--radius-lg) - 4px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.024);
   pointer-events: none;
   z-index: -1;
 }
 
 .controls:focus-within {
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.15);
   box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.1),
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 12px 40px rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 }
 
 /* Dose Zones */
@@ -268,22 +269,23 @@
 }
 
 .chartContainer {
+  /* 40% MORE TRANSPARENT */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.01) 50%,
-    rgba(255, 255, 255, 0.015) 100%
+    rgba(255, 255, 255, 0.012) 0%,
+    rgba(255, 255, 255, 0.006) 50%,
+    rgba(255, 255, 255, 0.009) 100%
   );
   -webkit-backdrop-filter: saturate(140%) blur(16px);
   backdrop-filter: saturate(140%) blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.048);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.048),
+    0 2px 8px rgba(0, 0, 0, 0.024),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
   position: relative;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
@@ -295,12 +297,13 @@
   left: 0;
   right: 0;
   height: 1px;
+  /* Edge reflection - 40% MORE TRANSPARENT */
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0.12) 20%,
+    rgba(255, 255, 255, 0.21) 50%,
+    rgba(255, 255, 255, 0.12) 80%,
     transparent 100%
   );
   pointer-events: none;
@@ -308,34 +311,34 @@
   border-radius: inherit;
 }
 
-/* Inner glass layer for depth */
+/* Inner glass layer for depth - 40% MORE TRANSPARENT */
 .chartContainer::after {
   content: '';
   position: absolute;
   inset: 8px;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.015) 0%,
-    rgba(255, 255, 255, 0.008) 50%,
-    rgba(255, 255, 255, 0.01) 100%
+    rgba(255, 255, 255, 0.009) 0%,
+    rgba(255, 255, 255, 0.0048) 50%,
+    rgba(255, 255, 255, 0.006) 100%
   );
   -webkit-backdrop-filter: saturate(130%) blur(8px);
   backdrop-filter: saturate(130%) blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.036);
   border-radius: calc(var(--radius-lg) - 4px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.048);
   pointer-events: none;
   z-index: -1;
 }
 
 .chartContainer:hover {
   transform: translateY(-4px) scale(1.01);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.1),
-    0 4px 16px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 16px 48px rgba(0, 0, 0, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .chartContainer h3 {
@@ -423,6 +426,28 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+}
+
+/* Edge reflection - 40% MORE TRANSPARENT */
+.interpretationCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 20%,
+    rgba(255, 255, 255, 0.21) 50%,
+    rgba(255, 255, 255, 0.12) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 .interpretationCard:hover {
@@ -607,4 +632,100 @@
   .interpretationCard:hover {
     transform: none;
   }
+}
+
+/* ============================================
+   LIGHT MODE - 100% MORE TRANSPARENT
+   ============================================ */
+
+:global([data-theme="light"]) .controls {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.003) 0%,
+    rgba(255, 255, 255, 0.0015) 50%,
+    rgba(255, 255, 255, 0.00225) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.012);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.012),
+    0 2px 8px rgba(0, 0, 0, 0.006),
+    inset 0 1px 0 rgba(255, 255, 255, 0.015),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.0075);
+}
+
+:global([data-theme="light"]) .controls::before {
+  /* Edge reflection - 100% lighter */
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.0525) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
+}
+
+:global([data-theme="light"]) .controls::after {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.00225) 0%,
+    rgba(255, 255, 255, 0.0012) 50%,
+    rgba(255, 255, 255, 0.0015) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.009);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.012);
+}
+
+:global([data-theme="light"]) .chartContainer {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.00375) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.009),
+    0 2px 8px rgba(0, 0, 0, 0.0045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.018),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.003);
+}
+
+/* Edge reflection for chartContainer */
+:global([data-theme="light"]) .chartContainer::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.06) 80%,
+    transparent 100%
+  );
+}
+
+:global([data-theme="light"]) .interpretationCard {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.006) 0%,
+    rgba(255, 255, 255, 0.00375) 50%,
+    rgba(255, 255, 255, 0.0045) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.018);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.009),
+    0 2px 8px rgba(0, 0, 0, 0.0045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.018),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.003);
+}
+
+/* Edge reflection for interpretationCard */
+:global([data-theme="light"]) .interpretationCard::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    transparent 100%
+  );
 }

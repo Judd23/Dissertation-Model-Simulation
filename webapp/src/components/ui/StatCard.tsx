@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
-import SharedElement from '../transitions/SharedElement';
+import { motion } from 'framer-motion';
+import { DANCE_SPRING_HEAVY } from '../../config/transitionConfig';
 import styles from './StatCard.module.css';
 
 interface StatCardProps {
@@ -9,6 +10,7 @@ interface StatCardProps {
   color?: 'default' | 'positive' | 'negative' | 'accent';
   size?: 'small' | 'medium' | 'large';
   animate?: boolean;
+  /** Unique ID for shared-element morphing across routes */
   layoutId?: string;
 }
 
@@ -163,17 +165,17 @@ export default function StatCard({
     return () => observer.disconnect();
   }, [value, animate]);
 
-  const card = (
-    <div ref={cardRef} className={`${styles.card} ${styles[size]}`}>
+  return (
+    <motion.div
+      ref={cardRef}
+      className={`${styles.card} ${styles[size]}`}
+      layoutId={layoutId}
+      layout={!!layoutId}
+      transition={DANCE_SPRING_HEAVY}
+    >
       <div className={styles.label}>{label}</div>
       <div className={`${styles.value} ${styles[color]}`}>{displayValue}</div>
       {subtext && <div className={styles.subtext}>{subtext}</div>}
-    </div>
+    </motion.div>
   );
-
-  if (layoutId) {
-    return <SharedElement id={layoutId}>{card}</SharedElement>;
-  }
-
-  return card;
 }

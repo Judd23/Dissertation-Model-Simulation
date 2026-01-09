@@ -6,7 +6,6 @@ import EffectDecomposition from '../components/charts/EffectDecomposition';
 import Toggle from '../components/ui/Toggle';
 import KeyTakeaway from '../components/ui/KeyTakeaway';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
-import SharedElement from '../components/transitions/SharedElement';
 import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import useParallax from '../hooks/useParallax';
 import { Link } from 'react-router-dom';
@@ -141,12 +140,8 @@ export default function PathwayPage() {
           className={styles.header}
           style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
         >
-          <SharedElement id="page-kicker" className={styles.eyebrow}>
-            Interactive Model
-          </SharedElement>
-          <SharedElement id="page-title">
-            <h1>How Dual Enrollment Credits Affect First-Year Success</h1>
-          </SharedElement>
+          <p className={styles.eyebrow}>Interactive Model</p>
+          <h1>How Dual Enrollment Credits Affect First-Year Success</h1>
           <p className="lead">
             This diagram shows the different ways that earning college credits in high school
             can influence a student's first-year college experience. The model uses {' '}
@@ -156,33 +151,31 @@ export default function PathwayPage() {
           </p>
         </header>
 
-        <SharedElement id="page-panel">
-          <section ref={controlsRef} className={`${styles.controls} ${isStuck ? styles.stuck : ''}`}>
-            <div className={styles.pathwayButtons}>
-              {pathwayButtons.map((btn) => (
-                <button
-                  key={btn.id || 'all'}
-                  className={`${styles.pathwayButton} ${highlightedPath === btn.id ? styles.active : ''}`}
-                  onClick={() => setHighlightedPath(btn.id)}
-                  style={{
-                    '--button-color': btn.color,
-                    '--button-text': btn.textColor ?? 'white',
-                  } as React.CSSProperties}
-                >
-                  {btn.label}
-                </button>
-              ))}
-            </div>
-            <div className={styles.toggleContainer}>
-              <Toggle
-                id="show-path-labels"
-                label="Show Path Labels"
-                checked={showPathLabels}
-                onChange={togglePathLabels}
-              />
-            </div>
-          </section>
-        </SharedElement>
+        <section ref={controlsRef} className={`${styles.controls} ${isStuck ? styles.stuck : ''}`}>
+          <div className={styles.pathwayButtons}>
+            {pathwayButtons.map((btn) => (
+              <button
+                key={btn.id || 'all'}
+                className={`${styles.pathwayButton} ${highlightedPath === btn.id ? styles.active : ''}`}
+                onClick={() => setHighlightedPath(btn.id)}
+                style={{
+                  '--button-color': btn.color,
+                  '--button-text': btn.textColor ?? 'white',
+                } as React.CSSProperties}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
+          <div className={styles.toggleContainer}>
+            <Toggle
+              id="show-path-labels"
+              label="Show Path Labels"
+              checked={showPathLabels}
+              onChange={togglePathLabels}
+            />
+          </div>
+        </section>
 
         <section ref={diagramRef} className={`${styles.diagram} reveal-scale`}>
           <PathwayDiagram width={800} height={450} interactive />
@@ -304,17 +297,16 @@ export default function PathwayPage() {
             <article className={`${styles.summaryCard} reveal`} style={{ transitionDelay: '0ms' }}>
               <h3>The Stress Route</h3>
               <p>
-                Students with FASt status report <strong>higher stress</strong> in their first year.
-                Since stress hurts college adjustment, this creates a{' '}
-                <GlossaryTerm term="Indirect Effect" definition="The portion of the total effect that works through an intermediate variable. Here, FASt status affects adjustment indirectly by first increasing stress, which then reduces adjustment.">negative indirect effect</GlossaryTerm>.
-                This is the "cost" side of accelerated credit.
+                Dual enrollment credits <strong>increase first-year stress</strong>, which hurts
+                adjustment. This is the main negative pathway. The effect is small but
+                statistically reliable across different student groups.
               </p>
             </article>
             <article className={`${styles.summaryCard} reveal`} style={{ transitionDelay: '100ms' }}>
               <h3>The Engagement Route</h3>
               <p>
-                Dual enrollment credits don't clearly change how engaged students are with campus life.
-                However, engagement is <strong>really important</strong> for success—the{' '}
+                The engagement pathway is <strong>not significant</strong>—dual enrollment
+                status alone doesn't change how much students engage with campus. However, the{' '}
                 <GlossaryTerm term="Path Coefficient" definition="A standardized measure of the strength and direction of a relationship between two variables in our model. Values range from -1 to +1, with larger absolute values indicating stronger relationships.">path from engagement to adjustment</GlossaryTerm>{' '}
                 is one of the strongest in our model.
               </p>

@@ -285,8 +285,11 @@ HANDLE_SMALL_W   <- "drop"      # "warn" | "drop" | "combine"
 OTHER_LABEL_W    <- "Other"
 
 # PSW overlap-weight covariates (edit only if your covariate table changes)
-# NOTE: Use hgrades (1..9) for PSW stage.
-PSW_COVARS <- c("hgrades","bparented_c","hapcl","hprecalc13","hchallenge_c","cSFcareer_c","cohort")
+# NOTE: Use centered versions for continuous covariates. Cohort is excluded from PSW.
+PSW_COVARS <- c(
+  "hgrades_c","bparented_c","hapcl_c","hprecalc13_c","hchallenge_c","cSFcareer_c",
+  "hacadpr13_c","tcare_c","StemMaj_c"
+)
 
 # -------------------------
 # BASIC CHECKS
@@ -529,8 +532,8 @@ for (v in c("credit_dose_raw", "Z", "Z_c", "XZ")) {
   if (v %in% names(dat)) dat[[v]] <- NULL
 }
 
-# Grades: use existing hgrades (BCSSE scale 3-8 after merge) as a balanced covariate
-# for both PSW and SEM.
+# Grades: use existing hgrades (BCSSE scale 3-8 after merge) and its centered
+# version for both PSW and SEM.
 # BCSSE hgrades23 uses 3-9: 3="C+ or below", 4="B-", ..., 8="A", 9="A+", 99="Grades not used"
 # Merge 9 (A+) into 8 (A) to create a clean 3-8 scale.
 if (!("hgrades" %in% names(dat))) stop("rep_data missing required column: hgrades")
@@ -657,9 +660,19 @@ dat <- .ensure_centered(dat, "hgrades", "hgrades_c")
 dat <- .ensure_centered(dat, "bparented", "bparented_c")
 dat <- .ensure_centered(dat, "hchallenge", "hchallenge_c")
 dat <- .ensure_centered(dat, "cSFcareer", "cSFcareer_c")
+dat <- .ensure_centered(dat, "hapcl", "hapcl_c")
+dat <- .ensure_centered(dat, "hprecalc13", "hprecalc13_c")
+dat <- .ensure_centered(dat, "StemMaj", "StemMaj_c")
+dat <- .ensure_centered(dat, "hacadpr13", "hacadpr13_c")
+dat <- .ensure_centered(dat, "tcare", "tcare_c")
 
 # Verify mean-centering (stop on failure)
-center_vars <- c("hgrades_c", "bparented_c", "hchallenge_c", "cSFcareer_c", "credit_dose_c")
+center_vars <- c(
+  "hgrades_c", "bparented_c", "hchallenge_c", "cSFcareer_c",
+  "hapcl_c", "hprecalc13_c", "StemMaj_c",
+  "hacadpr13_c", "tcare_c",
+  "credit_dose_c"
+)
 cent_stats <- data.frame(
   var = center_vars,
   n_nonmiss = vapply(center_vars, function(v) sum(!is.na(dat[[v]])), integer(1)),
@@ -674,7 +687,10 @@ if (!isTRUE(cent_ok)) {
 
 req <- c(
   "x_FASt","trnsfr_cr","credit_dose","credit_dose_c","XZ_c","credit_band","cohort",
-  "hgrades","hgrades_c","bparented_c","pell","hapcl","hprecalc13","hchallenge_c","cSFcareer_c",
+  "hgrades","hgrades_c","bparented_c","pell",
+  "hapcl","hapcl_c","hprecalc13","hprecalc13_c","StemMaj","StemMaj_c",
+  "hacadpr13","hacadpr13_c","tcare","tcare_c",
+  "hchallenge_c","cSFcareer_c",
   "sbvalued","sbmyself","sbcommunity",
   "pganalyze","pgthink","pgwork","pgvalues","pgprobsolve",
   "SEacademic","SEwellness","SEnonacad","SEactivities","SEdiverse",
@@ -686,7 +702,7 @@ miss <- setdiff(req, names(dat))
 if (length(miss) > 0) stop("rep_data missing required columns: ", paste(miss, collapse = ", "))
 
 # Coerce binary covariates used in regressions to numeric 0/1 (robust to character/logic)
-for (v in c("pell","hapcl","hprecalc13")) {
+for (v in c("pell","hapcl","hprecalc13","StemMaj")) {
   if (v %in% names(dat)) dat[[v]] <- .as_num01(dat[[v]])
 }
 

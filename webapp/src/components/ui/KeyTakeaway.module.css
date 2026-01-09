@@ -5,8 +5,8 @@
   background: linear-gradient(135deg,
     color-mix(in srgb, var(--color-accent) 6%, rgba(255, 255, 255, 0.04)) 0%,
     color-mix(in srgb, var(--color-engagement) 5%, rgba(255, 255, 255, 0.03)) 100%);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-left: 4px solid var(--color-accent);
   border-radius: var(--radius-md);

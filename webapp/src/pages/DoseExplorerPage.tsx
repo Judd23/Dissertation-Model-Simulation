@@ -9,8 +9,6 @@ import StatCard from '../components/ui/StatCard';
 import KeyTakeaway from '../components/ui/KeyTakeaway';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import DataTimestamp from '../components/ui/DataTimestamp';
-import SharedElement from '../components/transitions/SharedElement';
-import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import useParallax from '../hooks/useParallax';
 import { Link } from 'react-router-dom';
 import styles from './DoseExplorerPage.module.css';
@@ -32,14 +30,6 @@ function getDoseZone(dose: number): typeof DOSE_ZONES[number]['id'] {
 export default function DoseExplorerPage() {
   const { selectedDose, setSelectedDose, showCIs, toggleCIs } = useResearch();
   const { doseCoefficients } = useModelData();
-
-  // Scroll reveal refs
-  const headerRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
-  const controlsRef = useScrollReveal<HTMLElement>({ threshold: 0.3 });
-  const effectsRef = useStaggeredReveal<HTMLElement>();
-  const chartsRef = useStaggeredReveal<HTMLElement>();
-  const jnRef = useStaggeredReveal<HTMLElement>();
-  const interpretRef = useStaggeredReveal<HTMLElement>();
   const parallaxOffset = useParallax({ speed: 0.1, max: 28 });
 
   // Current dose zone
@@ -54,93 +44,82 @@ export default function DoseExplorerPage() {
   return (
     <div className={`${styles.page} page-fade`}>
       <div className="container">
-        <header
-          ref={headerRef}
+        <section
           className={styles.header}
           style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
         >
-          <SharedElement id="page-kicker" className={styles.eyebrow}>
-            Dose-Response Analysis
-          </SharedElement>
-          <SharedElement id="page-title">
-            <h1>Does the Number of Credits Matter?</h1>
-          </SharedElement>
+          <p className={styles.eyebrow}>Dose-Response Analysis</p>
+          <h1>Does the Number of Credits Matter?</h1>
           <p className="lead">
             Some students earn just a few college credits in high school, while others
             earn many. This is called the <GlossaryTerm term="Credit Dose" definition="The total number of transferable college credits a student earned before starting college. Our model tests whether effects differ based on dose—a 'dose-response' relationship.">credit dose</GlossaryTerm>. Use the slider below to explore
             how different doses affect <GlossaryTerm term="Emotional Distress" definition="A latent construct measuring students' challenges during their first year, including academic difficulties, loneliness, mental health concerns, exhaustion, sleep problems, and financial stress.">stress</GlossaryTerm>{' '}
             and <GlossaryTerm term="Quality of Engagement" definition="A latent construct measuring the quality of students' interactions on campus with other students, advisors, faculty, staff, and administrators.">campus engagement</GlossaryTerm>.
           </p>
-        </header>
-
-        <SharedElement id="page-panel">
-          <section ref={controlsRef} className={`${styles.controls} reveal`}>
-            <div className={styles.sliderContainer}>
-              <Slider
-                id="credit-dose"
-                label="College Credits Earned"
-                value={selectedDose}
-                onChange={setSelectedDose}
-                min={0}
-                max={80}
-                step={1}
-                formatValue={(v) => `${v} credits`}
-                showThreshold={12}
-                thresholdLabel="FASt (12+)"
-                tickMarks={[24, 36, 48, 60]}
-              />
-              {/* Dose Zone Indicators */}
-              <div className={styles.doseZones}>
-                {DOSE_ZONES.map((zone) => (
-                  <div
-                    key={zone.id}
-                    className={`${styles.doseZone} ${styles[zone.id]} ${currentZone === zone.id ? styles.active : ''}`}
-                  >
-                    <span className={styles.zoneDot} />
-                    <span className={styles.zoneLabel}>{zone.label}</span>
-                    <span className={styles.zoneRange}>{zone.range}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className={styles.toggleContainer}>
-              <Toggle
-                id="show-cis"
-                label="Show Uncertainty Ranges"
-                checked={showCIs}
-                onChange={toggleCIs}
-              />
-            </div>
-          </section>
-        </SharedElement>
-
-        <section ref={effectsRef} className={`${styles.conditionalEffects} stagger-children`}>
-          <h2>What Happens at {selectedDose} Credits?</h2>
-          <div className={styles.effectCards}>
-            <div className="reveal">
-              <StatCard
-                label="Effect on Stress"
-                value={distressEffect > 0 ? `+${distressEffect.toFixed(2)}` : distressEffect.toFixed(2)}
-                subtext={distressEffect > 0 ? '↑ Higher stress' : '↓ Lower stress'}
-                color={distressEffect > 0 ? 'negative' : 'positive'}
-                animate={false}
-              />
-            </div>
-            <div className="reveal">
-              <StatCard
-                label="Effect on Engagement"
-                value={engagementEffect > 0 ? `+${engagementEffect.toFixed(2)}` : engagementEffect.toFixed(2)}
-                subtext={engagementEffect > 0 ? '↑ More engaged' : '↓ Less engaged'}
-                color={engagementEffect > 0 ? 'positive' : 'negative'}
-                animate={false}
-              />
-            </div>
-          </div>
-          <DataTimestamp />
         </section>
 
-        <section ref={chartsRef} className={`${styles.charts} stagger-children`}>
-          <div className={`${styles.chartContainer} reveal`}>
+        <div className={styles.controls}>
+          <div className={styles.sliderContainer}>
+            <Slider
+              id="credit-dose"
+              label="College Credits Earned"
+              value={selectedDose}
+              onChange={setSelectedDose}
+              min={0}
+              max={80}
+              step={1}
+              formatValue={(v) => `${v} credits`}
+              showThreshold={12}
+              thresholdLabel="FASt (12+)"
+              tickMarks={[24, 36, 48, 60]}
+            />
+            {/* Dose Zone Indicators */}
+            <div className={styles.doseZones}>
+              {DOSE_ZONES.map((zone) => (
+                <div
+                  key={zone.id}
+                  className={`${styles.doseZone} ${styles[zone.id]} ${currentZone === zone.id ? styles.active : ''}`}
+                >
+                  <span className={styles.zoneDot} />
+                  <span className={styles.zoneLabel}>{zone.label}</span>
+                  <span className={styles.zoneRange}>{zone.range}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={styles.toggleContainer}>
+            <Toggle
+              id="show-cis"
+              label="Show Uncertainty Ranges"
+              checked={showCIs}
+              onChange={toggleCIs}
+            />
+          </div>
+        </div>
+
+        <div className={styles.conditionalEffects}>
+          <h2>What Happens at {selectedDose} Credits?</h2>
+          <div className={styles.effectCards}>
+            <StatCard
+              label="Effect on Stress"
+              value={distressEffect > 0 ? `+${distressEffect.toFixed(2)}` : distressEffect.toFixed(2)}
+              subtext={distressEffect > 0 ? '↑ Higher stress' : '↓ Lower stress'}
+              color={distressEffect > 0 ? 'negative' : 'positive'}
+              animate={false}
+            />
+            <StatCard
+              label="Effect on Engagement"
+              value={engagementEffect > 0 ? `+${engagementEffect.toFixed(2)}` : engagementEffect.toFixed(2)}
+              subtext={engagementEffect > 0 ? '↑ More engaged' : '↓ Less engaged'}
+              color={engagementEffect > 0 ? 'positive' : 'negative'}
+              animate={false}
+            />
+          </div>
+          <DataTimestamp />
+        </div>
+
+        <div className={styles.charts}>
+          <div className={styles.chartContainer}>
             <h3>Stress Levels by Credit Amount</h3>
             <p className={styles.chartDescription}>
               Students with FASt status report higher stress regardless of how many
@@ -150,7 +129,7 @@ export default function DoseExplorerPage() {
             <DoseResponseCurve outcome="distress" selectedDose={selectedDose} />
           </div>
 
-          <div className={`${styles.chartContainer} reveal`}>
+          <div className={styles.chartContainer}>
             <h3>Campus Engagement by Credit Amount</h3>
             <p className={styles.chartDescription}>
               There's a hint of an interesting pattern here: students with fewer transfer
@@ -159,32 +138,28 @@ export default function DoseExplorerPage() {
             </p>
             <DoseResponseCurve outcome="engagement" selectedDose={selectedDose} />
           </div>
-        </section>
+        </div>
 
         {/* Johnson-Neyman Analysis */}
-        <section ref={jnRef} className={`${styles.jnSection} stagger-children`}>
-          <h2 className="reveal">When Do Effects Become Significant?</h2>
-          <p className={`${styles.jnIntro} reveal`}>
+        <div className={styles.jnSection}>
+          <h2>When Do Effects Become Significant?</h2>
+          <p className={styles.jnIntro}>
             The <GlossaryTerm term="Johnson-Neyman Technique" definition="A statistical method that identifies the exact point(s) where a conditional effect becomes statistically significant. It shows where the confidence interval crosses zero.">Johnson-Neyman technique</GlossaryTerm> identifies
             the exact credit threshold where effects become statistically significant—where we can be confident the effect isn't just random variation.
           </p>
-          <p className={`${styles.jnNote} reveal`}>
+          <p className={styles.jnNote}>
             Significance is based on 95% confidence intervals that do not cross zero.
           </p>
           <div className={styles.jnCharts}>
-            <div className="reveal">
-              <JohnsonNeymanPlot outcome="engagement" selectedDose={selectedDose} />
-            </div>
-            <div className="reveal">
-              <JohnsonNeymanPlot outcome="distress" selectedDose={selectedDose} />
-            </div>
+            <JohnsonNeymanPlot outcome="engagement" selectedDose={selectedDose} />
+            <JohnsonNeymanPlot outcome="distress" selectedDose={selectedDose} />
           </div>
-        </section>
+        </div>
 
-        <section ref={interpretRef} className={`${styles.interpretation} stagger-children`}>
+        <div className={styles.interpretation}>
           <h2>Understanding These Numbers</h2>
           <div className={styles.interpretationContent}>
-            <article className={`${styles.interpretationCard} reveal`}>
+            <article className={styles.interpretationCard}>
               <h3>What Do the Numbers Mean?</h3>
               <p>
                 The <GlossaryTerm term="Effect Size" definition="A standardized measure of how strong a relationship is. Values are in standard deviation units—an effect of 0.10 is small, 0.30 is medium, and 0.50 is large.">effect sizes</GlossaryTerm> are in "standard deviation" units. An effect of +0.13
@@ -192,7 +167,7 @@ export default function DoseExplorerPage() {
                 stress measures—a small but meaningful difference in a group of students.
               </p>
             </article>
-            <article className={`${styles.interpretationCard} reveal`}>
+            <article className={styles.interpretationCard}>
               <h3>Why Credit Amount Matters</h3>
               <p>
                 This analysis tests for <GlossaryTerm term="Moderated Mediation" definition="A model where the indirect effect (through a mediator like stress) changes depending on a moderator variable (like credit dose). It answers: 'Does the mediation process work differently at different credit levels?'">moderated mediation</GlossaryTerm>—whether
@@ -200,7 +175,7 @@ export default function DoseExplorerPage() {
                 Someone with 12 credits may experience different effects than someone with 45 credits.
               </p>
             </article>
-            <article className={`${styles.interpretationCard} reveal`}>
+            <article className={styles.interpretationCard}>
               <h3>What This Means for Colleges</h3>
               <p>
                 The <GlossaryTerm term="Confidence Interval" definition="A range of values within which we're 95% confident the true effect lies. Wider intervals mean more uncertainty. When an interval includes zero, we can't be confident the effect is real.">confidence intervals</GlossaryTerm> help us understand uncertainty.
@@ -209,7 +184,7 @@ export default function DoseExplorerPage() {
               </p>
             </article>
           </div>
-        </section>
+        </div>
 
         {/* Key Takeaway */}
         <KeyTakeaway>

@@ -5,7 +5,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { useModelData } from '../../context/ModelDataContext';
 import { colors } from '../../utils/colorScales';
 import { formatNumber } from '../../utils/formatters';
-import SharedElement from '../transitions/SharedElement';
 import DataTimestamp from '../ui/DataTimestamp';
 import styles from './PathwayDiagram.module.css';
 
@@ -638,61 +637,59 @@ export default function PathwayDiagram({
   }, [dimensions, highlightedPath, interactive, setHighlightedPath, resolvedTheme, selectedDose, modelData, getAdjustedEstimate, isMobile, showLegend, showPathLabels]);
 
   return (
-    <SharedElement id="pathway-diagram">
-      <div ref={containerRef} className={styles.container}>
-        <svg
-          ref={svgRef}
-          width={dimensions.width}
-          height={dimensions.height}
-          className={styles.svg}
-          role="img"
-          aria-label="Pathway diagram showing FASt treatment effects through emotional distress and engagement mediators to developmental adjustment"
-        />
-        {showLegend && isMobile && (
-          <div className={styles.mobileLegend} aria-hidden="true">
-            <div className={styles.legendItem}>
-              <span className={styles.legendLine} style={{ background: colors.distress }} />
-              <span className={styles.legendLabel}>Stress route</span>
-            </div>
-            <div className={styles.legendItem}>
-              <span className={styles.legendLine} style={{ background: colors.engagement }} />
-              <span className={styles.legendLabel}>Engagement route</span>
-            </div>
-            <div className={styles.legendItem}>
-              <span className={styles.legendLine} style={{ background: colors.nonfast }} />
-              <span className={styles.legendLabel}>Direct benefit</span>
-            </div>
+    <div ref={containerRef} className={styles.container}>
+      <svg
+        ref={svgRef}
+        width={dimensions.width}
+        height={dimensions.height}
+        className={styles.svg}
+        role="img"
+        aria-label="Pathway diagram showing FASt treatment effects through emotional distress and engagement mediators to developmental adjustment"
+      />
+      {showLegend && isMobile && (
+        <div className={styles.mobileLegend} aria-hidden="true">
+          <div className={styles.legendItem}>
+            <span className={styles.legendLine} style={{ background: colors.distress }} />
+            <span className={styles.legendLabel}>Stress route</span>
           </div>
-        )}
-        {tooltip?.show && (
-          <div
-            className={`${styles.tooltip} ${tooltip.content.type === 'path' ? styles.pathTooltip : styles.nodeTooltip}`}
-            id={tooltipId}
-            role="tooltip"
-            aria-live="polite"
-            style={{ left: tooltip.x + 15, top: tooltip.y + 15 }}
-          >
-            <div className={styles.tooltipTitle}>{tooltip.content.title}</div>
-            <div className={styles.tooltipDescription}>{tooltip.content.description}</div>
-            {tooltip.content.type === 'path' && (
-              <>
-                <div className={styles.tooltipStats}>
-                  <span className={styles.tooltipFinding}>{tooltip.content.finding}</span>
-                  <span className={styles.tooltipEffect}>
-                    β = {formatNumber(tooltip.content.estimate!)}
-                  </span>
-                  <span className={styles.tooltipPvalue}>
-                    {tooltip.content.pvalue! < 0.001 ? 'p < .001' : 
-                     tooltip.content.pvalue! < 0.05 ? `p = ${tooltip.content.pvalue!.toFixed(3)}` :
-                     'Not significant'}
-                  </span>
-                </div>
-              </>
-            )}
+          <div className={styles.legendItem}>
+            <span className={styles.legendLine} style={{ background: colors.engagement }} />
+            <span className={styles.legendLabel}>Engagement route</span>
           </div>
-        )}
-        <DataTimestamp />
-      </div>
-    </SharedElement>
+          <div className={styles.legendItem}>
+            <span className={styles.legendLine} style={{ background: colors.nonfast }} />
+            <span className={styles.legendLabel}>Direct benefit</span>
+          </div>
+        </div>
+      )}
+      {tooltip?.show && (
+        <div
+          className={`${styles.tooltip} ${tooltip.content.type === 'path' ? styles.pathTooltip : styles.nodeTooltip}`}
+          id={tooltipId}
+          role="tooltip"
+          aria-live="polite"
+          style={{ left: tooltip.x + 15, top: tooltip.y + 15 }}
+        >
+          <div className={styles.tooltipTitle}>{tooltip.content.title}</div>
+          <div className={styles.tooltipDescription}>{tooltip.content.description}</div>
+          {tooltip.content.type === 'path' && (
+            <>
+              <div className={styles.tooltipStats}>
+                <span className={styles.tooltipFinding}>{tooltip.content.finding}</span>
+                <span className={styles.tooltipEffect}>
+                  β = {formatNumber(tooltip.content.estimate!)}
+                </span>
+                <span className={styles.tooltipPvalue}>
+                  {tooltip.content.pvalue! < 0.001 ? 'p < .001' : 
+                   tooltip.content.pvalue! < 0.05 ? `p = ${tooltip.content.pvalue!.toFixed(3)}` :
+                   'Not significant'}
+                </span>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+      <DataTimestamp />
+    </div>
   );
 }

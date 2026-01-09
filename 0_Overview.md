@@ -168,7 +168,8 @@ export BOOT_CI_TYPE_MAIN="bca.simple"
 - Marker-variable identification with `1*` loadings
 
 ### Covariates
-`cohort`, `hgrades_c`, `bparented_c`, `pell`, `hapcl`, `hprecalc13`, `hchallenge_c`, `cSFcareer_c`
+SEM controls: `hgrades_c`, `bparented_c`, `hapcl_c`, `hprecalc13_c`, `hchallenge_c`, `cSFcareer_c`, `hacadpr13_c`, `tcare_c`, `StemMaj_c`  
+PSW covariates use the same centered set and exclude `cohort` and `pell` (pell is W-only).
 
 ---
 

@@ -535,30 +535,30 @@
   gap: var(--spacing-xs);
   margin-bottom: var(--spacing-2xl);
   padding: var(--spacing-lg);
-  /* Clear glass: highly transparent */
+  /* Clear glass: 50% MORE TRANSPARENT */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.04) 50%,
-    rgba(255, 255, 255, 0.06) 100%
+    rgba(255, 255, 255, 0.024) 0%,
+    rgba(255, 255, 255, 0.012) 50%,
+    rgba(255, 255, 255, 0.018) 100%
   );
-  /* Strong frosted glass blur */
-  -webkit-backdrop-filter: saturate(150%) blur(20px);
-  backdrop-filter: saturate(150%) blur(20px);
+  /* Standard frosted glass blur - 16px for cards/panels */
+  -webkit-backdrop-filter: saturate(150%) blur(16px);
+  backdrop-filter: saturate(150%) blur(16px);
   /* Crisp glass edge */
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.045);
   border-radius: 16px;
   /* Soft glow for glass depth */
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 8px 32px rgba(0, 0, 0, 0.024),
+    0 2px 8px rgba(0, 0, 0, 0.012),
+    inset 0 1px 0 rgba(255, 255, 255, 0.036),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   position: relative;
   overflow: hidden;
 }
 
-/* Top highlight edge - like light hitting glass */
+/* Top highlight edge - like light hitting glass - 50% MORE TRANSPARENT */
 .nameplate::before {
   content: '';
   position: absolute;
@@ -569,9 +569,9 @@
   background: linear-gradient(
     90deg,
     transparent 5%,
-    rgba(255, 255, 255, 0.25) 25%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.25) 75%,
+    rgba(255, 255, 255, 0.075) 25%,
+    rgba(255, 255, 255, 0.105) 50%,
+    rgba(255, 255, 255, 0.075) 75%,
     transparent 95%
   );
 }
@@ -810,46 +810,46 @@
 }
 
 /* ============================================
-   DARK MODE ADJUSTMENTS
+   DARK MODE ADJUSTMENTS - 50% MORE TRANSPARENT
    ============================================ */
 :global([data-theme="dark"]) .nameplate {
-  /* Clear glass for dark mode */
+  /* Clear glass for dark mode - 50% MORE TRANSPARENT */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.02) 50%,
-    rgba(255, 255, 255, 0.04) 100%
+    rgba(255, 255, 255, 0.025) 0%,
+    rgba(255, 255, 255, 0.01) 50%,
+    rgba(255, 255, 255, 0.02) 100%
   );
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.05);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    0 8px 32px rgba(0, 0, 0, 0.075),
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 :global([data-theme="light"]) .nameplate {
-  /* Clear glass for light mode */
+  /* Clear glass for light mode - 100% MORE TRANSPARENT */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.25) 0%,
-    rgba(255, 255, 255, 0.15) 50%,
-    rgba(255, 255, 255, 0.2) 100%
+    rgba(255, 255, 255, 0.0625) 0%,
+    rgba(255, 255, 255, 0.0375) 50%,
+    rgba(255, 255, 255, 0.05) 100%
   );
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.06),
-    0 2px 8px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+    0 8px 32px rgba(0, 0, 0, 0.015),
+    0 2px 8px rgba(0, 0, 0, 0.0075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.125),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.0075);
 }
 
 :global([data-theme="dark"]) .institution {
-  background: color-mix(in srgb, var(--color-background) 80%, transparent);
+  background: color-mix(in srgb, var(--color-background) 40%, transparent);
 }
 
 :global([data-theme="dark"]) .kicker {
-  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 6%, transparent);
 }
 
 /* ============================================
@@ -882,4 +882,58 @@
       transform: translateY(0) scale(1);
     }
   }
+}
+
+/* ============================================
+   LIGHT MODE - 100% MORE TRANSPARENT
+   ============================================ */
+
+:global([data-theme="light"]) .nameplate {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.012) 0%,
+    rgba(255, 255, 255, 0.006) 50%,
+    rgba(255, 255, 255, 0.009) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.0225);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.012),
+    0 2px 8px rgba(0, 0, 0, 0.006),
+    inset 0 1px 0 rgba(255, 255, 255, 0.018),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.0075);
+}
+
+:global([data-theme="light"]) .nameplate::before {
+  /* Edge reflection - 100% lighter */
+  background: linear-gradient(
+    90deg,
+    transparent 5%,
+    rgba(255, 255, 255, 0.0375) 25%,
+    rgba(255, 255, 255, 0.0525) 50%,
+    rgba(255, 255, 255, 0.0375) 75%,
+    transparent 95%
+  );
+}
+
+:global([data-theme="light"]) .kicker {
+  background: color-mix(in srgb, var(--navy-mid) 2%, transparent);
+  border-color: color-mix(in srgb, var(--navy-accent) 6%, transparent);
+}
+
+:global([data-theme="light"]) .cta {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 22, 40, 0.35) 0%,
+    rgba(21, 34, 56, 0.3) 50%,
+    rgba(37, 99, 235, 0.325) 100%
+  );
+  box-shadow:
+    0 4px 20px rgba(10, 22, 40, 0.1),
+    0 0 0 0 rgba(37, 99, 235, 0.075);
+}
+
+:global([data-theme="light"]) .cta:hover {
+  box-shadow:
+    0 8px 30px rgba(10, 22, 40, 0.125),
+    0 0 0 3px rgba(37, 99, 235, 0.05);
 }

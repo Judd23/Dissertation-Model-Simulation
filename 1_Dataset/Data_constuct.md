@@ -1,29 +1,57 @@
-# Checklist: PSW Covariate Expansion (Time-Load + STEM Intent)
+# Data Construct Checklist (Authoritative)
 
 ## Purpose
-Success means `hacadpr13`, `tcare`, and `StemMaj` are integrated into the synthetic dataset and PSW pipeline with diagnostics and guards passing.
+Ensure the PSW covariate expansion is implemented, validated, and documented without refactoring the Jan 4 baseline pipeline.
 
 ## Scope lock
 - Allowed changes:
-  - `1_Dataset/`
-  - `2_Codebooks/`
-  - `3_Analysis/`
-  - `4_Model_Results/`
-  - `results/`
+  - `1_Dataset/generate_empirical_dataset.py`
+  - `1_Dataset/rep_data.csv`
+  - `2_Codebooks/Variable_Table.csv`
+  - `3_Analysis/1_Main_Pipeline_Code/` (PSW model, diagnostics, exports)
+  - `4_Model_Results/Outputs/` (new run artifacts)
+  - `1_Dataset/Overview.md`, `1_Dataset/Data_constuct.md`
+  - `.claude/docs/dissertation_context.md`
 - Disallowed changes:
-  - Everything else
+  - `webapp/`
+  - Structural refactors outside the files above
+  - Renaming archetypes or changing N=5,000
 - Stop rule:
-  - If a task requires touching a disallowed area, STOP and report why + the minimal alternative.
+  - If a task requires touching a disallowed area, STOP and report why + minimal alternative.
+
+## Archetype lock (final generator list)
+- 1: Latina Commuter Caretaker
+- 2: Latino Off-Campus Working
+- 3: Asian High-Pressure Achiever
+- 4: Asian First-Gen Navigator
+- 5: Black Campus Connector
+- 6: White Residential Traditional
+- 7: White Off-Campus Working
+- 8: Multiracial Bridge-Builder
+- 9: Hispanic On-Campus Transitioner
+- 10: Continuing-Gen Cruiser
+- 11: White Rural First-Gen
+- 12: Black Male Striver
+- 13: White Working-Class Striver
+- Rule: names, prevalence targets, and FASt rates are locked to the generator; documentation must mirror the generator.
+
+## Approval rule (required)
+- Before each Treatment starts: review rules/constraints and request approval.
+- Do not begin a Treatment without explicit approval.
+
+## Covariate usage rules
+- PSW and SEM use centered versions for continuous covariates.
+- SEM uses centered versions for binary covariates (no raw binaries in SEM balance/structural lists).
+- PSW excludes `cohort` and `pell` (`pell` is W-only).
 
 ## Inputs
-- Branch / commit: current working tree (no fixed commit)
-- Data / seeds: `1_Dataset/generate_empirical_dataset.py` (seed = 42); `1_Dataset/rep_data.csv`
-- Config flags: default generator settings (none specified)
+- Branch / commit:
+- Data / seeds:
+- Config flags:
 - References:
-  - `.claude/docs/dissertation_context.md`
-  - `2_Codebooks/BCSSE_Codebook.xlsx`
   - `2_Codebooks/BCSSE2024_US First Year Student (Web only).docx`
   - `2_Codebooks/Variable_Table.csv`
+  - `.claude/docs/dissertation_context.md`
 
 ## Evidence rules (how to check a box)
 A box may be checked only if evidence is attached directly under it:
@@ -33,232 +61,125 @@ A box may be checked only if evidence is attached directly under it:
 - Screenshot
 - Diff snippet (short)
 
-Approval rule: I will request approval before starting each new phase (Treatment 1–5).
-
 ---
 
-## Treatment 1: Build / Schema
-- [x] ~~Add/verify variables: `hacadpr13`, `tcare`, `StemMaj`~~  
-  **Evidence:**  
-  ```
-  columns contains: True
-  ```
-- [x] ~~Add centered versions / coding conventions (`hacadpr13_num`, `tcare_num`, `hacadpr13_num_c`, `tcare_num_c`, `StemMaj_c`)~~  
-  **Evidence:**  
-  ```
-  hacadpr13_num_c mean: 0.000000
-  tcare_num_c mean: 0.000000
-  StemMaj_c mean: 0.000000
-  ```
-- [x] ~~Export artifacts contain new fields~~  
-  **Evidence:**  
-  ```
-  columns contains: True
-  ```
+## Treatment 1: Schema + Variable Construction (Build / Schema)
+### Approval Gate (Required)
+- [x] STOP: review constraints + request approval to start Treatment 1  
+  **Evidence:** User approval: "go".
+
+- [x] Confirm codebook variable names for the 3 covariates  
+  - HS study hours (last year of HS): `hacadpr13`  
+  - Caregiving hours: `tcare`  
+  - STEM major intent: `StemMaj`  
+  **Evidence:** Updated `2_Codebooks/Variable_Table.csv` with `hacadpr13`, `tcare`, `StemMaj` and centered variants.
+- [x] Add/verify base variables in `rep_data` generator  
+  **Evidence:** `1_Dataset/generate_empirical_dataset.py` now creates `hacadpr13`, `tcare`, `StemMaj`.
+- [x] Create numeric midpoint recodes and centered versions  
+  **Evidence:** Generator writes `hacadpr13`/`tcare` as midpoint-coded hours and adds `*_c` versions.
+- [x] Export artifacts contain new fields (cleaned + PSW outputs)  
+  **Evidence:** Regenerated `1_Dataset/rep_data.csv` and `1_Dataset/archetype_assignments.csv`.
 
 ### Validation Gate 1 (must pass before Treatment 2)
-- [x] ~~Frequency tables match targets within tolerance~~  
+- [x] Frequency tables match targets within tolerance (pre-PSW)  
   **Evidence:**  
-  ```
-  Hacadpr13 % by category:
-  1     0.98
-  2    31.50
-  3    29.18
-  4    18.40
-  5    10.08
-  6     5.12
-  7     1.86
-  8     2.88
-  ```
-- [x] ~~No out-of-range values~~  
-  **Evidence:**  
-  ```
-  hacadpr13 range: 1 8
-  tcare range: 1 8
-  hacadpr13_num range: 0.0 35.0
-  tcare_num range: 0.0 35.0
-  ```
-- [x] ~~Centered vars have mean ~ 0 (report exact mean)~~  
-  **Evidence:**  
-  ```
-  hacadpr13_num_c mean: 0.000000
-  tcare_num_c mean: 0.000000
-  StemMaj_c mean: 0.000000
-  ```
+  - `hacadpr13` midpoints (%): 0=0.98, 3=31.50, 8=29.18, 13=18.40, 18=10.08, 23=5.12, 28=1.86, 35=2.88  
+  - `tcare` midpoints (%): 0=70.80, 3=12.72, 8=7.44, 13=3.86, 18=2.64, 23=1.42, 28=0.66, 35=0.46  
+  - `StemMaj` (%): 0=75.98, 1=24.02  
+- [x] No out-of-range values  
+  **Evidence:** `hacadpr13` bad_count=0; `tcare` bad_count=0  
+- [x] Centered vars have mean ~ 0 (report exact mean)  
+  **Evidence:** `hacadpr13_c=0.000000`, `tcare_c=0.000000`, `StemMaj_c=0.000000`
 
 ---
 
-## Treatment 2: Calibration / Conditioning
-- [x] ~~Fit marginals to targets (report exact %)~~  
-  **Evidence:**  
-  ```
-  Hacadpr13 % by category:
-  1     0.98
-  2    31.50
-  3    29.18
-  4    18.40
-  5    10.08
-  6     5.12
-  7     1.86
-  8     2.88
+## Treatment 2: Calibration + Conditioning (Pre-PSW Distributions)
+### Approval Gate (Required)
+- [ ] STOP: review constraints + request approval to start Treatment 2  
+  **Evidence:**
 
-  Tcare % by category:
-  1    68.94
-  2    15.72
-  3     7.28
-  4     3.84
-  5     2.20
-  6     0.90
-  7     0.62
-  8     0.50
-
-  StemMaj %:
-  0    75.98
-  1    24.02
-  ```
-- [x] ~~Archetype conditioning applied (report subgroup summaries)~~  
-  **Evidence:**  
-  ```
-  Archetype 1 (Latina Commuter Caretaker):
-    hacadpr13 mean: 8.54
-    tcare mean: 3.30
-    StemMaj %: 17.00
-
-  Archetype 3 (Asian High-Pressure Achiever):
-    hacadpr13 mean: 14.56
-    tcare mean: 1.09
-    StemMaj %: 40.00
-  ```
-- [x] ~~Correlation sign checks (report r values)~~  
-  **Evidence:**  
-  ```
-  corr(hgrades, hacadpr13_num) = 0.141
-  corr(tcare_num, hacadpr13_num) = -0.049
-  corr(StemMaj, hgrades) = 0.224
-  ```
+- [ ] Fit marginals to targets (report exact %)  
+  **Evidence:**
+- [ ] Archetype conditioning applied (report subgroup summaries)  
+  **Evidence:**
+- [ ] Correlation sign checks (report r values)  
+  **Evidence:**
+- [ ] Pre-PSW distributions recorded for ALL covariates (old + new)  
+  **Evidence:**
 
 ### Validation Gate 2
-- [x] ~~Marginals still within tolerance after conditioning~~  
-  **Evidence:**  
-  ```
-  Hacadpr13 % by category:
-  1     0.98
-  2    31.50
-  3    29.18
-  4    18.40
-  5    10.08
-  6     5.12
-  7     1.86
-  8     2.88
-  ```
-- [x] ~~Subgroup distributions plausible (no extreme collapse)~~  
-  **Evidence:**  
-  ```
-  Archetype 1 (Latina Commuter Caretaker):
-    hacadpr13 mean: 8.54
-    tcare mean: 3.30
-    StemMaj %: 17.00
-
-  Archetype 3 (Asian High-Pressure Achiever):
-    hacadpr13 mean: 14.56
-    tcare mean: 1.09
-    StemMaj %: 40.00
-  ```
+- [ ] Marginals still within tolerance after conditioning  
+  **Evidence:**
+- [ ] Subgroup distributions plausible (no extreme collapse)  
+  **Evidence:**
 
 ---
 
-## Treatment 3: Missingness
-- [x] ~~MCAR missingness applied (report % by variable)~~  
-  **Evidence:**  
-  ```
-  SEdiverse        2.2
-  pgvalues         2.1
-  ```
-- [x] ~~MAR missingness applied (report % by group)~~  
-  **Evidence:**  
-  ```
-  Missingness by race (%):
-  Asian (MHWdmental=10.20, MHWdlonely=13.33)
-  Hispanic/Latino (MHWdmental=6.09, MHWdlonely=6.60)
-  ```
-- [x] ~~PS model still fits with missingness strategy~~  
-  **Evidence:**  
-  ```
-  PS covariates (hacadpr13, tcare, StemMaj) missingness = 0.00%
-  ```
+## Treatment 3: Missingness (MAR/MCAR)
+### Approval Gate (Required)
+- [ ] STOP: review constraints + request approval to start Treatment 3  
+  **Evidence:**
+
+- [ ] MCAR missingness applied (report % by variable)  
+  **Evidence:**
+- [ ] MAR missingness applied (report % by group)  
+  **Evidence:**
+- [ ] PS model still fits with missingness strategy  
+  **Evidence:**
 
 ### Validation Gate 3
-- [x] ~~Missingness summary table created (overall + by key groups)~~  
-  **Evidence:**  
-  ```
-  Overall missingness (%):
-  hacadpr13        0.00
-  tcare            0.00
-  StemMaj          0.00
-  MHWdacad         5.66
-  MHWdlonely       7.30
-  MHWdmental       6.90
-  MHWdexhaust      6.14
-  MHWdsleep        5.88
-  MHWdfinancial    5.74
-  QIadmin          3.84
-  QIstudent        3.54
-  QIadvisor        4.60
-  QIfaculty        4.00
-  QIstaff          3.74
-
-  Missingness by race (%):
-  Asian: MHWdacad=10.08, MHWdlonely=13.33, MHWdmental=10.20
-  Hispanic/Latino: MHWdacad=4.17, MHWdlonely=6.60, MHWdmental=6.09
-  White: MHWdacad=4.73, MHWdlonely=5.66, MHWdmental=6.96
-
-  Missingness by archetype (%):
-  Asian High-Pressure Achiever: MHWdacad=11.27, MHWdlonely=12.00, MHWdmental=10.73
-  Latina Commuter Caretaker: MHWdacad=3.45, MHWdlonely=6.91, MHWdmental=7.36
-  ```
-- [x] ~~No accidental 0% or runaway missingness~~  
-  **Evidence:**  
-  ```
-  New PS covariates missingness = 0.00%; max MHW missingness = 13.33%
-  ```
+- [ ] Missingness summary table created (overall + by key groups)  
+  **Evidence:**
+- [ ] No accidental 0% or runaway missingness  
+  **Evidence:**
 
 ---
 
-## Treatment 4: PS Model + Weights
+## Treatment 4: PS Model + Weights (Post-PSW)
+### Approval Gate (Required)
+- [ ] STOP: review constraints + request approval to start Treatment 4  
+  **Evidence:**
+
 - [ ] Update PS formula (paste exact formula)  
-  **Evidence:**  
+  **Evidence:**
 - [ ] Compute propensity + overlap weights  
-  **Evidence:**  
+  **Evidence:**
 - [ ] Export weighted dataset with diagnostics  
-  **Evidence:**  
+  **Evidence:**
 
 ### Validation Gate 4
 - [ ] Coefficient directions sanity check (report ORs)  
-  **Evidence:**  
+  **Evidence:**
 - [ ] Overlap diagnostics (PS quantiles + weight quantiles)  
-  **Evidence:**  
+  **Evidence:**
 - [ ] ESS computed (report values)  
-  **Evidence:**  
+  **Evidence:**
 
 ---
 
-## Treatment 5: Balance + Unit Tests
+## Treatment 5: Balance + Guards + Reporting
+### Approval Gate (Required)
+- [ ] STOP: review constraints + request approval to start Treatment 5  
+  **Evidence:**
+
 - [ ] Balance table updated (SMD + variance ratios)  
-  **Evidence:**  
+  **Evidence:**
 - [ ] Distributional balance plots or eCDF/QQ checks added  
-  **Evidence:**  
+  **Evidence:**
 - [ ] Unit-test checks added (fail loudly)  
-  **Evidence:**  
+  **Evidence:**
 - [ ] Run report updated (what changed + why)  
-  **Evidence:**  
+  **Evidence:**
+- [ ] Post-PSW distributions recorded for ALL covariates (old + new)  
+  **Evidence:**
 
 ### Final Acceptance Gate (Definition of Done)
 - [ ] All validation gates passed  
-  **Evidence:**  
+  **Evidence:**
 - [ ] Reproducibility confirmed (seed + hashes if used)  
-  **Evidence:**  
+  **Evidence:**
 - [ ] No out-of-scope changes (confirm via git diff summary)  
-  **Evidence:**  
+  **Evidence:**
 
 ---
 

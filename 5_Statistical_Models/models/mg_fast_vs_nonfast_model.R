@@ -131,13 +131,13 @@ MODEL_FULL <- paste0(
   "# NOTE: credit_dose_c main effect OMITTED - dose only matters for FASt students\n",
   "# Disturbances for EmoDiss, QualEngag, DevAdj are implicit (lavaan default)\n",
   "EmoDiss ~ a1*x_FASt + a1z*XZ_c + g1*cohort +\n",
-  "         hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n",
+  "         hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n",
   "\n",
   "QualEngag ~ a2*x_FASt + a2z*XZ_c + g2*cohort +\n",
-  "           hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n",
+  "           hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n",
   "\n",
   "DevAdj ~ c*x_FASt + cz*XZ_c + b1*EmoDiss + b2*QualEngag + g3*cohort +\n",
-  "        hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n"
+  "        hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n"
 )
 
 # Serial mediation model (includes EmoDiss → QualEngag path)
@@ -169,14 +169,14 @@ MODEL_FULL_SERIAL <- paste0(
   "# NOTE: credit_dose_c main effect OMITTED - dose only matters for FASt students\n",
   "# Disturbances (residual variances) are implicit for all endogenous variables\n",
   "EmoDiss ~ a1*x_FASt + a1z*XZ_c + g1*cohort +\n",
-  "         hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n",
+  "         hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n",
   "\n",
   "# QualEngag regressed on EmoDiss (d path for serial mediation)\n",
   "QualEngag ~ a2*x_FASt + a2z*XZ_c + d*EmoDiss + g2*cohort +\n",
-  "           hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n",
+  "           hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n",
   "\n",
   "DevAdj ~ c*x_FASt + cz*XZ_c + b1*EmoDiss + b2*QualEngag + g3*cohort +\n",
-  "        hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n",
+  "        hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n",
   "\n",
   "# DEFINED PARAMETERS for serial mediation\n",
   "# Serial indirect effect: X → EmoDiss → QualEngag → DevAdj\n",
@@ -377,13 +377,13 @@ build_model_mg_structural_free_loadings <- function(dat, group_var, z_vals = NUL
     "\n",
     "# Structural paths: FREE across groups (labeled per group)\n",
     "EmoDiss ~ ", a1_free, " + ", a1z_free, " + a1c*credit_dose_c + g1*cohort +\n",
-    "         hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n",
+    "         hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n",
     "\n",
     "QualEngag ~ ", a2_free, " + ", a2z_free, " + a2c*credit_dose_c + g2*cohort +\n",
-    "           hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n",
+    "           hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n",
     "\n",
     "DevAdj ~ ", c_free, " + ", cz_free, " + cc*credit_dose_c + ", b1_free, " + ", b2_free, " + g3*cohort +\n",
-    "        hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n"
+    "        hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n"
   )
 }
 
@@ -465,11 +465,11 @@ MEASUREMENT_SYNTAX,
 "# X = x_FASt (0/1), XZ_c = x_FASt*credit_dose_c (treated-only dose effect)\n",
 "# NOTE: credit_dose_c main effect OMITTED - dose only matters for FASt students\n",
 "EmoDiss ~ a1*x_FASt + a1z*XZ_c + g1*cohort +\n",
-"     hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n\n",
+"     hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n\n",
 "QualEngag ~ a2*x_FASt + a2z*XZ_c + g2*cohort +\n",
-"     hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n\n",
+"     hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n\n",
 "DevAdj ~ c*x_FASt + cz*XZ_c + b1*EmoDiss + b2*QualEngag + g3*cohort +\n",
-"         hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n\n",
+"         hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n\n",
 "# conditional direct effects of FASt on DevAdj at Z values\n",
 "dir_z_low  := c + cz*", z_low_txt, "\n",
 "dir_z_mid  := c + cz*", z_mid_txt, "\n",
@@ -521,11 +521,11 @@ MEASUREMENT_SYNTAX,
 "# X = x_FASt (0/1), XZ_c = x_FASt*credit_dose_c (treated-only dose effect)\n",
 "# NOTE: credit_dose_c main effect OMITTED - dose only matters for FASt students\n",
 "EmoDiss ~ a1*x_FASt + a1z*XZ_c + g1*cohort +\n",
-"     hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n\n",
+"     hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n\n",
 "QualEngag ~ a2*x_FASt + a2z*XZ_c + d*EmoDiss + g2*cohort +\n",
-"     hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n\n",
+"     hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n\n",
 "DevAdj ~ c*x_FASt + cz*XZ_c + b1*EmoDiss + b2*QualEngag + g3*cohort +\n",
-"         hgrades_c + bparented_c + pell + hapcl + hprecalc13 + hchallenge_c + cSFcareer_c\n\n",
+"         hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c\n\n",
 "# conditional direct effects of FASt on DevAdj at Z values\n",
 "dir_z_low  := c + cz*", z_low_txt, "\n",
 "dir_z_mid  := c + cz*", z_mid_txt, "\n",
@@ -692,7 +692,10 @@ build_model_fast_treat_control_mg <- function(dat, group_var, w_label = NULL, z_
   # IMPORTANT: do not include the grouping variable as an exogenous covariate.
   # Example: when group_var == "pell", pell is constant within each group and lavaan errors.
   # Also exclude any covariate with zero variance in ANY group (causes lavaan error).
-  covars <- c("hgrades_c", "bparented_c", "pell", "hapcl", "hprecalc13", "hchallenge_c", "cSFcareer_c")
+  covars <- c(
+    "hgrades_c", "bparented_c", "hapcl_c", "hprecalc13_c", "hchallenge_c", "cSFcareer_c",
+    "hacadpr13_c", "tcare_c", "StemMaj_c"
+  )
   covars <- setdiff(covars, group_var)
   
   # Check for zero-variance covariates within any group

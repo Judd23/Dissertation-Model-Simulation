@@ -1,7 +1,6 @@
 import { useTheme } from '../context/ThemeContext';
 import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
-import SharedElement from '../components/transitions/SharedElement';
 import useParallax from '../hooks/useParallax';
 import styles from './ResearcherPage.module.css';
 
@@ -60,12 +59,8 @@ export default function ResearcherPage() {
                 className={styles.institutionLogo}
               />
             </div>
-            <SharedElement id="page-kicker" className={styles.kicker}>
-              Researcher
-            </SharedElement>
-            <SharedElement id="page-title">
-              <h1 className={styles.name}>Jay Johnson</h1>
-            </SharedElement>
+            <p className={styles.eyebrow}>Researcher</p>
+            <h1 className={styles.name}>Jay Johnson</h1>
             <div className={styles.metaLine}>
               <span className={styles.credentials}>M.F.A., Ed.D.-(May '26)</span>
               <span className={styles.dot} aria-hidden="true">•</span>
@@ -76,49 +71,47 @@ export default function ResearcherPage() {
       </header>
 
       <main className={styles.main}>
-        <SharedElement id="page-panel">
-          <section ref={factsRef} className={`${styles.factsStrip} stagger-children`}>
-            <div className={styles.factsInner}>
-              <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '0ms' }}>
-                <div className={styles.factLabel}>Focus</div>
-                <div className={styles.factValue}>
-                  <GlossaryTerm
-                    term="Student Development"
-                    definition="The holistic growth of students during their college experience, encompassing cognitive, psychosocial, and identity development as they navigate higher education."
-                  >
-                    Student development
-                  </GlossaryTerm>{' '}
-                  | equity | pathways
-                </div>
-              </div>
-              <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '100ms' }}>
-                <div className={styles.factLabel}>Methods</div>
-                <div className={styles.factValue}>
-                  <GlossaryTerm
-                    term="Structural Equation Modeling"
-                    definition="A multivariate statistical technique combining factor analysis and path analysis to test complex relationships between observed and latent variables simultaneously."
-                  >
-                    SEM
-                  </GlossaryTerm>
-                  ,{' '}
-                  <GlossaryTerm
-                    term="Causal Inference"
-                    definition="Statistical methods that attempt to estimate the effect of one variable on another, going beyond correlation to understand cause-and-effect relationships using techniques like propensity score matching."
-                  >
-                    causal inference
-                  </GlossaryTerm>
-                  , process models
-                </div>
-              </div>
-              <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '200ms' }}>
-                <div className={styles.factLabel}>Email</div>
-                <a href="mailto:jjohnson4039@SDSU.edu" className={styles.factLink}>
-                  jjohnson4039@SDSU.edu
-                </a>
+        <section ref={factsRef} className={`${styles.factsStrip} stagger-children`}>
+          <div className={styles.factsInner}>
+            <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '0ms' }}>
+              <div className={styles.factLabel}>Focus</div>
+              <div className={styles.factValue}>
+                <GlossaryTerm
+                  term="Student Development"
+                  definition="The holistic growth of students during their college experience, encompassing cognitive, psychosocial, and identity development as they navigate higher education."
+                >
+                  Student development
+                </GlossaryTerm>{' '}
+                | equity | pathways
               </div>
             </div>
-          </section>
-        </SharedElement>
+            <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '100ms' }}>
+              <div className={styles.factLabel}>Methods</div>
+              <div className={styles.factValue}>
+                <GlossaryTerm
+                  term="Structural Equation Modeling"
+                  definition="A multivariate statistical technique combining factor analysis and path analysis to test complex relationships between observed and latent variables simultaneously."
+                >
+                  SEM
+                </GlossaryTerm>
+                ,{' '}
+                <GlossaryTerm
+                  term="Causal Inference"
+                  definition="Statistical methods that attempt to estimate the effect of one variable on another, going beyond correlation to understand cause-and-effect relationships using techniques like propensity score matching."
+                >
+                  causal inference
+                </GlossaryTerm>
+                , process models
+              </div>
+            </div>
+            <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '200ms' }}>
+              <div className={styles.factLabel}>Email</div>
+              <a href="mailto:jjohnson4039@SDSU.edu" className={styles.factLink}>
+                jjohnson4039@SDSU.edu
+              </a>
+            </div>
+          </div>
+        </section>
 
         <section className={styles.grid}>
           <article ref={blockARef} className={`${styles.blockA} reveal-left`} style={{ animationDelay: '0ms' }}>

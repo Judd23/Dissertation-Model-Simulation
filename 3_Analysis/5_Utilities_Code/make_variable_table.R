@@ -406,9 +406,9 @@ add_row("QIstaff", "                Student services staff [QIstaff]", "Indicato
 # SECTION 5: PROPENSITY SCORE COVARIATES (used in PS model)
 # ============================================================================
 add_section("PROPENSITY SCORE COVARIATES")
-add_row("cohort", "Cohort Year [cohort]", "PS Covariate", "ML (continuous)", "Exogenous",
+add_row("cohort", "Cohort Year [cohort]", "SEM Covariate", "ML (continuous)", "Exogenous",
         scale = "Nominal", scale_points = 2, levels = "0=2019 | 1=2020",
-        source = "Institutional", notes = "Academic cohort year; also MG moderator",
+        source = "Institutional", notes = "Academic cohort year; SEM covariate only (excluded from PSW)",
         model_num = "MG")
 
 add_row("hgrades", "High School Grades [hgrades23]", "PS Covariate", "ML (continuous)", "Exogenous",
@@ -442,9 +442,23 @@ add_row("hapcl", "AP Course Load (High) [hapcl13]", "PS Covariate", "ML (continu
         source = "BCSSE", notes = "Derived from hapcl13: How many AP classes completed? Recoded 1=3+ courses",
         model_num = "59")
 
+add_row("hapcl_c", "AP Course Load (Centered)", "PS Covariate", "ML (continuous)", "Exogenous",
+        scale = "Interval", scale_points = NA,
+        levels = "Continuous (mean-centered)",
+        equation = "hapcl_c = hapcl - mean(hapcl)",
+        source = "Computed", notes = "Mean-centered version used in PS/SEM",
+        model_num = "59")
+
 add_row("hprecalc13", "Pre-Calculus/Trigonometry with C or better [hprecalc13]", "PS Covariate", "ML (continuous)", "Exogenous",
         scale = "Nominal", scale_points = 2, levels = "0=No | 1=Yes",
         source = "BCSSE", notes = "hprecalc13: Earned C or better in Pre-Calculus or Trigonometry",
+        model_num = "59")
+
+add_row("hprecalc13_c", "Pre-Calculus/Trigonometry (Centered)", "PS Covariate", "ML (continuous)", "Exogenous",
+        scale = "Interval", scale_points = NA,
+        levels = "Continuous (mean-centered)",
+        equation = "hprecalc13_c = hprecalc13 - mean(hprecalc13)",
+        source = "Computed", notes = "Mean-centered version used in PS/SEM",
         model_num = "59")
 
 add_row("hchallenge", "HS Courses Challenged You [hchallenge]", "PS Covariate", "ML (continuous)", "Exogenous",
@@ -474,26 +488,41 @@ add_row("cSFcareer_c", "Baseline Career Goals (Centered)", "PS Covariate", "ML (
         model_num = "59")
 
 add_row("hacadpr13", "HS Study Hours [hacadpr13]", "PS Covariate", "ML (continuous)", "Exogenous",
-        scale = "Ordinal", scale_points = 8,
-        levels = "1=0 | 2=1-5 | 3=6-10 | 4=11-15 | 5=16-20 | 6=21-25 | 7=26-30 | 8=More than 30",
-        source = "BCSSE", notes = "hacadpr13: During your last year of high school how many hours per week spent preparing for class (studying/reading/homework)?",
+        scale = "Interval", scale_points = NA,
+        levels = "Midpoint-coded hours/week (last year of HS)",
+        source = "BCSSE", notes = "Time-use item: hours per week preparing for class",
         model_num = "59")
 
-add_row("hwork", "HS Work Hours [hwork]", "PS Covariate", "ML (continuous)", "Exogenous",
-        scale = "Ordinal", scale_points = 8,
-        levels = "1=0 | 2=1-5 | 3=6-10 | 4=11-15 | 5=16-20 | 6=21-25 | 7=26-30 | 8=More than 30",
-        source = "BCSSE", notes = "hwork: During your last year of high school how many hours per week working for pay?",
+add_row("hacadpr13_c", "HS Study Hours (Centered)", "PS Covariate", "ML (continuous)", "Exogenous",
+        scale = "Interval", scale_points = NA,
+        levels = "Continuous (mean-centered)",
+        equation = "hacadpr13_c = hacadpr13 - mean(hacadpr13)",
+        source = "Computed", notes = "Mean-centered version used in PS/SEM",
         model_num = "59")
 
-add_row("tcare", "Expected Caregiving Hours [tcare]", "PS Covariate", "ML (continuous)", "Exogenous",
-        scale = "Ordinal", scale_points = 8,
-        levels = "1=0 | 2=1-5 | 3=6-10 | 4=11-15 | 5=16-20 | 6=21-25 | 7=26-30 | 8=More than 30",
-        source = "BCSSE", notes = "tcare: During the coming school year expected hours per week providing care for dependents (children/parents/etc.)?",
+add_row("tcare", "Caregiving Hours [tcare]", "PS Covariate", "ML (continuous)", "Exogenous",
+        scale = "Interval", scale_points = NA,
+        levels = "Midpoint-coded hours/week providing care",
+        source = "BCSSE/NSSE", notes = "Time-use item: caregiving hours per week",
+        model_num = "59")
+
+add_row("tcare_c", "Caregiving Hours (Centered)", "PS Covariate", "ML (continuous)", "Exogenous",
+        scale = "Interval", scale_points = NA,
+        levels = "Continuous (mean-centered)",
+        equation = "tcare_c = tcare - mean(tcare)",
+        source = "Computed", notes = "Mean-centered version used in PS/SEM",
         model_num = "59")
 
 add_row("StemMaj", "STEM Major [StemMaj]", "PS Covariate", "ML (continuous)", "Exogenous",
         scale = "Nominal", scale_points = 2, levels = "0=Non-STEM | 1=STEM",
         source = "Institutional", notes = "Declared major classification",
+        model_num = "59")
+
+add_row("StemMaj_c", "STEM Major (Centered)", "PS Covariate", "ML (continuous)", "Exogenous",
+        scale = "Interval", scale_points = NA,
+        levels = "Continuous (mean-centered)",
+        equation = "StemMaj_c = StemMaj - mean(StemMaj)",
+        source = "Computed", notes = "Mean-centered version used in PS/SEM",
         model_num = "59")
 
 # ============================================================================
@@ -561,6 +590,7 @@ add_row("Cgrades", "College GPA [Cgrades]", "Auxiliary", "N/A", "N/A",
         scale = "Interval", scale_points = NA,
         levels = "0.0–4.0 (GPA scale)",
         source = "Institutional", notes = "First-year cumulative GPA")
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Combine and write output

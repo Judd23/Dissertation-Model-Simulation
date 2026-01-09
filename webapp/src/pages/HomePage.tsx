@@ -4,24 +4,14 @@ import GlossaryTerm from '../components/ui/GlossaryTerm';
 import KeyTakeaway from '../components/ui/KeyTakeaway';
 import PathwayDiagram from '../components/charts/PathwayDiagram';
 import DataTimestamp from '../components/ui/DataTimestamp';
-import SharedElement from '../components/transitions/SharedElement';
 import { Link } from 'react-router-dom';
 import { useModelData } from '../context/ModelDataContext';
-import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal';
 import useParallax from '../hooks/useParallax';
 import styles from './HomePage.module.css';
 
 export default function HomePage() {
   const { sampleSize, fitMeasures, paths, fastPercent } = useModelData();
 
-  // Scroll reveal refs
-  const heroRef = useScrollReveal<HTMLElement>({ threshold: 0.2 });
-  const statsRef = useStaggeredReveal<HTMLElement>();
-  const finding1Ref = useScrollReveal<HTMLElement>();
-  const finding2Ref = useScrollReveal<HTMLElement>();
-  const finding3Ref = useScrollReveal<HTMLElement>();
-  const previewRef = useScrollReveal<HTMLElement>();
-  const exploreRef = useStaggeredReveal<HTMLElement>();
   const parallaxOffset = useParallax({ speed: 0.1, max: 32 });
 
   // Derive key findings dynamically from pipeline data
@@ -38,19 +28,16 @@ export default function HomePage() {
     <div className={`${styles.page} page-fade`}>
       {/* Hero Section - Full viewport */}
       <section
-        ref={heroRef}
         className={styles.hero}
         style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
       >
         <div className="container">
-          <SharedElement id="page-kicker" className={styles.eyebrow}>
+          <p className={styles.eyebrow}>
             Research Findings
-          </SharedElement>
-          <SharedElement id="page-title">
-            <h1 className={styles.title}>
-              How College Credits Earned in High School Affect First-Year Success
-            </h1>
-          </SharedElement>
+          </p>
+          <h1 className={styles.title}>
+            How College Credits Earned in High School Affect First-Year Success
+          </h1>
           <p className={styles.lead}>
             Explore what happens when students enter college with <GlossaryTerm term="Dual Enrollment Credits" definition="College credits earned while in high school through dual enrollment programs, allowing students to take college courses before graduating high school.">dual enrollment credits</GlossaryTerm> from
             high school. We studied California State University students to understand
@@ -62,43 +49,33 @@ export default function HomePage() {
 
 
       {/* Key Stats */}
-      <SharedElement id="page-panel">
-        <section ref={statsRef} className={`${styles.stats} stagger-children`}>
-          <div className="container">
-            <div className={styles.statsGrid}>
-              <div className="reveal">
-                <StatCard
-                  label="Sample Size"
-                  value={keyFindings.totalN.toLocaleString()}
-                  subtext="CSU first-year students"
-                  size="large"
-                  layoutId="stat-sample-size"
-                />
-              </div>
-              <div className="reveal">
-                <StatCard
-                  label={<span>Students with <GlossaryTerm term="FASt Status" definition="First-year Accelerated Status - students who earned 12 or more transferable college credits before enrolling in their first year of college.">FASt Status</GlossaryTerm></span>}
-                  value={`${keyFindings.fastPct}%`}
-                  subtext="12+ credits from high school"
-                  size="large"
-                  color="accent"
-                  layoutId="stat-fast-percent"
-                />
-              </div>
-              <div className="reveal">
-                <StatCard
-                  label="Study Quality Score"
-                  value={keyFindings.cfi.toFixed(3)}
-                  subtext="Excellent statistical fit"
-                  size="large"
-                  color="positive"
-                />
-              </div>
-            </div>
-            <DataTimestamp />
+      <div className={styles.stats}>
+        <div className="container">
+          <div className={styles.statsGrid}>
+            <StatCard
+              label="Sample Size"
+              value={keyFindings.totalN.toLocaleString()}
+              subtext="CSU first-year students"
+              size="large"
+            />
+            <StatCard
+              label={<span>Students with <GlossaryTerm term="FASt Status" definition="First-year Accelerated Status - students who earned 12 or more transferable college credits before enrolling in their first year of college.">FASt Status</GlossaryTerm></span>}
+              value={`${keyFindings.fastPct}%`}
+              subtext="12+ credits from high school"
+              size="large"
+              color="accent"
+            />
+            <StatCard
+              label="Study Quality Score"
+              value={keyFindings.cfi.toFixed(3)}
+              subtext="Excellent statistical fit"
+              size="large"
+              color="positive"
+            />
           </div>
-        </section>
-      </SharedElement>
+          <DataTimestamp />
+        </div>
+      </div>
 
       {/* Key Findings - Editorial Layout */}
       <section className={styles.findings}>
@@ -108,7 +85,7 @@ export default function HomePage() {
         </div>
 
         {/* Finding 1 */}
-        <article ref={finding1Ref} className={`${styles.findingSection} reveal`}>
+        <article className={styles.findingSection}>
           <div className="container">
             <div className={styles.findingContent}>
               <div className={styles.findingNumber} style={{ color: 'var(--color-distress)' }}>
@@ -131,7 +108,7 @@ export default function HomePage() {
         </article>
 
         {/* Finding 2 */}
-        <article ref={finding2Ref} className={`${styles.findingSection} ${styles.findingSectionAlt} reveal`}>
+        <article className={`${styles.findingSection} ${styles.findingSectionAlt}`}>
           <div className="container">
             <div className={styles.findingContent}>
               <div className={styles.findingNumber} style={{ color: 'var(--color-engagement)' }}>
@@ -154,7 +131,7 @@ export default function HomePage() {
         </article>
 
         {/* Finding 3 */}
-        <article ref={finding3Ref} className={`${styles.findingSection} reveal`}>
+        <article className={styles.findingSection}>
           <div className="container">
             <div className={styles.findingContent}>
               <div className={styles.findingNumber} style={{ color: 'var(--color-fast)' }}>
@@ -178,7 +155,7 @@ export default function HomePage() {
       </section>
 
       {/* Interactive Preview */}
-      <section ref={previewRef} className={`${styles.preview} reveal-scale`}>
+      <section className={styles.preview}>
         <div className="container">
           <h2>How It All Connects</h2>
           <p className={styles.previewText}>
@@ -209,39 +186,39 @@ export default function HomePage() {
       </KeyTakeaway>
 
       {/* Navigation Cards */}
-      <section ref={exploreRef} className={`${styles.explore} stagger-children`}>
+      <div className={styles.explore}>
         <div className="container">
           <h2>Explore the Research</h2>
           <div className={styles.exploreCards}>
-            <Link to="/demographics" className={`${styles.exploreCard} reveal`}>
+            <Link to="/demographics" className={styles.exploreCard}>
               <span className={styles.exploreIcon}>
                 <Icon name="users" size={40} />
               </span>
               <h3>Demographics</h3>
               <p>Compare findings across race, first-generation, Pell, and other subgroups.</p>
             </Link>
-            <Link to="/methods" className={`${styles.exploreCard} reveal`}>
+            <Link to="/methods" className={styles.exploreCard}>
               <span className={styles.exploreIcon}>
                 <Icon name="microscope" size={40} />
               </span>
               <h3>Methods</h3>
               <p>Technical details on model specification, estimation, and diagnostics.</p>
             </Link>
-            <Link to="/pathway" className={`${styles.exploreCard} reveal`}>
+            <Link to="/pathway" className={styles.exploreCard}>
               <span className={styles.exploreIcon}>
                 <Icon name="network" size={40} />
               </span>
               <h3>Pathways</h3>
               <p>Interact with the full SEM mediation diagram and explore each pathway.</p>
             </Link>
-            <Link to="/dose" className={`${styles.exploreCard} reveal`}>
+            <Link to="/dose" className={styles.exploreCard}>
               <span className={styles.exploreIcon}>
                 <Icon name="chart" size={40} />
               </span>
               <h3>Credit Levels</h3>
               <p>See how credit dose moderates treatment effects with interactive visualizations.</p>
             </Link>
-            <Link to="/so-what" className={`${styles.exploreCard} reveal`}>
+            <Link to="/so-what" className={styles.exploreCard}>
               <span className={styles.exploreIcon}>
                 <Icon name="lightbulb" size={40} />
               </span>
@@ -250,7 +227,7 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-      </section>
+      </div>
 
       <section className={styles.nextStep}>
         <div className="container">
