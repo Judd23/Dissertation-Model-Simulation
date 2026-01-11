@@ -112,48 +112,6 @@
   --radius-lg: 12px;
 }
 
-/* ============================================
-   LIGHT MODE OVERRIDES
-   Preserves orb structure - only tone shifts
-   ============================================ */
-[data-theme="light"] {
-  /* UI colors - Light Mode */
-  --color-background: transparent; /* Let orbs show through */
-  --color-surface: rgba(255, 255, 255, 0.60);
-  --color-surface-elevated: rgba(255, 255, 255, 0.70);
-  --color-text: #1a2a3f;
-  --color-text-muted: #4a5b6f;
-  --color-text-light: #6b7c90;
-  --color-border: #c5d0dc;
-  --color-border-light: #e2e8f0;
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
-  --color-accent-light: rgba(37, 99, 235, 0.15);
-
-  /* Chart-specific colors - light mode */
-  --color-chart-grid: #e2e8f0;
-  --color-chart-axis: #94a3b8;
-  --color-chart-background: transparent;
-
-  /* Shadows - light mode values */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
-
-  /* Construct colors for light mode visibility */
-  --color-distress: #dc2626;
-  --color-engagement: #2563eb;
-  --color-fast: #ea580c;
-  --color-nonfast: #6b7280;
-  --color-credits: #ca8a04;
-
-  --color-belonging: #16a34a;
-  --color-gains: #2563eb;
-  --color-support: #7c3aed;
-  --color-satisfaction: #92400e;
-}
-
 /* Responsive breakpoints via container queries */
 @media (max-width: 768px) {
   :root {
@@ -168,3 +126,4 @@
     --sidebar-width: 100%;
   }
 }
+

@@ -19,11 +19,6 @@ html {
   background: hsl(220, 70%, 3%);
 }
 
-html[data-theme="light"] {
-  /* Light base for parallax gradients */
-  background: hsl(220, 25%, 94%);
-}
-
 body {
   font-family: var(--font-body);
   font-size: var(--font-size-base);
