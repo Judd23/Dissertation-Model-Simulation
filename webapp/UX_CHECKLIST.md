@@ -1,446 +1,281 @@
 @ -1,445 +1 @@
-# Comprehensive UX Checklist
+# UX Checklist and Operating Rules (Phase 0)
 
-> **Last Updated:** January 11, 2026  
-> **Constraint:** Phase 0 Visual Lock — No changes to blur, opacity, glass, motion, spacing, glow, gradients, hover feel, or animation timing.  
+> **Last updated:** January 11, 2026  
+> **Phase 0 visual lock:** Do not change blur, opacity, glass thickness, motion density, timing, spacing, glow, gradients, hover feel, or animation timing.
 
----
-
-## 🧯 Repo Health Gate (Must Pass Before Any UX Work)
-These checks prevent false negatives where the UI looks broken but the repository or deploy pipeline is corrupted.
-
-| Check | Command | Pass Condition | What It Means If It Fails |
-|------|---------|----------------|--------------------------|
-| Git refs clean | `git show-ref --head` | No warnings about `refs/... 2` | Broken git refs will block fetch, pull, and Actions deploys |
-| Git objects sane | `git fsck --full` | No `fatal: bad object` | Object DB corruption; builds and diffs are unreliable |
-| Node types clean | `ls node_modules/@types | grep " 2"` | No results | Duplicate `@types/* 2` folders cause TS + Vite to misbehave |
-
-If any check fails, fix it before touching UI or motion code.
+This file is the single source of truth for (a) repo health gates, (b) how the site deploys, (c) the global motion + glass system, and (d) the verification steps that prove changes are real in production.
 
 ---
 
-## 🧭 What Actually Deploys This Site
-The live site is currently published via **GitHub Actions**.
+## 0) Repo Health Gate (run before any UX work)
 
-Important: In this repository, the Pages workflow run shown in Actions is labeled **gh-pages**. That means one of two things is true:
+If these fail, UI symptoms can be misleading (stale deploys, broken pulls, inconsistent builds).
 
-1) The workflow is configured to run when **gh-pages** is updated, OR
-2) The workflow runs on `main` but GitHub is showing the **deployment target/environment** as gh-pages.
+| Gate | Command | Pass condition | If it fails |
+|---|---|---|---|
+| Git refs clean | `git show-ref --head` | No warnings mentioning `refs/... 2` | Local `.git` refs are corrupted. Fix before pull/rebase/deploy. |
+| Git object DB sane | `git fsck --full` | No `fatal: bad object` | Object DB corruption. Diffs/builds can be unreliable. |
+| Node types clean (local installs only) | `ls node_modules/@types | grep " 2"` | No results | `@types/* 2` duplicates. Delete `node_modules` and reinstall. |
 
-Because of that ambiguity, the rule is:
-
-- Treat `main` as the source of truth for code and the workflow.
-- Treat `gh-pages` as the output branch/environment used for Pages hosting.
-- Do **not** manually merge `gh-pages` into `main`.
-
-Operationally, deployments should be driven by the workflow, not by branch merges.
-
-| Setting | Expected Value |
-|--------|-----------------|
-| **GitHub Pages → Source** | GitHub Actions |
-| **Workflow** | `.github/workflows/pages.yml` (or the repo’s active Pages workflow) |
-| **Source of code changes** | `main` |
-| **Pages target** | `gh-pages` (branch/environment managed by Actions) |
-| **Artifact** | `webapp/dist` |
+**Rule:** Do not start UI work until the gates pass.
 
 ---
 
-## 🧾 Cache + Version Truth
-Because GitHub Pages and browsers cache aggressively, visual verification must be factual.
+## 1) What deploys the live site
 
-- Always hard refresh after deploy (Cmd+Shift+R / Ctrl+Shift+R)
-- The footer must display **build timestamp or commit SHA** so we can prove which build is live
+The live site is published via **GitHub Pages using GitHub Actions**.
+
+### 1.1 Pages source of truth
+
+- Code changes are made on: `main`
+- Pages deployment output: managed by Actions (often labeled `github-pages` or `gh-pages` in the Actions UI)
+- Do **not** merge `gh-pages` into `main`.
+
+### 1.2 Verify Pages settings
+
+GitHub repo → **Settings → Pages**
+
+| Setting | Expected value |
+|---|---|
+| **Source** | GitHub Actions |
+
+If Settings → Pages is set to “Deploy from a branch”, stop and change it to GitHub Actions (or align the workflow accordingly). The workflow should be the only deploy mechanism.
+
+### 1.3 Build output that Pages serves
+
+- Build output directory: `webapp/dist`
+- Vite base path: `/Dissertation-Model-Simulation/`
 
 ---
 
-## 🎛 Motion Policy (Phase 0 Lock)
-No reduced-motion fallbacks are to be added or expanded in Phase 0 (keep the high-motion intent).
+## 2) Cache + Version Truth (how to prove you are seeing the right build)
 
-- Existing behavior, if present, is treated as legacy and is **not** extended.
-- All new work must preserve **heavy spring, parallax, glass thickness, reflections, and motion density**.
+GitHub Pages and browsers cache aggressively. Visual checks must be verifiable.
+
+- After each deploy: hard refresh (Cmd+Shift+R / Ctrl+Shift+R)
+- Add a visible build identifier (timestamp or commit SHA) in the UI footer when convenient, so production can be verified without guessing.
 
 ---
 
-## 🧪 Coverage Map for Motion + Glass
-All of the following surfaces must exhibit **DANCE_SPRING_HEAVY** hover, glass depth, and reflective shine:
+## 3) Motion policy (Phase 0)
 
+- No new reduced-motion behavior is added in Phase 0.
+- If reduced-motion logic already exists in the codebase, it stays as-is. Do not expand it.
+- All new work preserves heavy spring, parallax, glass thickness, reflections, and motion density.
+
+---
+
+## 4) Global UX scaffold (what must be consistent across pages)
+
+### 4.1 Global background orbs (all pages)
+
+Intent: every page background should match the “Wow it Works” page’s orb system.
+
+**Owner:** the global layout background component(s).  
+**Rule:** pages should not override the background with their own competing gradients unless explicitly approved.
+
+Verification checklist:
+- Background orbs visible on every route.
+- Same orb palette + blur intensity + depth feel across routes.
+- No route has a flat fallback color that wipes the orb layers.
+
+### 4.2 Glass + shine system (shared CSS)
+
+Source of truth:
+- `webapp/src/styles/glass.css`
+- `webapp/src/styles/global.css` imports `glass.css`
+
+Required characteristics (Phase 0 locked):
+- translucent tint + blur
+- laminated thickness (multi-layer shadow)
+- specular highlight (`::before`)
+- inner bevel ring (`::after`)
+
+### 4.3 Interaction system (heavy spring)
+
+The heavy spring feel must apply to every interactive surface.
+
+- Motion preset: `DANCE_SPRING_HEAVY` in `webapp/src/lib/transitionConfig.ts`
+- Common surface component(s): `InteractiveSurface`, `TiltSurface`, and any button/panel wrappers
+
+Coverage list (must match across pages):
 - Header nav links (desktop + mobile)
-- All primary and secondary buttons
+- Primary + secondary buttons
 - All `InteractiveSurface` panels
-- `StatCard`, `KeyTakeaway`, `Accordion` items
+- `StatCard`, `KeyTakeaway`, accordion items
 - `GlossaryTerm` trigger
-- `BackToTop` button
+- `BackToTop`
 - Sliders and toggles
 
-Each must be tested on: Home, Methods, Pathway, So What, Researcher.
+Pages to test (Phase 0): Home, Methods, Pathway, So What, Researcher.
 
 ---
 
-## 🧩 CSS Modules Type Safety
-| Check | Requirement |
-|-------|-------------|
-| Declarations | `vite-env.d.ts` must include `declare module '*.module.css'` |
-| TS config | The declaration file must be included by `tsconfig.app.json` |
-| Conflicts | No duplicate `*.d.ts` files shadowing module declarations |
+## 5) React stability gates (do these before polish)
 
-This prevents false TypeScript errors where CSS files exist but types are unknown.
+These are runtime correctness checks. If they fail, UI can look frozen or inconsistent.
 
----
+### 5.1 `usePointerParallax` must not mutate refs during render
 
----
+| Field | Value |
+|---|---|
+| File | `webapp/src/lib/hooks/usePointerParallax.ts` |
+| Symptom | React error: “Cannot access refs during render / Cannot update ref during render.” |
+| Failure pattern | Assigning `someRef.current = ...` in render body (outside effects/callbacks) |
+| Fix standard | Move ref writes into an effect, or replace with `useCallback` + effect wiring |
 
-## 🔴 Sprint 1 — Critical React Stability Fixes
+### 5.2 `usePointerParallax` state updates must be driven by the RAF loop
 
-These items address actual runtime errors that can crash or degrade the app.
+| Field | Value |
+|---|---|
+| File | `webapp/src/lib/hooks/usePointerParallax.ts` |
+| Symptom | React warning about cascading renders from setState inside an effect |
+| Fix standard | Let the RAF tick be the single writer of `setPosition`; if immediate reset is necessary, schedule it via `requestAnimationFrame` |
 
-### 1.1 usePointerParallax ref write during render (React error)
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/lib/hooks/usePointerParallax.ts` |
-| **Where** | The assignment `animateRef.current = () => { ... }` near the top of the hook |
-| **Issue** | React throws: “Cannot access refs during render / Cannot update ref during render.” Writing to `animateRef.current` happens during render, which React treats as a render-phase mutation. |
-| **Fix** | Move the assignment to an effect, or remove the ref indirection entirely. Preferred pattern:
-  1) Create a stable `animate` function with `useCallback`.
-  2) In `useEffect`, set `animateRef.current = animate`.
-  3) The RAF loop calls `animateRef.current?.()`.
-| **Why** | Removes a hard runtime error that can prevent the UI from updating correctly and can block deployments when errors are treated as fatal. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+### 5.3 Ref syncing must be effect-based
 
-### 1.2 usePointerParallax setState inside enabled-effect (React warning)
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/lib/hooks/usePointerParallax.ts` |
-| **Where** | The `useEffect(() => { ... }, [enabled])` block that calls `setPosition({ x: 0, y: 0, clientX: 0, clientY: 0 })` |
-| **Issue** | React warns: “Calling setState synchronously within an effect can trigger cascading renders.” This happens when `enabled` flips and the effect immediately calls `setPosition`. |
-| **Fix** | Avoid direct `setPosition` in the effect. Instead:
-  - Update only `targetRef.current` to zeros in the effect, and
-  - Let the existing RAF loop drive `setPosition` as part of the animation tick.
-  If an immediate visual reset is required, schedule `setPosition` via `requestAnimationFrame(() => setPosition(...))` rather than calling it synchronously in the effect body.
-| **Why** | Stops React’s cascading-render warning and keeps the animation system as the single writer of position state. |
-| **Risk** | Low |
-| **Visual Impact** | None |
-
-### 1.3 usePointerParallax ref syncing should not happen in render
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/lib/hooks/usePointerParallax.ts` |
-| **Where** | Any assignments like `enabledRef.current = enabled` and `smoothingRef.current = smoothing` that occur outside an effect |
-| **Issue** | Render-phase ref writes can trigger React warnings (and are brittle under strict mode). |
-| **Fix** | Keep all ref syncing inside `useEffect` (or `useLayoutEffect` if required). The hook should only read refs during render, not write them. |
-| **Why** | Aligns the hook with React’s rules for render purity and prevents warnings that look like “nothing is happening after step 0” during dev. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+| Field | Value |
+|---|---|
+| File | `webapp/src/lib/hooks/usePointerParallax.ts` |
+| Failure pattern | `enabledRef.current = enabled` (or similar) executed in render |
+| Fix standard | Sync those refs in an effect (`useEffect` or `useLayoutEffect` only when needed) |
 
 ---
 
-## 🟠 Sprint 2 — Accessibility (ARIA) Improvements
+## 6) Accessibility checklist (no visual impact)
 
-These items improve screen reader support without any visual changes.
+Phase 0 is a visual lock, not a functional lock. These changes are allowed if they do not change appearance.
 
-### 2.1 ProgressRing missing ARIA semantics
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/ProgressRing.tsx` |
-| **Lines** | 26–45 (the outer `<div>`) |
-| **Issue** | The ring SVG has `aria-hidden="true"` (correct) but the container lacks progressbar semantics. Screen readers cannot interpret the metric value. |
-| **Fix** | Add to the container div: `role="progressbar"`, `aria-valuenow={normalized}`, `aria-valuemin={0}`, `aria-valuemax={1}`, `aria-label={label}` |
-| **Why** | Accessibility — screen readers will announce "CFI: 99.7%" instead of nothing. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+### 6.1 ProgressRing semantics
 
-### 2.2 GlossaryTerm missing tooltip role
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/GlossaryTerm.tsx` |
-| **Lines** | ~110–130 (the portal-rendered tooltip div) |
-| **Issue** | Tooltip is rendered via `createPortal` but lacks `role="tooltip"`. Screen readers don't associate it with the trigger. |
-| **Fix** | Add `role="tooltip"` to the tooltip container element. |
-| **Why** | Accessibility — establishes semantic relationship between trigger and tooltip. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+| Field | Value |
+|---|---|
+| File | `webapp/src/components/ui/ProgressRing.tsx` |
+| Requirement | Container has `role="progressbar"` + `aria-valuenow/min/max` + a clear `aria-label` |
 
-### 2.3 GlossaryTerm missing keyboard dismiss
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/GlossaryTerm.tsx` |
-| **Lines** | ~90–100 (event handlers section) |
-| **Issue** | Tooltip can be dismissed by clicking outside on touch devices, but there's no `Escape` key handler for keyboard users. |
-| **Fix** | Add `useEffect` that listens for `keydown` event with `key === 'Escape'` and calls `setIsOpen(false)`. |
-| **Why** | Accessibility — keyboard users can dismiss tooltips without clicking elsewhere. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+### 6.2 Glossary tooltip semantics + dismiss
 
-### 2.4 StatCard animated values not announced
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/StatCard.tsx` |
-| **Lines** | ~165–175 (the value display element) |
-| **Issue** | When the stat value animates (count-up), screen readers don't announce the final value. |
-| **Fix** | Wrap the value in a `<span aria-live="polite" aria-atomic="true">` so the final value is announced. |
-| **Why** | Accessibility — blind users hear "5,000" instead of silence. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+| Field | Value |
+|---|---|
+| File | `webapp/src/components/ui/GlossaryTerm.tsx` |
+| Requirement | Tooltip container has `role="tooltip"` and keyboard users can dismiss via Escape |
 
-### 2.5 KeyTakeaway missing landmark role
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/KeyTakeaway.tsx` |
-| **Lines** | ~42–55 (the InteractiveSurface wrapper) |
-| **Issue** | Uses `<aside>` which is correct, but lacks a role annotation for callout semantics. |
-| **Fix** | Add `role="note"` to the aside element. |
-| **Why** | Accessibility — explicitly marks content as a note/callout for screen readers. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+### 6.3 StatCard live region
 
-### 2.6 Accordion focus ring visibility
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/Accordion.module.css` |
-| **Lines** | (button styles) |
-| **Issue** | Native focus ring may be suppressed by custom styling. Need to verify `:focus-visible` outline is present. |
-| **Fix** | Add `.button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }` if missing. |
-| **Why** | Accessibility — keyboard users see focus indicator. |
-| **Risk** | Low |
-| **Visual Impact** | None (adds outline only on keyboard focus, not mouse) |
+| Field | Value |
+|---|---|
+| File | `webapp/src/components/ui/StatCard.tsx` |
+| Requirement | Animated numeric value is wrapped in `aria-live="polite" aria-atomic="true"` |
+
+### 6.4 KeyTakeaway callout role
+
+| Field | Value |
+|---|---|
+| File | `webapp/src/components/ui/KeyTakeaway.tsx` |
+| Requirement | Callout container has `role="note"` |
+
+### 6.5 Accordion focus visibility
+
+| Field | Value |
+|---|---|
+| File | `webapp/src/components/ui/Accordion.module.css` |
+| Requirement | `:focus-visible` is present and visible for keyboard users |
 
 ---
 
-## 🟢 Sprint 3 — Robustness & Polish
+## 7) Motion + glass acceptance tests (must pass in dev and production)
 
-These items improve stability and developer experience without visual changes.
+These prove the Phase 0 system is actually active.
 
-### 3.1 TransitionNavLink type narrowing
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/features/transitions/TransitionNavLink.tsx` |
-| **Lines** | 29–31 |
-| **Issue** | `if (typeof to !== 'string') { return; }` silently does nothing for non-string `to` props. Should fall through to default NavLink behavior. |
-| **Fix** | Remove the early return; the NavLink will handle `To` objects correctly. |
-| **Why** | Correctness — allows object-form `to` props like `{ pathname: '/foo', search: '?x=1' }`. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+### Test A: Heavy spring interaction feel
 
-### 3.2 Slider touch target size
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/Slider.module.css` |
-| **Lines** | (thumb/track styles) |
-| **Issue** | Range input thumb may be smaller than 44×44px WCAG touch target recommendation. |
-| **Fix** | Verify thumb height/width is at least 44px. If not, increase via `-webkit-slider-thumb` and `::-moz-range-thumb` pseudo-elements. |
-| **Why** | Usability — easier to grab on touch devices. |
-| **Risk** | Low |
-| **Visual Impact** | None (existing thumb size is preserved; only increases if below 44px) |
+- Hover any `StatCard` on Home
+- Expected: lift + subtle scale + heavy spring settle + shadow/border intensify
 
-### 3.3 BackToTop scroll behavior consistency
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/BackToTop.tsx` |
-| **Lines** | 22–23 |
-| **Issue** | Uses `prefers-reduced-motion` to decide scroll behavior. This exists but must not be expanded under Phase 0. |
-| **Fix** | Verify current behavior only. Do not add or broaden reduced-motion logic. |
-| **Why** | Phase 0 locks in high-motion design; reduced-motion is legacy only. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+### Test B: Glass thickness + specular shine
 
-### 3.4 ThemeToggle aria-label clarity
-| Attribute | Value |
-|-----------|-------|
-| **File** | `webapp/src/components/ui/ThemeToggle.tsx` |
-| **Lines** | 68–72 |
-| **Issue** | The `aria-label` is comprehensive but long. Verify it reads well in screen readers. |
-| **Fix** | No change needed unless testing reveals issues. Consider shortening to `"Theme: ${getLabel()}. Click to change."` |
-| **Why** | Accessibility — cleaner announcement. |
-| **Risk** | Low |
-| **Visual Impact** | None |
+- Inspect a glass panel/card on any route
+- Expected: blur + layered depth + visible top highlight + inner bevel ring
+
+### Test C: Scroll-linked parallax + reflections
+
+- Scroll a page with parallax sections and move pointer over `TiltSurface` regions
+- Expected: visible parallax drift and subtle highlight shift where used
+
+### Test D: Background orbs
+
+- Visit Home, Methods, Pathway, So What
+- Expected: orb background visible and consistent, matching the “Wow it Works” intent
 
 ---
 
-## 🎯 Motion + Glass Acceptance Tests (Must Pass)
+## 8) Deploy sanity check (local build to Pages)
 
-These tests verify that all previously implemented motion and glass work is active in the running site and survives build + deploy.
+### 8.1 Confirm branch and sync state
 
-### Test 1: Heavy Spring Interaction Feel (DANCE_SPRING_HEAVY)
+```bash
+git branch --show-current
+# Expected: main
 
-| Attribute | Value |
-|-----------|-------|
-| **Implementation Files** | `webapp/src/lib/transitionConfig.ts` (lines 46–51: `DANCE_SPRING_HEAVY` export) |
-| **Consuming Files** | `webapp/src/components/ui/InteractiveSurface.tsx` (line 4, line 65), `webapp/src/components/ui/TiltSurface.tsx` (line 5), `webapp/src/components/ui/StatCard.tsx`, `webapp/src/components/ui/KeyTakeaway.tsx`, `webapp/src/components/ui/Accordion.tsx`, `webapp/src/components/ui/BackToTop.tsx` |
-| **CSS Companion** | `webapp/src/styles/interactiveSurfaces.css` (hover shadow/border/sheen) |
-| **Observable Behavior** | Hovering any card, button, or panel shows: (1) upward lift (~4px), (2) slight scale increase (~1.02×), (3) spring-based settle with overshoot, (4) shadow intensification, (5) border brightening. The motion should feel "heavy" — slow to start, smooth deceleration, slight bounce at rest. |
-| **Local Test** | `cd webapp && npm run dev` → Open http://localhost:5173/Dissertation-Model-Simulation/ → Hover any StatCard on Home page → Observe lift + spring settle |
-| **Production Test** | https://judd23.github.io/Dissertation-Model-Simulation/ → Same hover test on Home page |
-| **Failure Causes** | 1. `DANCE_SPRING_HEAVY` not imported in component. 2. `interactiveSurface` class not applied. 3. Framer Motion not in bundle. 4. CSS `will-change` or `transform` conflict. 5. Stale GH Pages cache (hard refresh). |
+git status -sb
+```
 
-### Test 2: Global Floating Glass System
+### 8.2 Local build must succeed
 
-| Attribute | Value |
-|-----------|-------|
-| **Implementation Files** | `webapp/src/styles/glass.css` (all), `webapp/src/styles/global.css` (line 3: `@import './glass.css'`) |
-| **Key Classes** | `.glass-panel`, `.glass-button`, `.glass-nav`, `.glass-panel-interactive`, `.glass-card-elevated` |
-| **Observable Behavior** | Cards and panels show: (1) translucent background with color-mix tint, (2) backdrop-filter blur (16px), (3) multi-layer box-shadow (outer depth + inner bevel), (4) `::before` specular highlight gradient, (5) `::after` inner bevel ring. On hover: border brightens, shadow deepens. |
-| **Local Test** | `cd webapp && npm run dev` → Visit any page → Inspect a StatCard or KeyTakeaway → Verify backdrop-filter is active in DevTools Computed Styles |
-| **Production Test** | https://judd23.github.io/Dissertation-Model-Simulation/ → Inspect same elements |
-| **Failure Causes** | 1. `glass.css` not imported in `global.css`. 2. Class not applied to element. 3. Browser doesn't support `backdrop-filter` (Safari needs `-webkit-` prefix — already present). 4. Parent has `overflow: hidden` breaking blur context. 5. `mix-blend-mode: screen` not visible on dark background. |
+```bash
+cd webapp
+npm run build
+```
 
-### Test 3: Increased 3D Thickness + Specular Shine
+Expected artifacts:
+- `webapp/dist/index.html`
+- `webapp/dist/assets/*.js`
+- `webapp/dist/assets/*.css`
 
-| Attribute | Value |
-|-----------|-------|
-| **Implementation Files** | `webapp/src/styles/glass.css` (lines 17–26: box-shadow stack, lines 32–58: `::before` specular, lines 60–70: `::after` bevel) |
-| **Key Properties** | `box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), inset 0 -10px 24px rgba(0,0,0,0.08)` (laminated thickness), `background: linear-gradient(135deg, rgba(255,255,255,0.22)...)` (specular) |
-| **Observable Behavior** | Panels appear to have physical depth — not flat. Top edge has bright highlight (light hitting glass edge). Bottom has subtle darkening. Side edges have faint bevel. The effect is "laminated glass slab" not "frosted rectangle." |
-| **Local Test** | View Home page → Look at the three StatCards → Should see distinct top highlight and bottom shadow gradient |
-| **Production Test** | Same on GH Pages |
-| **Failure Causes** | 1. `::before`/`::after` pseudo-elements not rendering (check `content: ''`). 2. `mix-blend-mode` not taking effect. 3. z-index stacking issues hiding pseudo-elements. 4. Theme override flattening shadows. |
+### 8.3 Vite base path must match Pages
 
-### Test 4: Reflection-Based Movement (Scroll-Linked Parallax)
+```bash
+grep "base:" webapp/vite.config.ts
+# Expected: base: '/Dissertation-Model-Simulation/'
+```
 
-| Attribute | Value |
-|-----------|-------|
-| **Implementation Files** | `webapp/src/lib/hooks/usePointerParallax.ts` (global pointer tracking), `webapp/src/lib/hooks/useParallax.ts` (scroll-based offset), `webapp/src/components/ui/TiltSurface.tsx` (element tilt) |
-| **Observable Behavior** | (1) Moving mouse across viewport causes subtle highlight shift on glass panels (if TiltSurface is used). (2) Scrolling causes parallax offset on hero sections (via `useParallax` hook). (3) Page backgrounds may have multi-layer drift. |
-| **Local Test** | Visit Pathway page → Move mouse over diagram area → If using TiltSurface, panels should subtly rotate toward pointer. Scroll any page with parallax hero → Background should move slower than foreground. |
-| **Production Test** | Same on GH Pages |
-| **Failure Causes** | 1. `usePointerParallax` not called in component. 2. `useParallax` hook not wired to style. 3. CSS `transform` conflict overriding Framer Motion. 4. RAF loop not started (check console for errors). 5. `elementRef` not attached to DOM node. |
+### 8.4 Deploy
+
+- Push to `main`
+- GitHub → Actions: confirm Pages workflow runs
+- After it completes, hard refresh the production site
 
 ---
 
-## 🚀 Deployment Sanity Check
+## 9) Backlog tracker (status must be explicit)
 
-### Workflow Configuration
-| Attribute | Value |
-|-----------|-------|
-| **Workflow File** | `.github/workflows/pages.yml` (or the repo’s active Pages workflow) |
-| **Source Branch** | `main` (where code changes are made) |
-| **Pages Target** | `gh-pages` (branch/environment managed by Actions) |
-| **Build Command** | `npm run build` (runs `tsc -b && vite build && cp dist/index.html dist/404.html`) |
-| **Artifact Path** | `webapp/dist` |
-| **Deploy Target** | GitHub Pages via `actions/deploy-pages@v4` |
+Use this section to record what is actually verified. Do not mark items complete unless they were tested after the last pull/rebase.
 
-### Verification Steps
+### 9.1 React stability
 
-1. **Confirm branch is correct**
-   ```bash
-   git branch --show-current
-   # You should be working on: main
-   # If you are on gh-pages, switch back before making code edits:
-   #   git switch main
-   ```
+- [ ] 5.1 No render-phase ref writes in `usePointerParallax`
+- [ ] 5.2 RAF loop is the single state writer for pointer position
+- [ ] 5.3 Ref syncing occurs only in effects
 
-2. **Confirm local build succeeds**
-   ```bash
-   cd webapp && npm run build
-   # Should output: dist/index.html, dist/assets/*.js, dist/assets/*.css
-   ```
+### 9.2 Accessibility
 
-3. **Confirm motion/glass in build output**
-   ```bash
-   grep -l "DANCE_SPRING_HEAVY" webapp/dist/assets/*.js
-   # Should return at least one file
-   
-   grep -l "glass-panel" webapp/dist/assets/*.css
-   # Should return the main CSS chunk
-   ```
+- [ ] 6.1 ProgressRing has correct progressbar semantics
+- [ ] 6.2 Glossary tooltip has `role="tooltip"` and Escape dismiss
+- [ ] 6.3 StatCard value announces final number
+- [ ] 6.4 KeyTakeaway has `role="note"`
+- [ ] 6.5 Accordion keyboard focus ring is visible
 
-4. **Confirm Vite base path**
-   ```bash
-   grep "base:" webapp/vite.config.ts
-   # Should show: base: '/Dissertation-Model-Simulation/'
-   ```
+### 9.3 Visual system checks (Phase 0)
 
-5. **Trigger deploy and verify**
-   - Push to `main` branch
-   - Go to repo → Actions → Confirm `pages-build-deploy` workflow runs
-   - After deploy, visit: https://judd23.github.io/Dissertation-Model-Simulation/
-   - Hard refresh (Cmd+Shift+R / Ctrl+Shift+R) to bypass cache
-   - Run Motion + Glass Acceptance Tests above
-
-### Common Deployment Failures
-
-| Symptom | Likely Cause | Fix |
-|---------|--------------|-----|
-| 404 on GH Pages | Wrong base path in vite.config.ts | Verify `base: '/Dissertation-Model-Simulation/'` |
-| Old version showing | GH Pages cache | Hard refresh or wait 5 minutes |
-| Styles missing | CSS not bundled | Check `npm run build` output for CSS chunk |
-| Motion not working | JS error in console | Check browser DevTools console |
-| Blank page | React error during hydration | Check console for React errors |
-| Workflow not triggered | Path filter didn't match | Verify file changed is under `webapp/` |
+- [ ] Background orbs consistent across routes (matches “Wow it Works” intent)
+- [ ] Glass thickness + shine visible across routes
+- [ ] Heavy spring present on all interactive surfaces
 
 ---
 
-## 📊 Sprint Summary
-
-### Sprint 1: React Stability (3 items)
-| Item | File | Priority | Status |
-|------|------|----------|--------|
-| 1.1 | `usePointerParallax.ts` — setState batching | 🔴 Critical | ✅ Already correct |
-| 1.2 | `usePointerParallax.ts` — ref dependency | 🔴 Critical | ✅ Already correct |
-| 1.3 | `usePointerParallax.ts` — ref sync timing | 🟠 High | ✅ Already correct |
-
-### Sprint 2: Accessibility (6 items)
-| Item | File | Priority | Status |
-|------|------|----------|--------|
-| 2.1 | `ProgressRing.tsx` — ARIA progressbar | 🟠 High | ✅ Fixed |
-| 2.2 | `GlossaryTerm.tsx` — tooltip role | 🟠 High | ✅ Already had role="tooltip" |
-| 2.3 | `GlossaryTerm.tsx` — Escape key | 🟠 High | ✅ Already had onKeyDown handler |
-| 2.4 | `StatCard.tsx` — aria-live | 🟡 Medium | ✅ Fixed |
-| 2.5 | `KeyTakeaway.tsx` — role note | 🟡 Medium | ✅ Fixed |
-| 2.6 | `Accordion.module.css` — focus ring | 🟡 Medium | ✅ Already has :focus-visible |
-
-### Sprint 3: Polish & Verification (4 items)
-| Item | File | Priority | Status |
-|------|------|----------|--------|
-| 3.1 | `TransitionNavLink.tsx` — type handling | 🟢 Low | ✅ Fixed |
-| 3.2 | `Slider.module.css` — touch target | 🟢 Low | ⚠️ 24px (below 44px WCAG, but Phase 0 lock) |
-| 3.3 | `BackToTop.tsx` — verify scroll behavior | 🟢 Low | ✅ Verified (uses prefers-reduced-motion) |
-| 3.4 | `ThemeToggle.tsx` — verify aria-label | 🟢 Low | ✅ Verified (good aria-label) |
-
----
-
-## ✅ Verification Protocol
-
-### After Each Sprint
-
-1. **TypeScript check**
-   ```bash
-   cd webapp && npx tsc --noEmit
-   ```
-
-2. **ESLint check**
-   ```bash
-   cd webapp && npm run lint
-   ```
-
-3. **Build check**
-   ```bash
-   cd webapp && npm run build
-   ```
-
-4. **Local visual verification**
-   ```bash
-   cd webapp && npm run dev
-   # Visit all 8 routes, verify no console errors
-   ```
-
-5. **Motion + Glass acceptance tests**
-   - Run all 4 tests from the section above
-   - Document pass/fail
-
-### Before Production Deploy
-
-1. Confirm all Sprint items complete
-2. Run full verification protocol
-3. Push to `main`
-4. Monitor GitHub Actions workflow
-5. After deploy, run Motion + Glass acceptance tests on production URL
-6. Hard refresh to bypass cache
-
----
-
-## 📝 Changelog
+## 10) Changelog
 
 | Date | Change |
-|------|--------|
-| Jan 11, 2026 | Initial checklist created from UX assessment |
-| Jan 11, 2026 | **Sprint 1-3 COMPLETED**: All 13 items addressed. ProgressRing ARIA, StatCard aria-live, KeyTakeaway role=note, TransitionNavLink To object handling. usePointerParallax, GlossaryTerm, Accordion already correct. |
+|---|---|
+| Jan 11, 2026 | Consolidated into a single UX scaffold: repo gates → deploy truth → Phase 0 policy → global background/glass/motion system → acceptance tests → deploy checks → explicit backlog tracker |
