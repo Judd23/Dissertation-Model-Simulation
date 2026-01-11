@@ -7,7 +7,7 @@ import KeyTakeaway from '../components/ui/KeyTakeaway';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import { useScrollReveal, useStaggeredReveal, useParallax } from '../lib/hooks';
-import { Link } from 'react-router-dom';
+
 import styles from './PathwayPage.module.css';
 
 export default function PathwayPage() {

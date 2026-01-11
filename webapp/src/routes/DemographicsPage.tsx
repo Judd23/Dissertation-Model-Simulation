@@ -5,7 +5,7 @@ import Toggle from '../components/ui/Toggle';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import { useParallax } from '../lib/hooks';
-import { Link } from 'react-router-dom';
+
 import { fastComparison } from '../data/adapters/fastComparison';
 import { sampleDescriptives } from '../data/adapters/sampleDescriptives';
 import styles from './DemographicsPage.module.css';

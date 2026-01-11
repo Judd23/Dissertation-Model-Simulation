@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
-import { DANCE_SPRING_HEAVY, PAGE_FADE } from '../lib/transitionConfig';
+import { PAGE_FADE } from '../lib/transitionConfig';
 import styles from './LandingPage.module.css';
 
 // Generate tiny dust particles with gentle floating motion

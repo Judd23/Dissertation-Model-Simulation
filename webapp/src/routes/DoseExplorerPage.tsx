@@ -10,7 +10,7 @@ import GlossaryTerm from '../components/ui/GlossaryTerm';
 import DataTimestamp from '../components/ui/DataTimestamp';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import { useParallax } from '../lib/hooks';
-import { Link } from 'react-router-dom';
+
 import styles from './DoseExplorerPage.module.css';
 
 // Dose zone definitions

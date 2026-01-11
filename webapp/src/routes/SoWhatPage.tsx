@@ -2,7 +2,7 @@ import KeyTakeaway from '../components/ui/KeyTakeaway';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import { useModelData } from '../app/contexts';
 import { useParallax } from '../lib/hooks';
-import { Link } from 'react-router-dom';
+
 import styles from './SoWhatPage.module.css';
 
 export default function SoWhatPage() {

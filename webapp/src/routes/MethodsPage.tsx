@@ -6,7 +6,7 @@ import ProgressRing from '../components/ui/ProgressRing';
 import Accordion from '../components/ui/Accordion';
 import AnalysisPipeline from '../features/charts/AnalysisPipeline';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
-import { Link } from 'react-router-dom';
+
 import styles from './MethodsPage.module.css';
 
 const modelSpecs = [
