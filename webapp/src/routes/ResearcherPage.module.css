@@ -222,6 +222,7 @@
   margin-left: 0;
   margin-right: 0;
   transition: transform var(--transition-fast);
+  border-radius: 16px;
   position: relative;
 }
 
@@ -526,6 +527,7 @@
   /* Glass handled by glass.css */
   grid-column: 1 / span 5;
   padding: var(--spacing-2xl);
+  border-radius: 16px;
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -587,6 +589,7 @@
   /* Glass handled by glass.css */
   grid-column: 6 / span 7;
   padding: var(--spacing-2xl);
+  border-radius: 16px;
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -750,6 +753,7 @@
   /* Glass handled by glass.css */
   grid-column: 1 / span 7;
   padding: var(--spacing-2xl);
+  border-radius: 16px;
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -858,6 +862,7 @@
   /* Glass handled by glass.css */
   grid-column: 8 / span 5;
   padding: var(--spacing-2xl);
+  border-radius: 16px;
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),

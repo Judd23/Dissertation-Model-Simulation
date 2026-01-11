@@ -466,7 +466,7 @@
 .institution {
   margin-top: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-md);
-  background: var(--color-background);
+  background: color-mix(in srgb, var(--color-background) 80%, transparent);
   border-radius: 6px;
   transition: transform 0.3s var(--ease-out-back);
 }
@@ -662,26 +662,6 @@
 
 /* ============================================
    DARK MODE ADJUSTMENTS
+   Keep glass styling centralized in glass.css.
+   (No LandingPage-specific glass overrides to avoid tint/thin drift.)
    ============================================ */
-:global([data-theme="dark"]) .nameplate {
-  /* Clear glass for dark mode */
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.02) 50%,
-    rgba(255, 255, 255, 0.04) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-}
-
-.institution {
-  background: color-mix(in srgb, var(--color-background) 80%, transparent);
-}
-
-.kicker {  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-}
