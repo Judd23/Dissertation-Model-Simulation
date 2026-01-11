@@ -50,15 +50,15 @@ export default function Header() {
           {navItems.map((item) => (
             <motion.span
               key={item.to}
-              whileHover={{ y: -2 }}
-              whileTap={{ y: 0 }}
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ y: 0, scale: 0.98 }}
               transition={DANCE_SPRING_HEAVY}
               style={{ display: 'inline-block' }}
             >
               <TransitionNavLink
                 to={item.to}
                 className={({ isActive }) =>
-                  `${styles.navLink} ${isActive ? styles.active : ''}`
+                  `${styles.navLink} interactiveSurface ${isActive ? styles.active : ''}`
                 }
                 end={item.to === '/home'}
               >

@@ -1,5 +1,7 @@
 import { useState, useRef, useLayoutEffect, useId, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { motion } from 'framer-motion';
+import { DANCE_SPRING_HEAVY } from '../../lib/transitionConfig';
 import styles from './GlossaryTerm.module.css';
 
 interface GlossaryTermProps {
@@ -94,9 +96,12 @@ export default function GlossaryTerm({ term, definition, children }: GlossaryTer
 
   return (
     <span className={styles.container}>
-      <span
+      <motion.span
         ref={termRef}
-        className={styles.term}
+        className={`${styles.term} interactiveSurface`}
+        whileHover={{ y: -1, scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        transition={DANCE_SPRING_HEAVY}
         onMouseEnter={() => !isTouchDevice && setIsOpen(true)}
         onMouseLeave={() => !isTouchDevice && setIsOpen(false)}
         onTouchStart={handleTouchStart}
@@ -119,19 +124,23 @@ export default function GlossaryTerm({ term, definition, children }: GlossaryTer
       >
         {children}
         <span className={styles.indicator} aria-hidden="true">?</span>
-      </span>
+      </motion.span>
       {isOpen &&
         createPortal(
-          <div
+          <motion.div
             ref={tooltipRef}
-            className={`${styles.tooltip} ${styles[position]}`}
+            className={`${styles.tooltip} ${styles[position]} glass-panel`}
             role="tooltip"
             id={tooltipId}
             style={{ left: coords.left, top: coords.top }}
+            initial={{ opacity: 0, y: position === 'bottom' ? -8 : 8, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: position === 'bottom' ? -8 : 8, scale: 0.96 }}
+            transition={DANCE_SPRING_HEAVY}
           >
             <div className={styles.tooltipTerm}>{term}</div>
             <div className={styles.tooltipDefinition}>{definition}</div>
-          </div>,
+          </motion.div>,
           document.body
         )}
     </span>

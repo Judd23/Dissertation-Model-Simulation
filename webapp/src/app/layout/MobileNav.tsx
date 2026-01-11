@@ -10,15 +10,15 @@ export default function MobileNav() {
       {navItems.map((item) => (
         <motion.span
           key={item.to}
-          whileHover={{ y: -2 }}
-          whileTap={{ y: 0, scale: 0.98 }}
+          whileHover={{ y: -2, scale: 1.02 }}
+          whileTap={{ y: 0, scale: 0.96 }}
           transition={DANCE_SPRING_HEAVY}
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
           <TransitionNavLink
             to={item.to}
             className={({ isActive }) =>
-              `${styles.link} ${isActive ? styles.active : ''}`
+              `${styles.link} interactiveSurface ${isActive ? styles.active : ''}`
             }
             end={item.to === '/home'}
           >
