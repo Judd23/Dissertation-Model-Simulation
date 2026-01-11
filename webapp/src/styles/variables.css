@@ -20,7 +20,7 @@
   --color-negative: #fb6b64;
 
   /* UI colors - Dark Mode Only */
-  --color-background: transparent; /* Let parallax orbs show through */
+  --color-background: transparent; /* Let background orbs show through */
   --color-surface: rgba(12, 22, 37, 0.60);
   --color-surface-elevated: rgba(21, 32, 48, 0.60);
   --color-text: #f0f4f8;

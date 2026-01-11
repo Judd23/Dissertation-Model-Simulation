@@ -35,7 +35,7 @@
   flex-wrap: wrap;
   position: sticky;
   top: calc(var(--header-height) + var(--spacing-sm));
-  background: color-mix(in srgb, var(--color-background) 92%, transparent);
+  background: transparent;
   padding: var(--spacing-md) 0;
   z-index: 100;
   border-bottom: 1px solid transparent;
@@ -45,7 +45,7 @@
 .controls.stuck {
   border-bottom-color: var(--color-accent);
   box-shadow: var(--shadow-lg);
-  background: color-mix(in srgb, var(--color-background) 95%, transparent);
+  background: transparent;
 }
 
 .pathwayButtons {
@@ -149,7 +149,7 @@
   text-align: center;
   margin-top: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-md);
-  background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+  background: color-mix(in srgb, var(--color-background) 35%, transparent);
   border-radius: var(--radius-md);
 }
 
@@ -164,11 +164,11 @@
   
   /* Scroll shadows for horizontal scroll affordance */
   .diagram {
-    background: 
-      linear-gradient(to right, var(--color-surface) 30%, transparent),
-      linear-gradient(to left, var(--color-surface) 30%, transparent),
-      linear-gradient(to right, rgba(0,0,0,0.15), transparent 15px),
-      linear-gradient(to left, rgba(0,0,0,0.15), transparent 15px);
+    background:
+      linear-gradient(to right, color-mix(in srgb, var(--color-background) 18%, transparent), transparent),
+      linear-gradient(to left, color-mix(in srgb, var(--color-background) 18%, transparent), transparent),
+      linear-gradient(to right, rgba(0, 0, 0, 0.18), transparent 15px),
+      linear-gradient(to left, rgba(0, 0, 0, 0.18), transparent 15px);
     background-position: left center, right center, left center, right center;
     background-repeat: no-repeat;
     background-size: 20px 100%, 20px 100%, 15px 100%, 15px 100%;
@@ -384,21 +384,16 @@
 }
 
 .indirectCard {
-  background: var(--color-surface);
-  border: 2px solid var(--color-border);
+  /* Glass handled by glass.css .indirectCard auto-selector */
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
   position: relative;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 /* Edge reflection handled by glass.css .indirectCard auto-selector */
 
-.indirectCard:hover {
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-accent);
-}
+/* Removed .indirectCard:hover rule as per instructions */
 
 .indirectHeader {
   display: flex;
@@ -504,21 +499,16 @@
 }
 
 .summaryCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  /* Glass handled by glass.css .summaryCard auto-selector */
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
   position: relative;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 /* Edge reflection handled by glass.css */
 
-.summaryCard:hover {
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-accent);
-}
+/* Removed .summaryCard:hover rule as per instructions */
 
 .summaryCard h3 {
   font-size: var(--font-size-lg);
@@ -685,6 +675,5 @@
   .coefficientCard:not(.dimmed):hover,
   .summaryCard:hover {
     transform: none;
-    box-shadow: none;
   }
 }

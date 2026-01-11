@@ -1,4 +1,4 @@
-/* Layout - Main app wrapper with parallax background */
+/* Layout - Main app wrapper with static background */
 
 .layout {
   display: flex;
@@ -34,7 +34,7 @@
   outline-offset: 4px;
 }
 
-/* Legacy background classes (deprecated - use ParallaxBackground) */
+/* Legacy background classes (deprecated - use static ParallaxBackground) */
 .background {
   display: none;
 }

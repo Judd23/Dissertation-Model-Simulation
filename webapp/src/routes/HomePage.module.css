@@ -105,7 +105,8 @@
 }
 
 .findingSectionAlt {
-  background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+  /* Keep readability without masking the global orb background */
+  background: color-mix(in srgb, var(--color-surface) 28%, transparent);
 }
 
 .findingContent {
@@ -292,7 +293,8 @@
   text-align: left;
   padding: var(--spacing-4xl) 0;
   border-top: 1px solid var(--color-border-light);
-  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  /* Let orb background show through while keeping contrast */
+  background: color-mix(in srgb, var(--color-surface) 32%, transparent);
 }
 
 .nextStep h2 {
@@ -435,7 +437,7 @@
 @media (hover: none) {
   .exploreCard:hover {
     transform: none;
-    box-shadow: none;
+    /* Keep a little depth on touch devices (avoid "flat" look) */
+    box-shadow: var(--shadow-sm);
   }
 }
-

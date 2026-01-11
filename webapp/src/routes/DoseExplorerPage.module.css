@@ -307,51 +307,15 @@
 }
 
 .interpretationCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  /* Glass handled by glass.css .interpretationCard auto-selector */
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
   position: relative;
-}
-
-/* Edge reflection - 40% MORE TRANSPARENT */
-.interpretationCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.12) 20%,
-    rgba(255, 255, 255, 0.21) 50%,
-    rgba(255, 255, 255, 0.12) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 .interpretationCard:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-accent);
-}
-
-.interpretationCard h3 {
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--spacing-sm);
-}
-
-.interpretationCard p {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  line-height: 1.6;
-  margin: 0;
 }
 
 /* Next step CTA */
@@ -501,7 +465,5 @@
   .chartContainer:hover,
   .interpretationCard:hover {
     transform: none;
-    box-shadow: none;
   }
 }
-
