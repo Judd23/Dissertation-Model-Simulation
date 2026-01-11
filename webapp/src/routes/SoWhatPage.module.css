@@ -83,23 +83,9 @@
 }
 
 .stakeholderCard {
-  /* 50% MORE TRANSPARENT */
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--color-accent) 3%, rgba(255, 255, 255, 0.012)) 0%,
-    rgba(255, 255, 255, 0.0075) 50%,
-    color-mix(in srgb, var(--color-engagement) 2%, rgba(255, 255, 255, 0.009)) 100%
-  );
-  -webkit-backdrop-filter: saturate(180%) blur(6px);
-  backdrop-filter: saturate(180%) blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.036);
+  /* Glass handled by glass.css .stakeholderCard auto-selector */
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.018),
-    0 2px 8px rgba(0, 0, 0, 0.009),
-    inset 0 1px 0 rgba(255, 255, 255, 0.036),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.006);
   position: relative;
   transition: 
     transform var(--transition-fast),
@@ -108,35 +94,10 @@
   text-align: left;
 }
 
-.stakeholderCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  /* Edge reflection - 50% MORE TRANSPARENT */
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.06) 20%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.06) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
+/* Edge reflection handled by glass.css */
 
 .stakeholderCard:hover {
   transform: translateY(-4px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.075);
-  box-shadow: 
-    0 20px 56px rgba(0, 0, 0, 0.072),
-    0 6px 20px rgba(0, 0, 0, 0.036),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.018);
 }
 
 .cardIcon {
@@ -227,59 +188,20 @@
 }
 
 .actionCard {
-  /* 40% MORE TRANSPARENT */
+  /* Glass handled by glass.css .actionCard auto-selector */
   display: flex;
   gap: var(--spacing-lg);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.048) 0%,
-    rgba(255, 255, 255, 0.024) 50%,
-    rgba(255, 255, 255, 0.036) 100%
-  );
-  -webkit-backdrop-filter: saturate(180%) blur(6px);
-  backdrop-filter: saturate(180%) blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.072);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.048),
-    0 2px 8px rgba(0, 0, 0, 0.024),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
   position: relative;
   transition: all var(--transition-fast);
   text-align: left;
 }
 
-.actionCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  /* Edge reflection - 40% MORE TRANSPARENT */
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.12) 20%,
-    rgba(255, 255, 255, 0.21) 50%,
-    rgba(255, 255, 255, 0.12) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
+/* Edge reflection handled by glass.css */
 
 .actionCard:hover {
   transform: translateY(-4px) scale(1.01);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.06),
-    0 4px 16px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 }
 
 .actionNumber {

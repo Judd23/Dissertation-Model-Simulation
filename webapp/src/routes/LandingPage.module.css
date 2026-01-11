@@ -430,68 +430,19 @@
    NAMEPLATE - Clear glass effect
    ============================================ */
 .nameplate {
+  /* Glass handled by glass.css */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-xs);
   margin-bottom: var(--spacing-2xl);
   padding: var(--spacing-lg);
-  /* Clear glass: highly transparent */
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.04) 50%,
-    rgba(255, 255, 255, 0.06) 100%
-  );
-  /* Strong frosted glass blur */
-  -webkit-backdrop-filter: saturate(150%) blur(8px);
-  backdrop-filter: saturate(150%) blur(8px);
-  /* Crisp glass edge */
-  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
-  /* Soft glow for glass depth */
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
 }
 
-/* Top highlight edge - like light hitting glass */
-.nameplate::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 5%,
-    rgba(255, 255, 255, 0.25) 25%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.25) 75%,
-    transparent 95%
-  );
-}
-
-/* Bottom subtle reflection */
-.nameplate::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
-}
+/* Edge reflections handled by glass.css */
 
 .authorName {
   font-family: var(--font-heading);

@@ -215,60 +215,20 @@
 }
 
 .institutionPanel {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   margin-bottom: var(--spacing-lg);
   display: inline-block;
   padding: var(--spacing-md) var(--spacing-lg);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.012) 0%,
-    rgba(255, 255, 255, 0.006) 50%,
-    rgba(255, 255, 255, 0.009) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(6px);
-  backdrop-filter: saturate(140%) blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.036);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.024),
-    0 2px 8px rgba(0, 0, 0, 0.012),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   margin-left: 0;
   margin-right: 0;
-  transition: 
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+  transition: transform var(--transition-fast);
   position: relative;
 }
 
-/* Edge reflection - 50% MORE TRANSPARENT */
-.institutionPanel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.06) 20%,
-    rgba(255, 255, 255, 0.105) 50%,
-    rgba(255, 255, 255, 0.06) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
+/* Edge reflection handled by glass.css */
 
 .institutionPanel:hover {
   transform: translateY(-2px);
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.03),
-    0 4px 12px rgba(0, 0, 0, 0.015),
-    inset 0 1px 0 rgba(255, 255, 255, 0.045),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
 }
 
 .institutionLogo {
@@ -563,23 +523,9 @@
 }
 
 .blockA {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   grid-column: 1 / span 5;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.024);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.006) 0%,
-    rgba(255, 255, 255, 0.003) 50%,
-    rgba(255, 255, 255, 0.0045) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(6px);
-  backdrop-filter: saturate(140%) blur(6px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.024),
-    0 2px 8px rgba(0, 0, 0, 0.012),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -624,15 +570,7 @@
 
 .blockA:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-lg),
-    0 0 30px color-mix(in srgb, var(--color-accent) 15%, transparent);
   border-color: var(--color-accent);
-  background: linear-gradient(
-    135deg,
-    var(--color-surface) 0%,
-    color-mix(in srgb, var(--color-accent) 3%, var(--color-surface)) 100%
-  );
 }
 
 .blockA:hover::before {
@@ -646,23 +584,9 @@
 }
 
 .blockB {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   grid-column: 6 / span 7;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.024);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.006) 0%,
-    rgba(255, 255, 255, 0.003) 50%,
-    rgba(255, 255, 255, 0.0045) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(6px);
-  backdrop-filter: saturate(140%) blur(6px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.024),
-    0 2px 8px rgba(0, 0, 0, 0.012),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -715,15 +639,7 @@
 
 .blockB:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-lg),
-    0 0 30px color-mix(in srgb, var(--color-engagement) 15%, transparent);
   border-color: var(--color-engagement);
-  background: linear-gradient(
-    135deg,
-    var(--color-background) 0%,
-    color-mix(in srgb, var(--color-engagement) 2%, var(--color-background)) 100%
-  );
 }
 
 .blockB:hover::before {
@@ -831,23 +747,9 @@
 }
 
 .blockC {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   grid-column: 1 / span 7;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.01) 0%,
-    rgba(255, 255, 255, 0.005) 50%,
-    rgba(255, 255, 255, 0.0075) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(6px);
-  backdrop-filter: saturate(140%) blur(6px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.04),
-    0 2px 8px rgba(0, 0, 0, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.025);
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -892,15 +794,7 @@
 
 .blockC:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-lg),
-    0 0 30px color-mix(in srgb, var(--color-engagement) 15%, transparent);
   border-color: var(--color-engagement);
-  background: linear-gradient(
-    135deg,
-    var(--color-surface) 0%,
-    color-mix(in srgb, var(--color-engagement) 3%, var(--color-surface)) 100%
-  );
 }
 
 .blockC:hover::before {
@@ -961,23 +855,9 @@
 }
 
 .blockD {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   grid-column: 8 / span 5;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.01) 0%,
-    rgba(255, 255, 255, 0.005) 50%,
-    rgba(255, 255, 255, 0.0075) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(6px);
-  backdrop-filter: saturate(140%) blur(6px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.04),
-    0 2px 8px rgba(0, 0, 0, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.025);
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -1027,9 +907,6 @@
 
 .blockD:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-lg),
-    0 0 30px color-mix(in srgb, var(--color-accent) 15%, transparent);
   border-color: var(--color-accent);
 }
 
