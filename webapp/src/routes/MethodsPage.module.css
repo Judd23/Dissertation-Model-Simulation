@@ -639,27 +639,6 @@
   }
 }
 
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .specCard,
-  .specCard[data-morph-id],
-  .constructCard,
-  .codeBlock,
-  .infoBox,
-  .softwareCard {
-    transition: none;
-  }
-
-  .specCard:hover,
-  .specCard[data-morph-id]:hover,
-  .constructCard:hover,
-  .codeBlock:hover,
-  .infoBox:hover,
-  .softwareCard:hover {
-    transform: none;
-  }
-}
-
 /* ============================================
    LIGHT MODE - 100% MORE TRANSPARENT
    ============================================ */

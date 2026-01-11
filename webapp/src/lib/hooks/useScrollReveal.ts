@@ -51,18 +51,6 @@ export function useScrollReveal<T extends HTMLElement>(
       return;
     }
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    // If user prefers reduced motion, show immediately
-    if (prefersReducedMotion) {
-      element.classList.add(visibleClass);
-      if (id) revealedElements.add(id);
-      return;
-    }
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -129,18 +117,6 @@ export function useStaggeredReveal<T extends HTMLElement>(
       children.forEach((child) => {
         child.classList.add(visibleClass);
       });
-      return;
-    }
-
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) {
-      children.forEach((child) => {
-        child.classList.add(visibleClass);
-      });
-      if (id) revealedElements.add(id);
       return;
     }
 
@@ -246,15 +222,6 @@ export function useRevealCallback<T extends HTMLElement>(
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (prefersReducedMotion) {
-      callbackRef.current(true);
-      return;
-    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {

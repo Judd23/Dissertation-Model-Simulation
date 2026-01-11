@@ -35,9 +35,3 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .progress {
-    transition: none;
-  }
-}

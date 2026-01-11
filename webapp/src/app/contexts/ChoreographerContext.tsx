@@ -86,7 +86,6 @@ interface ChoreographerProviderProps {
 
 export function ChoreographerProvider({ children }: ChoreographerProviderProps) {
   const [phase, setPhase] = useState<ChoreographerPhase>('idle');
-  const [reducedMotion, setReducedMotion] = useState(false);
   const [visibleElements] = useState(() => new Map<string, RegisteredElement>());
   const [viewportCenter, setViewportCenter] = useState<ViewportCenter>({ x: 0, y: 0 });
 
@@ -102,16 +101,6 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
     updateViewportCenter();
     window.addEventListener('resize', updateViewportCenter);
     return () => window.removeEventListener('resize', updateViewportCenter);
-  }, []);
-
-  // Detect reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    queueMicrotask(() => setReducedMotion(mediaQuery.matches));
-
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
   }, []);
 
   // Calculate distance from viewport center
@@ -223,7 +212,7 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
       getDistanceFromCenter,
       startOrchestration,
       completeOrchestration,
-      reducedMotion,
+      reducedMotion: false, // Always full cinematic experience
     }),
     [
       phase,
@@ -236,7 +225,6 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
       getDistanceFromCenter,
       startOrchestration,
       completeOrchestration,
-      reducedMotion,
     ]
   );
 

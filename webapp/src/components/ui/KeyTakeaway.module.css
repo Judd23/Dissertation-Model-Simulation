@@ -100,17 +100,3 @@
     font-size: 1.75rem;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .takeaway {
-    transition: none;
-  }
-
-  .takeaway[data-morph-id] {
-    transition: none;
-  }
-
-  .takeaway:hover {
-    transform: none;
-  }
-}

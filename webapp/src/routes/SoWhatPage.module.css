@@ -67,11 +67,12 @@
    ============================================ */
 .stakeholders {
   padding: var(--spacing-4xl) 0;
+  /* Transparent gradient - orbs visible */
   background: linear-gradient(
     to bottom,
-    var(--color-background) 0%,
-    var(--color-surface) 50%,
-    var(--color-background) 100%
+    transparent 0%,
+    color-mix(in srgb, var(--color-surface) 60%, transparent) 50%,
+    transparent 100%
   );
 }
 
@@ -479,21 +480,6 @@
 
   .actionNumber {
     margin: 0 auto;
-  }
-}
-
-/* ============================================
-   REDUCED MOTION
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .stakeholderCard,
-  .actionCard {
-    transition: none;
-  }
-
-  .stakeholderCard:hover,
-  .actionCard:hover {
-    transform: none;
   }
 }
 

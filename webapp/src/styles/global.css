@@ -22,7 +22,8 @@ body {
   font-size: var(--font-size-base);
   line-height: 1.6;
   color: var(--color-text);
-  background-color: var(--color-background);
+  /* No opaque background - orbs visible through ParallaxBackground */
+  background-color: transparent;
 }
 
 /* Typography */

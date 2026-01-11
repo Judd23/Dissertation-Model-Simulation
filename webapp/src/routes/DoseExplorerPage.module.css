@@ -620,19 +620,6 @@
   }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .chartContainer,
-  .interpretationCard {
-    transition: none;
-  }
-
-  .chartContainer:hover,
-  .interpretationCard:hover {
-    transform: none;
-  }
-}
-
 /* ============================================
    LIGHT MODE - 100% MORE TRANSPARENT
    ============================================ */

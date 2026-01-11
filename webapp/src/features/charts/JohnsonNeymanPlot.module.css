@@ -207,14 +207,3 @@
     box-shadow: none;
   }
 }
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .container {
-    transition: none;
-  }
-
-  .container:hover {
-    transform: none;
-  }
-}

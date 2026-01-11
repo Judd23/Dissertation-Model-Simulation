@@ -113,14 +113,72 @@
   background-size: 256px 256px;
 }
 
-/* ===== REDUCED MOTION ===== */
-@media (prefers-reduced-motion: reduce) {
-  .layerFar,
-  .layerMid,
-  .layerNear {
-    /* Disable parallax, show static */
-    transform: none !important;
-    inset: 0;
-  }
+/* ===== LIGHT THEME ADJUSTMENTS ===== */
+/* Light theme preserves orb structure - only tone shifts */
+:global([data-theme="light"]) .layerFar {
+  background:
+    radial-gradient(
+      ellipse 1400px 800px at 15% -15%,
+      rgba(100, 140, 255, 0.18),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 1200px 700px at 85% 5%,
+      rgba(255, 120, 180, 0.12),
+      transparent 50%
+    ),
+    linear-gradient(
+      175deg,
+      hsl(220, 25%, 94%) 0%,
+      hsl(225, 30%, 90%) 40%,
+      hsl(230, 35%, 88%) 100%
+    );
+}
+
+:global([data-theme="light"]) .layerMid {
+  background:
+    radial-gradient(
+      circle 600px at 25% 40%,
+      rgba(100, 150, 255, 0.10),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle 450px at 75% 55%,
+      rgba(200, 100, 255, 0.08),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 350px at 50% 85%,
+      rgba(150, 200, 255, 0.07),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 300px at 90% 15%,
+      rgba(255, 180, 120, 0.06),
+      transparent 45%
+    );
+}
+
+:global([data-theme="light"]) .layerNear {
+  background:
+    radial-gradient(
+      ellipse 800px 300px at 40% 5%,
+      rgba(100, 150, 255, 0.06),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle 400px at 70% 45%,
+      rgba(150, 100, 255, 0.04),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 500px at 20% 80%,
+      rgba(100, 130, 255, 0.05),
+      transparent 55%
+    );
+}
+
+:global([data-theme="light"]) .grain {
+  opacity: 0.015;
 }
 

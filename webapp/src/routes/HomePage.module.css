@@ -69,7 +69,10 @@
    ============================================ */
 .stats {
   padding: var(--spacing-3xl) 0;
-  background: var(--color-surface);
+  /* Transparent background - orbs visible */
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  backdrop-filter: saturate(140%) blur(12px);
   border-top: 1px solid var(--color-border-light);
   border-bottom: 1px solid var(--color-border-light);
 }
@@ -106,7 +109,9 @@
 }
 
 .findingSectionAlt {
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  backdrop-filter: saturate(140%) blur(12px);
 }
 
 .findingContent {
@@ -164,7 +169,10 @@
 .preview {
   text-align: left;
   padding: var(--spacing-4xl) 0;
-  background: var(--color-surface);
+  /* Transparent background - orbs visible */
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  backdrop-filter: saturate(140%) blur(12px);
   border-top: 1px solid var(--color-border-light);
 }
 
@@ -567,19 +575,6 @@
 
   .nextStep p {
     font-size: var(--font-size-base);
-  }
-}
-
-/* ============================================
-   REDUCED MOTION
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .exploreCard {
-    transition: none;
-  }
-
-  .exploreCard:hover {
-    transform: none;
   }
 }
 

@@ -9,22 +9,10 @@ interface ParallaxOptions {
 export default function useParallax({ speed = 0.15, max = 40, disabled = false }: ParallaxOptions = {}) {
   const [offset, setOffset] = useState(0);
   const rafRef = useRef<number | null>(null);
-  const reducedRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => {
-      reducedRef.current = media.matches;
-    };
-    update();
-    media.addEventListener?.('change', update);
-    return () => media.removeEventListener?.('change', update);
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (disabled || reducedRef.current) {
+    if (disabled) {
       // Defer state update to avoid synchronous setState in effect
       queueMicrotask(() => setOffset(0));
       return;
