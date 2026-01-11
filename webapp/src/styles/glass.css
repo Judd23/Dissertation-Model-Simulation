@@ -37,6 +37,7 @@
     border-color var(--transition-fast),
     background var(--transition-fast);
   position: relative;
+  isolation: isolate;
 }
 
 .glass-panel::before {
@@ -45,7 +46,7 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 
   /* specular reflections: edge gloss + soft bloom */
   background:
@@ -85,6 +86,11 @@
     inset 1px 0 0 rgba(255, 255, 255, 0.08),
     inset 0 -1px 0 rgba(0, 0, 0, 0.10),
     inset -1px 0 0 rgba(0, 0, 0, 0.08);
+}
+
+.glass-panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .glass-panel:hover {
@@ -180,6 +186,7 @@
     border-color var(--transition-fast);
   cursor: pointer;
   position: relative;
+  isolation: isolate;
 }
 
 .glass-button::before {
@@ -188,6 +195,7 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
+  z-index: 0;
 
   background:
     linear-gradient(
@@ -204,6 +212,11 @@
 
   mix-blend-mode: screen;
   opacity: 0.85;
+}
+
+.glass-button > * {
+  position: relative;
+  z-index: 1;
 }
 
 .glass-button:hover {
@@ -271,7 +284,6 @@
 .coefficientCard,
 .indirectCard,
 .factsStrip .fact,
-.sampleCard,
 .demoStat,
 .demoComparison {
   background: linear-gradient(
@@ -281,6 +293,7 @@
     color-mix(in srgb, var(--color-surface) 45%, transparent) 100%
   );
   border: 1px solid color-mix(in srgb, var(--color-border) 40%, transparent);
+  border-radius: var(--radius-lg);
   -webkit-backdrop-filter: saturate(160%) blur(18px);
   backdrop-filter: saturate(160%) blur(18px);
   box-shadow:
@@ -291,6 +304,7 @@
     inset 0 -1px 0 rgba(0, 0, 0, 0.08),
     inset 0 -10px 22px rgba(0, 0, 0, 0.08);
   position: relative;
+  isolation: isolate;
 }
 
 .glass-auto::before,
@@ -335,6 +349,24 @@
 
   mix-blend-mode: screen;
   opacity: 0.78;
+  z-index: 0;
+}
+
+.glass-auto > *,
+.diagramContainer > *,
+.exploreCard > *,
+.stakeholderCard > *,
+.actionCard > *,
+.demoCard > *,
+.sampleCard > *,
+.chartContainer > *,
+.jnCharts > div > *,
+.coefficientCard > *,
+.indirectCard > *,
+.factsStrip .fact > *,
+.demoStat > *,
+.demoComparison > * {
+  position: relative;
   z-index: 1;
 }
 
@@ -361,13 +393,18 @@
   -webkit-backdrop-filter: saturate(140%) blur(12px);
   backdrop-filter: saturate(140%) blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.01);
-  border-radius: calc(var(--glass-radius, 16px) - 4px);
+  border-radius: calc(var(--radius-lg) - 4px);
   box-shadow: 
     inset 0 1px 0 rgba(255, 255, 255, 0.015),
     inset 0 -1px 0 rgba(0, 0, 0, 0.005),
     0 0 8px rgba(0, 0, 0, 0.005);
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
+}
+
+.glass-panel-double > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* Interactive glass hover */
