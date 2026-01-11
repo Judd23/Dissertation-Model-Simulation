@@ -69,24 +69,24 @@ export default function LandingPage() {
       {/* Main Content */}
       <main className={styles.content}>
         <div className={styles.titleGhost} aria-hidden="true">
-          Dual Credit Outcomes &amp; First Year Achievement
+          Psychosocial Effects of Accelerated Dual Credit
         </div>
         {/* Kicker */}
         <p className={`${styles.kicker} ${styles.fromTop}`}>Ed.D. Dissertation Research</p>
 
         {/* Title */}
         <h1 className={`${styles.title} ${styles.fromTop}`}>
-            <span className={styles.titleLine}>Dual Credit Outcomes</span>
+            <span className={styles.titleLine}>Psychosocial Effects of</span>
             <span className={styles.titleLine}>
               <span className={styles.titleAccent}>
-                &amp; First Year Achievement
+                Accelerated Dual Credit
               </span>
             </span>
           </h1>
 
         {/* Subtitle */}
         <p className={`${styles.subtitle} ${styles.fromTop}`}>
-          A Conditional Process SEM Analysis
+          On First-Year Developmental Adjustment
         </p>
 
         {/* Divider - CENTER (scale) */}
