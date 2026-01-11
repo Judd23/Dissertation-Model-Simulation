@@ -66,13 +66,6 @@
    ============================================ */
 .stakeholders {
   padding: var(--spacing-4xl) 0;
-  /* Let the global background/orbs show through. Keep only the lightest section separation. */
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    color-mix(in srgb, var(--color-background) 10%, transparent) 50%,
-    transparent 100%
-  );
 }
 
 .stakeholderGrid {
@@ -235,13 +228,6 @@
    ============================================ */
 .limitations {
   padding: var(--spacing-4xl) 0;
-  /* No solid page fill: keep the orbs visible */
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    color-mix(in srgb, var(--color-background) 8%, transparent) 50%,
-    transparent 100%
-  );
   border-top: 1px solid var(--color-border-light);
   border-bottom: 1px solid var(--color-border-light);
 }

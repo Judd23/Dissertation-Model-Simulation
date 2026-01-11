@@ -164,15 +164,6 @@
   
   /* Scroll shadows for horizontal scroll affordance */
   .diagram {
-    background:
-      linear-gradient(to right, color-mix(in srgb, var(--color-background) 18%, transparent), transparent),
-      linear-gradient(to left, color-mix(in srgb, var(--color-background) 18%, transparent), transparent),
-      linear-gradient(to right, rgba(0, 0, 0, 0.18), transparent 15px),
-      linear-gradient(to left, rgba(0, 0, 0, 0.18), transparent 15px);
-    background-position: left center, right center, left center, right center;
-    background-repeat: no-repeat;
-    background-size: 20px 100%, 20px 100%, 15px 100%, 15px 100%;
-    background-attachment: local, local, scroll, scroll;
   }
 }
 
