@@ -1,13 +1,16 @@
 /* Interactive surfaces: consistent visual hover behavior for buttons, panels, banners */
-/* Transform is owned by Framer Motion for true spring feel. */
+/* Transform is owned by Framer Motion with DANCE_SPRING_HEAVY for true spring feel. */
+/* CSS handles visual properties only (border, shadow, sheen) */
 
 :root {
-  --surface-transition: 180ms;
+  /* Fast, snappy transitions to complement DANCE_SPRING_HEAVY */
+  --surface-transition: 150ms;
   --surface-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 
   --surface-border: rgba(255, 255, 255, 0.14);
-  --surface-border-hover: rgba(255, 255, 255, 0.24);
-  --surface-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  --surface-border-hover: rgba(255, 255, 255, 0.28);
+  --surface-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+  --surface-shadow-hover: 0 18px 48px rgba(0, 0, 0, 0.28);
 }
 
 /* Base class for anything hoverable/clickable */
@@ -17,7 +20,7 @@
   will-change: transform, box-shadow, border-color, background-color, filter;
 
   border: 1px solid var(--surface-border);
-  box-shadow: none;
+  box-shadow: var(--surface-shadow);
 
   transition:
     box-shadow var(--surface-transition) var(--surface-ease),
@@ -26,12 +29,12 @@
     filter var(--surface-transition) var(--surface-ease);
 }
 
-/* Hover + keyboard focus (visual only, no transform here) */
+/* Hover + keyboard focus (visual only, no transform here - Motion owns it) */
 .interactiveSurface:hover,
 .interactiveSurface:focus-visible {
   border-color: var(--surface-border-hover);
-  box-shadow: var(--surface-shadow);
-  filter: saturate(1.05);
+  box-shadow: var(--surface-shadow-hover);
+  filter: saturate(1.08) brightness(1.02);
   outline: none;
 }
 
