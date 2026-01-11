@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { TransitionNavLink } from '../../features/transitions';
+import { DANCE_SPRING_HEAVY } from '../../lib/transitionConfig';
 import { navItems } from './navItems';
 import styles from './Header.module.css';
 
@@ -51,6 +52,7 @@ export default function Header() {
               key={item.to}
               whileHover={{ y: -2 }}
               whileTap={{ y: 0 }}
+              transition={DANCE_SPRING_HEAVY}
               style={{ display: 'inline-block' }}
             >
               <TransitionNavLink

@@ -46,7 +46,8 @@ export function TransitionProvider({ children }: TransitionProviderProps) {
   const [phase, setPhase] = useState<TransitionPhase>('idle');
   const [sourceRoute, setSourceRoute] = useState<string | null>(null);
   const [targetRoute, setTargetRoute] = useState<string | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  // ALWAYS false - all users get full cinematic experience (no reduced motion)
+  const reducedMotion = false;
   const [particleCount, setParticleCount] = useState(200);
   const [sharedElements] = useState(() => new Map<string, SharedElementRect>());
   const [currentRoute, setCurrentRoute] = useState(() => {
@@ -55,21 +56,6 @@ export function TransitionProvider({ children }: TransitionProviderProps) {
     if (!hash) return '/';
     return hash.startsWith('/') ? hash : `/${hash}`;
   });
-
-  // Detect reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    // Defer initial state update to avoid synchronous setState in effect
-    queueMicrotask(() => setReducedMotion(mediaQuery.matches));
-
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handler);
-      return () => mediaQuery.removeEventListener('change', handler);
-    }
-    mediaQuery.addListener(handler);
-    return () => mediaQuery.removeListener(handler);
-  }, []);
 
   useEffect(() => {
     const updateRoute = () => {

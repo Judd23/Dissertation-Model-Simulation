@@ -296,15 +296,3 @@
     box-shadow: none;
   }
 }
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .arrow,
-  .arrowMobile {
-    animation: none;
-  }
-
-  .stepBox:hover {
-    transform: none;
-  }
-}

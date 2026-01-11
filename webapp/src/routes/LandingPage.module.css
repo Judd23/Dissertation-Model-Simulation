@@ -751,35 +751,3 @@
 :global([data-theme="dark"]) .kicker {
   background: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
-
-/* ============================================
-   REDUCED MOTION
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  .landing::before,
-  .landing::after,
-  .particle,
-  .pathwayLine,
-  .pathwayNode,
-  .divider,
-  .scrollChevron {
-    animation: none !important;
-  }
-
-  .loaded .fromTop,
-  .loaded .fromBottom {
-    animation: fadeIn 0.3s ease forwards !important;
-  }
-
-  .loaded .divider {
-    animation: fadeIn 0.3s ease forwards !important;
-    transform: scaleX(1);
-  }
-
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-}

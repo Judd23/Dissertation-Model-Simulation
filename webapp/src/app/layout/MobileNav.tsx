@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { TransitionNavLink } from '../../features/transitions';
+import { DANCE_SPRING_HEAVY } from '../../lib/transitionConfig';
 import { navItems } from './navItems';
 import styles from './MobileNav.module.css';
 
@@ -11,6 +12,7 @@ export default function MobileNav() {
           key={item.to}
           whileHover={{ y: -2 }}
           whileTap={{ y: 0, scale: 0.98 }}
+          transition={DANCE_SPRING_HEAVY}
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
           <TransitionNavLink

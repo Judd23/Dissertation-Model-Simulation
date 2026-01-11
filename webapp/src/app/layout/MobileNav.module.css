@@ -76,10 +76,3 @@
     color: var(--color-accent);
   }
 }
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .link {
-    transition: none;
-  }
-}

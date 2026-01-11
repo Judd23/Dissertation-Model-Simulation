@@ -159,10 +159,3 @@
     font-size: var(--font-size-sm);
   }
 }
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .tooltip {
-    animation: none;
-  }
-}

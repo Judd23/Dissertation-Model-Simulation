@@ -219,14 +219,3 @@
     box-shadow: var(--shadow-md);
   }
 }
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .slider::-webkit-slider-thumb {
-    transition: none;
-  }
-
-  .value {
-    transition: none;
-  }
-}

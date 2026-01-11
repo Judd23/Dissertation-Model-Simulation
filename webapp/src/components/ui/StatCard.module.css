@@ -156,36 +156,6 @@
   }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .card,
-  .card::before {
-    transition: none;
-  }
-
-  .card[data-morph-id],
-  .card[data-morph-id]::before {
-    transition: none;
-  }
-
-  .value {
-    transition: none;
-  }
-
-  .card:hover {
-    transform: none;
-  }
-
-  .card[data-morph-id]:hover,
-  .card[data-morph-id]:active {
-    transform: none;
-  }
-
-  .card:hover::before {
-    transform: scaleX(0);
-  }
-}
-
 /* ============================================
    LIGHT MODE - 100% MORE TRANSPARENT
    ============================================ */

@@ -72,12 +72,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .button {
-    transition: none;
-  }
-}
-
 /* ============================================
    LIGHT MODE - 100% MORE TRANSPARENT
    ============================================ */

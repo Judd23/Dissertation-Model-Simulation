@@ -89,6 +89,9 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
   const [visibleElements] = useState(() => new Map<string, RegisteredElement>());
   const [viewportCenter, setViewportCenter] = useState<ViewportCenter>({ x: 0, y: 0 });
 
+  // ALWAYS false - all users get full cinematic experience (no reduced motion)
+  const reducedMotion = false;
+
   // Track viewport center
   useEffect(() => {
     const updateViewportCenter = () => {
@@ -212,7 +215,7 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
       getDistanceFromCenter,
       startOrchestration,
       completeOrchestration,
-      reducedMotion: false, // Always full cinematic experience
+      reducedMotion, // Always false - full cinematic experience
     }),
     [
       phase,

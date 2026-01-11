@@ -983,17 +983,3 @@
   z-index: 1;
   border-radius: inherit;
 }
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  .coefficientCard,
-  .summaryCard,
-  .pathwayButton {
-    transition: none;
-  }
-
-  .coefficientCard:not(.dimmed):hover,
-  .summaryCard:hover {
-    transform: none;
-  }
-}

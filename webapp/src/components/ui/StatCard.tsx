@@ -114,13 +114,7 @@ export default function StatCard({
       return;
     }
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      queueMicrotask(() => setDisplayValue(String(value)));
-      hasAnimated.current = true;
-      return;
-    }
+    // All users get full cinematic experience - no reduced motion check
 
     const observer = new IntersectionObserver(
       (entries) => {

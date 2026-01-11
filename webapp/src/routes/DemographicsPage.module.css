@@ -765,25 +765,6 @@
   }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .demoCard,
-  .demoCard[data-morph-id],
-  .sampleCard,
-  .chartContainer,
-  .interpretationCard,
-  .groupButton,
-  .demoBarFill {
-    transition: none;
-  }
-
-  .demoCard:hover,
-  .chartContainer:hover,
-  .interpretationCard:hover {
-    transform: none;
-  }
-}
-
 /* ============================================
    LIGHT MODE - 100% MORE TRANSPARENT
    ============================================ */
