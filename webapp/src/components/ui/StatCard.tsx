@@ -175,7 +175,7 @@ export default function StatCard({
           className={`${styles.card} ${styles[size]} interactiveSurface`}
         >
           <div className={styles.label}>{label}</div>
-          <div className={`${styles.value} ${styles[color]}`}>{displayValue}</div>
+          <div className={`${styles.value} ${styles[color]}`} aria-live="polite" aria-atomic="true">{displayValue}</div>
           {subtext && <div className={styles.subtext}>{subtext}</div>}
         </InteractiveSurface>
       </motion.div>
@@ -188,7 +188,7 @@ export default function StatCard({
       className={`${styles.card} ${styles[size]} interactiveSurface`}
     >
       <div className={styles.label}>{label}</div>
-      <div className={`${styles.value} ${styles[color]}`}>{displayValue}</div>
+      <div className={`${styles.value} ${styles[color]}`} aria-live="polite" aria-atomic="true">{displayValue}</div>
       {subtext && <div className={styles.subtext}>{subtext}</div>}
     </InteractiveSurface>
   );

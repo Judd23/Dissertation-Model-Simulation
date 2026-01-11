@@ -23,7 +23,14 @@ export default function ProgressRing({
   const dashOffset = circumference * (1 - normalized);
 
   return (
-    <div className={styles.ring}>
+    <div
+      className={styles.ring}
+      role="progressbar"
+      aria-valuenow={normalized}
+      aria-valuemin={0}
+      aria-valuemax={1}
+      aria-label={label}
+    >
       <svg width={size} height={size} className={styles.svg} aria-hidden="true">
         <circle
           className={styles.track}

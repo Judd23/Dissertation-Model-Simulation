@@ -371,29 +371,29 @@ These tests verify that all previously implemented motion and glass work is acti
 ## 📊 Sprint Summary
 
 ### Sprint 1: React Stability (3 items)
-| Item | File | Priority |
-|------|------|----------|
-| 1.1 | `usePointerParallax.ts` — setState batching | 🔴 Critical |
-| 1.2 | `usePointerParallax.ts` — ref dependency | 🔴 Critical |
-| 1.3 | `usePointerParallax.ts` — ref sync timing | 🟠 High |
+| Item | File | Priority | Status |
+|------|------|----------|--------|
+| 1.1 | `usePointerParallax.ts` — setState batching | 🔴 Critical | ✅ Already correct |
+| 1.2 | `usePointerParallax.ts` — ref dependency | 🔴 Critical | ✅ Already correct |
+| 1.3 | `usePointerParallax.ts` — ref sync timing | 🟠 High | ✅ Already correct |
 
 ### Sprint 2: Accessibility (6 items)
-| Item | File | Priority |
-|------|------|----------|
-| 2.1 | `ProgressRing.tsx` — ARIA progressbar | 🟠 High |
-| 2.2 | `GlossaryTerm.tsx` — tooltip role | 🟠 High |
-| 2.3 | `GlossaryTerm.tsx` — Escape key | 🟠 High |
-| 2.4 | `StatCard.tsx` — aria-live | 🟡 Medium |
-| 2.5 | `KeyTakeaway.tsx` — role note | 🟡 Medium |
-| 2.6 | `Accordion.module.css` — focus ring | 🟡 Medium |
+| Item | File | Priority | Status |
+|------|------|----------|--------|
+| 2.1 | `ProgressRing.tsx` — ARIA progressbar | 🟠 High | ✅ Fixed |
+| 2.2 | `GlossaryTerm.tsx` — tooltip role | 🟠 High | ✅ Already had role="tooltip" |
+| 2.3 | `GlossaryTerm.tsx` — Escape key | 🟠 High | ✅ Already had onKeyDown handler |
+| 2.4 | `StatCard.tsx` — aria-live | 🟡 Medium | ✅ Fixed |
+| 2.5 | `KeyTakeaway.tsx` — role note | 🟡 Medium | ✅ Fixed |
+| 2.6 | `Accordion.module.css` — focus ring | 🟡 Medium | ✅ Already has :focus-visible |
 
 ### Sprint 3: Polish & Verification (4 items)
-| Item | File | Priority |
-|------|------|----------|
-| 3.1 | `TransitionNavLink.tsx` — type handling | 🟢 Low |
-| 3.2 | `Slider.module.css` — touch target | 🟢 Low |
-| 3.3 | `BackToTop.tsx` — verify scroll behavior | 🟢 Low |
-| 3.4 | `ThemeToggle.tsx` — verify aria-label | 🟢 Low |
+| Item | File | Priority | Status |
+|------|------|----------|--------|
+| 3.1 | `TransitionNavLink.tsx` — type handling | 🟢 Low | ✅ Fixed |
+| 3.2 | `Slider.module.css` — touch target | 🟢 Low | ⚠️ 24px (below 44px WCAG, but Phase 0 lock) |
+| 3.3 | `BackToTop.tsx` — verify scroll behavior | 🟢 Low | ✅ Verified (uses prefers-reduced-motion) |
+| 3.4 | `ThemeToggle.tsx` — verify aria-label | 🟢 Low | ✅ Verified (good aria-label) |
 
 ---
 
@@ -442,3 +442,4 @@ These tests verify that all previously implemented motion and glass work is acti
 | Date | Change |
 |------|--------|
 | Jan 11, 2026 | Initial checklist created from UX assessment |
+| Jan 11, 2026 | **Sprint 1-3 COMPLETED**: All 13 items addressed. ProgressRing ARIA, StatCard aria-live, KeyTakeaway role=note, TransitionNavLink To object handling. usePointerParallax, GlossaryTerm, Accordion already correct. |

@@ -26,12 +26,12 @@ export default function TransitionNavLink({
     if (event.defaultPrevented) return;
     if (event.button !== 0 || isModifiedEvent(event)) return;
 
-    if (typeof to !== 'string') {
-      return;
-    }
+    // Convert To object to string path if needed
+    const path = typeof to === 'string' ? to : to.pathname ?? '';
+    if (!path) return;
 
     event.preventDefault();
-    void navigate(to, { replace, transition });
+    void navigate(path, { replace, transition });
   };
 
   return (

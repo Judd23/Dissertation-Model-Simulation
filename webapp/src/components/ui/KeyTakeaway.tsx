@@ -40,7 +40,7 @@ export default function KeyTakeaway({ children, layoutId, icon }: KeyTakeawayPro
   if (layoutId) {
     return (
       <motion.div layoutId={layoutId} layout transition={DANCE_SPRING_HEAVY}>
-        <InteractiveSurface as="aside" className={`${styles.takeaway} interactiveSurface`}>
+        <InteractiveSurface as="aside" role="note" className={`${styles.takeaway} interactiveSurface`}>
           {icon ? <span className={styles.emojiIcon} aria-hidden="true">{icon}</span> : <InsightIcon />}
           <div className={styles.content}>{children}</div>
         </InteractiveSurface>
@@ -49,7 +49,7 @@ export default function KeyTakeaway({ children, layoutId, icon }: KeyTakeawayPro
   }
 
   return (
-    <InteractiveSurface as="aside" className={`${styles.takeaway} interactiveSurface`}>
+    <InteractiveSurface as="aside" role="note" className={`${styles.takeaway} interactiveSurface`}>
       {icon ? <span className={styles.emojiIcon} aria-hidden="true">{icon}</span> : <InsightIcon />}
       <div className={styles.content}>{children}</div>
     </InteractiveSurface>
