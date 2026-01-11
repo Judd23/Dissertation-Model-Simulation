@@ -116,7 +116,7 @@
 
 .table th {
   text-align: left;
-  background: var(--color-border-light);
+  background: color-mix(in srgb, var(--color-border-light) 55%, transparent);
   padding: var(--spacing-md);
   font-weight: 600;
 }
@@ -132,7 +132,7 @@
 }
 
 .table tbody tr:hover {
-  background-color: color-mix(in srgb, var(--color-accent) 5%, var(--color-surface));
+  background-color: color-mix(in srgb, var(--color-accent) 6%, transparent);
 }
 
 .table tbody tr:hover td:first-child {
@@ -290,11 +290,10 @@
 }
 
 .constructCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  /* Glass handled by glass.css */
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  position: relative;
   transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast),
@@ -302,9 +301,7 @@
 }
 
 .constructCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-accent);
+  transform: translateY(-4px) scale(1.01);
 }
 
 .constructCard h4 {
@@ -330,11 +327,11 @@
 
 /* Info Box */
 .infoBox {
-  background: rgba(0, 102, 204, 0.05);
-  border: 1px solid rgba(0, 102, 204, 0.2);
+  /* Glass handled by glass.css */
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   margin-top: var(--spacing-lg);
+  position: relative;
   transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast),
@@ -342,9 +339,7 @@
 }
 
 .infoBox:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-accent);
+  transform: translateY(-4px) scale(1.01);
 }
 
 .infoBox h4 {
@@ -368,10 +363,10 @@
 }
 
 .softwareCard {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  /* Glass handled by glass.css */
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
+  position: relative;
   transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast),
@@ -379,9 +374,7 @@
 }
 
 .softwareCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-accent);
+  transform: translateY(-4px) scale(1.01);
 }
 
 .softwareCard h4 {
@@ -396,7 +389,7 @@
 }
 
 .softwareCard code {
-  background: var(--color-border-light);
+  background: color-mix(in srgb, var(--color-border-light) 55%, transparent);
   padding: 0.1em 0.3em;
   border-radius: var(--radius-sm);
   font-size: 0.9em;

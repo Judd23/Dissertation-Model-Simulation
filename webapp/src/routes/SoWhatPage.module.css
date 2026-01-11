@@ -54,8 +54,7 @@
   content: '';
   position: absolute;
   bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 60px;
   height: 3px;
   background: linear-gradient(90deg, var(--color-accent), var(--color-fast));
@@ -67,11 +66,11 @@
    ============================================ */
 .stakeholders {
   padding: var(--spacing-4xl) 0;
-  /* Transparent gradient - orbs visible */
+  /* Let the global background/orbs show through. Keep only the lightest section separation. */
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    color-mix(in srgb, var(--color-surface) 60%, transparent) 50%,
+    color-mix(in srgb, var(--color-background) 10%, transparent) 50%,
     transparent 100%
   );
 }
@@ -236,7 +235,13 @@
    ============================================ */
 .limitations {
   padding: var(--spacing-4xl) 0;
-  background: var(--color-surface);
+  /* No solid page fill: keep the orbs visible */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--color-background) 8%, transparent) 50%,
+    transparent 100%
+  );
   border-top: 1px solid var(--color-border-light);
   border-bottom: 1px solid var(--color-border-light);
 }
@@ -416,7 +421,6 @@
   .stakeholderCard:hover,
   .actionCard:hover {
     transform: none;
-    box-shadow: none;
   }
 }
 
