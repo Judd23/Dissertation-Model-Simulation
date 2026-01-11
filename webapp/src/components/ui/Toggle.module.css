@@ -56,19 +56,3 @@
   font-size: var(--font-size-sm);
   color: var(--color-text);
 }
-
-/* Light mode */
-:global([data-theme="light"]) .slider {
-  background: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.15);
-}
-
-:global([data-theme="light"]) .slider::before {
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-:global([data-theme="light"]) .input:checked + .slider {
-  background: rgba(37, 99, 235, 0.85);
-  border-color: rgba(37, 99, 235, 0.5);
-}

@@ -71,29 +71,3 @@
     bottom: calc(var(--spacing-md) + 64px + env(safe-area-inset-bottom));
   }
 }
-
-/* ============================================
-   LIGHT MODE - 100% MORE TRANSPARENT
-   ============================================ */
-
-:global([data-theme="light"]) .button {
-  background: color-mix(in srgb, var(--color-surface) 22.5%, transparent);
-  border-color: rgba(0, 0, 0, 0.025);
-}
-
-:global([data-theme="light"]) .button::before {
-  /* Edge reflection - 100% lighter */
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.03) 20%,
-    rgba(255, 255, 255, 0.0525) 50%,
-    rgba(255, 255, 255, 0.03) 80%,
-    transparent 100%
-  );
-}
-
-:global([data-theme="light"]) .button:hover {
-  background: color-mix(in srgb, var(--color-accent-light) 15%, var(--color-surface));
-}
-
