@@ -3,10 +3,19 @@
 .container {
   position: fixed;
   inset: 0;
-  z-index: -10;
+  /* Keep the orb system behind content, but not behind the document background */
+  z-index: 0;
   overflow: hidden;
   pointer-events: none;
+
+  /* Prevent parent backgrounds from visually “swallowing” the gradients */
+  background: transparent;
+  isolation: isolate;
 }
+
+/* If any page-level wrapper sets an opaque background, the orbs will disappear.
+   Keep the ParallaxBackground visible by keeping page surfaces transparent.
+   (Actual surfaces should use the glass system instead.) */
 
 /* ===== FAR LAYER - Deep ambient gradients (slowest) ===== */
 .layerFar {
@@ -171,13 +180,3 @@
   opacity: 0.015;
 }
 
-/* ===== REDUCED MOTION ===== */
-@media (prefers-reduced-motion: reduce) {
-  .layerFar,
-  .layerMid,
-  .layerNear {
-    /* Disable parallax, show static */
-    transform: none !important;
-    inset: 0;
-  }
-}
