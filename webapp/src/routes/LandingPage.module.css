@@ -381,13 +381,32 @@
   box-shadow: 0 0 15px color-mix(in srgb, var(--navy-glow) 25%, transparent);
 }
 
+/* Keep divider entrance springy, then shimmer */
 .loaded .divider {
-  animation: elegantExpand 1s var(--ease-settle) 0.7s forwards, shimmer 3s linear 1.7s infinite;
+  animation:
+    springExpand 0.95s var(--ease-out-back) 0.55s forwards,
+    shimmer 3s linear 1.5s infinite;
 }
 
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+/* Legacy name (kept for safety): matches springExpand feel */
+@keyframes elegantExpand {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.6);
+  }
+  80% {
+    opacity: 1;
+    transform: scaleX(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
 }
 
 /* ============================================
@@ -489,7 +508,7 @@
   position: relative;
   overflow: hidden;
   transition:
-    transform 0.4s var(--ease-elegant),
+    transform 0.4s var(--ease-out-back),
     box-shadow 0.4s ease;
   box-shadow:
     0 4px 20px color-mix(in srgb, var(--navy-deep) 40%, transparent),
@@ -518,13 +537,14 @@
 }
 
 .cta:hover {
+  transform: translateY(-2px);
   box-shadow:
     0 8px 30px color-mix(in srgb, var(--navy-deep) 50%, transparent),
     0 0 0 3px color-mix(in srgb, var(--navy-accent) 20%, transparent);
 }
 
 .cta:active {
-  /* Motion owns transform */
+  transform: translateY(1px) scale(0.99);
 }
 
 .ctaIcon {
@@ -553,11 +573,11 @@
   padding: var(--spacing-sm) var(--spacing-md);
   transition:
     opacity 0.3s ease,
-    transform 0.3s var(--ease-out-back);
+    transform 0.4s var(--ease-out-back);
 }
 
 .scrollIndicator:hover {
-  /* Motion owns transform */
+  transform: translateX(-50%) translateY(-2px);
 }
 
 .scrollIndicator:hover .scrollText {
