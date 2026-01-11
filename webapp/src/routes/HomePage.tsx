@@ -7,13 +7,10 @@ import DataTimestamp from '../components/ui/DataTimestamp';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import { Link } from 'react-router-dom';
 import { useModelData } from '../app/contexts';
-import { useParallax } from '../lib/hooks';
 import styles from './HomePage.module.css';
 
 export default function HomePage() {
   const { sampleSize, fitMeasures, paths, fastPercent } = useModelData();
-
-  const parallaxOffset = useParallax({ speed: 0.1, max: 32 });
 
   // Derive key findings dynamically from pipeline data
   const keyFindings = {
@@ -28,10 +25,7 @@ export default function HomePage() {
   return (
     <div className={styles.page}>
       {/* Hero Section - Full viewport */}
-      <section
-        className={styles.hero}
-        style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
-      >
+      <section className={styles.hero}>
         <div className="container">
           <p className={styles.eyebrow}>
             Research Findings

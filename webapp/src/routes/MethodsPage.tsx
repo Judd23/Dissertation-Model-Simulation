@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useModelData } from '../app/contexts';
-import { useScrollReveal, useStaggeredReveal, useParallax } from '../lib/hooks';
+import { useScrollReveal, useStaggeredReveal } from '../lib/hooks';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import ProgressRing from '../components/ui/ProgressRing';
 import Accordion from '../components/ui/Accordion';
@@ -104,7 +104,6 @@ export default function MethodsPage() {
   const bootstrapRef = useScrollReveal<HTMLElement>({ id: 'methods-bootstrap' });
   const softwareRef = useStaggeredReveal<HTMLElement>({ id: 'methods-software' });
   const referencesRef = useScrollReveal<HTMLElement>({ id: 'methods-references' });
-  const parallaxOffset = useParallax({ speed: 0.1, max: 32 });
 
   // Build fit measures table dynamically from pipeline data
   const fitMeasures = useMemo(() => {
@@ -151,10 +150,7 @@ export default function MethodsPage() {
   }, [fits]);
 
   return (
-    <div
-      className={styles.page}
-      style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
-    >
+    <div className={styles.page}>
       <div className="container">
         <header ref={headerRef} className={styles.header}>
           <p className={styles.eyebrow}>Technical Methods</p>

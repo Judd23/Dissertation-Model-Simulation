@@ -1,5 +1,5 @@
 import { useTheme } from '../app/contexts';
-import { useScrollReveal, useStaggeredReveal, useParallax } from '../lib/hooks';
+import { useScrollReveal, useStaggeredReveal } from '../lib/hooks';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import styles from './ResearcherPage.module.css';
 
@@ -16,13 +16,9 @@ export default function ResearcherPage() {
   const blockBRef = useScrollReveal<HTMLElement>({ id: 'researcher-blockB' });
   const blockCRef = useScrollReveal<HTMLElement>({ id: 'researcher-blockC' });
   const blockDRef = useScrollReveal<HTMLElement>({ id: 'researcher-blockD' });
-  const parallaxOffset = useParallax({ speed: 0.08, max: 40 });
 
   return (
-    <div
-      className={styles.page}
-      style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
-    >
+    <div className={styles.page}>
       <header ref={heroRef} className={styles.hero}>
         <div className={styles.heroGrid}>
           <figure className={styles.heroFigure}>

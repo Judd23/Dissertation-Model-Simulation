@@ -12,5 +12,4 @@ export { default as ScrollToTop } from './ScrollToTop';
 export { default as Slider } from './Slider';
 export { default as StatCard } from './StatCard';
 export { default as ThemeToggle } from './ThemeToggle';
-export { TiltSurface } from './TiltSurface';
 export { default as Toggle } from './Toggle';

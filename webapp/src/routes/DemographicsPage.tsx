@@ -4,7 +4,6 @@ import GroupComparison from '../features/charts/GroupComparison';
 import Toggle from '../components/ui/Toggle';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
-import { useParallax } from '../lib/hooks';
 
 import { fastComparison } from '../data/adapters/fastComparison';
 import { sampleDescriptives } from '../data/adapters/sampleDescriptives';
@@ -22,15 +21,11 @@ export default function DemographicsPage() {
   const { groupingVariable, setGroupingVariable } = useResearch();
   const [showComparison, setShowComparison] = useState(false);
   const demographics = sampleDescriptives.demographics;
-  const parallaxOffset = useParallax({ speed: 0.1, max: 28 });
 
   return (
     <div className={styles.page}>
       <div className="container">
-        <section
-          className={`${styles.header} page-header-glow`}
-          style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
-        >
+        <section className={`${styles.header} page-header-glow`}>
           <p className={styles.eyebrow}>
             Equity Framework
           </p>

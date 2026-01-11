@@ -27,7 +27,7 @@
 
 /* Controls */
 .controls {
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
@@ -152,6 +152,9 @@
 
 .demoCard {
   /* Glass handled by glass.css .demoCard auto-selector */
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
@@ -243,9 +246,7 @@
 
 /* Sample Snapshot */
 .sampleInfo {
-  background: linear-gradient(135deg,
-    color-mix(in srgb, var(--color-fast) 10%, transparent) 0%,
-    color-mix(in srgb, var(--color-accent) 10%, transparent) 100%);
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
@@ -273,7 +274,7 @@
 }
 
 .sampleCard {
-  background: var(--color-surface);
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
@@ -285,7 +286,7 @@
 /* Edge reflection handled by glass.css .sampleCard auto-selector */
 
 .sampleCard:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
   border-color: var(--color-accent);
 }
 
@@ -361,6 +362,9 @@
 
 .chartContainer {
   /* Glass handled by glass.css .chartContainer auto-selector */
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
@@ -404,6 +408,9 @@
 
 .interpretationCard {
   /* Glass handled by glass.css */
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   position: relative;
@@ -607,7 +614,6 @@
   .interpretationCard:hover,
   .groupButton:hover {
     transform: none;
-    box-shadow: none;
+    box-shadow: var(--shadow-sm);
   }
 }
-

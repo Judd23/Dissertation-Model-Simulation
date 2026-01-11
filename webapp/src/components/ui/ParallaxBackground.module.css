@@ -1,4 +1,4 @@
-/* ParallaxBackground - Layered depth system for cinematic feel */
+/* ParallaxBackground - Static cinematic backdrop */
 
 .container {
   position: fixed;
@@ -8,42 +8,13 @@
   pointer-events: none;
 }
 
-/* ===== FAR LAYER - Deep ambient gradients (slowest) ===== */
-.layerFar {
+/* ===== STATIC BACKGROUND - All cosmic gradients merged ===== */
+.background {
   position: absolute;
-  inset: -20%; /* Extend beyond viewport for parallax movement */
+  inset: 0;
   z-index: 1;
 
-  /* Deep cosmic background */
-  background:
-    /* Primary radial gradient - top left blue glow */
-    radial-gradient(
-      ellipse 1400px 800px at 15% -15%,
-      rgba(90, 130, 255, 0.45),
-      transparent 50%
-    ),
-    /* Secondary radial - top right pink/magenta */
-    radial-gradient(
-      ellipse 1200px 700px at 85% 5%,
-      rgba(255, 100, 180, 0.30),
-      transparent 50%
-    ),
-    /* Deep base gradient */
-    linear-gradient(
-      175deg,
-      hsl(230, 50%, 8%) 0%,
-      hsl(225, 60%, 5%) 40%,
-      hsl(220, 70%, 3%) 100%
-    );
-}
-
-/* ===== MID LAYER - Glow orbs (medium speed) ===== */
-.layerMid {
-  position: absolute;
-  inset: -30%;
-  z-index: 2;
-
-  /* Floating glow orbs */
+  /* Combined cosmic background with orbs */
   background:
     /* Large diffuse orb - center-left */
     radial-gradient(
@@ -68,42 +39,39 @@
       circle 300px at 90% 15%,
       rgba(255, 180, 120, 0.18),
       transparent 45%
-    );
-}
-
-/* ===== NEAR LAYER - Subtle highlights (fastest) ===== */
-.layerNear {
-  position: absolute;
-  inset: -40%;
-  z-index: 3;
-
-  /* Subtle floating highlights */
-  background:
+    ),
     /* Top highlight shimmer */
     radial-gradient(
       ellipse 800px 300px at 40% 5%,
       rgba(255, 255, 255, 0.10),
       transparent 60%
     ),
-    /* Center-right soft glow */
+    /* Primary radial gradient - top left blue glow */
     radial-gradient(
-      circle 400px at 70% 45%,
-      rgba(255, 255, 255, 0.07),
+      ellipse 1400px 800px at 15% -15%,
+      rgba(90, 130, 255, 0.45),
       transparent 50%
     ),
-    /* Bottom left accent */
+    /* Secondary radial - top right pink/magenta */
     radial-gradient(
-      circle 500px at 20% 80%,
-      rgba(150, 180, 255, 0.10),
-      transparent 55%
+      ellipse 1200px 700px at 85% 5%,
+      rgba(255, 100, 180, 0.30),
+      transparent 50%
+    ),
+    /* Deep base gradient */
+    linear-gradient(
+      175deg,
+      hsl(230, 50%, 8%) 0%,
+      hsl(225, 60%, 5%) 40%,
+      hsl(220, 70%, 3%) 100%
     );
 }
 
-/* ===== GRAIN/NOISE OVERLAY (static) ===== */
+/* ===== GRAIN/NOISE OVERLAY ===== */
 .grain {
   position: absolute;
   inset: 0;
-  z-index: 4;
+  z-index: 2;
   opacity: 0.025;
   pointer-events: none;
 

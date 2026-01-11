@@ -9,7 +9,6 @@ import KeyTakeaway from '../components/ui/KeyTakeaway';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import DataTimestamp from '../components/ui/DataTimestamp';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
-import { useParallax } from '../lib/hooks';
 
 import styles from './DoseExplorerPage.module.css';
 
@@ -30,7 +29,6 @@ function getDoseZone(dose: number): typeof DOSE_ZONES[number]['id'] {
 export default function DoseExplorerPage() {
   const { selectedDose, setSelectedDose, showCIs, toggleCIs } = useResearch();
   const { doseCoefficients } = useModelData();
-  const parallaxOffset = useParallax({ speed: 0.1, max: 28 });
 
   // Current dose zone
   const currentZone = useMemo(() => getDoseZone(selectedDose), [selectedDose]);
@@ -44,10 +42,7 @@ export default function DoseExplorerPage() {
   return (
     <div className={styles.page}>
       <div className="container">
-        <section
-          className={`${styles.header} page-header-glow`}
-          style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
-        >
+        <section className={`${styles.header} page-header-glow`}>
           <p className={styles.eyebrow}>Dose-Response Analysis</p>
           <h1>Does the Number of Credits Matter?</h1>
           <p className="lead">

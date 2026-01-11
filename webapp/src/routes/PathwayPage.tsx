@@ -6,7 +6,7 @@ import Toggle from '../components/ui/Toggle';
 import KeyTakeaway from '../components/ui/KeyTakeaway';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
-import { useScrollReveal, useStaggeredReveal, useParallax } from '../lib/hooks';
+import { useScrollReveal, useStaggeredReveal } from '../lib/hooks';
 
 import styles from './PathwayPage.module.css';
 
@@ -22,7 +22,6 @@ export default function PathwayPage() {
   const coefficientsRef = useStaggeredReveal<HTMLElement>({ id: 'pathway-coefficients' });
   const indirectRef = useStaggeredReveal<HTMLElement>({ id: 'pathway-indirect' });
   const summaryRef = useStaggeredReveal<HTMLElement>({ id: 'pathway-summary' });
-  const parallaxOffset = useParallax({ speed: 0.1, max: 28 });
 
   // Detect sticky state (using -10px rootMargin for reliable triggering across zoom levels)
   useEffect(() => {
@@ -137,7 +136,6 @@ export default function PathwayPage() {
         <header
           ref={headerRef}
           className={`${styles.header} page-header-glow`}
-          style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
         >
           <p className={styles.eyebrow}>Interactive Model</p>
           <h1>How Dual Enrollment Credits Affect First-Year Success</h1>

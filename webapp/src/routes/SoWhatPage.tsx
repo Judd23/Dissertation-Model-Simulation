@@ -1,13 +1,11 @@
 import KeyTakeaway from '../components/ui/KeyTakeaway';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import { useModelData } from '../app/contexts';
-import { useParallax } from '../lib/hooks';
 
 import styles from './SoWhatPage.module.css';
 
 export default function SoWhatPage() {
   const { paths, fastPercent } = useModelData();
-  const parallaxOffset = useParallax({ speed: 0.1, max: 28 });
 
   // Get effect directions from data
   const distressEffect = paths.a1?.estimate ?? 0;
@@ -16,10 +14,7 @@ export default function SoWhatPage() {
   return (
     <div className={styles.page}>
       {/* Hero */}
-      <section
-        className={styles.hero}
-        style={{ ['--parallax-offset' as string]: `${parallaxOffset}px` }}
-      >
+      <section className={styles.hero}>
         <div className="container">
           <p className={styles.eyebrow}>Research Implications</p>
           <h1 className={styles.title}>So, What Does This Mean?</h1>
