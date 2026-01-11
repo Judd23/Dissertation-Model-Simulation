@@ -415,6 +415,7 @@ tbody tr:nth-child(even) {
    ============================================ */
 
 .button {
+  /* Glass handled by glass.css .glass-button */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -432,14 +433,6 @@ tbody tr:nth-child(even) {
     color var(--transition-fast),
     box-shadow var(--transition-fast);
   min-height: 44px; /* Touch-friendly */
-  -webkit-backdrop-filter: saturate(160%) blur(16px);
-  backdrop-filter: saturate(160%) blur(16px);
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--color-surface) 40%, transparent) 0%,
-    color-mix(in srgb, var(--color-surface) 25%, transparent) 50%,
-    color-mix(in srgb, var(--color-surface) 40%, transparent) 100%
-  );
 }
 
 .button:hover {

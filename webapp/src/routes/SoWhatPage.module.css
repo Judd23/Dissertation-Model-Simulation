@@ -368,8 +368,7 @@
 
   .stakeholderCard,
   .actionCard {
-    -webkit-backdrop-filter: saturate(140%) blur(6px);
-    backdrop-filter: saturate(140%) blur(6px);
+    /* Glass handled by glass.css */
   }
 
   .stakeholderCard:hover,

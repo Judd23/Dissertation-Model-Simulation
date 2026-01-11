@@ -1,13 +1,8 @@
 .takeaway {
+  /* Glass handled by glass.css */
   display: flex;
   gap: var(--spacing-lg);
   align-items: flex-start;
-  background: linear-gradient(135deg,
-    color-mix(in srgb, var(--color-accent) 6%, rgba(255, 255, 255, 0.04)) 0%,
-    color-mix(in srgb, var(--color-engagement) 5%, rgba(255, 255, 255, 0.03)) 100%);
-  -webkit-backdrop-filter: saturate(180%) blur(6px);
-  backdrop-filter: saturate(180%) blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
   border-left: 4px solid var(--color-accent);
   border-radius: var(--radius-md);
   padding: var(--spacing-xl);
@@ -15,9 +10,6 @@
   max-width: 800px;
   font-size: var(--font-size-lg);
   line-height: 1.6;
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
   transition: 
     transform var(--transition-fast), 
@@ -25,32 +17,10 @@
     border-color var(--transition-fast);
 }
 
-.takeaway::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 4px;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(255, 255, 255, 0.15) 50%,
-    rgba(255, 255, 255, 0.1) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
+/* Edge reflection handled by glass.css */
 
 .takeaway:hover {
   transform: translateY(-3px) scale(1.01);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .takeaway[data-morph-id] {
