@@ -36,13 +36,13 @@ export function ParallaxBackground() {
 
   // Combine scroll + pointer into ONE x/y per layer (prevents y vs translateY conflicts)
   const farX = useTransform(pointerX, (v) => v * 8);
-  const farYCombined = useTransform([farY, pointerY], ([sy, py]) => sy + py * 6);
+  const farYCombined = useTransform([farY, pointerY], ([sy, py]) => (sy as number) + (py as number) * 6);
 
   const midX = useTransform(pointerX, (v) => v * 15);
-  const midYCombined = useTransform([midY, pointerY], ([sy, py]) => sy + py * 12);
+  const midYCombined = useTransform([midY, pointerY], ([sy, py]) => (sy as number) + (py as number) * 12);
 
   const nearX = useTransform(pointerX, (v) => v * 25);
-  const nearYCombined = useTransform([nearY, pointerY], ([sy, py]) => sy + py * 20);
+  const nearYCombined = useTransform([nearY, pointerY], ([sy, py]) => (sy as number) + (py as number) * 20);
 
   // Heavy spring feel (use the shared preset as the spring config)
   const farYSpring = useSpring(farYCombined, DANCE_SPRING_HEAVY);
