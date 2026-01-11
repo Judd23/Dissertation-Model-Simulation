@@ -1,34 +1,10 @@
 import { useTheme } from '../app/contexts';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import { PAGE_FADE } from '../lib/transitionConfig';
 import styles from './LandingPage.module.css';
-
-// Generate tiny dust particles with gentle floating motion
-function generateDustParticles(count: number) {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    // Random starting position across the viewport
-    left: `${Math.random() * 100}%`,
-    top: `${20 + Math.random() * 70}%`, // Keep in middle 70% of screen
-    // Tiny size: 1.5-4px
-    size: 1.5 + Math.random() * 2.5,
-    // Staggered start times
-    delay: Math.random() * 12,
-    // Varied durations
-    duration: 12 + Math.random() * 15,
-    // More visible opacity: 0.15-0.4
-    opacity: 0.15 + Math.random() * 0.25,
-    // Muted colors
-    color: [
-      'rgba(100, 100, 120, 0.6)',
-      'rgba(80, 90, 110, 0.5)',
-      'rgba(30, 58, 95, 0.4)',
-    ][Math.floor(Math.random() * 3)],
-  }));
-}
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -38,9 +14,6 @@ export default function LandingPage() {
   const logoSrc = resolvedTheme === 'light'
     ? `${import.meta.env.BASE_URL}researcher/SDSUPrmary Bar.png`
     : `${import.meta.env.BASE_URL}researcher/sdsu_primary-logo_rgb_horizontal_reverse.png`;
-
-  // Generate dust particles once - reduced for performance
-  const dustParticles = useMemo(() => generateDustParticles(30), []);
 
   useEffect(() => {
     // Trigger animations after mount
@@ -62,26 +35,6 @@ export default function LandingPage() {
       exit={{ opacity: 0 }}
       transition={PAGE_FADE}
     >
-      {/* Tiny Dust Particles */}
-      <div className={styles.particles} aria-hidden="true">
-        {dustParticles.map((p) => (
-          <div
-            key={p.id}
-            className={styles.particle}
-            style={{
-              left: p.left,
-              top: p.top,
-              width: p.size,
-              height: p.size,
-              backgroundColor: p.color,
-              animationDelay: `${p.delay}s`,
-              ['--float-duration' as string]: `${p.duration}s`,
-              ['--dust-opacity' as string]: p.opacity,
-            }}
-          />
-        ))}
-      </div>
-
       {/* SEM Pathway Silhouette */}
       <svg
         className={styles.pathwaySilhouette}

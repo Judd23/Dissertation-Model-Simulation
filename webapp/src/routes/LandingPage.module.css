@@ -26,66 +26,9 @@
   padding: 2rem;
   position: relative;
   overflow: hidden;
-  background: var(--color-background);
 }
 
-/* ============================================
-   AMBIENT BACKGROUND - Subtle depth
-   ============================================ */
-
-/* Very subtle ambient glow - barely perceptible */
-.landing::before {
-  content: '';
-  position: absolute;
-  top: -30%;
-  left: -20%;
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(
-    ellipse,
-    color-mix(in srgb, var(--navy-light) 2%, transparent) 0%,
-    transparent 70%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  animation: ambientDrift 40s ease-in-out infinite;
-}
-
-.landing::after {
-  content: '';
-  position: absolute;
-  bottom: -25%;
-  right: -15%;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(
-    ellipse,
-    color-mix(in srgb, var(--navy-mid) 1.5%, transparent) 0%,
-    transparent 65%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  animation: ambientDrift 50s ease-in-out infinite reverse;
-}
-
-/* Dust particles container */
-.particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Tiny dust motes */
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(0.3px);
-  animation: dustFloat var(--float-duration, 20s) ease-in-out infinite;
-}
+/* Background now handled by Layout */
 
 /* SEM Pathway silhouette */
 .pathwaySilhouette {
@@ -132,41 +75,6 @@
 .loaded .pathwayNode:nth-child(2) { animation-delay: 1.4s; }
 .loaded .pathwayNode:nth-child(3) { animation-delay: 1.6s; }
 .loaded .pathwayNode:nth-child(4) { animation-delay: 1.8s; }
-
-/* Slow ambient background drift */
-@keyframes ambientDrift {
-  0%, 100% { transform: translate(0, 0); }
-  33% { transform: translate(30px, -20px); }
-  66% { transform: translate(-20px, 30px); }
-}
-
-/* Dust mote floating continuously in all directions */
-@keyframes dustFloat {
-  0% {
-    opacity: var(--dust-opacity, 0.3);
-    transform: translate(0, 0);
-  }
-  20% {
-    opacity: calc(var(--dust-opacity, 0.3) * 1.3);
-    transform: translate(15px, -20px);
-  }
-  40% {
-    opacity: calc(var(--dust-opacity, 0.3) * 0.7);
-    transform: translate(-10px, -35px);
-  }
-  60% {
-    opacity: calc(var(--dust-opacity, 0.3) * 1.1);
-    transform: translate(20px, -15px);
-  }
-  80% {
-    opacity: calc(var(--dust-opacity, 0.3) * 0.9);
-    transform: translate(-5px, -25px);
-  }
-  100% {
-    opacity: var(--dust-opacity, 0.3);
-    transform: translate(0, 0);
-  }
-}
 
 @keyframes fadeInPath {
   to { opacity: 1; }
