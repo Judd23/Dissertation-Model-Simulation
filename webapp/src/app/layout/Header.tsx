@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import ThemeToggle from '../../components/ui/ThemeToggle';
 import { TransitionNavLink } from '../../features/transitions';
 import { navItems } from './navItems';
 import styles from './Header.module.css';
@@ -65,7 +64,6 @@ export default function Header() {
               </TransitionNavLink>
             </motion.span>
           ))}
-          <ThemeToggle />
         </nav>
       </div>
     </header>

@@ -3,19 +3,10 @@
 .container {
   position: fixed;
   inset: 0;
-  /* Keep the orb system behind content, but not behind the document background */
-  z-index: 0;
+  z-index: -10;
   overflow: hidden;
   pointer-events: none;
-
-  /* Prevent parent backgrounds from visually “swallowing” the gradients */
-  background: transparent;
-  isolation: isolate;
 }
-
-/* If any page-level wrapper sets an opaque background, the orbs will disappear.
-   Keep the ParallaxBackground visible by keeping page surfaces transparent.
-   (Actual surfaces should use the glass system instead.) */
 
 /* ===== FAR LAYER - Deep ambient gradients (slowest) ===== */
 .layerFar {
@@ -122,61 +113,14 @@
   background-size: 256px 256px;
 }
 
-/* ===== THEME ADJUSTMENTS ===== */
-[data-theme="light"] .layerFar {
-  background:
-    radial-gradient(
-      ellipse 1400px 800px at 15% -15%,
-      rgba(100, 140, 255, 0.12),
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse 1200px 700px at 85% 5%,
-      rgba(255, 120, 200, 0.08),
-      transparent 50%
-    ),
-    linear-gradient(
-      175deg,
-      hsl(220, 30%, 95%) 0%,
-      hsl(225, 35%, 92%) 40%,
-      hsl(230, 40%, 88%) 100%
-    );
-}
-
-[data-theme="light"] .layerMid {
-  background:
-    radial-gradient(
-      circle 600px at 25% 40%,
-      rgba(100, 150, 255, 0.08),
-      transparent 60%
-    ),
-    radial-gradient(
-      circle 450px at 75% 55%,
-      rgba(200, 100, 255, 0.06),
-      transparent 55%
-    ),
-    radial-gradient(
-      circle 350px at 50% 85%,
-      rgba(150, 200, 255, 0.05),
-      transparent 50%
-    );
-}
-
-[data-theme="light"] .layerNear {
-  background:
-    radial-gradient(
-      ellipse 800px 300px at 40% 5%,
-      rgba(0, 0, 0, 0.015),
-      transparent 60%
-    ),
-    radial-gradient(
-      circle 400px at 70% 45%,
-      rgba(0, 0, 0, 0.01),
-      transparent 50%
-    );
-}
-
-[data-theme="light"] .grain {
-  opacity: 0.015;
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .layerFar,
+  .layerMid,
+  .layerNear {
+    /* Disable parallax, show static */
+    transform: none !important;
+    inset: 0;
+  }
 }
 

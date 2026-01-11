@@ -14,28 +14,46 @@
   --color-satisfaction: #a16207;  /* Brown - Satisfaction */
 
   /* Significance indicators */
-  --color-significant: #16a34a;
-  --color-nonsignificant: #6b7280;
-  --color-positive: #16a34a;
-  --color-negative: #dc2626;
+  --color-significant: #4ade80;
+  --color-nonsignificant: #64748b;
+  --color-positive: #4ade80;
+  --color-negative: #fb6b64;
 
-  /* UI colors - Light Mode (default) - 30% bolder background, 50% MORE transparent surfaces */
-  --color-background: #f8f9fb;
-  --color-surface: rgba(232, 242, 255, 0.30);
-  --color-surface-elevated: rgba(223, 234, 255, 0.30);
-  --color-text: #1a1f26;
-  --color-text-muted: #4a5260;
-  --color-text-light: #6a7280;
-  --color-border: #a9c6ea;
-  --color-border-light: #c5d8f5;
-  --color-accent: #0055bb;
-  --color-accent-hover: #003d8a;
-  --color-accent-light: rgba(0, 85, 187, 0.35);
+  /* UI colors - Dark Mode Only */
+  --color-background: #041228;
+  --color-surface: rgba(12, 22, 37, 0.60);
+  --color-surface-elevated: rgba(21, 32, 48, 0.60);
+  --color-text: #f0f4f8;
+  --color-text-muted: #a4b3c8;
+  --color-text-light: #7488a0;
+  --color-border: #1a3057;
+  --color-border-light: #122549;
+  --color-accent: #70b5fa;
+  --color-accent-hover: #a3d5fd;
+  --color-accent-light: rgba(112, 181, 250, 0.4);
+
+  /* Adjust construct colors for dark mode visibility */
+  --color-distress: #ff7b74;
+  --color-engagement: #70b5fa;
+  --color-fast: #ffa85a;
+  --color-nonfast: #a4b3c8;
+  --color-credits: #f5bb3a;
+
+  --color-belonging: #4ade80;
+  --color-gains: #93c5fd;
+  --color-support: #b794f6;
+  --color-satisfaction: #e97d3a;
 
   /* Chart-specific colors */
-  --color-chart-grid: #b4cbe6;
-  --color-chart-axis: #98b4d4;
-  --color-chart-background: #e7f0ff;
+  --color-chart-grid: #2d3a4a;
+  --color-chart-axis: #475569;
+  --color-chart-background: #121b2a;
+
+  /* Shadows - dark mode values */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
 
   /* Typography */
   --font-heading: 'Source Serif Pro', Georgia, 'Times New Roman', serif;
@@ -68,12 +86,6 @@
   --max-width: 1200px;
   --sidebar-width: 280px;
   --header-height: 64px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
 
   /* Transitions - elegant slower timing (50% slower for polish) */
   --transition-fast: 300ms ease-out;
@@ -111,93 +123,5 @@
     --font-size-2xl: 1.625rem;   /* 26px */
     --font-size-3xl: 1.875rem;   /* 30px */
     --sidebar-width: 100%;
-  }
-}
-
-/* ============================================
-   DARK MODE
-   ============================================ */
-[data-theme="dark"] {
-  /* UI colors - Dark Mode - 30% bolder background, 40% transparent surfaces */
-  --color-background: #041228;
-  --color-surface: rgba(12, 22, 37, 0.60);
-  --color-surface-elevated: rgba(21, 32, 48, 0.60);
-  --color-text: #f0f4f8;
-  --color-text-muted: #a4b3c8;
-  --color-text-light: #7488a0;
-  --color-border: #1a3057;
-  --color-border-light: #122549;
-  --color-accent: #70b5fa;
-  --color-accent-hover: #a3d5fd;
-  --color-accent-light: rgba(112, 181, 250, 0.4);
-
-  /* Adjust construct colors for dark mode visibility */
-  --color-distress: #ff7b74;
-  --color-engagement: #70b5fa;
-  --color-fast: #ffa85a;
-  --color-nonfast: #a4b3c8;
-  --color-credits: #f5bb3a;
-
-  --color-belonging: #4ade80;
-  --color-gains: #93c5fd;
-  --color-support: #b794f6;
-  --color-satisfaction: #e97d3a;
-
-  --color-significant: #4ade80;
-  --color-nonsignificant: #64748b;
-  --color-positive: #4ade80;
-  --color-negative: #fb6b64;
-
-  /* Chart-specific colors */
-  --color-chart-grid: #2d3a4a;
-  --color-chart-axis: #475569;
-  --color-chart-background: #121b2a;
-
-  /* Shadows - more subtle in dark mode */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
-}
-
-/* System preference detection */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --color-background: #041228;
-    --color-surface: rgba(19, 28, 43, 0.60);
-    --color-surface-elevated: rgba(29, 39, 56, 0.60);
-    --color-text: #e8eef5;
-    --color-text-muted: #94a3b8;
-    --color-text-light: #64748b;
-    --color-border: #2a3a57;
-    --color-border-light: #223049;
-    --color-accent: #60a5fa;
-    --color-accent-hover: #93c5fd;
-    --color-accent-light: rgba(96, 165, 250, 0.15);
-
-    --color-distress: #fb6b64;
-    --color-engagement: #60a5fa;
-    --color-fast: #f59e4a;
-    --color-nonfast: #94a3b8;
-    --color-credits: #e5ab2a;
-
-    --color-belonging: #4ade80;
-    --color-gains: #93c5fd;
-    --color-support: #b794f6;
-    --color-satisfaction: #e97d3a;
-
-    --color-significant: #4ade80;
-    --color-nonsignificant: #64748b;
-    --color-positive: #4ade80;
-    --color-negative: #fb6b64;
-
-    --color-chart-grid: #2d3a4a;
-    --color-chart-axis: #475569;
-    --color-chart-background: #121b2a;
-
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
   }
 }
