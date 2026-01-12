@@ -11,12 +11,7 @@
   --navy-accent: #f0f4f8;
   --navy-glow: #ffffff;
 
-  /* Motion system (LOCKED): springy editorial entrance + light settle */
-  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-out-back-soft: cubic-bezier(0.25, 1.25, 0.35, 1);
-  --ease-elegant: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-settle: cubic-bezier(0.2, 0.9, 0.2, 1);
+  /* Motion now handled by motion/react */
 
   min-height: 100dvh;
   display: flex;
@@ -227,11 +222,6 @@
   padding: var(--spacing-xs) var(--spacing-md);
   background: color-mix(in srgb, var(--color-background) 80%, transparent);
   border-radius: 6px;
-  transition: transform 0.3s var(--ease-out-back);
-}
-
-.institution:hover {
-  transform: scale(1.02);
 }
 
 .logo {
@@ -265,9 +255,6 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition:
-    transform 0.4s var(--ease-out-back),
-    box-shadow 0.4s ease;
   box-shadow:
     0 4px 20px color-mix(in srgb, var(--navy-deep) 40%, transparent),
     0 0 0 0 color-mix(in srgb, var(--navy-accent) 30%, transparent);
@@ -289,18 +276,13 @@
 }
 
 .cta:hover {
-  transform: translateY(-2px);
   box-shadow:
     0 8px 30px color-mix(in srgb, var(--navy-deep) 50%, transparent),
     0 0 0 3px color-mix(in srgb, var(--navy-accent) 20%, transparent);
 }
 
-.cta:active {
-  transform: translateY(1px) scale(0.99);
-}
-
 .ctaIcon {
-  transition: transform 0.4s var(--ease-elegant);
+  transition: transform 0.3s ease;
 }
 
 .cta:hover .ctaIcon {
@@ -310,11 +292,14 @@
 /* ============================================
    SCROLL INDICATOR
    ============================================ */
-.scrollIndicator {
+.scrollIndicatorWrapper {
   position: absolute;
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.scrollIndicator {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -323,13 +308,6 @@
   border: none;
   cursor: pointer;
   padding: var(--spacing-sm) var(--spacing-md);
-  transition:
-    opacity 0.3s ease,
-    transform 0.4s var(--ease-out-back);
-}
-
-.scrollIndicator:hover {
-  transform: translateX(-50%) translateY(-2px);
 }
 
 .scrollIndicator:hover .scrollText {
@@ -348,18 +326,7 @@
 
 .scrollChevron {
   color: var(--color-text-muted);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translateY(6px);
-    opacity: 1;
-  }
+  /* Animation handled by Motion */
 }
 
 /* ============================================
