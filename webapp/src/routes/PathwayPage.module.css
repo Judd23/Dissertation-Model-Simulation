@@ -161,19 +161,7 @@
   .mobileHint {
     display: block;
   }
-  
-  /* Scroll shadows for horizontal scroll affordance */
-  .diagram {
-  }
 }
-
-.diagram:hover {
-  /* Hover handled by glass.css */
-}
-
-/* Edge reflection handled by glass.css */
-
-/* Inner glass layer handled by glass.css */
 
 @media (max-width: 768px) {
   .diagram {

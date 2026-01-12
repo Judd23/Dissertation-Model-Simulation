@@ -456,12 +456,6 @@
 }
 
 @media (max-width: 768px) {
-  .header::before {
-    width: 300px;
-    height: 300px;
-    top: -50px;
-  }
-
   .header h1 {
     font-size: var(--font-size-2xl);
   }
@@ -523,12 +517,6 @@
 @media (max-width: 480px) {
   .header {
     padding-top: var(--spacing-lg);
-  }
-
-  .header::before {
-    width: 200px;
-    height: 200px;
-    opacity: 0.3;
   }
 
   .header h1 {
