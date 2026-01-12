@@ -44,66 +44,20 @@
   opacity: 0;
 }
 
-.loaded .pathwaySilhouette {
-  animation: fadeInPath 2.6s var(--ease-elegant) 0.55s forwards;
-}
-
+/* Pathway lines and nodes for Motion-driven animation */
 .pathwayLine {
   stroke: var(--color-border);
   stroke-width: 2;
   fill: none;
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  opacity: 0.3;
-}
-
-.loaded .pathwayLine {
-  animation: drawPath 4.6s var(--ease-out-quint) 1.05s forwards;
+  opacity: 0.32;
 }
 
 .pathwayNode {
   fill: var(--color-surface);
   stroke: var(--color-border);
   stroke-width: 2;
-  opacity: 0;
-}
-
-.loaded .pathwayNode {
-  animation: popIn 1.05s var(--ease-elegant) forwards;
-}
-
-.loaded .pathwayNode:nth-child(1) { animation-delay: 1.35s; }
-.loaded .pathwayNode:nth-child(2) { animation-delay: 1.55s; }
-.loaded .pathwayNode:nth-child(3) { animation-delay: 1.75s; }
-.loaded .pathwayNode:nth-child(4) { animation-delay: 1.95s; }
-
-@keyframes fadeInPath {
-  to { opacity: 1; }
-}
-
-@keyframes drawPath {
-  to { stroke-dashoffset: 0; }
-}
-
-@keyframes popIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.2);
-  }
-  58% {
-    opacity: 0.7;
-    transform: scale(1.07);
-  }
-  76% {
-    transform: scale(0.985);
-  }
-  90% {
-    transform: scale(1.01);
-  }
-  100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
+  opacity: 0.45;
+  transform-origin: center;
 }
 
 /* ============================================
@@ -127,214 +81,6 @@
    Spring-forward reveal with a controlled settle
    ============================================ */
 
-.fromTop,
-.fromBottom {
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
-/* Default travel distances (can be overridden per element) */
-.fromTop {
-  --enterY: -96px;
-  transform: translateY(var(--enterY));
-}
-
-.fromBottom {
-  --enterY: 96px;
-  transform: translateY(var(--enterY));
-}
-
-.divider {
-  opacity: 0;
-  transform: scaleX(0.45);
-  will-change: transform, opacity;
-}
-
-/* Element-specific travel distances (longer paths, softer landings) */
-.kicker.fromTop { --enterY: -88px; }
-.title.fromTop { --enterY: -128px; }
-.subtitle.fromTop { --enterY: -92px; }
-.description.fromBottom { --enterY: 92px; }
-.nameplate.fromBottom { --enterY: 116px; }
-.cta.fromBottom { --enterY: 104px; }
-.scrollIndicator.fromBottom { --enterY: 84px; }
-
-/* ============================================
-   STAGGERED ENTRANCE ANIMATIONS (LOCKED)
-   Spring motion + slight overshoot
-   ============================================ */
-
-.loaded .kicker.fromTop {
-  animation: springRevealDown 1.35s var(--ease-settle) 0.10s forwards;
-}
-
-.loaded .title.fromTop {
-  animation: springRevealDownTitle 1.70s var(--ease-settle) 0.22s forwards;
-}
-
-.loaded .subtitle.fromTop {
-  animation: springRevealDown 1.40s var(--ease-settle) 0.44s forwards;
-}
-
-.loaded .divider {
-  animation: springExpand 1.25s var(--ease-settle) 0.58s forwards;
-}
-
-.loaded .description.fromBottom {
-  animation: springRevealUp 1.45s var(--ease-settle) 0.70s forwards;
-}
-
-.loaded .nameplate.fromBottom {
-  animation: springRevealUp 1.65s var(--ease-settle) 0.88s forwards;
-}
-
-.loaded .cta.fromBottom {
-  animation: springRevealCTA 1.50s var(--ease-settle) 1.05s forwards;
-}
-
-.loaded .scrollIndicator.fromBottom {
-  animation: springFadeIn 1.25s var(--ease-settle) 1.28s forwards;
-}
-
-/* ============================================
-   SPRING REVEAL KEYFRAMES (LOCKED)
-   Controlled overshoot, no excessive travel
-   ============================================ */
-
-@keyframes springRevealDown {
-  0% {
-    opacity: 0;
-    transform: translateY(var(--enterY));
-  }
-  58% {
-    opacity: 1;
-    transform: translateY(6px);
-  }
-  76% {
-    transform: translateY(-2px);
-  }
-  88% {
-    transform: translateY(1px);
-  }
-  95% {
-    transform: translateY(-0.5px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes springRevealDownTitle {
-  0% {
-    opacity: 0;
-    transform: translateY(var(--enterY));
-  }
-  56% {
-    opacity: 1;
-    transform: translateY(7px);
-  }
-  74% {
-    transform: translateY(-2.5px);
-  }
-  87% {
-    transform: translateY(1px);
-  }
-  95% {
-    transform: translateY(-0.5px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes springRevealUp {
-  0% {
-    opacity: 0;
-    transform: translateY(var(--enterY));
-  }
-  58% {
-    opacity: 1;
-    transform: translateY(-6px);
-  }
-  76% {
-    transform: translateY(2px);
-  }
-  88% {
-    transform: translateY(-1px);
-  }
-  95% {
-    transform: translateY(0.5px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes springRevealCTA {
-  0% {
-    opacity: 0;
-    transform: translateY(var(--enterY)) scale(0.99);
-  }
-  58% {
-    opacity: 1;
-    transform: translateY(-6px) scale(1.012);
-  }
-  76% {
-    transform: translateY(2px) scale(0.999);
-  }
-  88% {
-    transform: translateY(-1px) scale(1.002);
-  }
-  95% {
-    transform: translateY(0.5px) scale(1.0005);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes springExpand {
-  0% {
-    opacity: 0;
-    transform: scaleX(0.45);
-  }
-  70% {
-    opacity: 1;
-    transform: scaleX(1.02);
-  }
-  86% {
-    transform: scaleX(0.995);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes springFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(var(--enterY));
-  }
-  62% {
-    opacity: 1;
-    transform: translateY(-4px);
-  }
-  80% {
-    transform: translateY(1.5px);
-  }
-  91% {
-    transform: translateY(-0.5px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 /* ============================================
    KICKER (CATEGORY LABEL)
@@ -443,13 +189,7 @@
   margin-bottom: var(--spacing-xl);
   position: relative;
   box-shadow: 0 0 15px color-mix(in srgb, var(--navy-glow) 25%, transparent);
-}
-
-/* Keep divider entrance springy, then shimmer */
-.loaded .divider {
-  animation:
-    springExpand 0.95s var(--ease-out-back) 0.55s forwards,
-    shimmer 3s linear 1.5s infinite;
+  animation: shimmer 3s linear 0.2s infinite;
 }
 
 @keyframes shimmer {
