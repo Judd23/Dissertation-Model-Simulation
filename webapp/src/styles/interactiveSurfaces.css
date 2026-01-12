@@ -18,9 +18,33 @@
   position: relative;
   transform: translateZ(0);
   will-change: transform, box-shadow, border-color, background-color, filter;
+  isolation: isolate;
+
+  /* Thick 3D glass - clear with depth */
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-radius: var(--radius-lg);
 
   border: 1px solid var(--surface-border);
-  box-shadow: var(--surface-shadow);
+
+  /* 3D depth - laminated thickness */
+  box-shadow:
+    /* Outer depth */
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    /* Inner bevel - top light edge */
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    /* Inner bevel - bottom dark edge */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.10),
+    /* Thickness depth */
+    inset 0 -12px 28px rgba(0, 0, 0, 0.08);
 
   transition:
     box-shadow var(--surface-transition) var(--surface-ease),
@@ -29,16 +53,58 @@
     filter var(--surface-transition) var(--surface-ease);
 }
 
+/* Specular shine overlay - polished reflection */
+.interactiveSurface::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+
+  /* Polished reflection */
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.08) 25%,
+      rgba(255, 255, 255, 0.00) 50%
+    ),
+    radial-gradient(
+      600px 300px at 30% 15%,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.00) 60%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+
+.interactiveSurface > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Hover + keyboard focus (visual only, no transform here - Motion owns it) */
 .interactiveSurface:hover,
 .interactiveSurface:focus-visible {
   border-color: var(--surface-border-hover);
-  box-shadow: var(--surface-shadow-hover);
+
+  /* Enhanced 3D depth on hover */
+  box-shadow:
+    /* Deeper outer shadow */
+    0 18px 54px rgba(0, 0, 0, 0.18),
+    0 6px 16px rgba(0, 0, 0, 0.10),
+    /* Brighter inner bevel */
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    inset 0 -14px 32px rgba(0, 0, 0, 0.10);
+
   filter: saturate(1.08) brightness(1.02);
   outline: none;
 }
 
-/* Optional: subtle sheen overlay */
+/* Hover sheen overlay - appears on interaction */
 .interactiveSurface::after {
   content: "";
   pointer-events: none;
@@ -46,11 +112,12 @@
   inset: 0;
   opacity: 0;
   border-radius: inherit;
+  z-index: 0;
 
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.12),
-    rgba(255, 255, 255, 0.02) 40%,
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.03) 40%,
     rgba(255, 255, 255, 0.00)
   );
 

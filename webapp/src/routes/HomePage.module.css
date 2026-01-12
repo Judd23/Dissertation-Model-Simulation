@@ -157,6 +157,13 @@
   color: var(--color-text-muted);
 }
 
+.effectCallout {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--color-accent);
+}
+
 /* ============================================
    PREVIEW SECTION
    ============================================ */

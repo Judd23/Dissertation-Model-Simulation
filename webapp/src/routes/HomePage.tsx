@@ -34,7 +34,7 @@ export default function HomePage() {
             How College Credits Earned in High School Affect First-Year Success
           </h1>
           <p className={styles.lead}>
-            <strong>Key insight:</strong> Students who earn <GlossaryTerm term="Dual Enrollment Credits" definition="College credits earned while in high school through dual enrollment programs, allowing students to take college courses before graduating high school.">dual enrollment credits</GlossaryTerm> in high school experience higher stress during their first year—but the right support can help. This study of 5,000 CSU students reveals how credit amount shapes <GlossaryTerm term="Developmental Adjustment" definition="A student's overall success in transitioning to college, including sense of belonging, personal growth, feeling supported, and satisfaction with their college experience.">college adjustment</GlossaryTerm>.
+            <strong>Key insight:</strong> Students who earn <GlossaryTerm term="Dual Enrollment Credits" definition="College credits earned while in high school through dual enrollment programs, allowing students to take college courses before graduating high school.">dual enrollment credits</GlossaryTerm> in high school experience higher stress during their first year—but the right support can help. This study of {sampleSize.toLocaleString()} CSU students reveals how credit amount shapes <GlossaryTerm term="Developmental Adjustment" definition="A student's overall success in transitioning to college, including sense of belonging, personal growth, feeling supported, and satisfaction with their college experience.">college adjustment</GlossaryTerm>.
           </p>
         </div>
       </section>
@@ -90,7 +90,7 @@ export default function HomePage() {
                 <h3>The Stress Connection</h3>
                 <p>
                   Students who earned college credits in high school report <strong>higher stress
-                  and anxiety</strong> during their first year, which makes it harder for them
+                  and anxiety</strong> during their first year—<span className={styles.effectCallout}>about {Math.abs(keyFindings.distressEffect * 100).toFixed(0)}% higher</span>—which makes it harder for them
                   to adjust to college.
                 </p>
                 <p className={styles.implication}>
@@ -114,7 +114,7 @@ export default function HomePage() {
                 <p>
                   There's a <strong>sweet spot</strong> for dual enrollment credits: students with a
                   moderate amount engage more on campus, while those with lots of credits
-                  tend to be less involved. This is called a <GlossaryTerm term="Dose-Response Effect" definition="The relationship between the amount of something (like dual enrollment credits) and its impact. In this study, we examine how different amounts of credits produce different effects on student outcomes.">dose-response effect</GlossaryTerm>.
+                  tend to be less involved—<span className={styles.effectCallout}>baseline effect is small (β = {keyFindings.engagementEffect.toFixed(2)})</span>. This is called a <GlossaryTerm term="Dose-Response Effect" definition="The relationship between the amount of something (like dual enrollment credits) and its impact. In this study, we examine how different amounts of credits produce different effects on student outcomes.">dose-response effect</GlossaryTerm>.
                 </p>
                 <p className={styles.implication}>
                   How many credits you earn in high school can shape how connected you feel
@@ -136,8 +136,7 @@ export default function HomePage() {
                 <h3>More Credits = Bigger Impact</h3>
                 <p>
                   The <strong>amount of credits matters</strong>: having 12 credits affects you
-                  differently than having 30+. More credits intensify both the benefits and
-                  the challenges.
+                  differently than having 30+. Beyond stress and engagement, credits provide a <span className={styles.effectCallout}>direct {(keyFindings.adjustmentDirect * 100).toFixed(0)}% boost</span> to first-year success.
                 </p>
                 <p className={styles.implication}>
                   Students with 12 credits need different support than those who completed

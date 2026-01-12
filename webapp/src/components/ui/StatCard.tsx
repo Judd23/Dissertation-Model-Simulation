@@ -114,7 +114,12 @@ export default function StatCard({
       return;
     }
 
-    // All users get full cinematic experience - no reduced motion check
+    // Respect user's reduced motion preference (WCAG 2.3.3)
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      queueMicrotask(() => setDisplayValue(formatValue(newParsed.numericValue!, newParsed.decimals, newParsed.prefix, newParsed.suffix, newParsed.useLocale)));
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
