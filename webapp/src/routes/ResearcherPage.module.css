@@ -479,8 +479,21 @@
   margin-bottom: 0;
 }
 
+/* Decoration container classes - allow interactiveSurface ::before/::after for glass */
+.blockDecorA,
+.blockDecorB,
+.blockDecorC,
+.blockDecorD {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
 .blockA {
-  /* Glass handled by glass.css */
+  /* Glass handled by interactiveSurface */
   grid-column: 1 / span 5;
   padding: var(--spacing-2xl);
   border-radius: 16px;
@@ -494,7 +507,7 @@
 }
 
 /* Animated side bar with glow */
-.blockA::before {
+.blockDecorA::before {
   content: '';
   position: absolute;
   top: 0;
@@ -509,7 +522,7 @@
 }
 
 /* Corner glow decoration */
-.blockA::after {
+.blockDecorA::after {
   content: '';
   position: absolute;
   top: -50px;
@@ -531,18 +544,18 @@
   border-color: var(--color-accent);
 }
 
-.blockA:hover::before {
+.blockA:hover .blockDecorA::before {
   transform: scaleY(1);
   animation: shimmer 3s linear infinite;
 }
 
-.blockA:hover::after {
+.blockA:hover .blockDecorA::after {
   opacity: 1;
   transform: scale(1.2);
 }
 
 .blockB {
-  /* Glass handled by glass.css */
+  /* Glass handled by interactiveSurface */
   grid-column: 6 / span 7;
   padding: var(--spacing-2xl);
   border-radius: 16px;
@@ -556,7 +569,7 @@
 }
 
 /* Decorative quotation marks - enhanced with gradient and animation */
-.blockB::before {
+.blockDecorB::before {
   content: '"';
   position: absolute;
   top: var(--spacing-md);
@@ -576,7 +589,7 @@
 }
 
 /* Closing quote */
-.blockB::after {
+.blockDecorB::after {
   content: '"';
   position: absolute;
   bottom: var(--spacing-md);
@@ -601,12 +614,12 @@
   border-color: var(--color-engagement);
 }
 
-.blockB:hover::before {
+.blockB:hover .blockDecorB::before {
   opacity: 0.2;
   transform: scale(1.15) translate(5px, 5px);
 }
 
-.blockB:hover::after {
+.blockB:hover .blockDecorB::after {
   opacity: 0.12;
   transform: rotate(180deg) scale(1.1) translate(5px, 5px);
 }
@@ -706,7 +719,7 @@
 }
 
 .blockC {
-  /* Glass handled by glass.css */
+  /* Glass handled by interactiveSurface */
   grid-column: 1 / span 7;
   padding: var(--spacing-2xl);
   border-radius: 16px;
@@ -720,7 +733,7 @@
 }
 
 /* Animated side bar - right side */
-.blockC::before {
+.blockDecorC::before {
   content: '';
   position: absolute;
   top: 0;
@@ -735,7 +748,7 @@
 }
 
 /* Corner glow - bottom right */
-.blockC::after {
+.blockDecorC::after {
   content: '';
   position: absolute;
   bottom: -50px;
@@ -757,12 +770,12 @@
   border-color: var(--color-engagement);
 }
 
-.blockC:hover::before {
+.blockC:hover .blockDecorC::before {
   transform: scaleY(1);
   animation: shimmer 3s linear infinite reverse;
 }
 
-.blockC:hover::after {
+.blockC:hover .blockDecorC::after {
   opacity: 1;
   transform: scale(1.2);
 }
@@ -815,7 +828,7 @@
 }
 
 .blockD {
-  /* Glass handled by glass.css */
+  /* Glass handled by interactiveSurface */
   grid-column: 8 / span 5;
   padding: var(--spacing-2xl);
   border-radius: 16px;
@@ -828,7 +841,7 @@
 }
 
 /* Animated top border */
-.blockD::before {
+.blockDecorD::before {
   content: '';
   position: absolute;
   top: 0;
@@ -848,7 +861,7 @@
 }
 
 /* Corner gradient decoration - enhanced */
-.blockD::after {
+.blockDecorD::after {
   content: '';
   position: absolute;
   bottom: -60px;
@@ -871,12 +884,12 @@
   border-color: var(--color-accent);
 }
 
-.blockD:hover::before {
+.blockD:hover .blockDecorD::before {
   transform: scaleX(1);
   animation: shimmer 2s linear infinite;
 }
 
-.blockD:hover::after {
+.blockD:hover .blockDecorD::after {
   transform: scale(1.8);
   opacity: 0.9;
 }

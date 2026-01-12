@@ -117,6 +117,7 @@ export default function ResearcherPage() {
 
         <section className={styles.grid}>
           <InteractiveSurface as="article" ref={blockARef} className={`${styles.blockA} interactiveSurface reveal-left`} style={{ animationDelay: '0ms' }} hoverLift={4}>
+            <span className={styles.blockDecorA} aria-hidden="true" />
             <div className={styles.blockHeader}>
               <span className={styles.blockNum}>01</span>
               <h2>Background</h2>
@@ -132,6 +133,7 @@ export default function ResearcherPage() {
           </InteractiveSurface>
 
           <InteractiveSurface as="aside" ref={blockBRef} className={`${styles.blockB} interactiveSurface reveal-right`} style={{ animationDelay: '100ms' }} hoverLift={4}>
+            <span className={styles.blockDecorB} aria-hidden="true" />
             <div className={styles.quotePanel}>
               <blockquote className={styles.pullQuote}>
                 <p>
@@ -149,6 +151,7 @@ export default function ResearcherPage() {
           </InteractiveSurface>
 
           <InteractiveSurface as="article" ref={blockCRef} className={`${styles.blockC} interactiveSurface reveal-left`} style={{ animationDelay: '200ms' }} hoverLift={4}>
+            <span className={styles.blockDecorC} aria-hidden="true" />
             <div className={styles.blockHeader}>
               <span className={styles.blockNum}>02</span>
               <h2>Research Areas</h2>
@@ -186,6 +189,7 @@ export default function ResearcherPage() {
           </InteractiveSurface>
 
           <InteractiveSurface as="article" ref={blockDRef} className={`${styles.blockD} interactiveSurface reveal-right`} style={{ animationDelay: '300ms' }} hoverLift={4}>
+            <span className={styles.blockDecorD} aria-hidden="true" />
             <div className={styles.blockHeader}>
               <span className={styles.blockNum}>03</span>
               <h2>Connect</h2>
