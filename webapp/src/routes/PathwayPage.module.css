@@ -154,7 +154,7 @@
 }
 
 .mobileHint::before {
-  content: '👆 ';
+  content: '↑ ';
 }
 
 @media (max-width: 768px) {

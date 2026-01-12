@@ -241,7 +241,7 @@ export default function DemographicsPage() {
               <p className={styles.chartDescription}>
                 Does earning dual enrollment credits lead to different stress levels across equity groups?
               </p>
-              <GroupComparison grouping={groupingVariable} pathway="a1" />
+              <GroupComparison grouping={groupingVariable} pathway="a1" aria-label="Chart comparing stress outcomes across equity groups" />
             </InteractiveSurface>
 
             <InteractiveSurface className={`${styles.chartContainer} interactiveSurface`} hoverLift={4}>
@@ -249,7 +249,7 @@ export default function DemographicsPage() {
               <p className={styles.chartDescription}>
                 Does earning dual enrollment credits change campus engagement differently across equity groups?
               </p>
-              <GroupComparison grouping={groupingVariable} pathway="a2" />
+              <GroupComparison grouping={groupingVariable} pathway="a2" aria-label="Chart comparing engagement outcomes across equity groups" />
             </InteractiveSurface>
         </div>
 

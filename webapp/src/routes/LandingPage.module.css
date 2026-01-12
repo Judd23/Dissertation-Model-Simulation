@@ -457,22 +457,6 @@
   100% { background-position: 200% 0; }
 }
 
-/* Legacy name (kept for safety): matches springExpand feel */
-@keyframes elegantExpand {
-  0% {
-    opacity: 0;
-    transform: scaleX(0.6);
-  }
-  80% {
-    opacity: 1;
-    transform: scaleX(1.03);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
 /* ============================================
    DESCRIPTION
    ============================================ */

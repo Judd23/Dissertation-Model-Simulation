@@ -3,6 +3,8 @@ import { useScrollReveal, useStaggeredReveal } from '../lib/hooks';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
 import styles from './ResearcherPage.module.css';
 
+const RESEARCHER_EMAIL = '{RESEARCHER_EMAIL}';
+
 export default function ResearcherPage() {
   const { resolvedTheme } = useTheme();
   const sdsuLogo = resolvedTheme === 'dark'
@@ -101,12 +103,12 @@ export default function ResearcherPage() {
             </div>
             <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '200ms' }}>
               <div className={styles.factLabel}>Email</div>
-              <a href="mailto:jjohnson4039@SDSU.edu" className={styles.factLink}>
+              <a href="mailto:{RESEARCHER_EMAIL}" className={styles.factLink}>
                 <svg className={styles.emailIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <rect x="2" y="4" width="20" height="16" rx="2" />
                   <path d="M22 6l-10 7L2 6" />
                 </svg>
-                jjohnson4039@SDSU.edu
+                {RESEARCHER_EMAIL}
               </a>
             </div>
           </div>
@@ -190,12 +192,12 @@ export default function ResearcherPage() {
             <p>
               For collaboration, speaking, or questions about the work, email me directly.
             </p>
-            <a href="mailto:jjohnson4039@SDSU.edu" className={styles.cta}>
+            <a href="mailto:{RESEARCHER_EMAIL}" className={styles.cta}>
               <svg className={styles.ctaIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <rect x="2" y="4" width="20" height="16" rx="2" />
                 <path d="M22 6l-10 7L2 6" />
               </svg>
-              <span>jjohnson4039@SDSU.edu</span>
+              <span>{RESEARCHER_EMAIL}</span>
               <span className={styles.ctaArrow} aria-hidden="true">→</span>
             </a>
           </article>

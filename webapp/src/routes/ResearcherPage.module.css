@@ -7,33 +7,6 @@
 
 /* Background now handled by Layout */
 
-/* Floating orb animations (kept for other elements) */
-@keyframes floatGlow {
-  0%, 100% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-  }
-  25% {
-    transform: translate(30px, -40px) scale(1.08) rotate(5deg);
-  }
-  50% {
-    transform: translate(-20px, 30px) scale(0.92) rotate(-3deg);
-  }
-  75% {
-    transform: translate(-40px, -15px) scale(1.04) rotate(2deg);
-  }
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 1;
-    filter: blur(0px);
-  }
-  50% {
-    opacity: 0.7;
-    filter: blur(10px);
-  }
-}
-
 /* Shimmer effect keyframes */
 @keyframes shimmer {
   0% {
@@ -41,15 +14,6 @@
   }
   100% {
     background-position: 200% 0;
-  }
-}
-
-@keyframes borderGlow {
-  0%, 100% {
-    box-shadow: var(--shadow-sm), 0 0 0 rgba(var(--color-accent-rgb), 0);
-  }
-  50% {
-    box-shadow: var(--shadow-sm), 0 0 20px rgba(var(--color-accent-rgb), 0.15);
   }
 }
 
