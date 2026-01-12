@@ -12,7 +12,7 @@
  * @link See ChoreographerContext.tsx for phase management
  */
 
-import { type ReactNode, useCallback, useEffect, useRef } from 'react';
+import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useChoreographer } from '../../app/contexts';
