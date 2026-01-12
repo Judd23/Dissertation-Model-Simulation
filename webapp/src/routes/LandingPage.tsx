@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import { PAGE_FADE } from '../lib/transitionConfig';
 import styles from './LandingPage.module.css';

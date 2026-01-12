@@ -479,7 +479,6 @@
    NAMEPLATE - Clear glass effect
    ============================================ */
 .nameplate {
-  /* Glass handled by glass.css */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -490,8 +489,6 @@
   position: relative;
   overflow: hidden;
 }
-
-/* Edge reflections handled by glass.css */
 
 .authorName {
   font-family: var(--font-heading);

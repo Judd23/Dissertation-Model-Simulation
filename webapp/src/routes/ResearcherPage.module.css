@@ -203,14 +203,6 @@
   max-width: 320px;
 }
 
-.kicker {
-  font-size: var(--font-size-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.28em;
-  color: var(--color-text-muted);
-  margin-bottom: var(--spacing-md);
-}
-
 .name {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 4vw, 3.5rem);
