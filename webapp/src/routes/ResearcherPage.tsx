@@ -56,7 +56,7 @@ export default function ResearcherPage() {
                 className={styles.institutionLogo}
               />
             </div>
-            <p className={styles.eyebrow}>Researcher</p>
+            <p className={styles.kicker}>Researcher</p>
             <h1 className={styles.name}>Jay Johnson</h1>
             <div className={styles.metaLine}>
               <span className={styles.credentials}>M.F.A., Ed.D.-(May '26)</span>
