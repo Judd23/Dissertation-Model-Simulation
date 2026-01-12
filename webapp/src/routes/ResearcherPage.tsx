@@ -1,6 +1,7 @@
 import { useTheme } from '../app/contexts';
 import { useScrollReveal, useStaggeredReveal } from '../lib/hooks';
 import GlossaryTerm from '../components/ui/GlossaryTerm';
+import { InteractiveSurface } from '../components/ui/InteractiveSurface';
 import styles from './ResearcherPage.module.css';
 
 const RESEARCHER_EMAIL = 'jjohnson4039@SDSU.edu';
@@ -21,7 +22,7 @@ export default function ResearcherPage() {
 
   return (
     <div className={styles.page}>
-      <header ref={heroRef} className={styles.hero}>
+      <header ref={heroRef} className={`${styles.hero} reveal`}>
         <div className={styles.heroGrid}>
           <figure className={styles.heroFigure}>
             <div className={styles.heroMedia}>
@@ -70,7 +71,7 @@ export default function ResearcherPage() {
       <main className={styles.main}>
         <section ref={factsRef} className={`${styles.factsStrip} stagger-children`}>
           <div className={styles.factsInner}>
-            <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '0ms' }}>
+            <InteractiveSurface className={`${styles.fact} interactiveSurface reveal-up`} style={{ animationDelay: '0ms' }} hoverLift={3}>
               <div className={styles.factLabel}>Focus</div>
               <div className={styles.factValue}>
                 <GlossaryTerm
@@ -81,8 +82,8 @@ export default function ResearcherPage() {
                 </GlossaryTerm>{' '}
                 | equity | pathways
               </div>
-            </div>
-            <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '100ms' }}>
+            </InteractiveSurface>
+            <InteractiveSurface className={`${styles.fact} interactiveSurface reveal-up`} style={{ animationDelay: '100ms' }} hoverLift={3}>
               <div className={styles.factLabel}>Methods</div>
               <div className={styles.factValue}>
                 <GlossaryTerm
@@ -100,8 +101,8 @@ export default function ResearcherPage() {
                 </GlossaryTerm>
                 , process models
               </div>
-            </div>
-            <div className={`${styles.fact} reveal-up`} style={{ animationDelay: '200ms' }}>
+            </InteractiveSurface>
+            <InteractiveSurface className={`${styles.fact} interactiveSurface reveal-up`} style={{ animationDelay: '200ms' }} hoverLift={3}>
               <div className={styles.factLabel}>Email</div>
               <a href={`mailto:${RESEARCHER_EMAIL}`} className={styles.factLink}>
                 <svg className={styles.emailIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -110,12 +111,12 @@ export default function ResearcherPage() {
                 </svg>
                 {RESEARCHER_EMAIL}
               </a>
-            </div>
+            </InteractiveSurface>
           </div>
         </section>
 
         <section className={styles.grid}>
-          <article ref={blockARef} className={`${styles.blockA} reveal-left`} style={{ animationDelay: '0ms' }}>
+          <InteractiveSurface as="article" ref={blockARef} className={`${styles.blockA} interactiveSurface reveal-left`} style={{ animationDelay: '0ms' }} hoverLift={4}>
             <div className={styles.blockHeader}>
               <span className={styles.blockNum}>01</span>
               <h2>Background</h2>
@@ -128,9 +129,9 @@ export default function ResearcherPage() {
               Now I study how early college experiences shape who stays, who thrives, and who feels
               like they belong. The numbers matter, but so do the stories behind them.
             </p>
-          </article>
+          </InteractiveSurface>
 
-          <aside ref={blockBRef} className={`${styles.blockB} reveal-right`} style={{ animationDelay: '100ms' }}>
+          <InteractiveSurface as="aside" ref={blockBRef} className={`${styles.blockB} interactiveSurface reveal-right`} style={{ animationDelay: '100ms' }} hoverLift={4}>
             <div className={styles.quotePanel}>
               <blockquote className={styles.pullQuote}>
                 <p>
@@ -145,9 +146,9 @@ export default function ResearcherPage() {
                 <footer className={styles.quoteAttribution}>— Research philosophy</footer>
               </blockquote>
             </div>
-          </aside>
+          </InteractiveSurface>
 
-          <article ref={blockCRef} className={`${styles.blockC} reveal-left`} style={{ animationDelay: '200ms' }}>
+          <InteractiveSurface as="article" ref={blockCRef} className={`${styles.blockC} interactiveSurface reveal-left`} style={{ animationDelay: '200ms' }} hoverLift={4}>
             <div className={styles.blockHeader}>
               <span className={styles.blockNum}>02</span>
               <h2>Research Areas</h2>
@@ -182,9 +183,9 @@ export default function ResearcherPage() {
                 </GlossaryTerm>
               </li>
             </ul>
-          </article>
+          </InteractiveSurface>
 
-          <article ref={blockDRef} className={`${styles.blockD} reveal-right`} style={{ animationDelay: '300ms' }}>
+          <InteractiveSurface as="article" ref={blockDRef} className={`${styles.blockD} interactiveSurface reveal-right`} style={{ animationDelay: '300ms' }} hoverLift={4}>
             <div className={styles.blockHeader}>
               <span className={styles.blockNum}>03</span>
               <h2>Connect</h2>
@@ -200,7 +201,7 @@ export default function ResearcherPage() {
               <span>{RESEARCHER_EMAIL}</span>
               <span className={styles.ctaArrow} aria-hidden="true">→</span>
             </a>
-          </article>
+          </InteractiveSurface>
         </section>
       </main>
     </div>
