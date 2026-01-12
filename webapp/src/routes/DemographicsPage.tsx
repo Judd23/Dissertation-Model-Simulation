@@ -53,7 +53,7 @@ export default function DemographicsPage() {
 
             <div className={`${styles.demographicsGrid} ${showComparison ? styles.comparing : ''}`}>
               {/* Race/Ethnicity Breakdown */}
-              <InteractiveSurface className={`${styles.demoCard} interactiveSurface reveal`} style={{ transitionDelay: '0ms' }} hoverLift={4}>
+              <InteractiveSurface className={`${styles.demoCard} interactiveSurface`} style={{ transitionDelay: '0ms' }} hoverLift={4}>
                 <h3>Race & Ethnicity</h3>
                 <div className={styles.demoStats}>
                   {Object.entries(demographics.race).map(([group, data]) => (
@@ -99,7 +99,7 @@ export default function DemographicsPage() {
               </InteractiveSurface>
 
               {/* First-Gen & Pell */}
-              <InteractiveSurface className={`${styles.demoCard} interactiveSurface reveal`} style={{ transitionDelay: '100ms' }} hoverLift={4}>
+              <InteractiveSurface className={`${styles.demoCard} interactiveSurface`} style={{ transitionDelay: '100ms' }} hoverLift={4}>
                 <h3>Access & Equity</h3>
                 <div className={styles.demoStats}>
                   <div className={styles.demoStat}>
@@ -173,6 +173,109 @@ export default function DemographicsPage() {
                 </div>
               </InteractiveSurface>
             </div>
+              {/* Gender */}
+              <InteractiveSurface className={`${styles.demoCard} interactiveSurface`} style={{ transitionDelay: '200ms' }} hoverLift={4}>
+                <h3>Gender</h3>
+                <div className={styles.demoStats}>
+                  {Object.entries(demographics.sex).map(([group, data]) => (
+                    <div key={group} className={styles.demoStat}>
+                      {!showComparison ? (
+                        <>
+                          <div className={styles.demoLabel}>
+                            <span>{group}</span>
+                            <span>{data.pct}%</span>
+                          </div>
+                          <div className={styles.demoBar}>
+                            <div className={styles.demoBarFill} style={{ width: `${data.pct}%` }} />
+                          </div>
+                        </>
+                      ) : (
+                        <div className={styles.demoComparison}>
+                          <div className={styles.demoLabel}><span>{group}</span></div>
+                          <div className={styles.comparisonRow}>
+                            <span className={styles.comparisonLabel}>FASt</span>
+                            <div className={styles.demoBar}>
+                              <div
+                                className={styles.demoBarFill}
+                                style={{
+                                  width: `${fastComparison.demographics.sex?.[group]?.fast.pct ?? 0}%`,
+                                  backgroundColor: 'var(--color-fast)'
+                                }}
+                              />
+                            </div>
+                            <span>{fastComparison.demographics.sex?.[group]?.fast.pct ?? 0}%</span>
+                          </div>
+                          <div className={styles.comparisonRow}>
+                            <span className={styles.comparisonLabel}>Non-FASt</span>
+                            <div className={styles.demoBar}>
+                              <div
+                                className={styles.demoBarFill}
+                                style={{
+                                  width: `${fastComparison.demographics.sex?.[group]?.nonfast.pct ?? 0}%`,
+                                  backgroundColor: 'var(--color-text-muted)'
+                                }}
+                              />
+                            </div>
+                            <span>{fastComparison.demographics.sex?.[group]?.nonfast.pct ?? 0}%</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </InteractiveSurface>
+
+              {/* Living Situation */}
+              <InteractiveSurface className={`${styles.demoCard} interactiveSurface`} style={{ transitionDelay: '300ms' }} hoverLift={4}>
+                <h3>Living Situation</h3>
+                <div className={styles.demoStats}>
+                  {Object.entries(demographics.living).map(([group, data]) => (
+                    <div key={group} className={styles.demoStat}>
+                      {!showComparison ? (
+                        <>
+                          <div className={styles.demoLabel}>
+                            <span>{group}</span>
+                            <span>{data.pct}%</span>
+                          </div>
+                          <div className={styles.demoBar}>
+                            <div className={styles.demoBarFill} style={{ width: `${data.pct}%` }} />
+                          </div>
+                        </>
+                      ) : (
+                        <div className={styles.demoComparison}>
+                          <div className={styles.demoLabel}><span>{group}</span></div>
+                          <div className={styles.comparisonRow}>
+                            <span className={styles.comparisonLabel}>FASt</span>
+                            <div className={styles.demoBar}>
+                              <div
+                                className={styles.demoBarFill}
+                                style={{
+                                  width: `${fastComparison.demographics.living?.[group]?.fast.pct ?? 0}%`,
+                                  backgroundColor: 'var(--color-fast)'
+                                }}
+                              />
+                            </div>
+                            <span>{fastComparison.demographics.living?.[group]?.fast.pct ?? 0}%</span>
+                          </div>
+                          <div className={styles.comparisonRow}>
+                            <span className={styles.comparisonLabel}>Non-FASt</span>
+                            <div className={styles.demoBar}>
+                              <div
+                                className={styles.demoBarFill}
+                                style={{
+                                  width: `${fastComparison.demographics.living?.[group]?.nonfast.pct ?? 0}%`,
+                                  backgroundColor: 'var(--color-text-muted)'
+                                }}
+                              />
+                            </div>
+                            <span>{fastComparison.demographics.living?.[group]?.nonfast.pct ?? 0}%</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </InteractiveSurface>
         </div>
 
         <section className={styles.sampleInfo}>
