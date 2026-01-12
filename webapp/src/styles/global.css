@@ -226,26 +226,6 @@ tbody tr:nth-child(even) {
     color-mix(in srgb, var(--color-fast) 6%, var(--color-background)) 100%);
 }
 
-/* Shared hero glow for page headers (Demographics, Dose, Pathway) */
-.page-header-glow::before {
-  content: '';
-  position: absolute;
-  top: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(
-    circle,
-    var(--color-accent-light) 0%,
-    transparent 60%
-  );
-  border-radius: 50%;
-  z-index: -1;
-  opacity: 0.85;
-  pointer-events: none;
-}
-
 /* Container */
 .container {
   max-width: var(--max-width);

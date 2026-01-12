@@ -42,7 +42,7 @@ export default function DoseExplorerPage() {
   return (
     <div className={styles.page}>
       <div className="container">
-        <section className={`${styles.header} page-header-glow`}>
+        <section className={styles.header}>
           <p className={styles.eyebrow}>Dose-Response Analysis</p>
           <h1>Does the Number of Credits Matter?</h1>
           <p className="lead">

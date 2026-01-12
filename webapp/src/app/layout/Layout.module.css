@@ -6,8 +6,54 @@
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  /* Background is now handled by ParallaxBackground component */
-  isolation: isolate; /* Create stacking context */
+  isolation: isolate;
+  
+  /* Static cosmic background - replaces ParallaxBackground */
+  background:
+    /* Large diffuse orb - center-left */
+    radial-gradient(
+      circle 600px at 25% 40%,
+      rgba(100, 150, 255, 0.28),
+      transparent 60%
+    ),
+    /* Medium orb - right side */
+    radial-gradient(
+      circle 450px at 75% 55%,
+      rgba(200, 100, 255, 0.22),
+      transparent 55%
+    ),
+    /* Smaller accent orb - bottom */
+    radial-gradient(
+      circle 350px at 50% 85%,
+      rgba(150, 200, 255, 0.20),
+      transparent 50%
+    ),
+    /* Warm accent orb - top right */
+    radial-gradient(
+      circle 300px at 90% 15%,
+      rgba(255, 180, 120, 0.18),
+      transparent 45%
+    ),
+    /* Primary radial gradient - top left blue glow */
+    radial-gradient(
+      ellipse 1400px 800px at 15% -15%,
+      rgba(90, 130, 255, 0.45),
+      transparent 50%
+    ),
+    /* Secondary radial - top right pink/magenta */
+    radial-gradient(
+      ellipse 1200px 700px at 85% 5%,
+      rgba(255, 100, 180, 0.30),
+      transparent 50%
+    ),
+    /* Deep base gradient */
+    linear-gradient(
+      175deg,
+      hsl(230, 50%, 8%) 0%,
+      hsl(225, 60%, 5%) 40%,
+      hsl(220, 70%, 3%) 100%
+    );
+  background-attachment: fixed;
 }
 
 /* Skip to main content link for accessibility */

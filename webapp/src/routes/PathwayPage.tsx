@@ -135,7 +135,7 @@ export default function PathwayPage() {
       <div className="container">
         <header
           ref={headerRef}
-          className={`${styles.header} page-header-glow`}
+          className={styles.header}
         >
           <p className={styles.eyebrow}>Interactive Model</p>
           <h1>How Dual Enrollment Credits Affect First-Year Success</h1>

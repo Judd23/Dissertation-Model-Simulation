@@ -3,15 +3,11 @@ import Header from './Header';
 import Footer from './Footer';
 import BackToTop from '../../components/ui/BackToTop';
 import MobileNav from './MobileNav';
-import ParallaxBackground from '../../components/ui/ParallaxBackground';
-import { TransitionOrchestrator } from '../../features/transitions';
-import { useScrollRestoration } from '../../lib/hooks';
 import { useModelData } from '../contexts';
 import styles from './Layout.module.css';
 
 export default function Layout() {
   const location = useLocation();
-  const { handleExitComplete } = useScrollRestoration();
   const { validation } = useModelData();
   const showDataInvalidBanner = import.meta.env.DEV && !validation.isValid;
   
@@ -20,9 +16,6 @@ export default function Layout() {
 
   return (
     <div className={styles.layout}>
-      {/* Global parallax background layers */}
-      <ParallaxBackground />
-      
       {showDataInvalidBanner && (
         <div
           style={{
@@ -54,12 +47,7 @@ export default function Layout() {
         id="main-content"
         className={styles.main}
       >
-        <TransitionOrchestrator
-          scrollOnTransition={false}
-          onExitComplete={handleExitComplete}
-        >
-          <Outlet />
-        </TransitionOrchestrator>
+        <Outlet />
       </main>
       {!isLandingPage && <BackToTop />}
       {!isLandingPage && <MobileNav />}
