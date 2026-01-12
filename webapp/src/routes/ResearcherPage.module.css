@@ -5,71 +5,7 @@
   overflow: hidden;
 }
 
-/* Animated hero glow - artistic background gradient */
-.page::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  right: -15%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(
-    ellipse,
-    color-mix(in srgb, var(--color-accent) 12%, transparent) 0%,
-    color-mix(in srgb, var(--color-engagement) 6%, transparent) 40%,
-    transparent 70%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  animation: floatGlow 18s ease-in-out infinite, pulseGlow 4s ease-in-out infinite;
-}
-
-.page::after {
-  content: '';
-  position: absolute;
-  bottom: 10%;
-  left: -12%;
-  width: 550px;
-  height: 550px;
-  background: radial-gradient(
-    ellipse,
-    color-mix(in srgb, var(--color-engagement) 10%, transparent) 0%,
-    color-mix(in srgb, var(--color-accent) 5%, transparent) 45%,
-    transparent 70%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  animation: floatGlow 22s ease-in-out infinite reverse, pulseGlow 5s ease-in-out infinite 1s;
-}
-
-/* Third floating orb for extra depth */
-@keyframes floatGlow {
-  0%, 100% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
-  }
-  25% {
-    transform: translate(30px, -40px) scale(1.08) rotate(5deg);
-  }
-  50% {
-    transform: translate(-20px, 30px) scale(0.92) rotate(-3deg);
-  }
-  75% {
-    transform: translate(-40px, -15px) scale(1.04) rotate(2deg);
-  }
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 1;
-    filter: blur(0px);
-  }
-  50% {
-    opacity: 0.7;
-    filter: blur(10px);
-  }
-}
+/* Background now handled by Layout */
 
 /* Shimmer effect keyframes */
 @keyframes shimmer {
@@ -78,15 +14,6 @@
   }
   100% {
     background-position: 200% 0;
-  }
-}
-
-@keyframes borderGlow {
-  0%, 100% {
-    box-shadow: var(--shadow-sm), 0 0 0 rgba(var(--color-accent-rgb), 0);
-  }
-  50% {
-    box-shadow: var(--shadow-sm), 0 0 20px rgba(var(--color-accent-rgb), 0.15);
   }
 }
 
@@ -128,7 +55,7 @@
   position: relative;
   margin: 0;
   border: 2px solid var(--color-border);
-  background: var(--color-surface);
+  background: transparent;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: 
@@ -197,7 +124,7 @@
 
 .heroMedia {
   padding: var(--spacing-lg);
-  background: var(--color-surface);
+  background: transparent;
 }
 
 .heroMedia picture,
@@ -252,60 +179,21 @@
 }
 
 .institutionPanel {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   margin-bottom: var(--spacing-lg);
   display: inline-block;
   padding: var(--spacing-md) var(--spacing-lg);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.012) 0%,
-    rgba(255, 255, 255, 0.006) 50%,
-    rgba(255, 255, 255, 0.009) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(12px);
-  backdrop-filter: saturate(140%) blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.036);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.024),
-    0 2px 8px rgba(0, 0, 0, 0.012),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
   margin-left: 0;
   margin-right: 0;
-  transition: 
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+  transition: transform var(--transition-fast);
+  border-radius: 16px;
   position: relative;
 }
 
-/* Edge reflection - 50% MORE TRANSPARENT */
-.institutionPanel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.06) 20%,
-    rgba(255, 255, 255, 0.105) 50%,
-    rgba(255, 255, 255, 0.06) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
+/* Edge reflection handled by glass.css */
 
 .institutionPanel:hover {
   transform: translateY(-2px);
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.03),
-    0 4px 12px rgba(0, 0, 0, 0.015),
-    inset 0 1px 0 rgba(255, 255, 255, 0.045),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
 }
 
 .institutionLogo {
@@ -412,7 +300,7 @@
 }
 
 .fact {
-  background: var(--color-surface);
+  background: transparent;
   padding: var(--spacing-lg);
   transition: 
     background var(--transition-fast), 
@@ -600,23 +488,10 @@
 }
 
 .blockA {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   grid-column: 1 / span 5;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.024);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.006) 0%,
-    rgba(255, 255, 255, 0.003) 50%,
-    rgba(255, 255, 255, 0.0045) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(16px);
-  backdrop-filter: saturate(140%) blur(16px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.024),
-    0 2px 8px rgba(0, 0, 0, 0.012),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
+  border-radius: 16px;
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -661,15 +536,7 @@
 
 .blockA:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-lg),
-    0 0 30px color-mix(in srgb, var(--color-accent) 15%, transparent);
   border-color: var(--color-accent);
-  background: linear-gradient(
-    135deg,
-    var(--color-surface) 0%,
-    color-mix(in srgb, var(--color-accent) 3%, var(--color-surface)) 100%
-  );
 }
 
 .blockA:hover::before {
@@ -683,23 +550,10 @@
 }
 
 .blockB {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   grid-column: 6 / span 7;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.024);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.006) 0%,
-    rgba(255, 255, 255, 0.003) 50%,
-    rgba(255, 255, 255, 0.0045) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(16px);
-  backdrop-filter: saturate(140%) blur(16px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.024),
-    0 2px 8px rgba(0, 0, 0, 0.012),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.015);
+  border-radius: 16px;
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -752,15 +606,7 @@
 
 .blockB:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-lg),
-    0 0 30px color-mix(in srgb, var(--color-engagement) 15%, transparent);
   border-color: var(--color-engagement);
-  background: linear-gradient(
-    135deg,
-    var(--color-background) 0%,
-    color-mix(in srgb, var(--color-engagement) 2%, var(--color-background)) 100%
-  );
 }
 
 .blockB:hover::before {
@@ -868,23 +714,10 @@
 }
 
 .blockC {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   grid-column: 1 / span 7;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.01) 0%,
-    rgba(255, 255, 255, 0.005) 50%,
-    rgba(255, 255, 255, 0.0075) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(16px);
-  backdrop-filter: saturate(140%) blur(16px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.04),
-    0 2px 8px rgba(0, 0, 0, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.025);
+  border-radius: 16px;
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -929,15 +762,7 @@
 
 .blockC:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-lg),
-    0 0 30px color-mix(in srgb, var(--color-engagement) 15%, transparent);
   border-color: var(--color-engagement);
-  background: linear-gradient(
-    135deg,
-    var(--color-surface) 0%,
-    color-mix(in srgb, var(--color-engagement) 3%, var(--color-surface)) 100%
-  );
 }
 
 .blockC:hover::before {
@@ -998,23 +823,10 @@
 }
 
 .blockD {
-  /* 50% MORE TRANSPARENT */
+  /* Glass handled by glass.css */
   grid-column: 8 / span 5;
   padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.01) 0%,
-    rgba(255, 255, 255, 0.005) 50%,
-    rgba(255, 255, 255, 0.0075) 100%
-  );
-  -webkit-backdrop-filter: saturate(140%) blur(16px);
-  backdrop-filter: saturate(140%) blur(16px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.04),
-    0 2px 8px rgba(0, 0, 0, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.025);
+  border-radius: 16px;
   transition: 
     transform 0.4s var(--ease-out-back), 
     box-shadow 0.4s var(--ease-out-back),
@@ -1064,9 +876,6 @@
 
 .blockD:hover {
   transform: translateY(-6px);
-  box-shadow: 
-    var(--shadow-lg),
-    0 0 30px color-mix(in srgb, var(--color-accent) 15%, transparent);
   border-color: var(--color-accent);
 }
 
@@ -1091,7 +900,7 @@
   font-weight: 700;
   font-size: var(--font-size-xl);
   position: relative;
-  background: var(--color-surface);
+  background: transparent;
   border: 2px solid var(--color-border);
   border-radius: 8px;
   transition: 
@@ -1259,8 +1068,7 @@
   .blockD,
   .institutionPanel {
     padding: var(--spacing-xl);
-    -webkit-backdrop-filter: saturate(140%) blur(12px);
-    backdrop-filter: saturate(140%) blur(12px);
+    /* Glass handled by glass.css */
   }
 
   .blockA:hover,
@@ -1357,12 +1165,6 @@
     flex-wrap: wrap;
   }
 
-  .page::before,
-  .page::after {
-    width: 250px;
-    height: 250px;
-  }
-
   .blockB::before {
     font-size: 5rem;
   }
@@ -1395,207 +1197,3 @@
   }
 }
 
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  .page::before,
-  .page::after {
-    animation: none;
-  }
-
-  .heroFigure,
-  .heroFigure::before,
-  .heroFigure::after,
-  .heroMedia img,
-  .institutionPanel,
-  .name,
-  .name::after,
-  .fact,
-  .fact::before,
-  .fact::after,
-  .factLink,
-  .factLink::after,
-  .blockA,
-  .blockA::before,
-  .blockA::after,
-  .blockB,
-  .blockB::before,
-  .blockB::after,
-  .pullQuote,
-  .pullQuote::before,
-  .pullQuoteAlt::before,
-  .blockC,
-  .blockC::before,
-  .blockC::after,
-  .blockD,
-  .blockD::before,
-  .blockD::after,
-  .list li,
-  .list li::before,
-  .cta,
-  .cta::before,
-  .cta::after,
-  .ctaArrow,
-  .blockNum {
-    transition: none;
-    animation: none;
-  }
-
-  .heroFigure:hover,
-  .heroFigure:hover::before,
-  .heroFigure:hover::after,
-  .hero:hover .name,
-  .hero:hover .name::after,
-  .fact:hover,
-  .fact:hover::before,
-  .fact:hover::after,
-  .blockA:hover,
-  .blockA:hover::before,
-  .blockA:hover::after,
-  .blockB:hover,
-  .blockB:hover::before,
-  .blockB:hover::after,
-  .blockC:hover,
-  .blockC:hover::before,
-  .blockC:hover::after,
-  .blockD:hover,
-  .blockD:hover::before,
-  .blockD:hover::after,
-  .list li:hover,
-  .list li:hover::before,
-  .cta:hover,
-  .cta:hover::before,
-  .cta:hover::after,
-  .cta:hover .ctaArrow {
-    transform: none;
-    animation: none;
-  }
-}
-
-/* ============================================
-   LIGHT MODE - 100% MORE TRANSPARENT
-   ============================================ */
-
-:global([data-theme="light"]) .heroFigure {
-  background: rgba(255, 255, 255, 0.125);
-  border-color: rgba(0, 0, 0, 0.025);
-}
-
-:global([data-theme="light"]) .fact {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.006) 0%,
-    rgba(255, 255, 255, 0.00375) 50%,
-    rgba(255, 255, 255, 0.0045) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.018);
-}
-
-/* Edge reflection for fact cards */
-:global([data-theme="light"]) .fact::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.03) 20%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.03) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
-
-:global([data-theme="light"]) .blockA,
-:global([data-theme="light"]) .blockB,
-:global([data-theme="light"]) .blockC,
-:global([data-theme="light"]) .blockD {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.006) 0%,
-    rgba(255, 255, 255, 0.00375) 50%,
-    rgba(255, 255, 255, 0.0045) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.018);
-}
-
-/* Edge reflections for blocks */
-:global([data-theme="light"]) .blockA::before,
-:global([data-theme="light"]) .blockB::before,
-:global([data-theme="light"]) .blockC::before,
-:global([data-theme="light"]) .blockD::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.03) 20%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.03) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
-
-:global([data-theme="light"]) .pullQuote,
-:global([data-theme="light"]) .pullQuoteAlt {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.0075) 0%,
-    rgba(255, 255, 255, 0.0045) 50%,
-    rgba(255, 255, 255, 0.006) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.018);
-}
-
-:global([data-theme="light"]) .institutionPanel {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.006) 0%,
-    rgba(255, 255, 255, 0.00375) 50%,
-    rgba(255, 255, 255, 0.0045) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.018);
-}
-
-/* Edge reflection for institutionPanel */
-:global([data-theme="light"]) .institutionPanel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.03) 20%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.03) 80%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
-
-:global([data-theme="light"]) .cta {
-  background: linear-gradient(
-    135deg,
-    rgba(37, 99, 235, 0.175) 0%,
-    rgba(59, 130, 246, 0.15) 50%,
-    rgba(37, 99, 235, 0.175) 100%
-  );
-  border-color: rgba(37, 99, 235, 0.075);
-}
