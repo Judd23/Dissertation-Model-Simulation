@@ -25,7 +25,7 @@ export default function DemographicsPage() {
   return (
     <div className={styles.page}>
       <div className="container">
-        <section className={`${styles.header} page-header-glow`}>
+        <section className={styles.header}>
           <div className={styles.headerContent}>
             <p className={styles.eyebrow}>
               Equity Framework

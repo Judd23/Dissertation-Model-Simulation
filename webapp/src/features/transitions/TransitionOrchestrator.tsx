@@ -90,7 +90,7 @@ export default function TransitionOrchestrator({
   }
 
   return (
-    <AnimatePresence mode="popLayout" onExitComplete={handleExitComplete}>
+    <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
       <motion.div
         key={location.pathname}
         variants={pageVariants}
