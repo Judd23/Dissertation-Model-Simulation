@@ -75,18 +75,15 @@
 }
 
 .stakeholderCard {
-  /* Glass handled by glass.css .stakeholderCard auto-selector */
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
-  transition: 
+  transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
   text-align: left;
 }
-
-/* Edge reflection handled by glass.css */
 
 .stakeholderCard:hover {
   transform: translateY(-4px) scale(1.02);
@@ -180,7 +177,6 @@
 }
 
 .actionCard {
-  /* Glass handled by glass.css .actionCard auto-selector */
   display: flex;
   gap: var(--spacing-lg);
   border-radius: var(--radius-lg);
@@ -189,8 +185,6 @@
   transition: all var(--transition-fast);
   text-align: left;
 }
-
-/* Edge reflection handled by glass.css */
 
 .actionCard:hover {
   transform: translateY(-4px) scale(1.01);
@@ -355,11 +349,6 @@
 
   .actionGrid {
     grid-template-columns: 1fr;
-  }
-
-  .stakeholderCard,
-  .actionCard {
-    /* Glass handled by glass.css */
   }
 
   .stakeholderCard:hover,

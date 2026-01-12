@@ -201,10 +201,6 @@
   transition: box-shadow var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
-/* Inner glass layer handled by glass.css */
-
-/* Edge reflection handled by glass.css */
-
 .diagramContainer:hover {
   transform: translateY(-4px) scale(1.01);
 }
@@ -250,10 +246,6 @@
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
-
-/* Edge reflection handled by glass.css */
-
-/* Inner glass layer handled by glass.css */
 
 /* Transform handled by Framer Motion wrapper - keep box-shadow/border for hover */
 .exploreCard:hover {
@@ -364,10 +356,6 @@
     padding: var(--spacing-2xl) 0;
   }
 
-  .exploreCard {
-    /* Glass handled by glass.css */
-  }
-
   .exploreCard:hover {
     transform: none;
   }
@@ -377,8 +365,6 @@
     min-height: 360px;
     justify-content: flex-start;
   }
-  
-  /* Glass layers handled by glass.css */
 
   .diagramContainer:hover {
     transform: none;

@@ -165,35 +165,35 @@
    ============================================ */
 
 .loaded .kicker.fromTop {
-  animation: springRevealDown 1.35s var(--ease-elegant) 0.10s forwards;
+  animation: springRevealDown 1.35s var(--ease-settle) 0.10s forwards;
 }
 
 .loaded .title.fromTop {
-  animation: springRevealDownTitle 1.70s var(--ease-elegant) 0.22s forwards;
+  animation: springRevealDownTitle 1.70s var(--ease-settle) 0.22s forwards;
 }
 
 .loaded .subtitle.fromTop {
-  animation: springRevealDown 1.40s var(--ease-elegant) 0.44s forwards;
+  animation: springRevealDown 1.40s var(--ease-settle) 0.44s forwards;
 }
 
 .loaded .divider {
-  animation: springExpand 1.25s var(--ease-elegant) 0.58s forwards;
+  animation: springExpand 1.25s var(--ease-settle) 0.58s forwards;
 }
 
 .loaded .description.fromBottom {
-  animation: springRevealUp 1.45s var(--ease-elegant) 0.70s forwards;
+  animation: springRevealUp 1.45s var(--ease-settle) 0.70s forwards;
 }
 
 .loaded .nameplate.fromBottom {
-  animation: springRevealUp 1.65s var(--ease-elegant) 0.88s forwards;
+  animation: springRevealUp 1.65s var(--ease-settle) 0.88s forwards;
 }
 
 .loaded .cta.fromBottom {
-  animation: springRevealCTA 1.50s var(--ease-elegant) 1.05s forwards;
+  animation: springRevealCTA 1.50s var(--ease-settle) 1.05s forwards;
 }
 
 .loaded .scrollIndicator.fromBottom {
-  animation: springFadeIn 1.25s var(--ease-elegant) 1.28s forwards;
+  animation: springFadeIn 1.25s var(--ease-settle) 1.28s forwards;
 }
 
 /* ============================================
@@ -206,18 +206,18 @@
     opacity: 0;
     transform: translateY(var(--enterY));
   }
-  55% {
+  58% {
     opacity: 1;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
-  72% {
-    transform: translateY(-4px);
+  76% {
+    transform: translateY(-2px);
   }
-  84% {
-    transform: translateY(2px);
+  88% {
+    transform: translateY(1px);
   }
-  92% {
-    transform: translateY(-1px);
+  95% {
+    transform: translateY(-0.5px);
   }
   100% {
     opacity: 1;
@@ -230,18 +230,18 @@
     opacity: 0;
     transform: translateY(var(--enterY));
   }
-  52% {
+  56% {
     opacity: 1;
-    transform: translateY(12px);
+    transform: translateY(7px);
   }
-  70% {
-    transform: translateY(-5px);
+  74% {
+    transform: translateY(-2.5px);
   }
-  83% {
-    transform: translateY(2px);
+  87% {
+    transform: translateY(1px);
   }
-  92% {
-    transform: translateY(-1px);
+  95% {
+    transform: translateY(-0.5px);
   }
   100% {
     opacity: 1;
@@ -254,18 +254,18 @@
     opacity: 0;
     transform: translateY(var(--enterY));
   }
-  55% {
+  58% {
     opacity: 1;
-    transform: translateY(-10px);
+    transform: translateY(-6px);
   }
-  72% {
-    transform: translateY(4px);
+  76% {
+    transform: translateY(2px);
   }
-  84% {
-    transform: translateY(-2px);
+  88% {
+    transform: translateY(-1px);
   }
-  92% {
-    transform: translateY(1px);
+  95% {
+    transform: translateY(0.5px);
   }
   100% {
     opacity: 1;
@@ -276,20 +276,20 @@
 @keyframes springRevealCTA {
   0% {
     opacity: 0;
-    transform: translateY(var(--enterY)) scale(0.985);
+    transform: translateY(var(--enterY)) scale(0.99);
   }
-  55% {
+  58% {
     opacity: 1;
-    transform: translateY(-10px) scale(1.02);
+    transform: translateY(-6px) scale(1.012);
   }
-  72% {
-    transform: translateY(4px) scale(0.998);
+  76% {
+    transform: translateY(2px) scale(0.999);
   }
-  84% {
-    transform: translateY(-2px) scale(1.004);
+  88% {
+    transform: translateY(-1px) scale(1.002);
   }
-  92% {
-    transform: translateY(1px) scale(1.001);
+  95% {
+    transform: translateY(0.5px) scale(1.0005);
   }
   100% {
     opacity: 1;
@@ -320,15 +320,15 @@
     opacity: 0;
     transform: translateY(var(--enterY));
   }
-  60% {
+  62% {
     opacity: 1;
-    transform: translateY(-6px);
+    transform: translateY(-4px);
   }
-  78% {
-    transform: translateY(3px);
+  80% {
+    transform: translateY(1.5px);
   }
-  90% {
-    transform: translateY(-1px);
+  91% {
+    transform: translateY(-0.5px);
   }
   100% {
     opacity: 1;
