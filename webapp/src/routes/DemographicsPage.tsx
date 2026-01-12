@@ -172,7 +172,7 @@ export default function DemographicsPage() {
                   </div>
                 </div>
               </InteractiveSurface>
-            </div>
+
               {/* Gender */}
               <InteractiveSurface className={`${styles.demoCard} interactiveSurface`} style={{ transitionDelay: '200ms' }} hoverLift={4}>
                 <h3>Gender</h3>
@@ -276,6 +276,7 @@ export default function DemographicsPage() {
                   ))}
                 </div>
               </InteractiveSurface>
+            </div>
         </div>
 
         <section className={styles.sampleInfo}>

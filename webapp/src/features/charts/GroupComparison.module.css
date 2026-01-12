@@ -78,3 +78,55 @@
 .tooltipRow {
   line-height: 1.5;
 }
+
+.breakdownSection {
+  width: 100%;
+}
+
+.sectionHeader {
+  width: 100%;
+  margin-bottom: var(--spacing-lg);
+  text-align: left;
+}
+
+.sectionTitle {
+  margin: 0;
+}
+
+.sectionSubtitle {
+  margin: var(--spacing-xs) 0 0;
+}
+
+.breakdownGrid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.sampleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+  width: 100%;
+  align-items: start;
+}
+
+.chartCard {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .sampleGrid {
+    grid-template-columns: 1fr;
+  }
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+}
