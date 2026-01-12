@@ -146,7 +146,7 @@
 
 @keyframes highlightCard {
   0% { transform: scale(1); border-color: var(--color-border); }
-  50% { transform: scale(1.02); border-color: var(--color-fast); }
+  50% { transform: scale(1.02); border-color: var(--color-accent); }
   100% { transform: scale(1); border-color: var(--color-border); }
 }
 
@@ -379,6 +379,7 @@
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
   min-height: 240px;
   overflow: visible;
+  isolation: isolate;
 }
 
 /* Edge reflection handled by glass.css */
