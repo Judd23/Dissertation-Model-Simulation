@@ -9,7 +9,7 @@
 .page::before {
   content: '';
   position: absolute;
-  top: calc(-20% + var(--parallax-offset, 0px));
+  top: -20%;
   right: -15%;
   width: 600px;
   height: 600px;
@@ -28,7 +28,7 @@
 .page::after {
   content: '';
   position: absolute;
-  bottom: calc(10% - var(--parallax-offset, 0px));
+  bottom: 10%;
   left: -12%;
   width: 550px;
   height: 550px;
