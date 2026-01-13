@@ -329,6 +329,26 @@
   white-space: nowrap;
 }
 
+.strengthBadge.strong {
+  background: var(--color-positive);
+  color: white;
+}
+
+.strengthBadge.good {
+  background: var(--color-engagement);
+  color: white;
+}
+
+.strengthBadge.suggestive {
+  background: var(--color-fast);
+  color: white;
+}
+
+.strengthBadge.uncertain {
+  background: var(--color-nonsignificant);
+  color: white;
+}
+
 .sigStar {
   color: var(--color-significant);
   font-weight: 700;

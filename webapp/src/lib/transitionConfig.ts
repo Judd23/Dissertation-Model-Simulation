@@ -42,13 +42,14 @@ export const DANCE_SPRING_LIGHT = {
 } satisfies Transition;
 
 /**
- * Heavier spring for page-level morphs
- * ~800ms settle time
+ * Heavier spring for page-level morphs and interactive elements
+ * Lower damping creates visible bounce/overshoot
+ * ~900ms settle time with noticeable bounce
  */
 export const DANCE_SPRING_HEAVY = {
   type: 'spring' as const,
-  stiffness: 90,
-  damping: 20,
+  stiffness: 100,
+  damping: 14,
   mass: 1.0,
 } satisfies Transition;
 

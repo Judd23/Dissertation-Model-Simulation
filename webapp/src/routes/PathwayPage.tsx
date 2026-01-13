@@ -251,6 +251,9 @@ export default function PathwayPage() {
               const strengthBadge = path.pvalue < 0.001 ? 'Strong evidence' :
                                     path.pvalue < 0.05 ? 'Good evidence' :
                                     path.pvalue < 0.10 ? 'Suggestive' : 'Uncertain';
+              const badgeClass = path.pvalue < 0.001 ? styles.strong :
+                                 path.pvalue < 0.05 ? styles.good :
+                                 path.pvalue < 0.10 ? styles.suggestive : styles.uncertain;
 
               return (
                 <InteractiveSurface
@@ -261,7 +264,7 @@ export default function PathwayPage() {
                 >
                   <div className={styles.coefficientHeader}>
                     <span className={styles.coefficientLabel}>{path.label}</span>
-                    <span className={styles.strengthBadge}>{strengthBadge}</span>
+                    <span className={`${styles.strengthBadge} ${badgeClass}`}>{strengthBadge}</span>
                   </div>
                   <div className={styles.coefficientValue}>
                     Effect size: {path.estimate > 0 ? '+' : ''}{path.estimate.toFixed(2)}
