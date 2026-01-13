@@ -185,8 +185,8 @@ export default function PathwayPage() {
           </p>
         </header>
 
-        <section ref={controlsRef} className={`${styles.controls} ${isStuck ? styles.stuck : ''}`}>
-          <div className={styles.pathwayButtons}>
+        <section ref={controlsRef} className={`${styles.controls} ${isStuck ? styles.stuck : ''}`} aria-label="Diagram filter controls">
+          <div className={styles.pathwayButtons} role="group" aria-label="Filter pathways by route type">
             {pathwayButtons.map((btn) => (
               <InteractiveSurface
                 key={btn.id || 'all'}
@@ -198,13 +198,14 @@ export default function PathwayPage() {
                   '--button-text': btn.textColor ?? 'white',
                 } as React.CSSProperties}
                 aria-pressed={highlightedPath === btn.id}
+                aria-label={`${btn.label}: ${btn.id === null ? 'Show all pathways' : `Highlight ${btn.label.toLowerCase()} pathways`}`}
                 hoverLift={3}
               >
                 {btn.label}
-                {highlightedPath === btn.id && <span className={styles.pathCount}>
-                  {btn.id === null ? pathData.length : 
-                   btn.id === 'distress' ? 3 : 
-                   btn.id === 'engagement' ? 3 : 
+                {highlightedPath === btn.id && <span className={styles.pathCount} aria-hidden="true">
+                  {btn.id === null ? pathData.length :
+                   btn.id === 'distress' ? 3 :
+                   btn.id === 'engagement' ? 3 :
                    btn.id === 'serial' ? 4 : 2} paths
                 </span>}
               </InteractiveSurface>
@@ -221,19 +222,21 @@ export default function PathwayPage() {
               className={styles.guideButton}
               onClick={handleShowGuide}
               type="button"
+              aria-label="Show diagram walkthrough guide"
             >
               Show Guide
             </button>
           </div>
         </section>
 
-        <section ref={diagramRef} className={`${styles.diagram} reveal-scale`}>
+        <section ref={diagramRef} className={`${styles.diagram} reveal-scale`} aria-labelledby="diagram-heading">
+          <h2 id="diagram-heading" className="sr-only">Interactive Pathway Diagram</h2>
           <PathwayDiagram width={800} height={450} interactive />
-          <p className={styles.mobileHint}>← Scroll horizontally to see full diagram →</p>
+          <p className={styles.mobileHint} aria-hidden="true">← Scroll horizontally to see full diagram →</p>
         </section>
 
-        <section ref={coefficientsRef} className={`${styles.coefficients} stagger-children`}>
-          <h2>Key Findings</h2>
+        <section ref={coefficientsRef} className={`${styles.coefficients} stagger-children`} aria-labelledby="coefficients-heading">
+          <h2 id="coefficients-heading">Key Findings</h2>
           <p className={styles.coefficientNote}>
             Evidence badges reflect p-value thresholds: <span className={styles.badgeLegend}><span className={styles.legendStrong}>Strong (p&lt;.001)</span> <span className={styles.legendGood}>Good (p&lt;.05)</span> <span className={styles.legendSuggestive}>Suggestive (p&lt;.10)</span> <span className={styles.legendUncertain}>Uncertain (p≥.10)</span></span>
           </p>
@@ -270,8 +273,8 @@ export default function PathwayPage() {
           </div>
         </section>
 
-        <section ref={indirectRef} className={`${styles.indirectEffects} stagger-children`}>
-          <h2>Understanding Indirect Effects</h2>
+        <section ref={indirectRef} className={`${styles.indirectEffects} stagger-children`} aria-labelledby="indirect-heading">
+          <h2 id="indirect-heading">Understanding Indirect Effects</h2>
           <p className={styles.indirectIntro}>
             Indirect effects show how FASt status affects adjustment <em>through</em> stress and engagement.
             They're calculated by multiplying path coefficients together.
@@ -344,8 +347,8 @@ export default function PathwayPage() {
           </div>
         </section>
 
-        <section ref={summaryRef} className={`${styles.summary} stagger-children`}>
-          <h2>The Big Picture</h2>
+        <section ref={summaryRef} className={`${styles.summary} stagger-children`} aria-labelledby="summary-heading">
+          <h2 id="summary-heading">The Big Picture</h2>
           <div className={styles.summaryGrid}>
             <InteractiveSurface as="article" className={`${styles.summaryCard} interactiveSurface reveal`} style={{ transitionDelay: '0ms' }}>
               <h3>The Stress Route</h3>
@@ -381,12 +384,12 @@ export default function PathwayPage() {
           Dual enrollment credits create <strong>competing forces</strong>: they increase stress (hurting adjustment) while offering direct academic benefits—with the balance shifting based on credit dose.
         </KeyTakeaway>
 
-        <section className={styles.nextStep}>
-          <h2>Next: Explore Credit Levels</h2>
+        <section className={styles.nextStep} aria-labelledby="next-step-pathway-heading">
+          <h2 id="next-step-pathway-heading">Next: Explore Credit Levels</h2>
           <p>
             See how different credit doses change the stress and engagement pathways in the model.
           </p>
-          <InteractiveSurface as="link" to="/dose" className="button button-primary button-lg interactiveSurface">
+          <InteractiveSurface as="link" to="/dose" className="button button-primary button-lg interactiveSurface" aria-label="Continue to Credit Levels page">
             Go to Credit Levels
           </InteractiveSurface>
         </section>

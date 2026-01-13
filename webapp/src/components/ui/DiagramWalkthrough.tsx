@@ -123,7 +123,7 @@ export default function DiagramWalkthrough({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.4 }}
             onClick={onClose}
             aria-hidden="true"
           />
@@ -132,10 +132,10 @@ export default function DiagramWalkthrough({
           <motion.div
             ref={cardRef}
             className={styles.card}
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 25, duration: 0.5 }}
             role="dialog"
             aria-modal="true"
             aria-labelledby="walkthrough-title"
@@ -159,10 +159,10 @@ export default function DiagramWalkthrough({
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
                 className={styles.content}
               >
                 <h3 id="walkthrough-title" className={styles.title}>

@@ -89,21 +89,21 @@ export default function HomePage() {
       </div>
 
       {/* Key Findings - Editorial Layout */}
-      <section className={styles.findings}>
+      <section className={styles.findings} aria-labelledby="findings-heading">
         <div className="container">
-          <h2 className={styles.findingsTitle}>Key Findings</h2>
-          <hr className="section-divider" />
+          <h2 id="findings-heading" className={styles.findingsTitle}>Key Findings</h2>
+          <hr className="section-divider" aria-hidden="true" />
         </div>
 
         {/* Finding 1 */}
-        <article className={styles.findingSection}>
+        <article className={styles.findingSection} aria-labelledby="finding-1-title">
           <div className="container">
             <div className={styles.findingContent}>
-              <div className={styles.findingNumber} style={{ color: 'var(--color-distress)' }}>
+              <div className={styles.findingNumber} style={{ color: 'var(--color-distress)' }} aria-hidden="true">
                 01
               </div>
               <div className={styles.findingText}>
-                <h3>The Stress Connection</h3>
+                <h3 id="finding-1-title">The Stress Connection</h3>
                 <p>
                   Students who earned college credits in high school report <strong>higher stress
                   and anxiety</strong> during their first year—<span className={styles.effectCallout}>{describeEffect(keyFindings.distressEffect)} than peers without early credits</span>—which makes it harder for them
@@ -119,14 +119,14 @@ export default function HomePage() {
         </article>
 
         {/* Finding 2 */}
-        <article className={`${styles.findingSection} ${styles.findingSectionAlt}`}>
+        <article className={`${styles.findingSection} ${styles.findingSectionAlt}`} aria-labelledby="finding-2-title">
           <div className="container">
             <div className={styles.findingContent}>
-              <div className={styles.findingNumber} style={{ color: 'var(--color-engagement)' }}>
+              <div className={styles.findingNumber} style={{ color: 'var(--color-engagement)' }} aria-hidden="true">
                 02
               </div>
               <div className={styles.findingText}>
-                <h3>Campus Involvement Matters</h3>
+                <h3 id="finding-2-title">Campus Involvement Matters</h3>
                 <p>
                   There's a <strong>sweet spot</strong> for dual enrollment credits: students with a
                   moderate amount engage more on campus, while those with lots of credits
@@ -142,14 +142,14 @@ export default function HomePage() {
         </article>
 
         {/* Finding 3 */}
-        <article className={styles.findingSection}>
+        <article className={styles.findingSection} aria-labelledby="finding-3-title">
           <div className="container">
             <div className={styles.findingContent}>
-              <div className={styles.findingNumber} style={{ color: 'var(--color-fast)' }}>
+              <div className={styles.findingNumber} style={{ color: 'var(--color-fast)' }} aria-hidden="true">
                 03
               </div>
               <div className={styles.findingText}>
-                <h3>More Credits = Bigger Impact</h3>
+                <h3 id="finding-3-title">More Credits = Bigger Impact</h3>
                 <p>
                   The <strong>amount of credits matters</strong>: having 12 credits affects you
                   differently than having 30+. Beyond stress and engagement, credits provide <span className={styles.effectCallout}>{describeEffectSize(keyFindings.adjustmentDirect)} direct benefit</span> to first-year success.
@@ -165,9 +165,9 @@ export default function HomePage() {
       </section>
 
       {/* Interactive Preview */}
-      <section className={styles.preview}>
+      <section className={styles.preview} aria-labelledby="preview-heading">
         <div className="container">
-          <h2>How It All Connects</h2>
+          <h2 id="preview-heading">How It All Connects</h2>
           <p className={styles.previewText}>
             We studied how earning college credits in high school affects student success
             through two main paths: stress levels and campus involvement. The diagram below
@@ -176,11 +176,11 @@ export default function HomePage() {
           <div className={styles.diagramContainer}>
             <PathwayDiagram />
           </div>
-          <div className={styles.actions}>
-            <InteractiveSurface as="link" to="/pathway" className="button button-primary button-lg interactiveSurface">
+          <div className={styles.actions} role="group" aria-label="Explore research pathways">
+            <InteractiveSurface as="link" to="/pathway" className="button button-primary button-lg interactiveSurface" aria-label="Explore the pathway diagram showing how credits affect student outcomes">
               Explore the Connections
             </InteractiveSurface>
-            <InteractiveSurface as="link" to="/dose" className="button button-secondary button-lg interactiveSurface">
+            <InteractiveSurface as="link" to="/dose" className="button button-secondary button-lg interactiveSurface" aria-label="See how different credit amounts affect student outcomes">
               See How Credit Amount Matters
             </InteractiveSurface>
           </div>
@@ -196,40 +196,40 @@ export default function HomePage() {
       </KeyTakeaway>
 
       {/* Navigation Cards */}
-      <div className={styles.explore}>
+      <nav className={styles.explore} aria-labelledby="explore-heading">
         <div className="container">
-          <h2>Explore the Research</h2>
-          <div className={styles.exploreCards}>
-            <InteractiveSurface as="link" to="/demographics" className={`${styles.exploreCard} interactiveSurface`}>
-              <span className={styles.exploreIcon}>
+          <h2 id="explore-heading">Explore the Research</h2>
+          <div className={styles.exploreCards} role="list">
+            <InteractiveSurface as="link" to="/demographics" className={`${styles.exploreCard} interactiveSurface`} role="listitem" aria-label="Demographics: Compare findings across race, first-generation, Pell, and other subgroups">
+              <span className={styles.exploreIcon} aria-hidden="true">
                 <Icon name="users" size={40} />
               </span>
               <h3>Demographics</h3>
               <p>Compare findings across race, first-generation, Pell, and other subgroups.</p>
             </InteractiveSurface>
-            <InteractiveSurface as="link" to="/methods" className={`${styles.exploreCard} interactiveSurface`}>
-              <span className={styles.exploreIcon}>
+            <InteractiveSurface as="link" to="/methods" className={`${styles.exploreCard} interactiveSurface`} role="listitem" aria-label="Methods: Technical details on model specification, estimation, and diagnostics">
+              <span className={styles.exploreIcon} aria-hidden="true">
                 <Icon name="microscope" size={40} />
               </span>
               <h3>Methods</h3>
               <p>Technical details on model specification, estimation, and diagnostics.</p>
             </InteractiveSurface>
-            <InteractiveSurface as="link" to="/pathway" className={`${styles.exploreCard} interactiveSurface`}>
-              <span className={styles.exploreIcon}>
+            <InteractiveSurface as="link" to="/pathway" className={`${styles.exploreCard} interactiveSurface`} role="listitem" aria-label="Pathways: Interact with the full SEM mediation diagram and explore each pathway">
+              <span className={styles.exploreIcon} aria-hidden="true">
                 <Icon name="network" size={40} />
               </span>
               <h3>Pathways</h3>
               <p>Interact with the full SEM mediation diagram and explore each pathway.</p>
             </InteractiveSurface>
-            <InteractiveSurface as="link" to="/dose" className={`${styles.exploreCard} interactiveSurface`}>
-              <span className={styles.exploreIcon}>
+            <InteractiveSurface as="link" to="/dose" className={`${styles.exploreCard} interactiveSurface`} role="listitem" aria-label="Credit Levels: See how credit dose moderates treatment effects with interactive visualizations">
+              <span className={styles.exploreIcon} aria-hidden="true">
                 <Icon name="chart" size={40} />
               </span>
               <h3>Credit Levels</h3>
               <p>See how credit dose moderates treatment effects with interactive visualizations.</p>
             </InteractiveSurface>
-            <InteractiveSurface as="link" to="/so-what" className={`${styles.exploreCard} interactiveSurface`}>
-              <span className={styles.exploreIcon}>
+            <InteractiveSurface as="link" to="/so-what" className={`${styles.exploreCard} interactiveSurface`} role="listitem" aria-label="So What: Practical implications for students, advisors, and policy makers">
+              <span className={styles.exploreIcon} aria-hidden="true">
                 <Icon name="lightbulb" size={40} />
               </span>
               <h3>So, What?</h3>
@@ -237,16 +237,16 @@ export default function HomePage() {
             </InteractiveSurface>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <section className={styles.nextStep}>
+      <section className={styles.nextStep} aria-labelledby="next-step-heading">
         <div className="container">
-          <h2>Next: Explore Equity Differences</h2>
+          <h2 id="next-step-heading">Next: Explore Equity Differences</h2>
           <p>
             Start with the equity frame to see how effects differ across race, first-generation status,
             financial need, and living situations.
           </p>
-          <InteractiveSurface as="link" to="/demographics" className="button button-primary button-lg interactiveSurface">
+          <InteractiveSurface as="link" to="/demographics" className="button button-primary button-lg interactiveSurface" aria-label="Continue to Demographics page to explore equity differences">
             Go to Demographics
           </InteractiveSurface>
         </div>

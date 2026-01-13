@@ -1,9 +1,8 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.35);
   z-index: 1000;
-  backdrop-filter: blur(2px);
   cursor: pointer;
 }
 

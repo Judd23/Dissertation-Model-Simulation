@@ -42,9 +42,9 @@ export default function DoseExplorerPage() {
   return (
     <div className={styles.page}>
       <div className="container">
-        <section className={styles.header}>
+        <section className={styles.header} aria-labelledby="dose-heading">
           <p className={styles.eyebrow}>Dose-Response Analysis</p>
-          <h1>Does the Number of Credits Matter?</h1>
+          <h1 id="dose-heading">Does the Number of Credits Matter?</h1>
           <p className="lead">
             Some students earn just a few college credits in high school, while others
             earn many. This is called the <GlossaryTerm term="Credit Dose" definition="The total number of transferable college credits a student earned before starting college. Our model tests whether effects differ based on dose—a 'dose-response' relationship.">credit dose</GlossaryTerm>. Use the slider below to explore
@@ -53,7 +53,7 @@ export default function DoseExplorerPage() {
           </p>
         </section>
 
-        <div className={styles.controls}>
+        <div className={styles.controls} role="region" aria-label="Credit dose controls">
           <div className={styles.sliderContainer}>
             <Slider
               id="credit-dose"
@@ -69,7 +69,7 @@ export default function DoseExplorerPage() {
               tickMarks={[24, 36, 48, 60]}
             />
             {/* Dose Zone Indicators - click to snap slider */}
-            <div className={styles.doseZones}>
+            <div className={styles.doseZones} role="group" aria-label="Quick dose presets">
               {DOSE_ZONES.map((zone) => {
                 const midpoint = zone.id === 'high' ? 48 : Math.round((zone.min + zone.max) / 2);
                 return (
@@ -104,8 +104,8 @@ export default function DoseExplorerPage() {
           </div>
         </div>
 
-        <div className={styles.conditionalEffects}>
-          <h2>What Happens at {selectedDose} Credits?</h2>
+        <div className={styles.conditionalEffects} role="region" aria-labelledby="effects-heading" aria-live="polite">
+          <h2 id="effects-heading">What Happens at {selectedDose} Credits?</h2>
           <div className={styles.effectCards}>
             <StatCard
               label="Effect on Stress"
@@ -125,9 +125,10 @@ export default function DoseExplorerPage() {
           <DataTimestamp />
         </div>
 
-        <div className={styles.charts}>
-          <div className={styles.chartContainer}>
-            <h3>Stress Levels by Credit Amount</h3>
+        <div className={styles.charts} role="region" aria-labelledby="charts-heading">
+          <h2 id="charts-heading" className="sr-only">Dose-Response Charts</h2>
+          <div className={styles.chartContainer} aria-labelledby="stress-chart-heading">
+            <h3 id="stress-chart-heading">Stress Levels by Credit Amount</h3>
             <p className={styles.chartDescription}>
               Students with FASt status report higher stress regardless of how many
               credits they earned. The number of credits doesn't significantly change
@@ -136,8 +137,8 @@ export default function DoseExplorerPage() {
             <DoseResponseCurve outcome="distress" selectedDose={selectedDose} />
           </div>
 
-          <div className={styles.chartContainer}>
-            <h3>Campus Engagement by Credit Amount</h3>
+          <div className={styles.chartContainer} aria-labelledby="engagement-chart-heading">
+            <h3 id="engagement-chart-heading">Campus Engagement by Credit Amount</h3>
             <p className={styles.chartDescription}>
               There's a hint of an interesting pattern here: students with fewer transfer
               credits seem to engage more with campus, while those with many credits
@@ -148,8 +149,8 @@ export default function DoseExplorerPage() {
         </div>
 
         {/* Johnson-Neyman Analysis */}
-        <div className={styles.jnSection}>
-          <h2>When Do Effects Become Significant?</h2>
+        <section className={styles.jnSection} aria-labelledby="jn-heading">
+          <h2 id="jn-heading">When Do Effects Become Significant?</h2>
           <p className={styles.jnIntro}>
             The <GlossaryTerm term="Johnson-Neyman Technique" definition="A statistical method that identifies the exact point(s) where a conditional effect becomes statistically significant. It shows where the confidence interval crosses zero.">Johnson-Neyman technique</GlossaryTerm> identifies
             the exact credit threshold where effects become statistically significant—where we can be confident the effect isn't just random variation.
@@ -157,14 +158,14 @@ export default function DoseExplorerPage() {
           <p className={styles.jnNote}>
             Significance is based on 95% confidence intervals that do not cross zero.
           </p>
-          <div className={styles.jnCharts}>
+          <div className={styles.jnCharts} role="group" aria-label="Johnson-Neyman significance plots">
             <JohnsonNeymanPlot outcome="engagement" selectedDose={selectedDose} />
             <JohnsonNeymanPlot outcome="distress" selectedDose={selectedDose} />
           </div>
-        </div>
+        </section>
 
-        <div className={styles.interpretation}>
-          <h2>Understanding These Numbers</h2>
+        <section className={styles.interpretation} aria-labelledby="interpretation-heading">
+          <h2 id="interpretation-heading">Understanding These Numbers</h2>
           <div className={styles.interpretationContent}>
             <InteractiveSurface as="article" className={`${styles.interpretationCard} interactiveSurface`} hoverLift={4}>
               <h3>What Do the Numbers Mean?</h3>
@@ -191,20 +192,20 @@ export default function DoseExplorerPage() {
               </p>
             </InteractiveSurface>
           </div>
-        </div>
+        </section>
 
         {/* Key Takeaway */}
         <KeyTakeaway>
           The <strong>amount of dual enrollment credits matters</strong>—12 credits create different effects than 30+ credits, with higher doses amplifying both stress and engagement impacts.
         </KeyTakeaway>
 
-        <section className={styles.nextStep}>
-          <h2>Next: See the Practical Implications</h2>
+        <section className={styles.nextStep} aria-labelledby="next-dose-heading">
+          <h2 id="next-dose-heading">Next: See the Practical Implications</h2>
           <p>
             Translate the dose-response patterns into concrete recommendations for students,
             advisors, and policy leaders.
           </p>
-          <InteractiveSurface as="link" to="/so-what" className="button button-primary button-lg interactiveSurface">
+          <InteractiveSurface as="link" to="/so-what" className="button button-primary button-lg interactiveSurface" aria-label="Continue to So What page for practical implications">
             Go to So, What?
           </InteractiveSurface>
         </section>
