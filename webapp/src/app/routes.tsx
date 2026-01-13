@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './layout/Layout';
 import LandingPage from '../routes/LandingPage';
 import HomePage from '../routes/HomePage';
+
 import SoWhatPage from '../routes/SoWhatPage';
 import DoseExplorerPage from '../routes/DoseExplorerPage';
 import DemographicsPage from '../routes/DemographicsPage';

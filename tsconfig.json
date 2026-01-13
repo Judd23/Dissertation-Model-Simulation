@@ -1,0 +1,8 @@
+{
+  "extends": "./webapp/tsconfig.app.json",
+  "compilerOptions": {
+    "baseUrl": "./webapp"
+  },
+  "include": ["webapp/src/**/*"],
+  "exclude": ["webapp/node_modules"]
+}
