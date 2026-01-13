@@ -19,3 +19,31 @@
 ## UI change safety
 - Prefer local, narrowly scoped changes over global CSS or tokens.
 - Any CSS or design change must be justified as necessary for the requested behavior.
+
+---
+
+# Project Ops Addendum (Source-Checked)
+
+## Required agent behaviors (efficiency + correctness)
+- Read the relevant files first; do not speculate.
+- Check in before making broad changes (refactors, styling sweeps, cross-cutting edits).
+- Explain what you are doing in short, concrete steps.
+- Keep changes simple and minimal-diff.
+- Keep architecture documentation centralized: treat `webapp/ARCHITECTURE_AUDIT.md` as the canonical architecture reference.
+
+## Webapp operational facts (verified)
+- Webapp lives in `webapp/`.
+- Commands (from `webapp/package.json`):
+	- `npm run dev`
+	- `npm run build` (copies `dist/index.html` to `dist/404.html` for GitHub Pages)
+	- `npm run lint`
+	- `npm run deploy` (publishes `dist/` to `gh-pages` branch)
+- GitHub Pages URL (from `webapp/package.json`): `https://judd23.github.io/Dissertation-Model-Simulation`
+- Vite base path (from `webapp/vite.config.ts`): `/Dissertation-Model-Simulation/`
+- Router is `HashRouter` (from `webapp/src/app/providers.tsx`) for GitHub Pages compatibility.
+
+## Animation ownership rule (Framer Motion owns movement)
+- Use `framer-motion` imports only. Do not use `motion/react`.
+- Motion owns ALL movement transforms (translate/scale/rotate), including hover/active motion.
+- CSS is for visuals only (color, opacity, shadows, borders, backgrounds, blur, etc.).
+- Do not use `transform:` or `transition: transform` in CSS modules unless explicitly requested and approved.
