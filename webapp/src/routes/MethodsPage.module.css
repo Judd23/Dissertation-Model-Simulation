@@ -100,6 +100,7 @@
   gap: var(--spacing-xs);
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
+  text-align: left;
 }
 
 /* Table - glass handled by glass.css */

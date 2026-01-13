@@ -73,5 +73,6 @@
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
   line-height: 1.6;
+  text-align: left;
 }
 
