@@ -87,8 +87,7 @@ p {
   content: "";
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 120px;
   height: 1px;
   background: linear-gradient(

@@ -28,7 +28,7 @@
   line-height: 1.1;
   letter-spacing: -0.03em;
   max-width: 800px;
-  margin: 0 auto var(--spacing-xl);
+  margin: 0 0 var(--spacing-xl);
   font-weight: 700;
 }
 
@@ -37,7 +37,7 @@
   color: var(--color-text-muted);
   line-height: 1.7;
   max-width: 650px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 /* ============================================
@@ -174,7 +174,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-xl);
   max-width: 900px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .actionCard {
@@ -234,7 +234,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-xl);
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .limitationItem {
@@ -307,7 +307,7 @@
   font-size: var(--font-size-lg);
   color: var(--color-text-muted);
   max-width: 600px;
-  margin: 0 auto var(--spacing-2xl);
+  margin: 0 0 var(--spacing-2xl);
   line-height: 1.7;
 }
 
@@ -401,4 +401,3 @@
     transform: none;
   }
 }
-
