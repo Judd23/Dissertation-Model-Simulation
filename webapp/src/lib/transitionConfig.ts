@@ -385,21 +385,6 @@ export const CATEGORY_SPRINGS: Record<MorphCategory, Transition> = {
 };
 
 // =============================================================================
-// VIEWPORT CONFIGURATION
-// =============================================================================
-
-export const VIEWPORT_CONFIG = {
-  /** IntersectionObserver thresholds for tracking */
-  thresholds: [0, 0.1, 0.25, 0.5, 0.75, 1],
-  /** Trigger reveal when element is 30% visible */
-  revealAmount: 0.3,
-  /** Only animate once (don't re-trigger on scroll back) */
-  once: true,
-  /** Root margin for early triggering */
-  margin: "-50px 0px -50px 0px",
-} as const;
-
-// =============================================================================
 // REDUCED MOTION
 // =============================================================================
 
