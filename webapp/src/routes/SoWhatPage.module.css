@@ -78,15 +78,16 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
+  /* Transform handled by Framer Motion */
   transition:
-    transform var(--transition-fast),
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
   text-align: left;
 }
 
 .stakeholderCard:hover {
-  transform: translateY(-4px) scale(1.02);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .cardIcon {
@@ -182,12 +183,14 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
-  transition: all var(--transition-fast);
+  /* Transform handled by Framer Motion */
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
   text-align: left;
 }
 
 .actionCard:hover {
-  transform: translateY(-4px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .actionNumber {

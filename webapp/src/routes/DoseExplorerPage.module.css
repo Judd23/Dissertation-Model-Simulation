@@ -216,7 +216,8 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  /* Transform handled by Framer Motion */
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 /* Edge reflection handled by glass.css */
@@ -224,7 +225,8 @@
 /* Inner glass layer handled by glass.css */
 
 .chartContainer:hover {
-  transform: translateY(-4px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .chartContainer h3 {
@@ -311,11 +313,13 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   position: relative;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  /* Transform handled by Framer Motion */
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 .interpretationCard:hover {
-  transform: translateY(-4px);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 /* Next step CTA */

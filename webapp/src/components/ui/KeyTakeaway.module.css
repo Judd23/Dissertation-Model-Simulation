@@ -11,8 +11,8 @@
   font-size: var(--font-size-lg);
   line-height: 1.6;
   position: relative;
-  transition: 
-    transform var(--transition-fast), 
+  /* Transform handled by Framer Motion */
+  transition:
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
@@ -20,7 +20,8 @@
 /* Edge reflection handled by glass.css */
 
 .takeaway:hover {
-  transform: translateY(-3px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent-hover);
 }
 
 .takeaway[data-morph-id] {

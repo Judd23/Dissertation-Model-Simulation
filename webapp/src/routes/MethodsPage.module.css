@@ -178,8 +178,8 @@
   /* Glass handled by glass.css */
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
+  /* Transform handled by Framer Motion */
   transition:
-    transform var(--transition-fast),
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
   position: relative;
@@ -202,7 +202,8 @@
 /* Edge reflection handled by glass.css */
 
 .specCard:hover {
-  transform: translateY(-4px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .specCard[data-morph-id] {
@@ -253,8 +254,8 @@
   padding: var(--spacing-lg);
   margin-top: var(--spacing-lg);
   position: relative;
+  /* Transform handled by Framer Motion */
   transition:
-    transform var(--transition-fast),
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
@@ -262,7 +263,8 @@
 /* Edge reflection handled by glass.css */
 
 .codeBlock:hover {
-  transform: translateY(-4px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .codeBlock h4 {
@@ -295,14 +297,15 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   position: relative;
+  /* Transform handled by Framer Motion */
   transition:
-    transform var(--transition-fast),
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
 .constructCard:hover {
-  transform: translateY(-4px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .constructCard h4 {
@@ -333,14 +336,15 @@
   padding: var(--spacing-lg);
   margin-top: var(--spacing-lg);
   position: relative;
+  /* Transform handled by Framer Motion */
   transition:
-    transform var(--transition-fast),
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
 .infoBox:hover {
-  transform: translateY(-4px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .infoBox h4 {
@@ -368,14 +372,15 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   position: relative;
+  /* Transform handled by Framer Motion */
   transition:
-    transform var(--transition-fast),
     box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
 .softwareCard:hover {
-  transform: translateY(-4px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .softwareCard h4 {

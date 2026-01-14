@@ -32,6 +32,11 @@
   --color-accent-hover: #a3d5fd;
   --color-accent-light: rgba(112, 181, 250, 0.4);
 
+  /* Alias variables (for backward compatibility) */
+  --color-primary: var(--color-accent);
+  --color-text-secondary: var(--color-text-muted);
+  --color-surface-alt: var(--color-surface-elevated);
+
   /* Adjust construct colors for dark mode visibility */
   --color-distress: #ff7b74;
   --color-engagement: #70b5fa;
@@ -85,6 +90,8 @@
   /* Layout */
   --max-width: 1200px;
   --max-width-wide: 1600px;
+  --max-width-prose: 760px;
+  --max-width-article: 800px;
   --sidebar-width: 280px;
   --header-height: 64px;
 

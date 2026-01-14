@@ -18,7 +18,8 @@
 /* Edge reflection handled by glass.css */
 
 .item:hover {
-  transform: translateY(-3px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .item.open {

@@ -3,6 +3,7 @@ import { HashRouter } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { ResearchProvider, ThemeProvider, ModelDataProvider, ChoreographerProvider, TransitionProvider } from '../app/contexts';
 import { DANCE_SPRING_HEAVY } from '../lib/transitionConfig';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -16,20 +17,22 @@ interface AppProvidersProps {
  */
 export function AppProviders({ children }: AppProvidersProps) {
   return (
-    <ThemeProvider>
-      <MotionConfig reducedMotion="never" transition={DANCE_SPRING_HEAVY}>
-        <ModelDataProvider>
-          <ResearchProvider>
-            <TransitionProvider>
-              <ChoreographerProvider>
-                <HashRouter>
-                  {children}
-                </HashRouter>
-              </ChoreographerProvider>
-            </TransitionProvider>
-          </ResearchProvider>
-        </ModelDataProvider>
-      </MotionConfig>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <MotionConfig reducedMotion="never" transition={DANCE_SPRING_HEAVY}>
+          <ModelDataProvider>
+            <ResearchProvider>
+              <TransitionProvider>
+                <ChoreographerProvider>
+                  <HashRouter>
+                    {children}
+                  </HashRouter>
+                </ChoreographerProvider>
+              </TransitionProvider>
+            </ResearchProvider>
+          </ModelDataProvider>
+        </MotionConfig>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }

@@ -198,11 +198,13 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   position: relative;
-  transition: box-shadow var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+  /* Transform handled by Framer Motion */
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 .diagramContainer:hover {
-  transform: translateY(-4px) scale(1.01);
+  /* Transform handled by Framer Motion - keep visual effects only */
+  border-color: var(--color-accent);
 }
 
 .actions {
