@@ -183,8 +183,7 @@ export default function PathwayPage() {
     {
       id: null,
       label: "Show All",
-      color: "var(--color-text)",
-      textColor: "var(--color-background)",
+      color: "#1e3a5f",
     },
     { id: "distress", label: "Stress Route", color: "var(--color-distress)" },
     {
@@ -197,7 +196,7 @@ export default function PathwayPage() {
       label: "Serial Mediation",
       color: "var(--color-belonging)",
     },
-    { id: "direct", label: "Direct Benefit", color: "var(--color-nonfast)" },
+    { id: "direct", label: "Direct Benefit", color: "var(--color-fast)" },
   ];
 
   return (
