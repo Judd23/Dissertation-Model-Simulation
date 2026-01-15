@@ -222,6 +222,9 @@ export default function LandingPageAlt() {
             height={512}
           />
 
+          {/* Inner Breathing Orb */}
+          <div className={styles.innerOrb} />
+
           {/* Central Pulse Ring */}
           <div className={styles.pulseRingWrapper}>
             <div className={styles.pulseRing} />
