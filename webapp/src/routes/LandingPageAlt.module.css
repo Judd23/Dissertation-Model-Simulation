@@ -1,0 +1,404 @@
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: #030712;
+}
+
+/* ============================================
+   AMBIENT GLOW BLOBS
+   ============================================ */
+.blob {
+  position: absolute;
+  filter: blur(80px);
+  opacity: 0.4;
+  z-index: 0;
+  border-radius: 50%;
+}
+
+.blobCyan {
+  background: #0891b2;
+  width: 24rem;
+  height: 24rem;
+  top: 0;
+  left: 25%;
+  transform: translateX(-50%);
+}
+
+.blobViolet {
+  background: #7c3aed;
+  width: 32rem;
+  height: 32rem;
+  bottom: 0;
+  right: 0;
+  transform: translateY(20%);
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navInner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoIcon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: -0.05em;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.logoText {
+  color: white;
+  font-weight: 500;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+
+.logoMuted {
+  color: #64748b;
+}
+
+.institutionBadge {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.institutionBadge:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.institutionLogo {
+  height: 1.5rem;
+  width: auto;
+  display: block;
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 7rem 1rem 3rem;
+  z-index: 10;
+  position: relative;
+}
+
+.hero {
+  text-align: center;
+  max-width: 48rem;
+  margin-bottom: 2rem;
+}
+
+/* ============================================
+   LIVE BADGE
+   ============================================ */
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  background: rgba(6, 182, 212, 0.1);
+  color: #22d3ee;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.liveDot {
+  position: relative;
+  display: flex;
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.livePing {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #22d3ee;
+  opacity: 0.75;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.liveCore {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #06b6d4;
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+.title {
+  font-family: "IBM Plex Serif", "Source Serif Pro", var(--font-heading), serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 500;
+  color: white;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.titleAccent {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================================
+   SUBTITLE
+   ============================================ */
+.subtitle {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #94a3b8;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+/* ============================================
+   PARTICLE SPHERE
+   ============================================ */
+.sphereContainer {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.particleCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.pulseRingWrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+.pulseRing {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  background: rgba(8, 145, 178, 0.05);
+  backdrop-filter: blur(4px);
+  animation: pulseRing 3s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   FLOATING STATS
+   ============================================ */
+.floatingStat {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+  z-index: 20;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.floatLeft {
+  top: 25%;
+  left: 0;
+  transform: translateX(-1rem);
+}
+
+.floatRight {
+  bottom: 33%;
+  right: 0;
+  transform: translateX(1rem);
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #22d3ee;
+}
+
+.statValue {
+  display: block;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* ============================================
+   CTA BUTTON
+   ============================================ */
+.ctaWrapper {
+  position: relative;
+  z-index: 20;
+  margin-bottom: 3rem;
+}
+
+.ctaGlow {
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(90deg, #0891b2, #2563eb);
+  border-radius: 0.5rem;
+  filter: blur(12px);
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.ctaWrapper:hover .ctaGlow {
+  opacity: 0.7;
+}
+
+.cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 0.5rem;
+  color: #e2e8f0;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.cta:hover {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.cta svg {
+  color: #22d3ee;
+}
+
+/* ============================================
+   AUTHOR
+   ============================================ */
+.author {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.authorName {
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.authorTitle {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 640px) {
+  .floatingStat {
+    display: none;
+  }
+
+  .sphereContainer {
+    max-width: 20rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
+  .navInner {
+    padding: 0 1rem;
+  }
+
+  .institutionBadge {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .institutionLogo {
+    height: 1.25rem;
+  }
+}

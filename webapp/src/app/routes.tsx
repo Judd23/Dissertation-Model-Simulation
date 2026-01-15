@@ -1,15 +1,16 @@
-import { LayoutGroup } from 'framer-motion';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import Layout from './layout/Layout';
-import LandingPage from '../routes/LandingPage';
-import HomePage from '../routes/HomePage';
+import { LayoutGroup } from "framer-motion";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Layout from "./layout/Layout";
+import LandingPage from "../routes/LandingPage";
+import LandingPageAlt from "../routes/LandingPageAlt";
+import HomePage from "../routes/HomePage";
 
-import SoWhatPage from '../routes/SoWhatPage';
-import DoseExplorerPage from '../routes/DoseExplorerPage';
-import DemographicsPage from '../routes/DemographicsPage';
-import PathwayPage from '../routes/PathwayPage';
-import MethodsPage from '../routes/MethodsPage';
-import ResearcherPage from '../routes/ResearcherPage';
+import SoWhatPage from "../routes/SoWhatPage";
+import DoseExplorerPage from "../routes/DoseExplorerPage";
+import DemographicsPage from "../routes/DemographicsPage";
+import PathwayPage from "../routes/PathwayPage";
+import MethodsPage from "../routes/MethodsPage";
+import ResearcherPage from "../routes/ResearcherPage";
 
 /**
  * AppRoutes - Handles route transitions with shared layout scope.
@@ -26,6 +27,7 @@ export function AppRoutes() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
+          <Route path="landing-alt" element={<LandingPageAlt />} />
           <Route path="home" element={<HomePage />} />
           <Route path="so-what" element={<SoWhatPage />} />
           <Route path="dose" element={<DoseExplorerPage />} />
