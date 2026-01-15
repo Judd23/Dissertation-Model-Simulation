@@ -26,8 +26,8 @@ export function AppRoutes() {
     <LayoutGroup id="app">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<LandingPage />} />
-          <Route path="landing-alt" element={<LandingPageAlt />} />
+          <Route index element={<LandingPageAlt />} />
+          <Route path="landing-alt" element={<Navigate to="/" replace />} />
           <Route path="home" element={<HomePage />} />
           <Route path="so-what" element={<SoWhatPage />} />
           <Route path="dose" element={<DoseExplorerPage />} />

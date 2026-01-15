@@ -159,7 +159,7 @@
 }
 
 .tickLabel {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   font-weight: 500;
   margin-top: 4px;
@@ -208,7 +208,7 @@
   }
 
   .tickLabel {
-    font-size: 9px;
+    font-size: var(--font-size-xs);
   }
 }
 

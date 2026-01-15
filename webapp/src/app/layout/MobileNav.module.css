@@ -50,7 +50,7 @@
 
 .label {
   display: block;
-  font-size: 0.625rem;
+  font-size: var(--font-size-xs);
   line-height: 1.2;
 }
 

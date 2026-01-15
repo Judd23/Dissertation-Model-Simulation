@@ -121,7 +121,7 @@
 .groupButton.active::after {
   content: "✓";
   margin-left: 6px;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .groupDescription {

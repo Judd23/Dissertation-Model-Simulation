@@ -73,13 +73,13 @@
   /* Font sizes */
   --font-size-xs: 0.75rem; /* 12px */
   --font-size-sm: 0.875rem; /* 14px */
-  --font-size-base: 1rem; /* 16px */
-  --font-size-lg: 1.125rem; /* 18px */
-  --font-size-xl: 1.5rem; /* 24px */
-  --font-size-2xl: 2rem; /* 32px */
-  --font-size-3xl: 2.5rem; /* 40px */
-  --font-size-4xl: 3.5rem; /* 56px - editorial headlines */
-  --font-size-5xl: 4.5rem; /* 72px - dramatic statements */
+  --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16px */
+  --font-size-lg: clamp(1.125rem, 1rem + 0.5vw, 1.25rem); /* 18px */
+  --font-size-xl: clamp(1.5rem, 1.25rem + 1vw, 1.75rem); /* 24px */
+  --font-size-2xl: clamp(2rem, 1.5rem + 2vw, 2.5rem); /* 32px */
+  --font-size-3xl: clamp(2.5rem, 2rem + 2vw, 3rem); /* 40px */
+  --font-size-4xl: clamp(3rem, 2rem + 4vw, 4rem); /* 56px - editorial headlines */
+  --font-size-5xl: clamp(3.5rem, 2rem + 5vw, 4.5rem); /* 72px - dramatic statements */
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -145,13 +145,5 @@
 @media (max-width: 768px) {
   :root {
     /* Increase base font sizes on mobile for readability */
-    --font-size-xs: 0.8125rem; /* 13px */
-    --font-size-sm: 0.9375rem; /* 15px */
-    --font-size-base: 1.0625rem; /* 17px */
-    --font-size-lg: 1.1875rem; /* 19px */
-    --font-size-xl: 1.375rem; /* 22px */
-    --font-size-2xl: 1.625rem; /* 26px */
-    --font-size-3xl: 1.875rem; /* 30px */
-    --sidebar-width: 100%;
   }
 }

@@ -62,7 +62,7 @@
 .label {
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.7rem;
+  font-size: var(--font-size-xs);
 }
 
 @media (max-width: 768px) {
