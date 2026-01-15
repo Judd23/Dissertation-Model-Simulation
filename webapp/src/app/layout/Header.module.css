@@ -108,6 +108,7 @@
   text-decoration: none;
   transition: all var(--transition-fast);
   position: relative;
+  white-space: nowrap;
 }
 
 .navLink:hover {
