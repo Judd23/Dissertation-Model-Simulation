@@ -5,7 +5,70 @@
   overflow: hidden;
 }
 
-/* Background now handled by Layout */
+/* Animated floating glow orbs - magazine editorial effect */
+.page::before {
+  content: '';
+  position: absolute;
+  top: calc(-20% + var(--parallax-offset, 0px));
+  right: -15%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--color-accent) 12%, transparent) 0%,
+    color-mix(in srgb, var(--color-engagement) 6%, transparent) 40%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatGlow 18s ease-in-out infinite, pulseGlow 4s ease-in-out infinite;
+}
+
+.page::after {
+  content: '';
+  position: absolute;
+  bottom: calc(10% - var(--parallax-offset, 0px));
+  left: -12%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--color-engagement) 10%, transparent) 0%,
+    color-mix(in srgb, var(--color-accent) 5%, transparent) 45%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatGlow 22s ease-in-out infinite reverse, pulseGlow 5s ease-in-out infinite 1s;
+}
+
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translate(30px, -40px) scale(1.08) rotate(5deg);
+  }
+  50% {
+    transform: translate(-20px, 30px) scale(0.92) rotate(-3deg);
+  }
+  75% {
+    transform: translate(-40px, -15px) scale(1.04) rotate(2deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(10px);
+  }
+}
 
 /* Shimmer effect keyframes */
 @keyframes shimmer {
