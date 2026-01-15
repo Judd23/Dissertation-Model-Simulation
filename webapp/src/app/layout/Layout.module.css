@@ -62,7 +62,11 @@
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  background: transparent;
+  background: #030712;
+}
+
+.layoutLanding .main {
+  padding: 0;
 }
 
 /* Skip to main content link for accessibility */
