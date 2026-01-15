@@ -166,7 +166,7 @@ export default function LandingPageAlt() {
             rel="noopener noreferrer"
             className={styles.institutionBadge}
             whileHover={HOVER_SUBTLE}
-            transition={{ opacity: { duration: 0.8 }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
+            transition={DANCE_SPRING}
           >
             <img
               src={logoSrc}
@@ -256,6 +256,7 @@ export default function LandingPageAlt() {
         >
           <h2 className={styles.authorName}>Jay Johnson</h2>
           <span className={styles.authorTitle}>Doctoral Candidate</span>
+        </motion.div>
         {/* CTA Button */}
         <motion.div
           className={styles.ctaWrapper}
@@ -269,7 +270,7 @@ export default function LandingPageAlt() {
             onClick={handleEnter}
             whileHover={HOVER_SUBTLE}
             whileTap={TAP_SUBTLE}
-            transition={{ opacity: { duration: 0.8 }, scale: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
+            transition={DANCE_SPRING_HEAVY}
           >
             <span>Explore the Research</span>
             <svg
