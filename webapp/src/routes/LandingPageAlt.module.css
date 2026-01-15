@@ -340,7 +340,7 @@
 .ctaWrapper {
   position: relative;
   z-index: 20;
-  margin-top: auto; margin-bottom: 6rem; padding-bottom: env(safe-area-inset-bottom);
+  margin-top: 2rem; margin-bottom: 6rem; padding-bottom: env(safe-area-inset-bottom);
 }
 
 .ctaGlow {
@@ -397,19 +397,22 @@
   /* Reduced by ~23pt */
   font-family: "IBM Plex Serif", "Source Serif Pro", var(--font-heading), serif;
   color: white;
-  font-weight: 500;
-  font-size: var(--font-size-lg);
+  font-weight: 600;
+  font-size: var(--font-size-xl);
   font-style: italic;
   letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
   margin: 0;
 }
 
 .authorTitle {
   /* Reduced */
-  color: #94a3b8;
-  font-size: var(--font-size-sm);
+  color: #cbd5e1;
+  font-size: var(--font-size-base);
   font-style: italic;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 400;
 }
 
 
