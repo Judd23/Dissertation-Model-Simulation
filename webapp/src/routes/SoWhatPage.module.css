@@ -292,7 +292,7 @@
 
 .resourceList a::after {
   content: "↗";
-  font-size: 0.85em;
+  font-size: var(--font-size-xs);
   opacity: 0.7;
 }
 

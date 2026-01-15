@@ -55,7 +55,7 @@
 }
 
 .arrow {
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   line-height: 1;
 }
 

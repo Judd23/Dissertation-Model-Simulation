@@ -71,8 +71,8 @@
   --font-mono: "Source Code Pro", "SF Mono", Consolas, monospace;
 
   /* Font sizes */
-  --font-size-xs: 0.75rem; /* 12px */
-  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem); /* 12px */
+  --font-size-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem); /* 14px */
   --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16px */
   --font-size-lg: clamp(1.125rem, 1rem + 0.5vw, 1.25rem); /* 18px */
   --font-size-xl: clamp(1.5rem, 1.25rem + 1vw, 1.75rem); /* 24px */

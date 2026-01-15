@@ -361,7 +361,7 @@
   }
 
   .findingNumber {
-    font-size: 3rem;
+    font-size: var(--font-size-3xl);
   }
 
   .findingSection {

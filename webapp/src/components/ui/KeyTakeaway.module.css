@@ -42,7 +42,7 @@
 }
 
 .emojiIcon {
-  font-size: 2rem;
+  font-size: var(--font-size-2xl);
   line-height: 1;
   flex-shrink: 0;
 }
