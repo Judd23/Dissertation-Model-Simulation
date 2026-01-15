@@ -6,7 +6,7 @@
    HERO SECTION
    ============================================ */
 .hero {
-  text-align: left;
+  text-align: center;
   padding: var(--spacing-4xl) 0 var(--spacing-3xl);
   position: relative;
 }
@@ -21,6 +21,7 @@
   color: var(--color-accent);
   margin-bottom: var(--spacing-lg);
   display: block;
+  text-align: center;
 }
 
 .title {
@@ -30,6 +31,7 @@
   max-width: 800px;
   margin: 0 auto var(--spacing-xl);
   font-weight: 700;
+  text-align: center;
 }
 
 .lead {
@@ -38,6 +40,7 @@
   line-height: 1.7;
   max-width: 650px;
   margin: 0 auto;
+  text-align: left;
 }
 
 /* ============================================
@@ -45,16 +48,17 @@
    ============================================ */
 .sectionTitle {
   font-size: var(--font-size-2xl);
-  text-align: left;
+  text-align: center;
   margin-bottom: var(--spacing-2xl);
   position: relative;
 }
 
 .sectionTitle::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -8px;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 60px;
   height: 3px;
   background: linear-gradient(90deg, var(--color-accent), var(--color-fast));
@@ -79,8 +83,7 @@
   padding: var(--spacing-xl);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition:
-    box-shadow var(--transition-fast),
+  transition: box-shadow var(--transition-fast),
     border-color var(--transition-fast);
   text-align: left;
 }
@@ -119,6 +122,7 @@
 .stakeholderCard h3 {
   font-size: var(--font-size-xl);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .cardLead {
@@ -126,6 +130,7 @@
   font-size: var(--font-size-base);
   margin-bottom: var(--spacing-lg);
   line-height: 1.6;
+  text-align: left;
 }
 
 .cardList {
@@ -146,7 +151,7 @@
 }
 
 .cardList li::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 8px;
@@ -184,7 +189,8 @@
   padding: var(--spacing-xl);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  transition: box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
   text-align: left;
 }
 
@@ -211,6 +217,7 @@
   font-size: var(--font-size-base);
   font-weight: 600;
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .actionContent p {
@@ -218,6 +225,7 @@
   color: var(--color-text-muted);
   line-height: 1.6;
   margin: 0;
+  text-align: left;
 }
 
 /* ============================================
@@ -246,6 +254,7 @@
   font-weight: 600;
   margin-bottom: var(--spacing-sm);
   color: var(--color-text-muted);
+  text-align: center;
 }
 
 .limitationItem p {
@@ -253,6 +262,7 @@
   color: var(--color-text-muted);
   line-height: 1.6;
   margin: 0;
+  text-align: left;
 }
 
 /* ============================================
@@ -281,7 +291,7 @@
 }
 
 .resourceList a::after {
-  content: '↗';
+  content: "↗";
   font-size: 0.85em;
   opacity: 0.7;
 }
@@ -295,12 +305,13 @@
    ============================================ */
 .cta {
   padding: var(--spacing-4xl) 0;
-  text-align: left;
+  text-align: center;
 }
 
 .cta h2 {
   font-size: var(--font-size-2xl);
   margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .cta p {
@@ -309,11 +320,12 @@
   max-width: 600px;
   margin: 0 auto var(--spacing-2xl);
   line-height: 1.7;
+  text-align: left;
 }
 
 .ctaButtons {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   gap: var(--spacing-md);
   flex-wrap: wrap;
 }

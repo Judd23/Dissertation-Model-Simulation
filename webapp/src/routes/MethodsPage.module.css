@@ -6,7 +6,7 @@
 /* Background now handled by Layout */
 
 .header {
-  text-align: left;
+  text-align: center;
   max-width: 800px;
   margin: 0 auto var(--spacing-2xl);
   padding-top: var(--spacing-xl);
@@ -21,11 +21,17 @@
   letter-spacing: 0.15em;
   color: var(--color-accent);
   margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .header h1 {
   font-size: clamp(1.75rem, 4vw, var(--font-size-3xl));
   margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.header .lead {
+  text-align: left;
 }
 
 /* Sections */
@@ -43,18 +49,23 @@
   border-bottom: 2px solid var(--color-border);
   padding-bottom: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
-  text-align: left;
+  text-align: center;
   position: relative;
 }
 
 .section h2::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 60px;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-accent), var(--color-engagement));
+  background: linear-gradient(
+    90deg,
+    var(--color-accent),
+    var(--color-engagement)
+  );
   border-radius: 1px;
 }
 
@@ -179,21 +190,24 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   /* Transform handled by Framer Motion */
-  transition:
-    box-shadow var(--transition-fast),
+  transition: box-shadow var(--transition-fast),
     border-color var(--transition-fast);
   position: relative;
   overflow: hidden;
 }
 
 .specCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(to bottom, var(--color-accent), var(--color-engagement));
+  background: linear-gradient(
+    to bottom,
+    var(--color-accent),
+    var(--color-engagement)
+  );
   transform: scaleY(0);
   transition: transform var(--transition-normal);
   transform-origin: bottom;
@@ -208,10 +222,8 @@
 
 .specCard[data-morph-id] {
   opacity: 1;
-  transition:
-    opacity var(--reveal-duration) var(--ease-out-expo),
-    box-shadow var(--transition-fast),
-    border-color var(--transition-fast);
+  transition: opacity var(--reveal-duration) var(--ease-out-expo),
+    box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 .specCard[data-morph-id]:hover,
@@ -255,8 +267,7 @@
   margin-top: var(--spacing-lg);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition:
-    box-shadow var(--transition-fast),
+  transition: box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -298,8 +309,7 @@
   padding: var(--spacing-lg);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition:
-    box-shadow var(--transition-fast),
+  transition: box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -310,12 +320,14 @@
 
 .constructCard h4 {
   margin-bottom: var(--spacing-xs);
+  text-align: center;
 }
 
 .constructCard > p {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-md);
+  text-align: left;
 }
 
 .constructCard ul {
@@ -337,8 +349,7 @@
   margin-top: var(--spacing-lg);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition:
-    box-shadow var(--transition-fast),
+  transition: box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -350,6 +361,7 @@
 .infoBox h4 {
   color: var(--color-accent);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .infoBox p {
@@ -357,6 +369,7 @@
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
   line-height: 1.6;
+  text-align: left;
 }
 
 /* Software */
@@ -373,8 +386,7 @@
   padding: var(--spacing-lg);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition:
-    box-shadow var(--transition-fast),
+  transition: box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -385,6 +397,7 @@
 
 .softwareCard h4 {
   margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .softwareCard ul {

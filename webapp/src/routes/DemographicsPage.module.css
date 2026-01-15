@@ -3,7 +3,7 @@
 }
 
 .header {
-  text-align: left;
+  text-align: center;
   max-width: 800px;
   margin: 0 auto var(--spacing-2xl);
   padding-top: var(--spacing-2xl);
@@ -25,11 +25,17 @@
   letter-spacing: 0.15em;
   color: var(--color-accent);
   margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .header h1 {
   font-size: clamp(1.75rem, 4vw, var(--font-size-3xl));
   margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.header .lead {
+  text-align: left;
 }
 
 /* Controls */
@@ -40,7 +46,8 @@
   padding: var(--spacing-xl);
   margin-bottom: var(--spacing-2xl);
   text-align: left;
-  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  transition: box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .controls:focus-within {
@@ -98,18 +105,21 @@
 }
 
 .groupButton.active {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
+  background: linear-gradient(
+    135deg,
+    var(--color-accent),
+    var(--color-accent-hover)
+  );
   border-color: var(--color-accent-hover);
   color: #ffffff;
-  box-shadow: 
-    0 4px 12px rgba(0, 85, 187, 0.3),
+  box-shadow: 0 4px 12px rgba(0, 85, 187, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
   font-weight: 600;
 }
 
 .groupButton.active::after {
-  content: '✓';
+  content: "✓";
   margin-left: 6px;
   font-size: 12px;
 }
@@ -143,6 +153,7 @@
 .demographicsHeader h2 {
   font-size: var(--font-size-xl);
   margin: 0;
+  text-align: center;
 }
 
 .demographicsGrid {
@@ -152,9 +163,18 @@
 }
 
 @keyframes highlightCard {
-  0% { transform: scale(1); border-color: var(--color-border); }
-  50% { transform: scale(1.02); border-color: var(--color-accent); }
-  100% { transform: scale(1); border-color: var(--color-border); }
+  0% {
+    transform: scale(1);
+    border-color: var(--color-border);
+  }
+  50% {
+    transform: scale(1.02);
+    border-color: var(--color-accent);
+  }
+  100% {
+    transform: scale(1);
+    border-color: var(--color-border);
+  }
 }
 
 .demoCard {
@@ -165,10 +185,8 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
-  transition: 
-    transform var(--transition-fast), 
-    box-shadow var(--transition-fast), 
-    border-color var(--transition-fast);
+  transition: transform var(--transition-fast),
+    box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 /* Edge reflection handled by glass.css */
@@ -179,10 +197,8 @@
 
 .demoCard[data-morph-id] {
   opacity: 1;
-  transition:
-    opacity var(--reveal-duration) var(--ease-out-expo),
-    box-shadow var(--transition-fast),
-    border-color var(--transition-fast);
+  transition: opacity var(--reveal-duration) var(--ease-out-expo),
+    box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 /* Fallback: if global .reveal logic is not firing, do not allow cards/charts to stay invisible */
@@ -201,6 +217,7 @@
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-sm);
   border-bottom: 2px solid var(--color-border-light);
+  text-align: center;
 }
 
 .demoStats {
@@ -271,6 +288,7 @@
 .sampleInfo h2 {
   font-size: var(--font-size-xl);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .sampleIntro {
@@ -293,7 +311,8 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  transition: transform var(--transition-fast),
+    box-shadow var(--transition-fast), border-color var(--transition-fast);
   position: relative;
 }
 
@@ -383,7 +402,8 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  transition: transform var(--transition-fast),
+    box-shadow var(--transition-fast), border-color var(--transition-fast);
   min-height: 240px;
   overflow: visible;
   isolation: isolate;
@@ -398,18 +418,19 @@
 .chartContainer h2 {
   font-size: var(--font-size-xl);
   margin-bottom: var(--spacing-sm);
-  text-align: left;
+  text-align: center;
 }
 
 .chartDescription {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-lg);
+  text-align: left;
 }
 
 /* Interpretation */
 .interpretation h2 {
-  text-align: left;
+  text-align: center;
   margin-bottom: var(--spacing-xl);
 }
 
@@ -432,7 +453,8 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   position: relative;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  transition: transform var(--transition-fast),
+    box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 /* Edge reflection handled by glass.css */
@@ -444,6 +466,7 @@
 .interpretationCard h3 {
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .interpretationCard p {
@@ -451,6 +474,7 @@
   color: var(--color-text-muted);
   line-height: 1.6;
   margin: 0;
+  text-align: left;
 }
 
 /* Next step CTA */

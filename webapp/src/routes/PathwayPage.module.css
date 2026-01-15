@@ -3,7 +3,7 @@
 }
 
 .header {
-  text-align: left;
+  text-align: center;
   max-width: 800px;
   margin: 0 auto var(--spacing-2xl);
   padding-top: var(--spacing-2xl);
@@ -18,11 +18,13 @@
   letter-spacing: 0.15em;
   color: var(--color-accent);
   margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .header h1 {
   font-size: clamp(1.75rem, 4vw, var(--font-size-3xl));
   margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 /* Controls - Sticky */
@@ -241,12 +243,12 @@
 }
 
 .coefficients h2 {
-  text-align: left;
+  text-align: center;
   margin-bottom: var(--spacing-xl);
 }
 
 .coefficientNote {
-  text-align: left;
+  text-align: center;
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
   margin: -var(--spacing-lg) 0 var(--spacing-xl);
@@ -318,8 +320,8 @@
 
 .coefficientHeader {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   gap: var(--spacing-xs);
   margin-bottom: var(--spacing-sm);
 }
@@ -327,6 +329,7 @@
 .coefficientLabel {
   font-weight: 600;
   font-size: var(--font-size-sm);
+  text-align: center;
 }
 
 .strengthBadge {
@@ -367,11 +370,13 @@
   font-family: var(--font-mono);
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-xs);
+  text-align: center;
 }
 
 .coefficientSE {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+  text-align: center;
 }
 
 .coefficientPvalue {
@@ -379,6 +384,7 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .coefficientInterpretation {
@@ -386,6 +392,7 @@
   color: var(--color-text-muted);
   line-height: 1.5;
   margin: 0;
+  text-align: left;
 }
 
 /* Indirect Effects */
@@ -396,15 +403,15 @@
 }
 
 .indirectEffects h2 {
-  text-align: left;
+  text-align: center;
   margin-bottom: var(--spacing-md);
 }
 
 .indirectIntro {
-  text-align: left;
+  text-align: center;
   color: var(--color-text-muted);
   max-width: 600px;
-  margin: 0 0 var(--spacing-xl);
+  margin: 0 auto var(--spacing-xl);
   line-height: 1.6;
 }
 
@@ -433,14 +440,16 @@
 
 .indirectHeader {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  gap: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
 }
 
 .indirectHeader h3 {
   margin: 0;
   font-size: var(--font-size-lg);
+  text-align: center;
 }
 
 .indirectBadge {
@@ -481,7 +490,7 @@
 
 .formulaMultiply,
 .formulaEquals {
-  text-align: left;
+  text-align: center;
   font-size: var(--font-size-xl);
   font-weight: 700;
   color: var(--color-accent);
@@ -519,7 +528,7 @@
 
 /* Summary */
 .summary h2 {
-  text-align: left;
+  text-align: center;
   margin-bottom: var(--spacing-xl);
 }
 
@@ -550,6 +559,7 @@
 .summaryCard h3 {
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .summaryCard p {
@@ -557,6 +567,7 @@
   color: var(--color-text-muted);
   line-height: 1.6;
   margin: 0;
+  text-align: left;
 }
 
 .summaryCard strong {

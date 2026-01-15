@@ -37,11 +37,11 @@ export default function Header() {
       {showProgress && (
         <div
           className={styles.progressBar}
-          style={{ width: `${scrollProgress * 100}%` }}
+          data-progress={Math.round(scrollProgress * 100)}
           role="progressbar"
           aria-valuenow={Math.round(scrollProgress * 100)}
-          aria-valuemin="0"
-          aria-valuemax="100"
+          aria-valuemin={0}
+          aria-valuemax={100}
           aria-label="Page scroll progress"
         />
       )}

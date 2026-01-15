@@ -24,6 +24,7 @@
   letter-spacing: 0.15em;
   color: var(--color-accent);
   margin-bottom: var(--spacing-lg);
+  text-align: center;
 }
 
 .title {
@@ -34,6 +35,7 @@
   margin: 0 auto var(--spacing-xl);
   font-weight: 700;
   color: var(--color-text);
+  text-align: center;
 }
 
 .lead {
@@ -44,10 +46,11 @@
   margin: 0 auto;
   padding-bottom: var(--spacing-2xl);
   position: relative;
+  text-align: center;
 }
 
 .lead::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -78,7 +81,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-xl);
   justify-items: stretch;
-  text-align: left;
+  text-align: center;
 }
 
 /* ============================================
@@ -90,7 +93,7 @@
 }
 
 .findingsTitle {
-  text-align: left;
+  text-align: center;
   font-size: var(--font-size-2xl);
   margin-bottom: var(--spacing-md);
 }
@@ -132,6 +135,7 @@
   font-size: var(--font-size-xl);
   margin-bottom: var(--spacing-md);
   color: var(--color-text);
+  text-align: center;
 }
 
 .findingText p {
@@ -139,6 +143,7 @@
   color: var(--color-text-muted);
   line-height: 1.7;
   margin-bottom: var(--spacing-md);
+  text-align: left;
 }
 
 .findingText p:last-child {
@@ -168,7 +173,7 @@
    PREVIEW SECTION
    ============================================ */
 .preview {
-  text-align: left;
+  text-align: center;
   padding: var(--spacing-4xl) 0;
   border-top: 1px solid var(--color-border-light);
 }
@@ -176,6 +181,7 @@
 .preview h2 {
   font-size: var(--font-size-2xl);
   margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .previewText {
@@ -199,7 +205,8 @@
   -webkit-overflow-scrolling: touch;
   position: relative;
   /* Transform handled by Framer Motion */
-  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  transition: box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .diagramContainer:hover {
@@ -210,7 +217,7 @@
 .actions {
   display: flex;
   gap: var(--spacing-md);
-  justify-content: flex-start;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -222,7 +229,7 @@
 }
 
 .explore h2 {
-  text-align: left;
+  text-align: center;
   font-size: var(--font-size-2xl);
   margin-bottom: var(--spacing-2xl);
 }
@@ -237,15 +244,14 @@
 .exploreCard {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  text-align: center;
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   position: relative;
   text-decoration: none;
   /* Transform handled by Framer Motion DANCE_SPRING_HEAVY */
-  transition:
-    box-shadow var(--transition-fast),
+  transition: box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -264,7 +270,8 @@
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-md);
   color: var(--color-accent);
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  transition: background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .exploreCard:hover .exploreIcon {
@@ -277,6 +284,8 @@
   font-size: var(--font-size-lg);
   color: var(--color-text);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
+  width: 100%;
 }
 
 .exploreCard p {
@@ -284,6 +293,7 @@
   color: var(--color-text-muted);
   margin: 0;
   line-height: 1.6;
+  text-align: left;
 }
 
 /* ============================================

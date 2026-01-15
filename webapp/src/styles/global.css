@@ -200,6 +200,55 @@ tbody tr:nth-child(even) {
   border: 0;
 }
 
+/* ===========================================
+   Newspaper Layout Utilities
+   - Centered headers (h1, h2, h3)
+   - Left-justified body copy
+   - Centered standalone data callouts
+   - Centered CTAs
+   =========================================== */
+
+/* Section headers - centered with elegant styling */
+.section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.section-header h1,
+.section-header h2,
+.section-header h3 {
+  text-align: center;
+}
+
+/* Card titles - centered h3 */
+.card-title {
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Body copy - left-justified for readability */
+.body-copy {
+  text-align: left;
+  line-height: 1.7;
+}
+
+/* Standalone data callouts - centered */
+.data-callout {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* CTA container - centered buttons */
+.cta-container {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
 /* Significance stars */
 .sig-star {
   color: var(--color-significant);
