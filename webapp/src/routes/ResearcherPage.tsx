@@ -101,7 +101,7 @@ export default function ResearcherPage() {
           variants={containerVariants}
         >
           <div className={styles.factsInner}>
-            <motion.div variants={itemVariants}>
+            <motion.div className={styles.factWrapper1} variants={itemVariants}>
               <InteractiveSurface
                 className={`${styles.fact} interactiveSurface`}
                 hoverLift={3}
@@ -118,7 +118,7 @@ export default function ResearcherPage() {
                 </div>
               </InteractiveSurface>
             </motion.div>
-            <motion.div variants={itemVariants}>
+            <motion.div className={styles.factWrapper2} variants={itemVariants}>
               <InteractiveSurface
                 className={`${styles.fact} interactiveSurface`}
                 hoverLift={3}
@@ -142,7 +142,7 @@ export default function ResearcherPage() {
                 </div>
               </InteractiveSurface>
             </motion.div>
-            <motion.div variants={itemVariants}>
+            <motion.div className={styles.factWrapper3} variants={itemVariants}>
               <InteractiveSurface
                 className={`${styles.fact} interactiveSurface`}
                 hoverLift={3}
@@ -172,6 +172,7 @@ export default function ResearcherPage() {
 
         <section className={styles.grid}>
           <motion.div
+            className={styles.blockWrapperA}
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT_CONFIG}
@@ -200,6 +201,7 @@ export default function ResearcherPage() {
           </motion.div>
 
           <motion.div
+            className={styles.blockWrapperB}
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT_CONFIG}
@@ -235,6 +237,7 @@ export default function ResearcherPage() {
           </motion.div>
 
           <motion.div
+            className={styles.blockWrapperC}
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT_CONFIG}
@@ -283,6 +286,7 @@ export default function ResearcherPage() {
           </motion.div>
 
           <motion.div
+            className={styles.blockWrapperD}
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT_CONFIG}
