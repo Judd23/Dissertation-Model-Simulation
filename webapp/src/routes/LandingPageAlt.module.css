@@ -85,7 +85,7 @@
 .logoText {
   color: white;
   font-weight: 500;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   letter-spacing: -0.02em;
 }
 
@@ -206,7 +206,7 @@
    SUBTITLE
    ============================================ */
 .subtitle {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   line-height: 1.6;
   background: radial-gradient(
     ellipse at center,
@@ -322,7 +322,7 @@
 
 .statLabel {
   display: block;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   font-weight: 600;
   color: #22d3ee;
 }
