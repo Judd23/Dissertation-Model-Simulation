@@ -271,7 +271,73 @@ export default function MethodsPage() {
           <div className={styles.cardVisualEnhanced}>
             <div className={styles.diagramContainer}>
               <span className={styles.diagramLabel}>Causal Pathways</span>
-              <PathDiagramMini />
+              <motion.svg
+                viewBox="0 0 220 160"
+                className={styles.abstractVisual}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                {/* Upper curve - stress pathway */}
+                <motion.path
+                  d="M30,80 Q110,15 190,80"
+                  stroke="rgba(248, 113, 113, 0.6)"
+                  strokeWidth="3"
+                  fill="none"
+                  strokeLinecap="round"
+                  variants={{ hidden: { pathLength: 0 }, visible: { pathLength: 1, transition: { duration: 0.8, delay: 0.2 } } }}
+                />
+                {/* Lower curve - engagement pathway */}
+                <motion.path
+                  d="M30,80 Q110,145 190,80"
+                  stroke="rgba(6, 182, 212, 0.6)"
+                  strokeWidth="3"
+                  fill="none"
+                  strokeLinecap="round"
+                  variants={{ hidden: { pathLength: 0 }, visible: { pathLength: 1, transition: { duration: 0.8, delay: 0.4 } } }}
+                />
+                {/* Direct path - dashed */}
+                <motion.path
+                  d="M30,80 L190,80"
+                  stroke="rgba(139, 92, 246, 0.5)"
+                  strokeWidth="2"
+                  strokeDasharray="6 4"
+                  fill="none"
+                  variants={{ hidden: { pathLength: 0 }, visible: { pathLength: 1, transition: { duration: 0.6, delay: 0.6 } } }}
+                />
+                {/* Source node */}
+                <motion.circle
+                  cx="30" cy="80" r="14"
+                  fill="rgba(255,255,255,0.15)"
+                  stroke="rgba(255,255,255,0.3)"
+                  strokeWidth="2"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 0 } } }}
+                />
+                {/* Mediator - stress */}
+                <motion.circle
+                  cx="110" cy="30" r="12"
+                  fill="rgba(248, 113, 113, 0.25)"
+                  stroke="rgba(248, 113, 113, 0.5)"
+                  strokeWidth="2"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 0.3 } } }}
+                />
+                {/* Mediator - engagement */}
+                <motion.circle
+                  cx="110" cy="130" r="12"
+                  fill="rgba(6, 182, 212, 0.25)"
+                  stroke="rgba(6, 182, 212, 0.5)"
+                  strokeWidth="2"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 0.5 } } }}
+                />
+                {/* Outcome node */}
+                <motion.circle
+                  cx="190" cy="80" r="14"
+                  fill="rgba(139, 92, 246, 0.25)"
+                  stroke="rgba(139, 92, 246, 0.5)"
+                  strokeWidth="2"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 0.7 } } }}
+                />
+              </motion.svg>
               <span className={styles.diagramCaption}>
                 Multiple pathways tested simultaneously
               </span>
@@ -347,7 +413,61 @@ export default function MethodsPage() {
               <span className={styles.diagramLabel}>
                 Bootstrap Distribution
               </span>
-              <BootstrapDistribution />
+              <motion.svg
+                viewBox="0 0 220 140"
+                className={styles.abstractVisual}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                {/* Confidence region fill */}
+                <motion.path
+                  d="M20,120 Q50,120 70,75 Q110,15 150,75 Q170,120 200,120 L200,120 L20,120 Z"
+                  fill="rgba(16, 185, 129, 0.12)"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.1 } } }}
+                />
+                {/* Distribution curve */}
+                <motion.path
+                  d="M20,120 Q50,120 70,75 Q110,15 150,75 Q170,120 200,120"
+                  stroke="rgba(16, 185, 129, 0.7)"
+                  strokeWidth="3"
+                  fill="none"
+                  strokeLinecap="round"
+                  variants={{ hidden: { pathLength: 0 }, visible: { pathLength: 1, transition: { duration: 1, delay: 0.2 } } }}
+                />
+                {/* Left CI bound */}
+                <motion.line
+                  x1="55" y1="25" x2="55" y2="120"
+                  stroke="rgba(255,255,255,0.3)"
+                  strokeWidth="2"
+                  strokeDasharray="4 3"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.8 } } }}
+                />
+                {/* Right CI bound */}
+                <motion.line
+                  x1="165" y1="25" x2="165" y2="120"
+                  stroke="rgba(255,255,255,0.3)"
+                  strokeWidth="2"
+                  strokeDasharray="4 3"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.8 } } }}
+                />
+                {/* Point estimate marker */}
+                <motion.circle
+                  cx="110" cy="20" r="6"
+                  fill="rgba(16, 185, 129, 0.9)"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 1, type: "spring" } } }}
+                />
+                {/* CI label - left */}
+                <motion.text
+                  x="55" y="135" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="9"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.9 } } }}
+                >2.5%</motion.text>
+                {/* CI label - right */}
+                <motion.text
+                  x="165" y="135" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="9"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.9 } } }}
+                >97.5%</motion.text>
+              </motion.svg>
               <span className={styles.diagramCaption}>
                 2,000 resamples with BCa confidence intervals
               </span>
@@ -405,17 +525,80 @@ export default function MethodsPage() {
               Key estimation parameters for full reproducibility
             </span>
           </div>
-          <div className={styles.cardVisual}>
-            <svg
-              className={styles.visualIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <circle cx="12" cy="12" r="3" />
-              <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
-            </svg>
+          <div className={styles.cardVisualEnhanced}>
+            <div className={styles.diagramContainer}>
+              <span className={styles.diagramLabel}>Configuration</span>
+              <motion.svg
+                viewBox="0 0 180 160"
+                className={styles.abstractVisual}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                {/* Main gear - outer */}
+                <motion.circle
+                  cx="90" cy="80" r="40"
+                  fill="none"
+                  stroke="rgba(245, 158, 11, 0.4)"
+                  strokeWidth="10"
+                  strokeDasharray="18 10"
+                  variants={{ hidden: { opacity: 0, rotate: -30 }, visible: { opacity: 1, rotate: 0, transition: { duration: 0.8 } } }}
+                  style={{ transformOrigin: "90px 80px" }}
+                />
+                {/* Main gear - inner */}
+                <motion.circle
+                  cx="90" cy="80" r="18"
+                  fill="rgba(245, 158, 11, 0.25)"
+                  stroke="rgba(245, 158, 11, 0.5)"
+                  strokeWidth="2"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 0.3 } } }}
+                />
+                {/* Small gear - top right */}
+                <motion.circle
+                  cx="145" cy="45" r="18"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.2)"
+                  strokeWidth="6"
+                  strokeDasharray="10 6"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.4 } } }}
+                />
+                <motion.circle
+                  cx="145" cy="45" r="8"
+                  fill="rgba(255,255,255,0.1)"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 0.5 } } }}
+                />
+                {/* Small gear - bottom left */}
+                <motion.circle
+                  cx="35" cy="115" r="18"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.2)"
+                  strokeWidth="6"
+                  strokeDasharray="10 6"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 } } }}
+                />
+                <motion.circle
+                  cx="35" cy="115" r="8"
+                  fill="rgba(255,255,255,0.1)"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 0.6 } } }}
+                />
+                {/* Connection indicators */}
+                <motion.line
+                  x1="120" y1="60" x2="130" y2="55"
+                  stroke="rgba(255,255,255,0.15)"
+                  strokeWidth="2"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.7 } } }}
+                />
+                <motion.line
+                  x1="60" y1="100" x2="50" y2="105"
+                  stroke="rgba(255,255,255,0.15)"
+                  strokeWidth="2"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.7 } } }}
+                />
+              </motion.svg>
+              <span className={styles.diagramCaption}>
+                Key estimation parameters for full reproducibility
+              </span>
+            </div>
           </div>
         </motion.section>
 
@@ -493,7 +676,79 @@ export default function MethodsPage() {
           <div className={styles.cardVisualEnhanced}>
             <div className={styles.diagramContainer}>
               <span className={styles.diagramLabel}>Latent Structure</span>
-              <MeasurementModel />
+              <motion.svg
+                viewBox="0 0 220 170"
+                className={styles.abstractVisual}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                {/* Bottom layer - observed indicators */}
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <motion.rect
+                    key={`indicator-${i}`}
+                    x={25 + i * 30}
+                    y="130"
+                    width="22"
+                    height="30"
+                    rx="4"
+                    fill="rgba(255,255,255,0.08)"
+                    stroke="rgba(255,255,255,0.15)"
+                    strokeWidth="1"
+                    variants={{
+                      hidden: { opacity: 0, y: 15 },
+                      visible: { opacity: 1, y: 0, transition: { delay: 0.1 + i * 0.05 } }
+                    }}
+                  />
+                ))}
+                {/* Connecting lines from indicators to latent */}
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <motion.line
+                    key={`line-${i}`}
+                    x1={36 + i * 30}
+                    y1="130"
+                    x2="110"
+                    y2="95"
+                    stroke="rgba(236, 72, 153, 0.25)"
+                    strokeWidth="1"
+                    variants={{
+                      hidden: { opacity: 0 },
+                      visible: { opacity: 1, transition: { delay: 0.4 + i * 0.03 } }
+                    }}
+                  />
+                ))}
+                {/* Middle layer - latent construct */}
+                <motion.rect
+                  x="45" y="65" width="130" height="35" rx="8"
+                  fill="rgba(236, 72, 153, 0.2)"
+                  stroke="rgba(236, 72, 153, 0.45)"
+                  strokeWidth="2"
+                  variants={{ hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1, transition: { delay: 0.5 } } }}
+                />
+                <motion.text
+                  x="110" y="87" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="11" fontWeight="500"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.6 } } }}
+                >Latent Construct</motion.text>
+                {/* Connecting line to second-order */}
+                <motion.line
+                  x1="110" y1="65" x2="110" y2="45"
+                  stroke="rgba(139, 92, 246, 0.4)"
+                  strokeWidth="2"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.65 } } }}
+                />
+                {/* Top layer - second-order factor */}
+                <motion.rect
+                  x="65" y="15" width="90" height="30" rx="6"
+                  fill="rgba(139, 92, 246, 0.25)"
+                  stroke="rgba(139, 92, 246, 0.5)"
+                  strokeWidth="2"
+                  variants={{ hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1, transition: { delay: 0.7 } } }}
+                />
+                <motion.text
+                  x="110" y="35" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="10" fontWeight="500"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.8 } } }}
+                >Second-Order</motion.text>
+              </motion.svg>
               <span className={styles.diagramCaption}>
                 Latent variables from multiple survey indicators
               </span>
