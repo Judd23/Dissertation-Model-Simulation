@@ -521,9 +521,6 @@ export default function MethodsPage() {
                 <p className={styles.specValue}>Hayes Model 59</p>
               </div>
             </div>
-            <span className={styles.diagramCaption}>
-              Key estimation parameters for full reproducibility
-            </span>
           </div>
           <div className={styles.cardVisualEnhanced}>
             <div className={styles.diagramContainer}>
