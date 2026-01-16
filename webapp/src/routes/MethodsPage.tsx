@@ -7,11 +7,8 @@ import { useModelData } from "../app/contexts";
 import GlossaryTerm from "../components/ui/GlossaryTerm";
 import ProgressRing from "../components/ui/ProgressRing";
 import { InteractiveSurface } from "../components/ui/InteractiveSurface";
-import { BalanceDiagram } from "../features/charts/BalanceDiagram";
-import { PathDiagramMini } from "../features/charts/PathDiagramMini";
-import { BootstrapDistribution } from "../features/charts/BootstrapDistribution";
-import { MeasurementModel } from "../features/charts/MeasurementModel";
 import { PackageStack } from "../features/charts/PackageStack";
+import { Check } from "lucide-react";
 import {
   revealVariants,
   containerVariants,
@@ -129,19 +126,19 @@ export default function MethodsPage() {
             </p>
             <div className={styles.keyPoints}>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Accounts for selection bias in observational data
                 </span>
               </div>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Balances 8 background covariates between groups
                 </span>
               </div>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Creates pseudo-randomization without an experiment
                 </span>
@@ -151,7 +148,62 @@ export default function MethodsPage() {
           <div className={styles.cardVisualEnhanced}>
             <div className={styles.diagramContainer}>
               <span className={styles.diagramLabel}>Covariate Balance</span>
-              <BalanceDiagram />
+              <motion.svg
+                viewBox="0 0 200 160"
+                className={styles.abstractVisual}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                {/* Fulcrum */}
+                <motion.polygon
+                  points="100,130 85,150 115,150"
+                  fill="rgba(6, 182, 212, 0.3)"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.3 } } }}
+                />
+                {/* Balance beam */}
+                <motion.line
+                  x1="30" y1="70" x2="170" y2="70"
+                  stroke="rgba(255,255,255,0.25)"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.1 } } }}
+                />
+                {/* Support pillar */}
+                <motion.line
+                  x1="100" y1="70" x2="100" y2="130"
+                  stroke="rgba(255,255,255,0.2)"
+                  strokeWidth="3"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.2 } } }}
+                />
+                {/* Left weight - represents one group */}
+                <motion.circle
+                  cx="50" cy="50" r="28"
+                  fill="rgba(6, 182, 212, 0.35)"
+                  stroke="rgba(6, 182, 212, 0.5)"
+                  strokeWidth="2"
+                  variants={{ hidden: { opacity: 0, y: -20 }, visible: { opacity: 1, y: 0, transition: { delay: 0.4, type: "spring" } } }}
+                />
+                {/* Right weight - represents other group */}
+                <motion.circle
+                  cx="150" cy="50" r="28"
+                  fill="rgba(139, 92, 246, 0.35)"
+                  stroke="rgba(139, 92, 246, 0.5)"
+                  strokeWidth="2"
+                  variants={{ hidden: { opacity: 0, y: -20 }, visible: { opacity: 1, y: 0, transition: { delay: 0.5, type: "spring" } } }}
+                />
+                {/* Center pivot */}
+                <motion.circle
+                  cx="100" cy="70" r="8"
+                  fill="rgba(255,255,255,0.4)"
+                  variants={{ hidden: { scale: 0 }, visible: { scale: 1, transition: { delay: 0.6 } } }}
+                />
+                {/* Equal sign in center */}
+                <motion.text
+                  x="100" y="105" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="20" fontWeight="bold"
+                  variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.7 } } }}
+                >=</motion.text>
+              </motion.svg>
               <span className={styles.diagramCaption}>
                 PSW creates comparable groups on observed characteristics
               </span>
@@ -197,19 +249,19 @@ export default function MethodsPage() {
             </p>
             <div className={styles.keyPoints}>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Tests direct and indirect effects simultaneously
                 </span>
               </div>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Handles measurement error through latent variables
                 </span>
               </div>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Parallel mediation design (stress & engagement)
                 </span>
@@ -271,19 +323,19 @@ export default function MethodsPage() {
             </p>
             <div className={styles.keyPoints}>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   No normality assumption required
                 </span>
               </div>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Robust for indirect effects (products of coefficients)
                 </span>
               </div>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Industry-standard BCa method for mediation
                 </span>
@@ -419,19 +471,19 @@ export default function MethodsPage() {
             </div>
             <div className={styles.keyPoints}>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   26 survey items total from NSSE
                 </span>
               </div>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   3 latent constructs with validated scales
                 </span>
               </div>
               <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
                 <span className={styles.keyPointText}>
                   Second-order factor for developmental adjustment
                 </span>
@@ -505,19 +557,19 @@ export default function MethodsPage() {
           </div>
           <div className={styles.keyPoints}>
             <div className={styles.keyPoint}>
-              <span className={styles.keyPointMarker}>→</span>
+              <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
               <span className={styles.keyPointText}>
                 Fully reproducible analysis pipeline
               </span>
             </div>
             <div className={styles.keyPoint}>
-              <span className={styles.keyPointMarker}>→</span>
+              <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
               <span className={styles.keyPointText}>
                 Code available on GitHub
               </span>
             </div>
             <div className={styles.keyPoint}>
-              <span className={styles.keyPointMarker}>→</span>
+              <span className={styles.keyPointMarker}><Check aria-hidden="true" /></span>
               <span className={styles.keyPointText}>
                 No proprietary software required
               </span>
