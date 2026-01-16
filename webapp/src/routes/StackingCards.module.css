@@ -1,4 +1,4 @@
-/* webapp/src/routes/StackingCards.module.css - v3 stacking */
+/* webapp/src/routes/StackingCards.module.css - v4 stacking */
 
 .stackingContainer {
   position: relative;
@@ -16,17 +16,18 @@
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   align-items: center;
-  background: rgba(18, 18, 24, 0.97);
+  background: rgba(18, 18, 24, 0.98);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
     0 20px 40px -10px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  margin-bottom: 1rem;
+  /* Scroll trigger: enough space for next card to scroll up */
+  margin-bottom: 100vh;
 }
 
-/* Stacking positions */
+/* Stacking positions - cards stack 8px apart */
 .card1 {
   composes: card;
   z-index: 1;
@@ -36,25 +37,26 @@
 .card2 {
   composes: card;
   z-index: 2;
-  top: 5.5rem;
+  top: calc(5rem + 8px);
 }
 
 .card3 {
   composes: card;
   z-index: 3;
-  top: 6rem;
+  top: calc(5rem + 16px);
 }
 
 .card4 {
   composes: card;
   z-index: 4;
-  top: 6.5rem;
+  top: calc(5rem + 24px);
 }
 
 .card5 {
   composes: card;
   z-index: 5;
-  top: 7rem;
+  top: calc(5rem + 32px);
+  margin-bottom: 2rem; /* Last card - no extra scroll space */
 }
 
 /* Software Panel (standalone, not stacking) */
