@@ -1,85 +1,75 @@
-/* webapp/src/routes/StackingCards.module.css - v2 */
+/* webapp/src/routes/StackingCards.module.css - v3 stacking */
 
 .stackingContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  max-width: 1000px;
+  position: relative;
+  padding: 1rem 1.5rem 2rem;
+  max-width: 960px;
   margin: 0 auto;
 }
 
-/* Base card styles - thick glass */
+/* Base card styles - thick glass stacking card */
 .card {
-  border-radius: 2rem;
-  padding: 2.5rem;
+  position: sticky;
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
+  gap: 2rem;
   align-items: center;
-  background: linear-gradient(
-    135deg,
-    rgba(15, 15, 20, 0.95) 0%,
-    rgba(20, 20, 28, 0.92) 50%,
-    rgba(15, 15, 20, 0.95) 100%
-  );
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(18, 18, 24, 0.97);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-  transition: box-shadow 0.3s ease;
+    0 20px 40px -10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  margin-bottom: 1rem;
 }
 
-.card:hover {
-  box-shadow:
-    0 30px 60px -15px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-}
-
-/* Card variants inherit base styles */
+/* Stacking positions */
 .card1 {
   composes: card;
+  z-index: 1;
+  top: 5rem;
 }
 
 .card2 {
   composes: card;
+  z-index: 2;
+  top: 5.5rem;
 }
 
 .card3 {
   composes: card;
+  z-index: 3;
+  top: 6rem;
 }
 
 .card4 {
   composes: card;
+  z-index: 4;
+  top: 6.5rem;
 }
 
 .card5 {
   composes: card;
+  z-index: 5;
+  top: 7rem;
 }
 
 /* Software Panel (standalone, not stacking) */
 .softwarePanel {
-  background: linear-gradient(
-    135deg,
-    rgba(15, 15, 20, 0.95) 0%,
-    rgba(20, 20, 28, 0.92) 50%,
-    rgba(15, 15, 20, 0.95) 100%
-  );
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 2.5rem;
-  padding: 3rem;
-  margin: 1.5rem auto;
-  max-width: calc(1000px - 4rem);
+  background: rgba(18, 18, 24, 0.97);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  margin: 1rem auto;
+  max-width: calc(960px - 3rem);
   box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    0 20px 40px -10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-xl);
@@ -266,23 +256,17 @@
 
 /* Model Fit Panel (standalone, not stacking) */
 .modelFitPanel {
-  background: linear-gradient(
-    135deg,
-    rgba(15, 15, 20, 0.95) 0%,
-    rgba(20, 20, 28, 0.92) 50%,
-    rgba(15, 15, 20, 0.95) 100%
-  );
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 2.5rem;
-  padding: 3rem;
-  margin: 1.5rem auto;
-  max-width: calc(1000px - 4rem);
+  background: rgba(18, 18, 24, 0.97);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  margin: 1rem auto;
+  max-width: calc(960px - 3rem);
   box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    0 20px 40px -10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .fitRingsGrid {
@@ -330,9 +314,9 @@
 
 /* References section */
 .referencesSection {
-  padding: 2rem;
-  max-width: calc(1000px - 4rem);
-  margin-inline: auto;
+  padding: 1.5rem 2rem;
+  max-width: calc(960px - 3rem);
+  margin: 0 auto;
 }
 
 .referencesList {
