@@ -1,99 +1,85 @@
-/* webapp/src/routes/StackingCards.module.css */
+/* webapp/src/routes/StackingCards.module.css - v2 */
 
 .stackingContainer {
-  position: relative;
-  padding-block: var(--space-lg);
-  padding-inline: var(--space-xl);
-  max-width: 1100px;
-  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 /* Base card styles - thick glass */
 .card {
-  position: sticky;
-  min-height: 520px;
-  border-radius: 2.5rem;
-  padding: var(--space-xl) var(--space-2xl);
+  border-radius: 2rem;
+  padding: 2.5rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-2xl);
+  gap: 2.5rem;
   align-items: center;
   background: linear-gradient(
     135deg,
-    rgba(15, 15, 20, 0.94) 0%,
-    rgba(20, 20, 28, 0.90) 50%,
-    rgba(15, 15, 20, 0.94) 100%
+    rgba(15, 15, 20, 0.95) 0%,
+    rgba(20, 20, 28, 0.92) 50%,
+    rgba(15, 15, 20, 0.95) 100%
   );
   -webkit-backdrop-filter: blur(24px);
   backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
     inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.3s ease;
-  margin-bottom: 40vh;
 }
 
 .card:hover {
   box-shadow:
     0 30px 60px -15px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
     inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* Stacking positions - no color theming, just z-index and top offset */
+/* Card variants inherit base styles */
 .card1 {
   composes: card;
-  z-index: 10;
-  top: 6rem;
 }
 
 .card2 {
   composes: card;
-  z-index: 20;
-  top: 7rem;
 }
 
 .card3 {
   composes: card;
-  z-index: 30;
-  top: 8rem;
 }
 
 .card4 {
   composes: card;
-  z-index: 40;
-  top: 9rem;
 }
 
 .card5 {
   composes: card;
-  z-index: 50;
-  top: 10rem;
-  margin-bottom: 0;
 }
 
 /* Software Panel (standalone, not stacking) */
 .softwarePanel {
   background: linear-gradient(
     135deg,
-    rgba(15, 15, 20, 0.92) 0%,
-    rgba(20, 20, 28, 0.88) 50%,
-    rgba(15, 15, 20, 0.92) 100%
+    rgba(15, 15, 20, 0.95) 0%,
+    rgba(20, 20, 28, 0.92) 50%,
+    rgba(15, 15, 20, 0.95) 100%
   );
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2.5rem;
-  padding: var(--space-2xl);
-  margin-block: var(--space-md);
-  margin-inline: var(--space-lg);
-  max-width: calc(1200px - var(--space-lg) * 2);
+  padding: 3rem;
+  margin: 1.5rem auto;
+  max-width: calc(1000px - 4rem);
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-xl);
@@ -104,8 +90,7 @@
 .cardContent {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  padding: var(--space-md);
+  gap: 1rem;
 }
 
 .cardEyebrow {
@@ -283,22 +268,21 @@
 .modelFitPanel {
   background: linear-gradient(
     135deg,
-    rgba(15, 15, 20, 0.92) 0%,
-    rgba(20, 20, 28, 0.88) 50%,
-    rgba(15, 15, 20, 0.92) 100%
+    rgba(15, 15, 20, 0.95) 0%,
+    rgba(20, 20, 28, 0.92) 50%,
+    rgba(15, 15, 20, 0.95) 100%
   );
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2.5rem;
-  padding: var(--space-2xl);
-  margin-block: var(--space-md);
-  margin-inline: var(--space-lg);
-  max-width: calc(1200px - var(--space-lg) * 2);
+  padding: 3rem;
+  margin: 1.5rem auto;
+  max-width: calc(1000px - 4rem);
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
 .fitRingsGrid {
@@ -346,9 +330,8 @@
 
 /* References section */
 .referencesSection {
-  padding-block: var(--space-xl);
-  padding-inline: var(--space-lg);
-  max-width: 1200px;
+  padding: 2rem;
+  max-width: calc(1000px - 4rem);
   margin-inline: auto;
 }
 
@@ -416,39 +399,42 @@
 .stageIndicator {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1rem 0.5rem 0.625rem;
-  background: rgba(255, 255, 255, 0.03);
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem 0.375rem 0.375rem;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1rem;
+  width: fit-content;
 }
 
 .stageIcon {
-  width: 36px;
-  height: 36px;
-  border-radius: 0.5rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 0.375rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .stageIcon svg {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   stroke-width: 1.5;
   color: inherit;
 }
 
 .stageLabel {
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: inherit;
+  white-space: nowrap;
 }
 
 /* Per-card stage colors */
