@@ -185,4 +185,3 @@ export function useTransition() {
   // Return default context if provider is not present (graceful degradation)
   return context ?? defaultContext;
 }
-}
