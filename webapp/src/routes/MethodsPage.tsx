@@ -2,10 +2,16 @@
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
+import { Scale, Network, RefreshCw, Settings, Layers, Code } from "lucide-react";
 import { useModelData } from "../app/contexts";
 import GlossaryTerm from "../components/ui/GlossaryTerm";
 import ProgressRing from "../components/ui/ProgressRing";
 import { InteractiveSurface } from "../components/ui/InteractiveSurface";
+import { BalanceDiagram } from "../features/charts/BalanceDiagram";
+import { PathDiagramMini } from "../features/charts/PathDiagramMini";
+import { BootstrapDistribution } from "../features/charts/BootstrapDistribution";
+import { MeasurementModel } from "../features/charts/MeasurementModel";
+import { PackageStack } from "../features/charts/PackageStack";
 import {
   revealVariants,
   containerVariants,
@@ -93,7 +99,12 @@ export default function MethodsPage() {
           variants={revealVariants}
         >
           <div className={styles.cardContent}>
-            <p className={styles.cardEyebrow}>Stage 1</p>
+            <div className={styles.stageIndicator}>
+              <div className={styles.stageIcon}>
+                <Scale aria-hidden="true" />
+              </div>
+              <span className={styles.stageLabel}>Stage 1</span>
+            </div>
             <h2 className={styles.cardHeading}>Leveling the Playing Field</h2>
             <p className={styles.cardDescription}>
               Students who earn college credits in high school aren't randomly
@@ -116,18 +127,29 @@ export default function MethodsPage() {
               <strong>Plain talk:</strong> We statistically match students so
               we're comparing apples to apples, not apples to oranges.
             </p>
+            <div className={styles.keyPoints}>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Accounts for selection bias in observational data</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Balances 8 background covariates between groups</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Creates pseudo-randomization without an experiment</span>
+              </div>
+            </div>
           </div>
-          <div className={styles.cardVisual}>
-            <svg
-              className={styles.visualIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path d="M12 3v18M3 12h18M7 7l10 10M17 7L7 17" />
-              <circle cx="12" cy="12" r="9" />
-            </svg>
+          <div className={styles.cardVisualEnhanced}>
+            <div className={styles.diagramContainer}>
+              <span className={styles.diagramLabel}>Covariate Balance</span>
+              <BalanceDiagram />
+              <span className={styles.diagramCaption}>
+                PSW creates comparable groups on observed characteristics
+              </span>
+            </div>
           </div>
         </motion.section>
 
@@ -140,7 +162,12 @@ export default function MethodsPage() {
           variants={revealVariants}
         >
           <div className={styles.cardContent}>
-            <p className={styles.cardEyebrow}>Stage 2</p>
+            <div className={styles.stageIndicator}>
+              <div className={styles.stageIcon}>
+                <Network aria-hidden="true" />
+              </div>
+              <span className={styles.stageLabel}>Stage 2</span>
+            </div>
             <h2 className={styles.cardHeading}>Mapping the Pathways</h2>
             <p className={styles.cardDescription}>
               With balanced groups, we used{" "}
@@ -162,21 +189,29 @@ export default function MethodsPage() {
               <strong>Plain talk:</strong> We map all the ways credits might
               help—or hurt—and test them at the same time.
             </p>
+            <div className={styles.keyPoints}>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Tests direct and indirect effects simultaneously</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Handles measurement error through latent variables</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Parallel mediation design (stress & engagement)</span>
+              </div>
+            </div>
           </div>
-          <div className={styles.cardVisual}>
-            <svg
-              className={styles.visualIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <circle cx="4" cy="12" r="2" />
-              <circle cx="12" cy="6" r="2" />
-              <circle cx="12" cy="18" r="2" />
-              <circle cx="20" cy="12" r="2" />
-              <path d="M6 12h4M14 6l4 4M14 18l4-4" />
-            </svg>
+          <div className={styles.cardVisualEnhanced}>
+            <div className={styles.diagramContainer}>
+              <span className={styles.diagramLabel}>Causal Pathways</span>
+              <PathDiagramMini />
+              <span className={styles.diagramCaption}>
+                Multiple pathways tested simultaneously
+              </span>
+            </div>
           </div>
         </motion.section>
 
@@ -189,7 +224,12 @@ export default function MethodsPage() {
           variants={revealVariants}
         >
           <div className={styles.cardContent}>
-            <p className={styles.cardEyebrow}>Stage 3</p>
+            <div className={styles.stageIndicator}>
+              <div className={styles.stageIcon}>
+                <RefreshCw aria-hidden="true" />
+              </div>
+              <span className={styles.stageLabel}>Stage 3</span>
+            </div>
             <h2 className={styles.cardHeading}>Testing Our Confidence</h2>
             <p className={styles.cardDescription}>
               How sure can we be in these findings? We used{" "}
@@ -217,18 +257,29 @@ export default function MethodsPage() {
               <strong>Plain talk:</strong> We rerun the analysis 2,000 times to
               see how much results could vary by chance.
             </p>
+            <div className={styles.keyPoints}>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>No normality assumption required</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Robust for indirect effects (products of coefficients)</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Industry-standard BCa method for mediation</span>
+              </div>
+            </div>
           </div>
-          <div className={styles.cardVisual}>
-            <svg
-              className={styles.visualIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path d="M3 20h18M6 16v4M10 12v8M14 8v12M18 4v16" />
-              <path d="M3 12c3-4 6-6 9-6s6 2 9 6" strokeDasharray="2 2" />
-            </svg>
+          <div className={styles.cardVisualEnhanced}>
+            <div className={styles.diagramContainer}>
+              <span className={styles.diagramLabel}>Bootstrap Distribution</span>
+              <BootstrapDistribution />
+              <span className={styles.diagramCaption}>
+                2,000 resamples with BCa confidence intervals
+              </span>
+            </div>
           </div>
         </motion.section>
 
@@ -241,7 +292,12 @@ export default function MethodsPage() {
           variants={revealVariants}
         >
           <div className={styles.cardContent}>
-            <p className={styles.cardEyebrow}>Specifications</p>
+            <div className={styles.stageIndicator}>
+              <div className={styles.stageIcon}>
+                <Settings aria-hidden="true" />
+              </div>
+              <span className={styles.stageLabel}>Specifications</span>
+            </div>
             <h2 className={styles.cardHeading}>Technical Settings</h2>
             <p className={styles.cardDescription}>
               The specific parameters we chose for estimation, missing data
@@ -273,6 +329,9 @@ export default function MethodsPage() {
                 <p className={styles.specValue}>Hayes Model 59</p>
               </div>
             </div>
+            <span className={styles.diagramCaption}>
+              Key estimation parameters for full reproducibility
+            </span>
           </div>
           <div className={styles.cardVisual}>
             <svg
@@ -297,7 +356,12 @@ export default function MethodsPage() {
           variants={revealVariants}
         >
           <div className={styles.cardContent}>
-            <p className={styles.cardEyebrow}>Measurement</p>
+            <div className={styles.stageIndicator}>
+              <div className={styles.stageIcon}>
+                <Layers aria-hidden="true" />
+              </div>
+              <span className={styles.stageLabel}>Measurement</span>
+            </div>
             <h2 className={styles.cardHeading}>What We Measured</h2>
             <p className={styles.cardDescription}>
               Each concept in our model was measured using multiple survey
@@ -333,20 +397,29 @@ export default function MethodsPage() {
                 </p>
               </div>
             </div>
+            <div className={styles.keyPoints}>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>26 survey items total from NSSE</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>3 latent constructs with validated scales</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Second-order factor for developmental adjustment</span>
+              </div>
+            </div>
           </div>
-          <div className={styles.cardVisual}>
-            <svg
-              className={styles.visualIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
+          <div className={styles.cardVisualEnhanced}>
+            <div className={styles.diagramContainer}>
+              <span className={styles.diagramLabel}>Latent Structure</span>
+              <MeasurementModel />
+              <span className={styles.diagramCaption}>
+                Latent variables from multiple survey indicators
+              </span>
+            </div>
           </div>
         </motion.section>
 
@@ -359,7 +432,12 @@ export default function MethodsPage() {
           variants={revealVariants}
         >
           <div className={styles.cardContent}>
-            <p className={styles.cardEyebrow}>Reproducibility</p>
+            <div className={styles.stageIndicator}>
+              <div className={styles.stageIcon}>
+                <Code aria-hidden="true" />
+              </div>
+              <span className={styles.stageLabel}>Reproducibility</span>
+            </div>
             <h2 className={styles.cardHeading}>Open-Source Toolkit</h2>
             <p className={styles.cardDescription}>
               All analyses used open-source software, ensuring transparency and
@@ -400,19 +478,29 @@ export default function MethodsPage() {
                 </ul>
               </div>
             </div>
+            <div className={styles.keyPoints}>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Fully reproducible analysis pipeline</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>Code available on GitHub</span>
+              </div>
+              <div className={styles.keyPoint}>
+                <span className={styles.keyPointMarker}>→</span>
+                <span className={styles.keyPointText}>No proprietary software required</span>
+              </div>
+            </div>
           </div>
-          <div className={styles.cardVisual}>
-            <svg
-              className={styles.visualIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <polyline points="16 18 22 12 16 6" />
-              <polyline points="8 6 2 12 8 18" />
-              <line x1="12" y1="2" x2="12" y2="22" />
-            </svg>
+          <div className={styles.cardVisualEnhanced}>
+            <div className={styles.diagramContainer}>
+              <span className={styles.diagramLabel}>Analysis Stack</span>
+              <PackageStack />
+              <span className={styles.diagramCaption}>
+                Open-source, reproducible analysis
+              </span>
+            </div>
           </div>
         </motion.section>
       </div>

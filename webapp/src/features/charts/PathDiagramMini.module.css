@@ -1,0 +1,99 @@
+/* PathDiagramMini.module.css */
+
+.container {
+  width: 100%;
+  max-width: 360px;
+  padding: 0.5rem;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Node styles */
+.nodeX {
+  fill: rgba(139, 92, 246, 0.15);
+  stroke: #8b5cf6;
+  stroke-width: 1.5;
+}
+
+.nodeM1 {
+  fill: rgba(248, 113, 113, 0.15);
+  stroke: #f87171;
+  stroke-width: 1.5;
+}
+
+.nodeM2 {
+  fill: rgba(6, 182, 212, 0.15);
+  stroke: #06b6d4;
+  stroke-width: 1.5;
+}
+
+.nodeY {
+  fill: rgba(139, 92, 246, 0.15);
+  stroke: #8b5cf6;
+  stroke-width: 1.5;
+}
+
+.nodeLabel {
+  fill: rgba(255, 255, 255, 0.85);
+  font-size: 9px;
+  font-weight: 500;
+  text-anchor: middle;
+  font-family: var(--font-body);
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.legendLine {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.legendCoral {
+  background: #f87171;
+}
+
+.legendCyan {
+  background: #06b6d4;
+}
+
+.legendViolet {
+  background: #8b5cf6;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #8b5cf6 0px,
+    #8b5cf6 4px,
+    transparent 4px,
+    transparent 6px
+  );
+}
+
+@media (max-width: 640px) {
+  .container {
+    max-width: 280px;
+  }
+  
+  .legend {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+}

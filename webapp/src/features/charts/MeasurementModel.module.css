@@ -1,0 +1,127 @@
+/* MeasurementModel.module.css */
+
+.container {
+  width: 100%;
+  max-width: 380px;
+  padding: 1rem;
+}
+
+.constructs {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.constructGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.latent {
+  width: 60px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.latentLabel {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arrows {
+  display: flex;
+  gap: 4px;
+  height: 20px;
+  align-items: center;
+  margin: 0.25rem 0;
+}
+
+.arrow {
+  width: 2px;
+  height: 16px;
+  border-radius: 1px;
+  transform-origin: top;
+}
+
+.moreIndicator {
+  font-size: 0.55rem;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+.indicators {
+  display: flex;
+  gap: 3px;
+}
+
+.indicator {
+  width: 18px;
+  height: 14px;
+  border: 1px solid;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.indicatorLabel {
+  font-size: 0.45rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}
+
+.countBadge {
+  margin-top: 0.5rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.75rem;
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: white;
+}
+
+.summary {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.summaryText {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .container {
+    max-width: 300px;
+  }
+  
+  .latent {
+    width: 50px;
+    height: 35px;
+  }
+  
+  .latentLabel {
+    font-size: 0.55rem;
+  }
+  
+  .indicator {
+    width: 14px;
+    height: 12px;
+  }
+  
+  .indicatorLabel {
+    font-size: 0.4rem;
+  }
+}

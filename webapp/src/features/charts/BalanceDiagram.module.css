@@ -1,0 +1,167 @@
+/* BalanceDiagram.module.css */
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem;
+}
+
+.panels {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.panel {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.panelLabel {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.75rem;
+}
+
+.barsContainer {
+  display: flex;
+  gap: 0.5rem;
+  height: 80px;
+  align-items: flex-end;
+  width: 100%;
+  justify-content: center;
+}
+
+.barGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.barPair {
+  display: flex;
+  gap: 2px;
+  height: 60px;
+  align-items: flex-end;
+}
+
+.bar {
+  width: 8px;
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+}
+
+.barFast {
+  background: linear-gradient(to top, #06b6d4, #22d3ee);
+}
+
+.barNonfast {
+  background: linear-gradient(to top, #8b5cf6, #a78bfa);
+}
+
+.barLabel {
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.imbalanceIndicator,
+.balanceIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.imbalanceIndicator {
+  color: #f59e0b;
+}
+
+.imbalanceIcon {
+  font-size: 0.75rem;
+}
+
+.balanceIndicator {
+  color: #10b981;
+}
+
+.balanceIcon {
+  font-size: 0.75rem;
+}
+
+.arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.arrowLabel {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-cyan);
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.legendFast {
+  background: #06b6d4;
+}
+
+.legendNonfast {
+  background: #8b5cf6;
+}
+
+@media (max-width: 640px) {
+  .panels {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .arrow {
+    transform: rotate(90deg);
+    margin: 0.25rem 0;
+  }
+  
+  .arrowLabel {
+    transform: rotate(-90deg);
+  }
+}
