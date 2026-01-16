@@ -2,12 +2,12 @@
  * ChoreographerContext.tsx
  * ========================
  * Unified animation orchestration for viewport-aware transitions.
- * 
+ *
  * Extends TransitionContext with:
  * - Viewport center tracking for center-out stagger
  * - Element registration for morph coordination
  * - Phase state for orchestrated sequences
- * 
+ *
  * @link See transitionConfig.ts for timing constants
  * @link See Debugs.md Phase 27 for implementation details
  */
@@ -21,16 +21,20 @@ import {
   useEffect,
   useMemo,
   type ReactNode,
-} from 'react';
-import { TIMING, STAGGER_CONFIG, calculateCenterOutDelay } from '../../lib/transitionConfig';
+} from "react";
+import {
+  TIMING,
+  STAGGER_CONFIG,
+  calculateCenterOutDelay,
+} from "../../lib/transitionConfig";
 
 // =============================================================================
 // TYPES
 // =============================================================================
 
-export type ChoreographerPhase = 'idle' | 'exiting' | 'morphing' | 'entering';
+export type ChoreographerPhase = "idle" | "exiting" | "morphing" | "entering";
 
-export type MorphCategory = 'hero' | 'card' | 'text' | 'chart' | 'decoration';
+export type MorphCategory = "hero" | "card" | "text" | "chart" | "decoration";
 
 interface RegisteredElement {
   id: string;
@@ -48,20 +52,20 @@ interface ChoreographerContextValue {
   // Phase management
   phase: ChoreographerPhase;
   setPhase: (phase: ChoreographerPhase) => void;
-  
+
   // Viewport tracking
   viewportCenter: ViewportCenter;
   visibleElements: Map<string, RegisteredElement>;
-  
+
   // Element registration
   registerElement: (id: string, category: MorphCategory, rect: DOMRect) => void;
   unregisterElement: (id: string) => void;
   updateElementRect: (id: string, rect: DOMRect) => void;
-  
+
   // Stagger calculation
   getStaggerDelay: (elementId: string) => number;
   getDistanceFromCenter: (elementId: string) => number;
-  
+
   // Transition orchestration
   startOrchestration: () => Promise<void>;
   completeOrchestration: () => void;
@@ -71,7 +75,9 @@ interface ChoreographerContextValue {
 // CONTEXT
 // =============================================================================
 
-const ChoreographerContext = createContext<ChoreographerContextValue | null>(null);
+const ChoreographerContext = createContext<ChoreographerContextValue | null>(
+  null
+);
 
 // =============================================================================
 // PROVIDER
@@ -81,10 +87,17 @@ interface ChoreographerProviderProps {
   children: ReactNode;
 }
 
-export function ChoreographerProvider({ children }: ChoreographerProviderProps) {
-  const [phase, setPhase] = useState<ChoreographerPhase>('idle');
-  const [visibleElements] = useState(() => new Map<string, RegisteredElement>());
-  const [viewportCenter, setViewportCenter] = useState<ViewportCenter>({ x: 0, y: 0 });
+export function ChoreographerProvider({
+  children,
+}: ChoreographerProviderProps) {
+  const [phase, setPhase] = useState<ChoreographerPhase>("idle");
+  const [visibleElements] = useState(
+    () => new Map<string, RegisteredElement>()
+  );
+  const [viewportCenter, setViewportCenter] = useState<ViewportCenter>({
+    x: 0,
+    y: 0,
+  });
 
   // Track viewport center
   useEffect(() => {
@@ -96,8 +109,8 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
     };
 
     updateViewportCenter();
-    window.addEventListener('resize', updateViewportCenter);
-    return () => window.removeEventListener('resize', updateViewportCenter);
+    window.addEventListener("resize", updateViewportCenter);
+    return () => window.removeEventListener("resize", updateViewportCenter);
   }, []);
 
   // Calculate distance from viewport center
@@ -107,15 +120,15 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
         x: rect.left + rect.width / 2,
         y: rect.top + rect.height / 2,
       };
-      
+
       const dx = elementCenter.x - viewportCenter.x;
       const dy = elementCenter.y - viewportCenter.y;
-      
+
       // Normalize to viewport diagonal
       const viewportDiagonal = Math.sqrt(
         viewportCenter.x ** 2 + viewportCenter.y ** 2
       );
-      
+
       return Math.sqrt(dx ** 2 + dy ** 2) / viewportDiagonal;
     },
     [viewportCenter]
@@ -172,23 +185,23 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
   // Orchestrated transition sequence
   const startOrchestration = useCallback(async () => {
     // Phase 1: Exit
-    setPhase('exiting');
+    setPhase("exiting");
     await new Promise((resolve) => setTimeout(resolve, TIMING.exit));
 
     // Phase 2: Morph
-    setPhase('morphing');
+    setPhase("morphing");
     await new Promise((resolve) => setTimeout(resolve, TIMING.morph));
 
     // Phase 3: Enter
-    setPhase('entering');
+    setPhase("entering");
     await new Promise((resolve) => setTimeout(resolve, TIMING.enter));
 
     // Complete
-    setPhase('idle');
+    setPhase("idle");
   }, []);
 
   const completeOrchestration = useCallback(() => {
-    setPhase('idle');
+    setPhase("idle");
   }, []);
 
   // Memoized context value
@@ -237,7 +250,9 @@ export function ChoreographerProvider({ children }: ChoreographerProviderProps) 
 export function useChoreographer(): ChoreographerContextValue {
   const context = useContext(ChoreographerContext);
   if (!context) {
-    throw new Error('useChoreographer must be used within ChoreographerProvider');
+    throw new Error(
+      "useChoreographer must be used within ChoreographerProvider"
+    );
   }
   return context;
 }
@@ -247,7 +262,7 @@ export function useChoreographer(): ChoreographerContextValue {
  */
 export function useIsOrchestrating(): boolean {
   const { phase } = useChoreographer();
-  return phase !== 'idle';
+  return phase !== "idle";
 }
 
 /**
@@ -285,12 +300,14 @@ export function useDistanceFromCenter(elementId: string): number {
 export function calculateGroupStagger(
   elements: { id: string; distanceFromCenter: number }[]
 ): Map<string, number> {
-  const sorted = [...elements].sort((a, b) => a.distanceFromCenter - b.distanceFromCenter);
+  const sorted = [...elements].sort(
+    (a, b) => a.distanceFromCenter - b.distanceFromCenter
+  );
   const delays = new Map<string, number>();
-  
+
   sorted.forEach((el, index) => {
     delays.set(el.id, index * STAGGER_CONFIG.delay);
   });
-  
+
   return delays;
 }

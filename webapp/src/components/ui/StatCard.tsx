@@ -1,15 +1,15 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { InteractiveSurface } from './InteractiveSurface';
-import { DANCE_SPRING_HEAVY } from '../../lib/transitionConfig';
-import styles from './StatCard.module.css';
+import { useEffect, useState, useRef, useMemo } from "react";
+import { motion } from "framer-motion";
+import { InteractiveSurface } from "./InteractiveSurface";
+import { DANCE_SPRING_HEAVY } from "../../lib/transitionConfig";
+import styles from "./StatCard.module.css";
 
 interface StatCardProps {
   label: string | React.ReactNode;
   value: string | number;
   subtext?: string;
-  color?: 'default' | 'positive' | 'negative' | 'accent';
-  size?: 'small' | 'medium' | 'large';
+  color?: "default" | "positive" | "negative" | "accent";
+  size?: "small" | "medium" | "large";
   animate?: boolean;
   /** Unique ID for shared-element morphing across routes */
   layoutId?: string;
@@ -23,36 +23,50 @@ function parseFormattedValue(value: string | number): {
   decimals: number;
   useLocale: boolean;
 } {
-  if (typeof value === 'number') {
+  if (typeof value === "number") {
     return {
       numericValue: value,
-      prefix: '',
-      suffix: '',
-      decimals: Number.isInteger(value) ? 0 : String(value).split('.')[1]?.length || 0,
+      prefix: "",
+      suffix: "",
+      decimals: Number.isInteger(value)
+        ? 0
+        : String(value).split(".")[1]?.length || 0,
       useLocale: false,
     };
   }
 
   // Detect if number uses locale formatting (has commas)
-  const useLocale = value.includes(',');
+  const useLocale = value.includes(",");
 
   // Extract prefix (like $, £) and suffix (like %, K, M)
   const match = value.match(/^([^0-9.-]*)([0-9,.-]+)([^0-9]*)$/);
 
   if (!match) {
-    return { numericValue: null, prefix: '', suffix: '', decimals: 0, useLocale: false };
+    return {
+      numericValue: null,
+      prefix: "",
+      suffix: "",
+      decimals: 0,
+      useLocale: false,
+    };
   }
 
-  const [, prefix = '', numStr, suffix = ''] = match;
-  const cleanNum = numStr.replace(/,/g, '');
+  const [, prefix = "", numStr, suffix = ""] = match;
+  const cleanNum = numStr.replace(/,/g, "");
   const numericValue = parseFloat(cleanNum);
 
   if (isNaN(numericValue)) {
-    return { numericValue: null, prefix: '', suffix: '', decimals: 0, useLocale: false };
+    return {
+      numericValue: null,
+      prefix: "",
+      suffix: "",
+      decimals: 0,
+      useLocale: false,
+    };
   }
 
   // Detect decimal places
-  const decimalPart = cleanNum.split('.')[1];
+  const decimalPart = cleanNum.split(".")[1];
   const decimals = decimalPart ? decimalPart.length : 0;
 
   return { numericValue, prefix, suffix, decimals, useLocale };
@@ -74,7 +88,8 @@ function formatValue(
       maximumFractionDigits: decimals,
     });
   } else {
-    formatted = decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
+    formatted =
+      decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
   }
 
   return `${prefix}${formatted}${suffix}`;
@@ -84,8 +99,8 @@ export default function StatCard({
   label,
   value,
   subtext,
-  color = 'default',
-  size = 'medium',
+  color = "default",
+  size = "medium",
   animate = true,
   layoutId,
 }: StatCardProps) {
@@ -98,7 +113,13 @@ export default function StatCard({
   const [displayValue, setDisplayValue] = useState<string>(() => {
     // Show 0 initially if animatable, otherwise show actual value
     if (animate && parsed.numericValue !== null) {
-      return formatValue(0, parsed.decimals, parsed.prefix, parsed.suffix, parsed.useLocale);
+      return formatValue(
+        0,
+        parsed.decimals,
+        parsed.prefix,
+        parsed.suffix,
+        parsed.useLocale
+      );
     }
     return String(value);
   });
@@ -119,7 +140,8 @@ export default function StatCard({
         if (entries[0].isIntersecting && !hasAnimated.current) {
           hasAnimated.current = true;
 
-          const { numericValue, prefix, suffix, decimals, useLocale } = newParsed;
+          const { numericValue, prefix, suffix, decimals, useLocale } =
+            newParsed;
           if (numericValue === null) return;
 
           const duration = 1500; // ms - slightly longer for more dramatic effect
@@ -135,20 +157,24 @@ export default function StatCard({
             const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
             const current = startValue + (endValue - startValue) * eased;
 
-            setDisplayValue(formatValue(current, decimals, prefix, suffix, useLocale));
+            setDisplayValue(
+              formatValue(current, decimals, prefix, suffix, useLocale)
+            );
 
             if (progress < 1) {
               requestAnimationFrame(runAnimation);
             } else {
               // Ensure final value is exact
-              setDisplayValue(formatValue(endValue, decimals, prefix, suffix, useLocale));
+              setDisplayValue(
+                formatValue(endValue, decimals, prefix, suffix, useLocale)
+              );
             }
           };
 
           requestAnimationFrame(runAnimation);
         }
       },
-      { threshold: 0.3, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.3, rootMargin: "0px 0px -50px 0px" }
     );
 
     if (cardRef.current) {
@@ -167,7 +193,13 @@ export default function StatCard({
           className={`${styles.card} ${styles[size]} interactiveSurface`}
         >
           <div className={styles.label}>{label}</div>
-          <div className={`${styles.value} ${styles[color]}`} aria-live="polite" aria-atomic="true">{displayValue}</div>
+          <div
+            className={`${styles.value} ${styles[color]}`}
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {displayValue}
+          </div>
           {subtext && <div className={styles.subtext}>{subtext}</div>}
         </InteractiveSurface>
       </motion.div>
@@ -180,7 +212,13 @@ export default function StatCard({
       className={`${styles.card} ${styles[size]} interactiveSurface`}
     >
       <div className={styles.label}>{label}</div>
-      <div className={`${styles.value} ${styles[color]}`} aria-live="polite" aria-atomic="true">{displayValue}</div>
+      <div
+        className={`${styles.value} ${styles[color]}`}
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {displayValue}
+      </div>
       {subtext && <div className={styles.subtext}>{subtext}</div>}
     </InteractiveSurface>
   );

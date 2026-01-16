@@ -2,21 +2,21 @@
  * TransitionOrchestrator.tsx
  * ==========================
  * Wraps routes with AnimatePresence for seamless page transitions.
- * 
+ *
  * Uses mode="popLayout" to avoid layout stacking:
  * - Exiting page is popped out of layout (prevents height jumps)
  * - SharedElements morph via layoutId during transition
  * - Enter animation staggers content in
- * 
+ *
  * @link See transitionConfig.ts for page variants
  * @link See ChoreographerContext.tsx for phase management
  */
 
-import { type ReactNode, useCallback, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useChoreographer } from '../../app/contexts';
-import { pageVariants } from '../../lib/transitionConfig';
+import { type ReactNode, useCallback, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { useChoreographer } from "../../app/contexts";
+import { pageVariants } from "../../lib/transitionConfig";
 
 interface TransitionOrchestratorProps {
   children: ReactNode;
@@ -30,7 +30,7 @@ interface TransitionOrchestratorProps {
 
 /**
  * TransitionOrchestrator - Seamless page transitions
- * 
+ *
  * Design:
  * - mode="popLayout": Exiting page doesn't affect layout
  * - No forced fade-out: Keeps shared morph as the primary cue
@@ -49,7 +49,7 @@ export default function TransitionOrchestrator({
   // Instant scroll to top on route change
   useEffect(() => {
     if (scrollOnTransition) {
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }
   }, [location.pathname, scrollOnTransition]);
 
@@ -86,7 +86,7 @@ export default function TransitionOrchestrator({
         initial="hidden"
         animate="visible"
         exit="exit"
-        style={{ minHeight: '100%' }}
+        style={{ minHeight: "100%" }}
       >
         {children}
       </motion.div>

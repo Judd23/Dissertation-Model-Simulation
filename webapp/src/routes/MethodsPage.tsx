@@ -2,13 +2,7 @@
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import {
-  Scale,
-  Network,
-  RefreshCw,
-  Settings,
-  Layers,
-} from "lucide-react";
+import { Scale, Network, RefreshCw, Settings, Layers } from "lucide-react";
 import { useModelData } from "../app/contexts";
 import GlossaryTerm from "../components/ui/GlossaryTerm";
 import ProgressRing from "../components/ui/ProgressRing";
@@ -468,71 +462,72 @@ export default function MethodsPage() {
           <motion.p className={styles.cardEyebrow} variants={itemVariants}>
             Reproducibility
           </motion.p>
-          <motion.h2 className={styles.cardHeading} variants={itemVariants}>Open-Source Toolkit</motion.h2>
-            <p className={styles.cardDescription}>
-              All analyses used open-source software, ensuring transparency and
-              full reproducibility. The complete codebase is available in the
-              project repository.
-            </p>
-            <div className={styles.softwareList}>
-              <div className={styles.softwareGroup}>
-                <h3>R Packages</h3>
-                <ul>
-                  <li>
-                    <code>lavaan</code> — Structural equation modeling
-                  </li>
-                  <li>
-                    <code>semTools</code> — Model diagnostics and extensions
-                  </li>
-                  <li>
-                    <code>mice</code> — Multiple imputation
-                  </li>
-                  <li>
-                    <code>parallel</code> — Distributed computation
-                  </li>
-                </ul>
-              </div>
-              <div className={styles.softwareGroup}>
-                <h3>Python Packages</h3>
-                <ul>
-                  <li>
-                    <code>pandas</code>, <code>numpy</code> — Data processing
-                  </li>
-                  <li>
-                    <code>matplotlib</code>, <code>seaborn</code> —
-                    Visualization
-                  </li>
-                  <li>
-                    <code>python-docx</code> — Report generation
-                  </li>
-                </ul>
-              </div>
+          <motion.h2 className={styles.cardHeading} variants={itemVariants}>
+            Open-Source Toolkit
+          </motion.h2>
+          <p className={styles.cardDescription}>
+            All analyses used open-source software, ensuring transparency and
+            full reproducibility. The complete codebase is available in the
+            project repository.
+          </p>
+          <div className={styles.softwareList}>
+            <div className={styles.softwareGroup}>
+              <h3>R Packages</h3>
+              <ul>
+                <li>
+                  <code>lavaan</code> — Structural equation modeling
+                </li>
+                <li>
+                  <code>semTools</code> — Model diagnostics and extensions
+                </li>
+                <li>
+                  <code>mice</code> — Multiple imputation
+                </li>
+                <li>
+                  <code>parallel</code> — Distributed computation
+                </li>
+              </ul>
             </div>
-            <div className={styles.keyPoints}>
-              <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
-                <span className={styles.keyPointText}>
-                  Fully reproducible analysis pipeline
-                </span>
-              </div>
-              <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
-                <span className={styles.keyPointText}>
-                  Code available on GitHub
-                </span>
-              </div>
-              <div className={styles.keyPoint}>
-                <span className={styles.keyPointMarker}>→</span>
-                <span className={styles.keyPointText}>
-                  No proprietary software required
-                </span>
-              </div>
+            <div className={styles.softwareGroup}>
+              <h3>Python Packages</h3>
+              <ul>
+                <li>
+                  <code>pandas</code>, <code>numpy</code> — Data processing
+                </li>
+                <li>
+                  <code>matplotlib</code>, <code>seaborn</code> — Visualization
+                </li>
+                <li>
+                  <code>python-docx</code> — Report generation
+                </li>
+              </ul>
             </div>
           </div>
-          <div className={styles.cardVisualEnhanced}>
-            <div className={styles.diagramContainer}>
-              <span className={styles.diagramLabel}>Analysis Stack</span>
-              <PackageStack />
+          <div className={styles.keyPoints}>
+            <div className={styles.keyPoint}>
+              <span className={styles.keyPointMarker}>→</span>
+              <span className={styles.keyPointText}>
+                Fully reproducible analysis pipeline
+              </span>
+            </div>
+            <div className={styles.keyPoint}>
+              <span className={styles.keyPointMarker}>→</span>
+              <span className={styles.keyPointText}>
+                Code available on GitHub
+              </span>
+            </div>
+            <div className={styles.keyPoint}>
+              <span className={styles.keyPointMarker}>→</span>
+              <span className={styles.keyPointText}>
+                No proprietary software required
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className={styles.cardVisualEnhanced}>
+          <div className={styles.diagramContainer}>
+            <span className={styles.diagramLabel}>Analysis Stack</span>
+            <PackageStack />
             <span className={styles.diagramCaption}>
               Open-source, reproducible analysis
             </span>

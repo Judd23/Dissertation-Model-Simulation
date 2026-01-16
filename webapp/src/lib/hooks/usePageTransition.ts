@@ -1,8 +1,8 @@
-import { useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTransition } from '../../app/contexts/TransitionContext';
+import { useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useTransition } from "../../app/contexts/TransitionContext";
 
-type TransitionType = 'particles' | 'morph' | 'auto' | 'none';
+type TransitionType = "particles" | "morph" | "auto" | "none";
 
 interface NavigateOptions {
   transition?: TransitionType;
@@ -12,10 +12,7 @@ interface NavigateOptions {
 export function usePageTransition() {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    mode,
-    startTransition,
-  } = useTransition();
+  const { mode, startTransition } = useTransition();
 
   const navigateWithTransition = useCallback(
     async (to: string, options?: NavigateOptions) => {
@@ -23,7 +20,7 @@ export function usePageTransition() {
       if (location.pathname === to) return;
 
       // Skip animation if transition is 'none'
-      if (options?.transition === 'none') {
+      if (options?.transition === "none") {
         navigate(to, { replace: options?.replace });
         return;
       }
@@ -31,13 +28,13 @@ export function usePageTransition() {
       // Determine transition type
       let transitionType = options?.transition ?? mode;
 
-      if (transitionType === 'auto') {
+      if (transitionType === "auto") {
         // Force morph transitions (no particle effect).
-        transitionType = 'morph';
+        transitionType = "morph";
       }
 
       // For morph transitions, Framer Motion handles it automatically
-      if (transitionType === 'morph') {
+      if (transitionType === "morph") {
         navigate(to, { replace: options?.replace });
         return;
       }
@@ -46,12 +43,7 @@ export function usePageTransition() {
       await startTransition(location.pathname, to);
       navigate(to, { replace: options?.replace });
     },
-    [
-      location.pathname,
-      navigate,
-      mode,
-      startTransition,
-    ]
+    [location.pathname, navigate, mode, startTransition]
   );
 
   return {
