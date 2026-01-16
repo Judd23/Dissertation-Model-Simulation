@@ -2,8 +2,10 @@
 
 .stackingContainer {
   position: relative;
-  min-height: 400vh;
-  padding-block: var(--space-2xl);
+  padding-block: var(--space-xl);
+  padding-inline: var(--space-lg);
+  max-width: 1200px;
+  margin-inline: auto;
 }
 
 /* Base card styles - thick glass */
@@ -30,7 +32,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     inset 0 -1px 0 rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.3s ease;
-  margin-bottom: 3rem;
+  margin-bottom: 60vh;
 }
 
 .card:hover {
@@ -69,15 +71,29 @@
   composes: card;
   z-index: 50;
   top: 10rem;
+  margin-bottom: var(--space-md);
 }
 
 /* Software Panel (standalone, not stacking) */
 .softwarePanel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-xl);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 15, 20, 0.92) 0%,
+    rgba(20, 20, 28, 0.88) 50%,
+    rgba(15, 15, 20, 0.92) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 2.5rem;
   padding: var(--space-2xl);
-  margin-block: var(--space-2xl);
+  margin-block: var(--space-md);
+  margin-inline: var(--space-lg);
+  max-width: calc(1200px - var(--space-lg) * 2);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-xl);
@@ -264,11 +280,24 @@
 
 /* Model Fit Panel (standalone, not stacking) */
 .modelFitPanel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-xl);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 15, 20, 0.92) 0%,
+    rgba(20, 20, 28, 0.88) 50%,
+    rgba(15, 15, 20, 0.92) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 2.5rem;
   padding: var(--space-2xl);
-  margin-block: var(--space-2xl);
+  margin-block: var(--space-md);
+  margin-inline: var(--space-lg);
+  max-width: calc(1200px - var(--space-lg) * 2);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .fitRingsGrid {
@@ -316,7 +345,10 @@
 
 /* References section */
 .referencesSection {
-  padding-block: var(--space-2xl);
+  padding-block: var(--space-xl);
+  padding-inline: var(--space-lg);
+  max-width: 1200px;
+  margin-inline: auto;
 }
 
 .referencesList {
