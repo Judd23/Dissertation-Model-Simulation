@@ -6,11 +6,11 @@ import {
   useCallback,
   useEffect,
   type ReactNode,
-} from 'react';
-import { TIMING } from '../../lib/transitionConfig';
+} from "react";
+import { TIMING } from "../../lib/transitionConfig";
 
-type TransitionMode = 'none' | 'particles' | 'morph' | 'auto';
-type TransitionPhase = 'idle' | 'exiting' | 'transitioning' | 'entering';
+type TransitionMode = "none" | "particles" | "morph" | "auto";
+type TransitionPhase = "idle" | "exiting" | "transitioning" | "entering";
 
 interface SharedElementRect {
   id: string;
@@ -41,35 +41,35 @@ interface TransitionProviderProps {
 }
 
 export function TransitionProvider({ children }: TransitionProviderProps) {
-  const [mode, setMode] = useState<TransitionMode>('morph');
-  const [phase, setPhase] = useState<TransitionPhase>('idle');
+  const [mode, setMode] = useState<TransitionMode>("morph");
+  const [phase, setPhase] = useState<TransitionPhase>("idle");
   const [sourceRoute, setSourceRoute] = useState<string | null>(null);
   const [targetRoute, setTargetRoute] = useState<string | null>(null);
   const [particleCount, setParticleCount] = useState(200);
   const [sharedElements] = useState(() => new Map<string, SharedElementRect>());
   const [currentRoute, setCurrentRoute] = useState(() => {
-    if (typeof window === 'undefined') return '/';
-    const hash = window.location.hash.replace(/^#/, '');
-    if (!hash) return '/';
-    return hash.startsWith('/') ? hash : `/${hash}`;
+    if (typeof window === "undefined") return "/";
+    const hash = window.location.hash.replace(/^#/, "");
+    if (!hash) return "/";
+    return hash.startsWith("/") ? hash : `/${hash}`;
   });
 
   useEffect(() => {
     const updateRoute = () => {
-      const hash = window.location.hash.replace(/^#/, '');
+      const hash = window.location.hash.replace(/^#/, "");
       if (!hash) {
-        setCurrentRoute('/');
+        setCurrentRoute("/");
         return;
       }
-      setCurrentRoute(hash.startsWith('/') ? hash : `/${hash}`);
+      setCurrentRoute(hash.startsWith("/") ? hash : `/${hash}`);
     };
 
-    window.addEventListener('hashchange', updateRoute);
-    window.addEventListener('popstate', updateRoute);
+    window.addEventListener("hashchange", updateRoute);
+    window.addEventListener("popstate", updateRoute);
     updateRoute();
     return () => {
-      window.removeEventListener('hashchange', updateRoute);
-      window.removeEventListener('popstate', updateRoute);
+      window.removeEventListener("hashchange", updateRoute);
+      window.removeEventListener("popstate", updateRoute);
     };
   }, []);
 
@@ -115,27 +115,24 @@ export function TransitionProvider({ children }: TransitionProviderProps) {
     [sharedElements, sourceRoute, currentRoute]
   );
 
-  const startTransition = useCallback(
-    async (from: string, to: string) => {
-      setSourceRoute(from);
-      setTargetRoute(to);
-      setPhase('exiting');
+  const startTransition = useCallback(async (from: string, to: string) => {
+    setSourceRoute(from);
+    setTargetRoute(to);
+    setPhase("exiting");
 
-      // Wait for exit animation - uses centralized timing
-      await new Promise((resolve) => setTimeout(resolve, TIMING.exit));
+    // Wait for exit animation - uses centralized timing
+    await new Promise((resolve) => setTimeout(resolve, TIMING.exit));
 
-      setPhase('transitioning');
+    setPhase("transitioning");
 
-      // Wait for morph/particle transition - uses centralized timing
-      await new Promise((resolve) => setTimeout(resolve, TIMING.morph));
+    // Wait for morph/particle transition - uses centralized timing
+    await new Promise((resolve) => setTimeout(resolve, TIMING.morph));
 
-      setPhase('entering');
-    },
-    []
-  );
+    setPhase("entering");
+  }, []);
 
   const completeTransition = useCallback(() => {
-    setPhase('idle');
+    setPhase("idle");
     setSourceRoute(null);
     setTargetRoute(null);
   }, []);
@@ -165,9 +162,9 @@ export function TransitionProvider({ children }: TransitionProviderProps) {
 
 // Default context for when TransitionProvider is not present
 const defaultContext: TransitionContextValue = {
-  mode: 'none',
+  mode: "none",
   setMode: () => {},
-  phase: 'idle',
+  phase: "idle",
   setPhase: () => {},
   sourceRoute: null,
   targetRoute: null,
