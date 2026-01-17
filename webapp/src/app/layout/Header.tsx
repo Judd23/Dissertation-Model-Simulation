@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { TransitionNavLink } from "../../features/transitions";
@@ -11,9 +11,7 @@ import { navItems } from "./navItems";
 import styles from "./Header.module.css";
 
 export default function Header() {
-  const progressBarRef = useRef<HTMLDivElement | null>(null);
-  const frameRef = useRef<number | null>(null);
-  const lastBucketRef = useRef(-1);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const location = useLocation();
 
   // Don't show progress bar on landing page (HashRouter initially shows '/')
@@ -22,33 +20,11 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (frameRef.current !== null) return;
-      frameRef.current = window.requestAnimationFrame(() => {
-        frameRef.current = null;
-        const scrollTop = window.scrollY;
-        const docHeight =
-          document.documentElement.scrollHeight - window.innerHeight;
-        const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
-        const width = `${progress * 100}%`;
-        const progressBar = progressBarRef.current;
-
-        if (progressBar) {
-          progressBar.style.width = width;
-          progressBar.setAttribute("data-progress", `${Math.round(progress * 100)}`);
-        }
-
-        const bucket = Math.floor(progress * 20);
-        if (bucket !== lastBucketRef.current) {
-          lastBucketRef.current = bucket;
-          console.log("[DEBUG][Header](NO $) Scroll progress:", {
-            scrollTop,
-            docHeight,
-            progress,
-            width,
-            showProgress,
-          });
-        }
-      });
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+      setScrollProgress(progress);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -56,14 +32,15 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
 
+  const progressPercent = Math.round(scrollProgress * 100);
+
   return (
     <header className={styles.header}>
       {showProgress && (
         <div
           className={styles.progressBar}
+          data-progress={progressPercent}
           aria-hidden="true"
-          ref={progressBarRef}
-          style={{ width: "0%" }}
         />
       )}
       <div className={styles.container}>
