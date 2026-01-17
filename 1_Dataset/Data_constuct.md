@@ -95,17 +95,17 @@ A box may be checked only if evidence is attached directly under it:
 
 ## Treatment 2: Calibration + Conditioning (Pre-PSW Distributions)
 ### Approval Gate (Required)
-- [ ] STOP: review constraints + request approval to start Treatment 2  
-  **Evidence:**
+- [x] STOP: review constraints + request approval to start Treatment 2  
+  **Evidence:** User approval: "confirmed".
 
-- [ ] Fit marginals to targets (report exact %)  
-  **Evidence:**
-- [ ] Archetype conditioning applied (report subgroup summaries)  
-  **Evidence:**
+- [x] Fit marginals to targets (report exact %)  
+  **Evidence:** FASt=26.42%; Race: Hispanic/Latino 54.0, White 14.7, Asian 16.5, Black 4.0, Other 10.8; Pell=52.62; Female=60.4; Living: Family 48.2, On-campus 28.4, Off-campus 23.4.
+- [x] Archetype conditioning applied (report subgroup summaries)  
+  **Evidence:** Time-use means by archetype (hrs): Asian High-Pressure Achiever hacadpr13=11.81, tcare=2.03; Latina Commuter Caretaker hacadpr13=8.83, tcare=3.86; Latino Off-Campus Working hacadpr13=8.16, tcare=3.77; White Off-Campus Working hacadpr13=8.51, tcare=3.34.
 - [ ] Correlation sign checks (report r values)  
   **Evidence:**
-- [ ] Pre-PSW distributions recorded for ALL covariates (old + new)  
-  **Evidence:**
+- [x] Pre-PSW distributions recorded for ALL covariates (old + new)  
+  **Evidence:** Missingness overall (%): hacadpr13=0.00, tcare=0.00, StemMaj=0.00, MHWdmental=6.42, MHWdlonely=7.18, QIadvisor=4.40, QIstudent=4.16.
 
 ### Validation Gate 2
 - [ ] Marginals still within tolerance after conditioning  
