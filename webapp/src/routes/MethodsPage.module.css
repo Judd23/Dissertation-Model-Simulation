@@ -34,46 +34,6 @@
   text-align: left;
 }
 
-/* Sections */
-.section {
-  margin-bottom: var(--spacing-3xl);
-  position: relative;
-}
-
-.section:not(:first-of-type) {
-  border-top: 1px solid var(--color-border-light);
-  padding-top: var(--spacing-3xl);
-}
-
-.section h2 {
-  border-bottom: 2px solid var(--color-border);
-  padding-bottom: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-  text-align: center;
-  position: relative;
-}
-
-.section h2::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--color-accent),
-    var(--color-engagement)
-  );
-  border-radius: 1px;
-}
-
-.sectionIntro {
-  color: var(--color-text-muted);
-  margin-bottom: var(--spacing-lg);
-}
-
 .plainTalk {
   margin: calc(var(--spacing-sm) * -1) 0 var(--spacing-lg);
   color: var(--color-text);
@@ -86,16 +46,6 @@
   gap: var(--spacing-lg);
   margin: var(--spacing-lg) 0 var(--spacing-xl);
   align-items: center;
-}
-
-.surveyExamples {
-  margin-bottom: var(--spacing-3xl);
-}
-
-.surveyColumns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--spacing-md);
 }
 
 .surveyLabel {
@@ -190,7 +140,8 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   /* Transform handled by Framer Motion */
-  transition: box-shadow var(--transition-fast),
+  transition:
+    box-shadow var(--transition-fast),
     border-color var(--transition-fast);
   position: relative;
   overflow: hidden;
@@ -222,8 +173,10 @@
 
 .specCard[data-morph-id] {
   opacity: 1;
-  transition: opacity var(--reveal-duration) var(--ease-out-expo),
-    box-shadow var(--transition-fast), border-color var(--transition-fast);
+  transition:
+    opacity var(--reveal-duration) var(--ease-out-expo),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .specCard[data-morph-id]:hover,
@@ -267,7 +220,8 @@
   margin-top: var(--spacing-lg);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition: box-shadow var(--transition-fast),
+  transition:
+    box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -309,7 +263,8 @@
   padding: var(--spacing-lg);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition: box-shadow var(--transition-fast),
+  transition:
+    box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -349,7 +304,8 @@
   margin-top: var(--spacing-lg);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition: box-shadow var(--transition-fast),
+  transition:
+    box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -386,7 +342,8 @@
   padding: var(--spacing-lg);
   position: relative;
   /* Transform handled by Framer Motion */
-  transition: box-shadow var(--transition-fast),
+  transition:
+    box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
