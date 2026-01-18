@@ -25,7 +25,7 @@ function useParticleSphere(
 
     const particleCount = 800;
     const sphereRadius = 180;
-    const rotationSpeed = 0.003;
+    const rotationSpeed = 0.002;
 
     const width = canvas.width;
     const height = canvas.height;
@@ -63,22 +63,6 @@ function useParticleSphere(
         this.z = z;
       }
 
-      draw(ctx: CanvasRenderingContext2D, centerX: number, centerY: number) {
-        const scale = 300 / (300 + this.z);
-        const x2d = centerX + this.x * scale;
-        const y2d = centerY + this.y * scale;
-        const opacity = Math.max(0, this.baseOpacity + (this.z / sphereRadius) * 0.4);
-        ctx.beginPath();
-        ctx.arc(x2d, y2d, this.size * scale, 0, Math.PI * 2);
-        if (this.x > 50) {
-          ctx.fillStyle = `rgba(6, 244, 255, ${opacity})`;
-        } else if (this.x < -50) {
-          ctx.fillStyle = `rgba(196, 181, 253, ${opacity})`;
-        } else {
-          ctx.fillStyle = `rgba(203, 213, 225, ${opacity})`;
-        }
-        ctx.fill();
-      }
     }
 
     const particles: Particle[] = [];
@@ -86,14 +70,48 @@ function useParticleSphere(
       particles.push(new Particle());
     }
 
+    let frame = 0;
     const animate = () => {
+      frame += 1;
       ctx.clearRect(0, 0, width, height);
       const centerX = width / 2;
       const centerY = height / 2;
       particles.sort((a, b) => b.z - a.z);
+      if (frame % 600 === 0) {
+        const sample = particles[0];
+        const sampleDiag = Math.max(
+          -1,
+          Math.min(1, (sample.x + sample.y) / (sphereRadius * 1.2))
+        );
+        const sampleMix = (sampleDiag + 1) / 2;
+        console.log("(NO $) [LandingOrb] gradient sample", {
+          frame,
+          sampleX: sample.x,
+          sampleY: sample.y,
+          sampleMix,
+        });
+      }
       particles.forEach((p) => {
         p.rotate(rotationSpeed, rotationSpeed * 0.6);
-        p.draw(ctx, centerX, centerY);
+        const scale = 300 / (300 + p.z);
+        const x2d = centerX + p.x * scale;
+        const y2d = centerY + p.y * scale;
+        const opacity = Math.max(0, p.baseOpacity + (p.z / sphereRadius) * 0.4);
+        const diag = Math.max(-1, Math.min(1, (p.x + p.y) / (sphereRadius * 1.2)));
+        const mix = (diag + 1) / 2;
+        const depthTint = Math.max(0, Math.min(0.12, (p.z / sphereRadius) * 0.12));
+        const cyan = [6, 244, 255];
+        const violet = [196, 181, 253];
+        const r = Math.round(cyan[0] * (1 - mix) + violet[0] * mix);
+        const g = Math.round(cyan[1] * (1 - mix) + violet[1] * mix);
+        const b = Math.round(cyan[2] * (1 - mix) + violet[2] * mix);
+        const isEdge = Math.abs(p.z) > sphereRadius * 0.75 && Math.random() < 0.002;
+        const sparkle = isEdge ? 0.35 + 0.1 * Math.sin(frame * 0.12) : 0;
+
+        ctx.beginPath();
+        ctx.arc(x2d, y2d, p.size * scale, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${Math.min(1, opacity + depthTint + sparkle)})`;
+        ctx.fill();
       });
       animationId = requestAnimationFrame(animate);
     };
@@ -158,13 +176,13 @@ export default function LandingPageAlt() {
       {/* Navigation */}
       <nav className={styles.nav}>
         <div className={styles.navInner}>
-          {/* Logo */}
-          <div className={styles.logoGroup}>
-            <div className={styles.logoIcon}>DC</div>
-            <span className={styles.logoText}>
-              Dual Credit<span className={styles.logoMuted}>.Study</span>
-            </span>
-          </div>
+          {/* Identity label */}
+          <a
+            className="_navLink_1t7ov_101 interactiveSurface"
+            aria-label="A Study on Equity & Student Development"
+          >
+            A Study on Equity & Student Development
+          </a>
 
           {/* Institution Badge */}
           <motion.a
