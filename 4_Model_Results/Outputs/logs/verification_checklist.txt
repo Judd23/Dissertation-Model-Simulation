@@ -1,11 +1,11 @@
 Verification checklist: run_all_RQs_official
 REP_DATA_CSV=1_Dataset/rep_data.csv
-REP_DATA_MTIME=2026-01-06 21:14:23.855063
-REP_DATA_MD5=52f37a699008104caafbe29c77651564
+REP_DATA_MTIME=2026-01-17 11:09:07.549789
+REP_DATA_MD5=c2a3b94fca9921c7a80da1b639163024
 TREATMENT_VAR=x_FASt
 
 ANALYSIS_DATA_CSV=4_Model_Results/Outputs/logs/analysis_dataset_cleaned.csv
-ANALYSIS_DATA_MD5=23b220735443c150f9b7f899837bed23
+ANALYSIS_DATA_MD5=1cda6930f0656a591b2c3dcb4220b8ea
 
 (0) Executed SEM syntax files
 measurement_syntax=4_Model_Results/Outputs/syntax/executed_measurement_syntax.lav
@@ -16,7 +16,7 @@ sem_serial=4_Model_Results/Outputs/syntax/executed_sem_serial.lav
 (6) Group counts (credit_band)
 
        non_DE non_FASt_1_11   FASt_12plus 
-          215          2671          2114  
+          322          3357          1321  
 
 Check: x_FASt vs 1(trnsfr_cr>=12)
 mismatches=0
@@ -25,7 +25,7 @@ mismatches=0
 tol=1e-10
           var max_abs_diff
 1 credit_dose    1.2000000
-2        XZ_c    0.3963351 
+2        XZ_c    0.4899906 
 NOTE: mismatches were detected and were overwritten by the runner.
 Dropped variants (if present): credit_dose_raw, Z, Z_c, XZ
 
@@ -35,8 +35,8 @@ max_abs_diff=0
 (2) hgrades value distribution (expected BCSSE scale 3-8 after A+/A merge)
 n_hgrades_9_merged=0
 
-   5    6    7    8 <NA> 
- 787 1650 1577  884  102  
+   5    6    7    8 
+ 793 1706 1574  927  
 
 (2a) Grades source check (use hgrades only)
 hgrades present: TRUE
@@ -52,17 +52,22 @@ MHWdfinance present (should be FALSE): FALSE
 
 (3) Centering verification (abs(mean) < tol)
                         var n_nonmiss          mean     abs_mean
-hgrades_c         hgrades_c      4898 -2.574049e-16 2.574049e-16
-bparented_c     bparented_c      4892  4.453601e-16 4.453601e-16
-hchallenge_c   hchallenge_c      4903 -1.579175e-16 1.579175e-16
-cSFcareer_c     cSFcareer_c      4900 -2.258511e-16 2.258511e-16
-credit_dose_c credit_dose_c      5000 -4.057110e-15 4.057110e-15 
+hgrades_c         hgrades_c      5000 -6.548539e-16 6.548539e-16
+bparented_c     bparented_c      5000 -2.545200e-16 2.545200e-16
+hchallenge_c   hchallenge_c      5000  1.582734e-16 1.582734e-16
+cSFcareer_c     cSFcareer_c      5000  1.573741e-16 1.573741e-16
+hapcl_c             hapcl_c      5000 -2.326472e-16 2.326472e-16
+hprecalc13_c   hprecalc13_c      5000  1.022071e-16 1.022071e-16
+StemMaj_c         StemMaj_c      5000 -6.152856e-17 6.152856e-17
+hacadpr13_c     hacadpr13_c      5000 -4.779199e-15 4.779199e-15
+tcare_c             tcare_c      5000 -7.991918e-15 7.991918e-15
+credit_dose_c credit_dose_c      5000  6.865619e-17 6.865619e-17 
 
 (3a) Interaction term check: XZ_c == x_FASt*credit_dose_c
 max_abs_diff=0
 
 (3b) Eigenvalues of cov(x_FASt, credit_dose_c, XZ_c) on complete cases
-[1] 5.09630164 0.20538673 0.01875538 
+[1] 3.90768254 0.09653069 0.03252076 
 
 (8) MHW distribution report (raw values; 9=Not applicable; analysis recodes 9->NA)
 
@@ -70,67 +75,67 @@ MHWdacad
 counts (1..6,9):
 
    1    2    3    4    5    6    9 
-  69  446 1322 1646  945  282    0  
+  80  434 1297 1664  987  257    0  
 percents (1..6,9):
-1:1.5%  2:9.5%  3:28.1%  4:34.9%  5:20.1%  6:6.0%  9:0.0% 
+1:1.7%  2:9.2%  3:27.5%  4:35.3%  5:20.9%  6:5.4%  9:0.0% 
 min/max after recode(9->NA): 1/6
-n_raw_9=0  n_analysis_NA=290
-max_abs_pp_dev_to_anchorA=14.54  max_abs_pp_dev_to_anchorB=19.54  best=A (14.54)
+n_raw_9=0  n_analysis_NA=281
+max_abs_pp_dev_to_anchorA=14.3  max_abs_pp_dev_to_anchorB=19.3  best=A (14.3)
 
 MHWdlonely
 counts (1..6,9):
 
    1    2    3    4    5    6    9 
-  65  447 1312 1676  898  265    0  
+  60  444 1300 1685  925  227    0  
 percents (1..6,9):
-1:1.4%  2:9.6%  3:28.1%  4:35.9%  5:19.3%  6:5.7%  9:0.0% 
+1:1.3%  2:9.6%  3:28.0%  4:36.3%  5:19.9%  6:4.9%  9:0.0% 
 min/max after recode(9->NA): 1/6
-n_raw_9=0  n_analysis_NA=337
-max_abs_pp_dev_to_anchorA=14.61  max_abs_pp_dev_to_anchorB=19.61  best=A (14.61)
+n_raw_9=0  n_analysis_NA=359
+max_abs_pp_dev_to_anchorA=14.71  max_abs_pp_dev_to_anchorB=19.71  best=A (14.71)
 
 MHWdmental
 counts (1..6,9):
 
    1    2    3    4    5    6    9 
-  58  424 1347 1662  931  221    0  
+  50  422 1333 1727  932  215    0  
 percents (1..6,9):
-1:1.2%  2:9.1%  3:29.0%  4:35.8%  5:20.1%  6:4.8%  9:0.0% 
+1:1.1%  2:9.0%  3:28.5%  4:36.9%  5:19.9%  6:4.6%  9:0.0% 
 min/max after recode(9->NA): 1/6
-n_raw_9=0  n_analysis_NA=357
-max_abs_pp_dev_to_anchorA=14.75  max_abs_pp_dev_to_anchorB=19.75  best=A (14.75)
+n_raw_9=0  n_analysis_NA=321
+max_abs_pp_dev_to_anchorA=14.93  max_abs_pp_dev_to_anchorB=19.93  best=A (14.93)
 
 MHWdexhaust
 counts (1..6,9):
 
    1    2    3    4    5    6    9 
-  55  421 1338 1689  945  265    0  
+  62  435 1303 1687  990  241    0  
 percents (1..6,9):
-1:1.2%  2:8.9%  3:28.4%  4:35.8%  5:20.1%  6:5.6%  9:0.0% 
+1:1.3%  2:9.2%  3:27.6%  4:35.8%  5:21.0%  6:5.1%  9:0.0% 
 min/max after recode(9->NA): 1/6
-n_raw_9=0  n_analysis_NA=287
-max_abs_pp_dev_to_anchorA=14.83  max_abs_pp_dev_to_anchorB=19.83  best=A (14.83)
+n_raw_9=0  n_analysis_NA=282
+max_abs_pp_dev_to_anchorA=14.69  max_abs_pp_dev_to_anchorB=19.69  best=A (14.69)
 
 MHWdsleep
 counts (1..6,9):
 
    1    2    3    4    5    6    9 
-  66  429 1350 1680  912  287    0  
+  58  445 1290 1655  962  254    0  
 percents (1..6,9):
-1:1.4%  2:9.1%  3:28.6%  4:35.6%  5:19.3%  6:6.1%  9:0.0% 
+1:1.2%  2:9.5%  3:27.7%  4:35.5%  5:20.6%  6:5.4%  9:0.0% 
 min/max after recode(9->NA): 1/6
-n_raw_9=0  n_analysis_NA=276
-max_abs_pp_dev_to_anchorA=14.6  max_abs_pp_dev_to_anchorB=19.6  best=A (14.6)
+n_raw_9=0  n_analysis_NA=336
+max_abs_pp_dev_to_anchorA=14.76  max_abs_pp_dev_to_anchorB=19.76  best=A (14.76)
 
 MHWdfinancial
 counts (1..6,9):
 
    1    2    3    4    5    6    9 
-  95  458 1279 1564  964  341    0  
+ 118  476 1242 1598  966  309    0  
 percents (1..6,9):
-1:2.0%  2:9.7%  3:27.2%  4:33.3%  5:20.5%  6:7.3%  9:0.0% 
+1:2.5%  2:10.1%  3:26.4%  4:33.9%  5:20.5%  6:6.6%  9:0.0% 
 min/max after recode(9->NA): 1/6
-n_raw_9=0  n_analysis_NA=299
-max_abs_pp_dev_to_anchorA=13.98  max_abs_pp_dev_to_anchorB=18.98  best=A (13.98)
+n_raw_9=0  n_analysis_NA=291
+max_abs_pp_dev_to_anchorA=13.49  max_abs_pp_dev_to_anchorB=18.49  best=A (13.49)
 
 (7) Indicator directional alignment (higher = more of construct)
 Belonging (SB): higher => more belonging (Strongly disagree=1 ... Strongly agree=4)
@@ -139,9 +144,9 @@ sbvalued       sbvalued   1   4            1            4     TRUE
 sbmyself       sbmyself   1   4            1            4     TRUE
 sbcommunity sbcommunity   1   4            1            4     TRUE 
          item mean_spearman_to_others flag
-1    sbvalued               0.7426709     
-2    sbmyself               0.7312243     
-3 sbcommunity               0.7522282      
+1    sbvalued               0.7457294     
+2    sbmyself               0.7308088     
+3 sbcommunity               0.7522665      
 
 Gains (PG): higher => more gains (Very little=1 ... Very much=4)
                    item min max expected_min expected_max range_ok
@@ -151,11 +156,11 @@ pgwork           pgwork   1   4            1            4     TRUE
 pgvalues       pgvalues   1   4            1            4     TRUE
 pgprobsolve pgprobsolve   1   4            1            4     TRUE 
          item mean_spearman_to_others flag
-1   pganalyze               0.5250647     
-2     pgthink               0.5635465     
-3      pgwork               0.5449812     
-4    pgvalues               0.5189013     
-5 pgprobsolve               0.5518495      
+1   pganalyze               0.5462135     
+2     pgthink               0.5829069     
+3      pgwork               0.5583207     
+4    pgvalues               0.5376730     
+5 pgprobsolve               0.5685806      
 
 SupportEnv (SE): higher => more support (Very little=1 ... Very much=4)
                      item min max expected_min expected_max range_ok
@@ -165,11 +170,11 @@ SEnonacad       SEnonacad   1   4            1            4     TRUE
 SEactivities SEactivities   1   4            1            4     TRUE
 SEdiverse       SEdiverse   1   4            1            4     TRUE 
           item mean_spearman_to_others flag
-1   SEacademic               0.6392482     
-2   SEwellness               0.6268323     
-3    SEnonacad               0.6073433     
-4 SEactivities               0.5843769     
-5    SEdiverse               0.6141666      
+1   SEacademic               0.6466107     
+2   SEwellness               0.6432521     
+3    SEnonacad               0.6150199     
+4 SEactivities               0.5956797     
+5    SEdiverse               0.6233918      
 
 Satisf: higher => more satisfaction (evalexp: Poor=1..Excellent=4; sameinst: Def no=1..Def yes=4)
              item min max expected_min expected_max range_ok
@@ -188,12 +193,12 @@ MHWdexhaust     MHWdexhaust   1   6            1            6     TRUE
 MHWdsleep         MHWdsleep   1   6            1            6     TRUE
 MHWdfinancial MHWdfinancial   1   6            1            6     TRUE 
            item mean_spearman_to_others flag
-1      MHWdacad               0.8147952     
-2    MHWdlonely               0.8272032     
-3    MHWdmental               0.8434004     
-4   MHWdexhaust               0.8337863     
-5     MHWdsleep               0.8254162     
-6 MHWdfinancial               0.7789148      
+1      MHWdacad               0.8190730     
+2    MHWdlonely               0.8324247     
+3    MHWdmental               0.8427953     
+4   MHWdexhaust               0.8396760     
+5     MHWdsleep               0.8235759     
+6 MHWdfinancial               0.7824325      
 
 QualEngag (QI only): higher => better interactions (Poor=1..Excellent=7)
                item min max expected_min expected_max range_ok
@@ -203,11 +208,11 @@ QIadvisor QIadvisor   1   7            1            7     TRUE
 QIfaculty QIfaculty   1   7            1            7     TRUE
 QIstaff     QIstaff   1   7            1            7     TRUE 
        item mean_spearman_to_others flag
-1   QIadmin               0.8033211     
-2 QIstudent               0.8174397     
-3 QIadvisor               0.8326739     
-4 QIfaculty               0.8345334     
-5   QIstaff               0.8277363      
+1   QIadmin               0.8012063     
+2 QIstudent               0.8098430     
+3 QIadvisor               0.8237128     
+4 QIfaculty               0.8330951     
+5   QIstaff               0.8202060      
 
 (1) Composite proxies rebuilt from raw items (not used in SEM)
 

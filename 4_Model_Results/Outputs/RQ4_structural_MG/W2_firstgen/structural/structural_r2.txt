@@ -1,32 +1,32 @@
 $`First-gen`
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.746         0.696         0.798         0.523         0.627 
+        0.750         0.690         0.771         0.541         0.633 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.534         0.508         0.596         0.682         0.649 
+        0.547         0.481         0.573         0.681         0.659 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.569         0.555         0.602         0.694         0.764 
+        0.607         0.547         0.634         0.738         0.718 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.807         0.854         0.880         0.861         0.837 
+        0.811         0.858         0.882         0.874         0.828 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.725         0.802         0.834         0.834         0.871 
+        0.726         0.794         0.804         0.850         0.877 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.841         0.172         0.121         0.170         0.248 
+        0.840         0.172         0.077         0.183         0.231 
        DevAdj       EmoDiss     QualEngag 
-        0.628         0.025         0.024 
+        0.682         0.017         0.017 
 
 $`Continuing-gen`
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.766         0.699         0.806         0.508         0.609 
+        0.757         0.715         0.793         0.529         0.624 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.534         0.479         0.588         0.671         0.671 
+        0.567         0.520         0.579         0.686         0.669 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.595         0.579         0.624         0.773         0.764 
+        0.613         0.552         0.619         0.769         0.727 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.829         0.863         0.894         0.878         0.854 
+        0.837         0.872         0.895         0.884         0.860 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.762         0.808         0.818         0.852         0.862 
+        0.770         0.786         0.802         0.840         0.868 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.842         0.259         0.073         0.219         0.297 
+        0.827         0.240         0.053         0.206         0.199 
        DevAdj       EmoDiss     QualEngag 
-        0.721         0.011         0.024 
+        0.765         0.011         0.018 
 
