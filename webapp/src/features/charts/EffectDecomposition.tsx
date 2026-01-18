@@ -15,7 +15,7 @@ interface Bar extends Segment {
 }
 
 export default function EffectDecomposition() {
-  const { paths } = useModelData();
+  const { paths, totalEffectPath, modelSelections } = useModelData();
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 520, height: 80 });
 
@@ -32,11 +32,6 @@ export default function EffectDecomposition() {
     const indirectStress = safeMul(a1, b1);
     const indirectEngagement = safeMul(a2, b2);
     const direct = Number.isFinite(c) ? c! : null;
-    const total =
-      (indirectStress ?? 0) +
-      (indirectEngagement ?? 0) +
-      (direct ?? 0);
-
     const hasData =
       Number.isFinite(indirectStress) ||
       Number.isFinite(indirectEngagement) ||
@@ -46,10 +41,16 @@ export default function EffectDecomposition() {
       indirectStress: indirectStress ?? 0,
       indirectEngagement: indirectEngagement ?? 0,
       direct: direct ?? 0,
-      total,
       hasData,
     };
   }, [paths]);
+
+  const totalEffectEstimate = useMemo(() => {
+    if (totalEffectPath && Number.isFinite(totalEffectPath.estimate)) {
+      return totalEffectPath.estimate;
+    }
+    return null;
+  }, [totalEffectPath]);
 
   const segments: Segment[] = useMemo(() => [
     { key: 'Stress (indirect)', value: metrics.indirectStress, color: colors.distress },
@@ -123,7 +124,7 @@ export default function EffectDecomposition() {
       <div className={styles.header}>
         <h3>Effect Decomposition</h3>
         <p>
-          Total effect = direct + indirect (stress) + indirect (engagement)
+          Structural paths: {modelSelections.structural.label}
         </p>
       </div>
       {!metrics.hasData && (
@@ -174,12 +175,14 @@ export default function EffectDecomposition() {
         ))}
       </div>
       <div className={styles.total}>
-        Total effect:{' '}
+        Total effect ({modelSelections.totalEffect.label}):{' '}
         <strong>
-          {metrics.hasData ? `${metrics.total >= 0 ? '+' : ''}${metrics.total.toFixed(2)}` : '—'}
+          {totalEffectEstimate !== null ? `${totalEffectEstimate >= 0 ? '+' : ''}${totalEffectEstimate.toFixed(2)}` : '—'}
         </strong>
       </div>
-      <p className={styles.dataNote}>Data simulated for illustration</p>
+      <p className={styles.dataNote}>
+        Data simulated for illustration. Total effect displayed from {modelSelections.totalEffect.label}.
+      </p>
     </div>
   );
 }

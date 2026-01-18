@@ -44,11 +44,20 @@ export type FitMeasures = z.infer<typeof FitMeasuresSchema>;
 // Model Results Schema
 // =============================================================================
 
+export const ModelSourcePathsSchema = z.object({
+  parameterEstimates: z.string().min(1, 'Parameter estimates path is required'),
+  fitMeasures: z.string().min(1, 'Fit measures path is required'),
+});
+
+export const ModelResultSchema = z.object({
+  structuralPaths: z.array(StructuralPathSchema),
+  fitMeasures: FitMeasuresSchema,
+  sourcePaths: ModelSourcePathsSchema,
+});
+
 export const ModelResultsSchema = z.object({
-  mainModel: z.object({
-    structuralPaths: z.array(StructuralPathSchema),
-    fitMeasures: FitMeasuresSchema,
-  }),
+  mainModel: ModelResultSchema,
+  totalEffectModel: ModelResultSchema,
 });
 
 export type ModelResults = z.infer<typeof ModelResultsSchema>;

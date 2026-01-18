@@ -45,12 +45,14 @@ export function parseModelData(payload: ModelDataPayload = {}): ModelData {
 
   const validation: ModelDataValidation = { isValid: errors.length === 0, errors };
 
-  const structuralPaths = modelResultsResult.success
-    ? (modelResultsResult.data.mainModel.structuralPaths as StructuralPath[])
-    : [];
-  const fitMeasures = modelResultsResult.success
-    ? (modelResultsResult.data.mainModel.fitMeasures as FitMeasures)
-    : ({} as FitMeasures);
+  const mainModel = modelResultsResult.success ? modelResultsResult.data.mainModel : null;
+  const totalEffectModel = modelResultsResult.success ? modelResultsResult.data.totalEffectModel : null;
+
+  const structuralPaths = mainModel ? (mainModel.structuralPaths as StructuralPath[]) : [];
+  const fitMeasures = mainModel ? (mainModel.fitMeasures as FitMeasures) : ({} as FitMeasures);
+  const totalEffectPath = totalEffectModel
+    ? ((totalEffectModel.structuralPaths as StructuralPath[]).find(path => path.id === 'c_total') ?? null)
+    : null;
   const doseCoefficients = doseEffectsResult.success
     ? (doseEffectsResult.data.coefficients as DoseCoefficients)
     : ({} as DoseCoefficients);
@@ -90,6 +92,19 @@ export function parseModelData(payload: ModelDataPayload = {}): ModelData {
   const fastCount = sampleDescriptivesResult.success ? sampleDescriptivesResult.data.demographics.fast.yes.n : 0;
   const fastPercent = sampleDescriptivesResult.success ? sampleDescriptivesResult.data.demographics.fast.yes.pct : 0;
 
+  const modelSelections = {
+    structural: {
+      key: 'mainModel',
+      label: 'Structural (Direct Effect) Model',
+      sourcePaths: mainModel?.sourcePaths ?? { parameterEstimates: '', fitMeasures: '' },
+    },
+    totalEffect: {
+      key: 'totalEffectModel',
+      label: 'Total Effect Model',
+      sourcePaths: totalEffectModel?.sourcePaths ?? { parameterEstimates: '', fitMeasures: '' },
+    },
+  };
+
   return {
     paths: {
       a1: getPath('a1'),
@@ -106,6 +121,7 @@ export function parseModelData(payload: ModelDataPayload = {}): ModelData {
     },
     allPaths: structuralPaths,
     fitMeasures,
+    totalEffectPath,
     doseCoefficients: safeDoseCoefficients,
     doseEffects,
     doseRange: {
@@ -119,6 +135,7 @@ export function parseModelData(payload: ModelDataPayload = {}): ModelData {
     fastPercent,
     getPath,
     getEffectAtDose,
+    modelSelections,
     validation,
   };
 }
