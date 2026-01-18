@@ -289,6 +289,61 @@ def build_group_comparisons() -> dict:
     """Build group comparison data from multi-group analyses by parsing actual output files."""
     group_data = {}
 
+    def extract_group_paths(params: pd.DataFrame, group_labels: list) -> dict:
+        if params.empty:
+            return {}
+
+        group_column = None
+        if "group.label" in params.columns:
+            group_column = "group.label"
+        elif "group" in params.columns:
+            group_column = "group"
+        else:
+            return {}
+
+        group_values = params[group_column].dropna().unique().tolist()
+        group_map = {}
+
+        if group_column == "group.label":
+            if all(label in group_values for label in group_labels):
+                group_map = {label: label for label in group_labels}
+            else:
+                group_map = {
+                    value: group_labels[i]
+                    for i, value in enumerate(group_values)
+                    if i < len(group_labels)
+                }
+        else:
+            group_map = {
+                value: group_labels[i]
+                for i, value in enumerate(group_values)
+                if i < len(group_labels)
+            }
+
+        grouped = {}
+        for value, label in group_map.items():
+            group_params = params[params[group_column] == value]
+            grouped[label] = extract_key_paths(group_params)
+        return grouped
+
+    def extract_group_paths_from_dirs(base_dir: Path, group_labels: list) -> dict:
+        grouped = {}
+        group_paths = sorted(base_dir.glob("*/structural/structural_parameterEstimates.txt"))
+        for idx, params_path in enumerate(group_paths):
+            folder_name = params_path.parent.parent.name
+            label = next(
+                (candidate for candidate in group_labels
+                 if candidate.lower().replace(" ", "_").replace("-", "_") in folder_name.lower()),
+                None,
+            )
+            if label is None and idx < len(group_labels):
+                label = group_labels[idx]
+            if label is None:
+                continue
+            params = parse_parameter_estimates(params_path)
+            grouped[label] = extract_key_paths(params)
+        return grouped
+
     # Race/ethnicity subgroups
     race_dir = OUTPUTS_DIR / "RQ4_structural_by_re_all"
     if race_dir.exists():
@@ -345,36 +400,39 @@ def build_group_comparisons() -> dict:
 
         for folder, key, variable, group_labels in mg_configs:
             params_path = mg_dir / folder / "structural" / "structural_parameterEstimates.txt"
+            grouped_paths = {}
             if params_path.exists():
                 params = parse_parameter_estimates(params_path)
-                # For MG models, we need to extract group-specific estimates
-                # This is a simplified version - actual parsing would need group-level extraction
-                paths = extract_key_paths(params)
+                grouped_paths = extract_group_paths(params, group_labels)
+            if not grouped_paths:
+                grouped_paths = extract_group_paths_from_dirs(mg_dir / folder, group_labels)
 
-                if paths:
-                    groups = []
-                    for i, label in enumerate(group_labels):
-                        # In actual implementation, parse group-specific estimates
-                        # For now, use the pooled estimates as placeholder
-                        a1 = next((p for p in paths if p["id"] == "a1"), None)
-                        a2 = next((p for p in paths if p["id"] == "a2"), None)
+            if grouped_paths:
+                groups = []
+                for label in group_labels:
+                    paths = grouped_paths.get(label, [])
+                    a1 = next((p for p in paths if p["id"] == "a1"), None)
+                    a2 = next((p for p in paths if p["id"] == "a2"), None)
 
-                        group = {"label": label, "effects": {}}
-                        if a1:
-                            # Add some variation for demo purposes
-                            group["effects"]["a1"] = {
-                                "estimate": round(a1["estimate"] * (1 + (i - 0.5) * 0.1), 4),
-                                "se": a1["se"],
-                                "pvalue": a1["pvalue"] * (1 + i * 0.5),
-                            }
-                        if a2:
-                            group["effects"]["a2"] = {
-                                "estimate": round(a2["estimate"] * (1 + (i - 0.5) * 0.15), 4),
-                                "se": a2["se"],
-                                "pvalue": a2["pvalue"],
-                            }
-                        groups.append(group)
+                    if not (a1 or a2):
+                        continue
 
+                    group = {"label": label, "effects": {}}
+                    if a1:
+                        group["effects"]["a1"] = {
+                            "estimate": a1["estimate"],
+                            "se": a1["se"],
+                            "pvalue": a1["pvalue"],
+                        }
+                    if a2:
+                        group["effects"]["a2"] = {
+                            "estimate": a2["estimate"],
+                            "se": a2["se"],
+                            "pvalue": a2["pvalue"],
+                        }
+                    groups.append(group)
+
+                if groups:
                     group_data[key] = {
                         "groupVariable": variable,
                         "groups": groups,
