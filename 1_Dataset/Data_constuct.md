@@ -117,21 +117,21 @@ A box may be checked only if evidence is attached directly under it:
 
 ## Treatment 3: Missingness (MAR/MCAR)
 ### Approval Gate (Required)
-- [ ] STOP: review constraints + request approval to start Treatment 3  
-  **Evidence:**
+- [x] STOP: review constraints + request approval to start Treatment 3  
+  **Evidence:** User approval: "approved".
 
-- [ ] MCAR missingness applied (report % by variable)  
-  **Evidence:**
-- [ ] MAR missingness applied (report % by group)  
-  **Evidence:**
+- [x] MCAR missingness applied (report % by variable)  
+  **Evidence:** QI items overall missingness (%): QIadmin=4.34, QIstudent=4.16, QIadvisor=4.40, QIfaculty=4.44, QIstaff=4.00.
+- [x] MAR missingness applied (report % by group)  
+  **Evidence:** MHW items missingness (%), Asian vs Non-Asian: MHWdacad 8.72 vs 5.01; MHWdlonely 12.59 vs 6.11; MHWdmental 10.41 vs 5.63; MHWdexhaust 7.02 vs 5.37; MHWdsleep 11.99 vs 5.68; MHWdfinancial 9.20 vs 5.15.
 - [ ] PS model still fits with missingness strategy  
-  **Evidence:**
+  **Evidence:** Not run (statsmodels/sklearn not available in environment).
 
 ### Validation Gate 3
-- [ ] Missingness summary table created (overall + by key groups)  
-  **Evidence:**
-- [ ] No accidental 0% or runaway missingness  
-  **Evidence:**
+- [x] Missingness summary table created (overall + by key groups)  
+  **Evidence:** Overall (%): MHWdacad=5.62, MHWdlonely=7.18, MHWdmental=6.42, MHWdexhaust=5.64, MHWdsleep=6.72, MHWdfinancial=5.82, QIadmin=4.34, QIstudent=4.16, QIadvisor=4.40, QIfaculty=4.44, QIstaff=4.00. By living (% QI items): With family QIadmin=4.90/QIstudent=4.40/QIadvisor=4.73/QIfaculty=4.36/QIstaff=4.85; On-campus QIadmin=3.38/QIstudent=3.38/QIadvisor=3.38/QIfaculty=3.45/QIstaff=2.04; Off-campus QIadmin=4.37/QIstudent=4.62/QIadvisor=4.97/QIfaculty=5.82/QIstaff=4.62.
+- [x] No accidental 0% or runaway missingness  
+  **Evidence:** Targeted missingness ranges 2.04%–12.59% across affected items; no 0% or extreme missingness.
 
 ---
 
