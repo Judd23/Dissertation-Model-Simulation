@@ -1,18 +1,41 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, type ReactNode } from 'react';
-import {
-  parseModelData,
-  modelResultsData,
-  doseEffectsData,
-  sampleDescriptivesData,
-} from '../../data/adapters/modelData';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { fetchModelData, parseModelData } from '../../data/adapters/modelData';
 import type { ModelData } from '../../data/types/modelData';
 
 const ModelDataContext = createContext<ModelData | null>(null);
+const POLL_INTERVAL_MS = 15000;
 
-const modelData = parseModelData();
+const initialModelData = parseModelData();
 
 export function ModelDataProvider({ children }: { children: ReactNode }) {
+  const [modelData, setModelData] = useState<ModelData>(initialModelData);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadData = async () => {
+      try {
+        const latest = await fetchModelData();
+        if (isMounted) {
+          setModelData(latest);
+        }
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.error('(NO $) [ModelDataProvider] fetchModelData failed:', error);
+        }
+      }
+    };
+
+    loadData();
+    const interval = window.setInterval(loadData, POLL_INTERVAL_MS);
+
+    return () => {
+      isMounted = false;
+      window.clearInterval(interval);
+    };
+  }, []);
+
   return (
     <ModelDataContext.Provider value={modelData}>
       {children}
@@ -27,6 +50,3 @@ export function useModelData(): ModelData {
   }
   return context;
 }
-
-// Export raw data for components that need direct access
-export { modelResultsData, doseEffectsData, sampleDescriptivesData };
