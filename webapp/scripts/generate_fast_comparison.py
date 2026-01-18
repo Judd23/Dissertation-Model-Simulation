@@ -9,7 +9,7 @@ from pathlib import Path
 def main():
     # Read the dataset
     data_path = Path(__file__).parent.parent.parent / "1_Dataset" / "rep_data.csv"
-    output_path = Path(__file__).parent.parent / "src" / "data" / "fastComparison.json"
+    output_path = Path(__file__).parent.parent / "public" / "data" / "fastComparison.json"
 
     print(f"Reading data from: {data_path}")
     df = pd.read_csv(data_path)
