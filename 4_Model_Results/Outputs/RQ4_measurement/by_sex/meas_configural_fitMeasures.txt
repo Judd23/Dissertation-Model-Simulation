@@ -1,0 +1,15 @@
+measure	value
+npar	170
+df	584
+chisq	758.042822642807
+pvalue	1.44296986270831e-06
+cfi	0.998316542790456
+tli	0.99812628906472
+rmsea	0.0109182147244431
+srmr	0.0185033183333708
+cfi.scaled	1
+tli.scaled	1.00003318278277
+rmsea.scaled	0
+cfi.robust	1
+tli.robust	1.00008674915343
+rmsea.robust	0
