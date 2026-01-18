@@ -1,18 +1,41 @@
-import modelResultsData from '../modelResults.json';
-import doseEffectsData from '../doseEffects.json';
-import sampleDescriptivesData from '../sampleDescriptives.json';
 import { DoseEffectsDataSchema, ModelResultsSchema, SampleDescriptivesSchema, safeParseData } from '../schemas/modelData';
 import type { ModelData, StructuralPath, FitMeasures, DoseCoefficients, DoseEffect, ModelDataValidation } from '../types/modelData';
 
 // Parse the JSON data into stable view models.
-export function parseModelData(): ModelData {
+export type ModelDataPayload = {
+  modelResults?: unknown;
+  doseEffects?: unknown;
+  sampleDescriptives?: unknown;
+};
+
+const DATA_BASE_PATH = '/data';
+
+async function fetchJson(filename: string) {
+  const response = await fetch(`${DATA_BASE_PATH}/${filename}?t=${Date.now()}`, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load ${filename} (${response.status})`);
+  }
+  return response.json();
+}
+
+export async function fetchModelData(): Promise<ModelData> {
+  const [modelResults, doseEffects, sampleDescriptives] = await Promise.all([
+    fetchJson('modelResults.json'),
+    fetchJson('doseEffects.json'),
+    fetchJson('sampleDescriptives.json'),
+  ]);
+
+  return parseModelData({ modelResults, doseEffects, sampleDescriptives });
+}
+
+export function parseModelData(payload: ModelDataPayload = {}): ModelData {
   const errors: string[] = [];
 
-  const modelResultsResult = safeParseData(ModelResultsSchema, modelResultsData, 'modelResults.json');
-  const doseEffectsResult = safeParseData(DoseEffectsDataSchema, doseEffectsData, 'doseEffects.json');
+  const modelResultsResult = safeParseData(ModelResultsSchema, payload.modelResults ?? null, 'modelResults.json');
+  const doseEffectsResult = safeParseData(DoseEffectsDataSchema, payload.doseEffects ?? null, 'doseEffects.json');
   const sampleDescriptivesResult = safeParseData(
     SampleDescriptivesSchema,
-    sampleDescriptivesData,
+    payload.sampleDescriptives ?? null,
     'sampleDescriptives.json'
   );
 
@@ -99,5 +122,3 @@ export function parseModelData(): ModelData {
     validation,
   };
 }
-
-export { modelResultsData, doseEffectsData, sampleDescriptivesData };

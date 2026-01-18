@@ -10,11 +10,11 @@ Reads:
   - 1_Dataset/rep_data.csv (for descriptives)
 
 Writes:
-  - webapp/src/data/modelResults.json
-  - webapp/src/data/doseEffects.json
-  - webapp/src/data/groupComparisons.json
-  - webapp/src/data/sampleDescriptives.json
-  - webapp/src/data/variableMetadata.json
+  - webapp/public/data/modelResults.json
+  - webapp/public/data/doseEffects.json
+  - webapp/public/data/groupComparisons.json
+  - webapp/public/data/sampleDescriptives.json
+  - webapp/public/data/variableMetadata.json
 """
 
 import json
@@ -29,7 +29,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 OUTPUTS_DIR = PROJECT_ROOT / "4_Model_Results" / "Outputs"
 DATA_DIR = PROJECT_ROOT / "1_Dataset"
 CODEBOOK_DIR = PROJECT_ROOT / "2_Codebooks"
-OUTPUT_DIR = Path(__file__).parent.parent / "src" / "data"
+OUTPUT_DIR = Path(__file__).parent.parent / "public" / "data"
 
 # Key structural paths we want to extract
 KEY_PATHS = ["a1", "a1z", "a2", "a2z", "b1", "b2", "c", "cz", "g1", "g2", "g3"]
