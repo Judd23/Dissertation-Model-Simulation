@@ -1625,4 +1625,65 @@ if (deep_result == 0) {
 
 }  # end if (!SKIP_POST_PROCESSING)
 
+# =============================================================================
+# Regenerate Summary outputs (remove old, write fresh artifacts)
+# =============================================================================
+summary_dir <- file.path(dirname(OUT_BASE), "Summary")
+key_findings_path <- file.path(summary_dir, "Key_Findings_Summary.md")
+key_findings <- NULL
+if (file.exists(key_findings_path)) {
+  key_findings <- readLines(key_findings_path, warn = FALSE)
+}
+
+if (dir.exists(summary_dir)) {
+  old_files <- list.files(summary_dir, full.names = TRUE)
+  if (length(old_files) > 0) unlink(old_files, recursive = TRUE, force = TRUE)
+} else {
+  dir.create(summary_dir, recursive = TRUE, showWarnings = FALSE)
+}
+
+if (!is.null(key_findings)) {
+  writeLines(key_findings, con = key_findings_path)
+}
+
+run_summary_dir <- file.path(summary_dir, "Run_Summary")
+dir.create(run_summary_dir, recursive = TRUE, showWarnings = FALSE)
+
+copy_if_exists <- function(src, dest_dir) {
+  if (file.exists(src)) {
+    file.copy(src, file.path(dest_dir, basename(src)), overwrite = TRUE)
+  }
+}
+
+copy_if_exists(file.path(OUT_LOGS, "run_log.txt"), run_summary_dir)
+copy_if_exists(file.path(OUT_LOGS, "verification_checklist.txt"), run_summary_dir)
+copy_if_exists(file.path(OUT_LOGS, "recode_report.tsv"), run_summary_dir)
+copy_if_exists(file.path(OUT_SYNTAX, "executed_measurement_syntax.lav"), run_summary_dir)
+copy_if_exists(file.path(OUT_SYNTAX, "executed_sem_parallel.lav"), run_summary_dir)
+copy_if_exists(file.path(OUT_SYNTAX, "executed_sem_serial.lav"), run_summary_dir)
+copy_if_exists(file.path(OUT_SYNTAX, "executed_sem_total.lav"), run_summary_dir)
+copy_if_exists(file.path(OUT_FIGURES, "standards_data.json"), run_summary_dir)
+
+# PSW balance summary table + report
+psw_src <- file.path(out_main, "psw_balance_smd.txt")
+psw_csv_out <- file.path(summary_dir, "psw_balance_smd_table.csv")
+psw_report_out <- file.path(summary_dir, "psw_balance_report.md")
+if (file.exists(psw_src)) {
+  bal <- read.delim(psw_src, stringsAsFactors = FALSE)
+  write.csv(bal, file = psw_csv_out, row.names = FALSE)
+  if (all(c("smd_unweighted", "smd_weighted") %in% names(bal))) {
+    abs_unw <- abs(bal$smd_unweighted)
+    abs_w <- abs(bal$smd_weighted)
+    report_lines <- c(
+      "# PSW Balance Summary",
+      "",
+      paste0("Max |SMD| (unweighted): ", formatC(max(abs_unw, na.rm = TRUE), digits = 3, format = "f")),
+      paste0("Max |SMD| (weighted): ", formatC(max(abs_w, na.rm = TRUE), digits = 3, format = "f")),
+      paste0("Mean |SMD| (unweighted): ", formatC(mean(abs_unw, na.rm = TRUE), digits = 3, format = "f")),
+      paste0("Mean |SMD| (weighted): ", formatC(mean(abs_w, na.rm = TRUE), digits = 3, format = "f"))
+    )
+    writeLines(report_lines, con = psw_report_out)
+  }
+}
+
 message("ALL RQs run complete. Outputs under: ", OUT_BASE)

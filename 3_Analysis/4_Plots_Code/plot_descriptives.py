@@ -271,19 +271,26 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     
     for idx, (col, label) in enumerate(zip(sb_cols, sb_labels)):
         ax = axes[0, idx]
-        counts = df[col].value_counts().sort_index()
+        counts = weighted_value_counts(df[col], w)
+        counts = counts.sort_index()
         bar_colors = [green_gradient[int(v)-1] for v in counts.index]
         bars = ax.bar(counts.index, counts.values, color=bar_colors, edgecolor='white')
         ax.set_xlabel(f'Response (1-{sb_max})', fontsize=9)
-        ax.set_ylabel('Frequency', fontsize=9)
-        low_pct = (df[col] <= sb_max / 2).mean() * 100
+        ax.set_ylabel('Weighted Count' if use_weights else 'Count', fontsize=9)
+        low_mask = (df[col] <= sb_max / 2).astype(float)
+        low_mask[df[col].isna()] = np.nan
+        low_pct = weighted_proportion(low_mask.values, w) * 100
         ax.set_title(f'{label}\n({low_pct:.1f}% low)', fontsize=10, fontweight='bold')
         ax.set_xticks(range(1, sb_max + 1))
     
     # Summary belonging (weighted)
     ax = axes[0, 3]
     low_threshold = sb_max // 2  # Bottom half of scale
-    low_belong = [weighted_proportion((df[c] <= low_threshold).astype(float).values, w) * 100 for c in sb_cols]
+    low_belong = []
+    for c in sb_cols:
+        low_mask = (df[c] <= low_threshold).astype(float)
+        low_mask[df[c].isna()] = np.nan
+        low_belong.append(weighted_proportion(low_mask.values, w) * 100)
     # Green gradient based on percentage (higher = darker = worse)
     green_shades = [plt.cm.Greens(0.3 + 0.5 * (v / max(low_belong) if max(low_belong) > 0 else 0)) for v in low_belong]
     ax.barh(sb_labels, low_belong, color=green_shades)
@@ -455,7 +462,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     
     # =========================================================================
     # FIGURE 6: Correlation Heatmap - Key Variables (grouped by construct)
-    # Note: Correlations are not PSW-weighted (correlation is a bivariate measure)
+    # Note: Spearman correlations are not PSW-weighted (correlation is a bivariate measure)
     # =========================================================================
     fig, ax = plt.subplots(figsize=(14, 12))
     
@@ -499,7 +506,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     key_vars = [v for v, l in available]
     var_labels = [l for v, l in available]
     
-    corr_matrix = df[key_vars].corr()
+    corr_matrix = df[key_vars].corr(method='spearman')
 
     # Use a diverging colormap where RED = positive, BLUE = negative
     # (common interpretation for correlation heatmaps)
@@ -523,7 +530,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
             ax.axhline(sep - 0.5, color='black', linewidth=1.5)
             ax.axvline(sep - 0.5, color='black', linewidth=1.5)
     
-    plt.colorbar(im, ax=ax, label='Pearson r (red=positive, blue=negative)', shrink=0.8)
+    plt.colorbar(im, ax=ax, label='Spearman rho (red=positive, blue=negative)', shrink=0.8)
     ax.set_title('Figure 6\nCorrelation Matrix by Construct\n(X/Z | Covariates | EmoDiss | QualEngag | Belong | Gains | Satisf)', 
                  fontsize=14, fontweight='bold')
     plt.tight_layout()
@@ -531,6 +538,41 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     plt.savefig(f'{outdir}/fig6_correlation_heatmap.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 6: Correlation Heatmap saved')
+    
+    # =========================================================================
+    # FIGURE 13: Love Plot - PSW Balance (unweighted vs weighted SMDs)
+    # =========================================================================
+    psw_path = os.path.join(os.path.dirname(outdir), "Outputs", "RQ1_RQ3_main", "psw_balance_smd.txt")
+    if os.path.exists(psw_path):
+        bal = pd.read_csv(psw_path, sep='\t')
+        req_cols = {'covariate', 'smd_unweighted', 'smd_weighted'}
+        if req_cols.issubset(bal.columns):
+            bal = bal.dropna(subset=['smd_unweighted', 'smd_weighted'])
+            covs = bal['covariate'].astype(str).tolist()
+            y_pos = np.arange(len(covs))
+            fig, ax = plt.subplots(figsize=(10, max(6, len(covs) * 0.3)))
+            ax.scatter(bal['smd_unweighted'], y_pos, color='#7f7f7f', label='Unweighted', zorder=3)
+            ax.scatter(bal['smd_weighted'], y_pos, color=colors['fast'], label='PSW weighted', zorder=3)
+            for i, (u, wgt) in enumerate(zip(bal['smd_unweighted'], bal['smd_weighted'])):
+                ax.plot([u, wgt], [i, i], color='#cccccc', linewidth=1, zorder=2)
+            ax.axvline(0, color='black', linewidth=0.8)
+            ax.axvline(0.1, color='red', linestyle='--', linewidth=0.8)
+            ax.axvline(-0.1, color='red', linestyle='--', linewidth=0.8)
+            ax.set_yticks(y_pos)
+            ax.set_yticklabels(covs, fontsize=9)
+            ax.invert_yaxis()
+            ax.set_xlabel('Standardized Mean Difference (SMD)', fontsize=11)
+            ax.set_title('Figure 13\nLove Plot: Covariate Balance (Unweighted vs PSW Weighted)', fontsize=14, fontweight='bold')
+            ax.legend(loc='lower right', fontsize=9)
+            plt.tight_layout()
+            add_sim_note(fig, y_offset=0.01)
+            plt.savefig(f'{outdir}/fig13_love_plot.png', dpi=300, bbox_inches='tight')
+            plt.close()
+            print('✓ Figure 13: Love Plot saved')
+        else:
+            print('! Figure 13 skipped: psw_balance_smd.txt missing required columns')
+    else:
+        print('! Figure 13 skipped: psw_balance_smd.txt not found')
     
     print(f'\n✓ All figures saved to {outdir}/')
     return outdir
