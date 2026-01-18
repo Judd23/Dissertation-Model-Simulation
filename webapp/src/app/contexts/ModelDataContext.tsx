@@ -15,12 +15,6 @@ export function ModelDataProvider({ children }: { children: ReactNode }) {
     let isMounted = true;
 
     const loadData = async () => {
-      if (import.meta.env.DEV) {
-        console.log('(NO $) [ModelDataProvider] poll tick:', {
-          intervalMs: POLL_INTERVAL_MS,
-          at: new Date().toISOString(),
-        });
-      }
       try {
         const latest = await fetchModelData();
         if (isMounted) {
