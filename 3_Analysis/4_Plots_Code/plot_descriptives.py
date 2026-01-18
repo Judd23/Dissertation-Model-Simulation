@@ -74,6 +74,16 @@ def weighted_value_counts(series, weights, normalize=False):
         result = result / result.sum()
     return result
 
+def normalize_is_woman(sex_series):
+    """Normalize sex codes to a boolean is_woman series (0 or 'Female')."""
+    if pd.api.types.is_numeric_dtype(sex_series):
+        is_woman = sex_series.eq(0)
+    else:
+        sex_str = sex_series.astype('string')
+        is_woman = sex_str.str.lower().eq('female')
+    is_woman = is_woman.where(sex_series.notna())
+    return is_woman.astype(float)
+
 def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', weight_col=None):
     os.makedirs(outdir, exist_ok=True)
     
@@ -132,10 +142,11 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # 1b. First-gen and Pell status - BLACK bar charts (weighted)
     ax = axes[0, 1]
     categories = ['First-Gen', 'Pell-Eligible', 'Women', 'FASt Status']
+    is_woman = normalize_is_woman(df['sex'])
     yes_pct = [
         weighted_proportion(df['firstgen'].values, w)*100, 
         weighted_proportion(df['pell'].values, w)*100,
-        weighted_proportion((df['sex'] == 'Female').astype(float).values, w)*100, 
+        weighted_proportion(is_woman.values, w)*100, 
         weighted_proportion(df['x_FASt'].values, w)*100
     ]
     no_pct = [100-p for p in yes_pct]
