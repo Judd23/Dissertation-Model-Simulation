@@ -115,24 +115,52 @@ def compute_dose_effects(main_paths: list) -> dict:
     c = get_path(main_paths, "c")
     cz = get_path(main_paths, "cz")
 
-    # Use actual coefficients if available, else defaults
+    # Use actual coefficients if available; mark missing data for the UI.
     coefficients = {
         "distress": {
-            "main": a1["estimate"] if a1 else 0.127,
-            "moderation": a1z["estimate"] if a1z else 0.003,
-            "se": a1["se"] if a1 else 0.037,
+            "main": a1["estimate"] if a1 and a1["estimate"] is not None else None,
+            "moderation": a1z["estimate"] if a1z and a1z["estimate"] is not None else None,
+            "se": a1["se"] if a1 and a1["se"] is not None else None,
         },
         "engagement": {
-            "main": a2["estimate"] if a2 else -0.010,
-            "moderation": a2z["estimate"] if a2z else -0.014,
-            "se": a2["se"] if a2 else 0.036,
+            "main": a2["estimate"] if a2 and a2["estimate"] is not None else None,
+            "moderation": a2z["estimate"] if a2z and a2z["estimate"] is not None else None,
+            "se": a2["se"] if a2 and a2["se"] is not None else None,
         },
         "adjustment": {
-            "main": c["estimate"] if c else 0.041,
-            "moderation": cz["estimate"] if cz else -0.009,
-            "se": c["se"] if c else 0.013,
+            "main": c["estimate"] if c and c["estimate"] is not None else None,
+            "moderation": cz["estimate"] if cz and cz["estimate"] is not None else None,
+            "se": c["se"] if c and c["se"] is not None else None,
         },
     }
+
+    missing = []
+    for label, path in [("a1", a1), ("a1z", a1z), ("a2", a2), ("a2z", a2z), ("c", c), ("cz", cz)]:
+        if not path or path["estimate"] is None:
+            missing.append(label)
+    for label, path in [("a1_se", a1), ("a2_se", a2), ("c_se", c)]:
+        if not path or path["se"] is None:
+            missing.append(label)
+
+    if missing:
+        return {
+            "creditDoseRange": {
+                "min": 0,
+                "max": 80,
+                "threshold": 12,
+                "units": "credits",
+            },
+            "coefficients": coefficients,
+            "effects": [],
+            "johnsonNeymanPoints": {
+                "distress": {"lower": None, "upper": None},
+                "engagement": {"crossover": 15.2},
+            },
+            "validation": {
+                "status": "missing_coefficients",
+                "missing": missing,
+            },
+        }
 
     dose_range = list(range(0, 81, 5))
     effects = []
