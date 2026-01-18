@@ -33,6 +33,7 @@ OUTPUT_DIR = Path(__file__).parent.parent / "public" / "data"
 
 # Key structural paths we want to extract
 KEY_PATHS = ["a1", "a1z", "a2", "a2z", "b1", "b2", "c", "cz", "g1", "g2", "g3"]
+TOTAL_EFFECT_KEYS = ["c_total"]
 
 
 def parse_parameter_estimates(filepath: Path) -> pd.DataFrame:
@@ -45,7 +46,7 @@ def parse_parameter_estimates(filepath: Path) -> pd.DataFrame:
     return df
 
 
-def extract_key_paths(params: pd.DataFrame) -> list:
+def extract_key_paths(params: pd.DataFrame, key_paths: list = None) -> list:
     """Extract key structural path coefficients from parameter estimates."""
     if params.empty:
         return []
@@ -53,10 +54,11 @@ def extract_key_paths(params: pd.DataFrame) -> list:
     # Filter to structural paths with labels
     structural = params[(params["op"] == "~") & (params["label"].notna()) & (params["label"] != "")].copy()
 
+    active_keys = key_paths if key_paths is not None else KEY_PATHS
     paths = []
     for _, row in structural.iterrows():
         label = row["label"]
-        if label not in KEY_PATHS:
+        if label not in active_keys:
             continue
 
         path = {
@@ -437,6 +439,25 @@ def build_variable_metadata() -> dict:
     return metadata
 
 
+def build_model_results(model_dir: Path, key_paths: list) -> dict:
+    """Build model result payload with source path metadata."""
+    params_path = model_dir / "structural_parameterEstimates.txt"
+    fit_path = model_dir / "structural_fitMeasures.txt"
+
+    params = parse_parameter_estimates(params_path)
+    paths = extract_key_paths(params, key_paths)
+    fit = parse_fit_measures(fit_path)
+
+    return {
+        "fitMeasures": fit,
+        "structuralPaths": paths,
+        "sourcePaths": {
+            "parameterEstimates": str(params_path.relative_to(PROJECT_ROOT)),
+            "fitMeasures": str(fit_path.relative_to(PROJECT_ROOT)),
+        },
+    }
+
+
 def main():
     """Main function to transform all outputs."""
     print("=" * 60)
@@ -448,18 +469,15 @@ def main():
 
     # 1. Model Results
     print("\n[1/5] Processing main model results...")
-    main_params_path = OUTPUTS_DIR / "RQ1_RQ3_main" / "structural" / "structural_parameterEstimates.txt"
-    main_fit_path = OUTPUTS_DIR / "RQ1_RQ3_main" / "structural" / "structural_fitMeasures.txt"
+    main_model_dir = OUTPUTS_DIR / "RQ1_RQ3_main" / "structural"
+    total_effect_model_dir = OUTPUTS_DIR / "A0_total_effect" / "structural"
 
-    params = parse_parameter_estimates(main_params_path)
-    paths = extract_key_paths(params)
-    fit = parse_fit_measures(main_fit_path)
+    main_model = build_model_results(main_model_dir, KEY_PATHS)
+    total_effect_model = build_model_results(total_effect_model_dir, TOTAL_EFFECT_KEYS)
 
     model_results = {
-        "mainModel": {
-            "fitMeasures": fit,
-            "structuralPaths": paths,
-        },
+        "mainModel": main_model,
+        "totalEffectModel": total_effect_model,
         "bootstrap": {
             "n_replicates": 2000,
             "ci_type": "bca.simple",
@@ -468,11 +486,15 @@ def main():
 
     with open(OUTPUT_DIR / "modelResults.json", "w") as f:
         json.dump(model_results, f, indent=2)
-    print(f"  ✓ Wrote modelResults.json ({len(paths)} key paths, {len(fit)} fit measures)")
+    print(
+        "  ✓ Wrote modelResults.json ("
+        f"{len(main_model['structuralPaths'])} main paths, {len(main_model['fitMeasures'])} main fit measures; "
+        f"{len(total_effect_model['structuralPaths'])} total paths, {len(total_effect_model['fitMeasures'])} total fit measures)"
+    )
 
     # 2. Dose Effects
     print("\n[2/5] Computing dose-response effects...")
-    dose_effects = compute_dose_effects(paths)
+    dose_effects = compute_dose_effects(main_model["structuralPaths"])
 
     with open(OUTPUT_DIR / "doseEffects.json", "w") as f:
         json.dump(dose_effects, f, indent=2)

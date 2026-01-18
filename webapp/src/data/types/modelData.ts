@@ -20,6 +20,17 @@ export interface FitMeasures {
   [key: string]: number;
 }
 
+export interface ModelSourcePaths {
+  parameterEstimates: string;
+  fitMeasures: string;
+}
+
+export interface ModelSelection {
+  key: 'mainModel' | 'totalEffectModel';
+  label: string;
+  sourcePaths: ModelSourcePaths;
+}
+
 export interface DoseCoefficients {
   distress: { main: number; moderation: number; se: number };
   engagement: { main: number; moderation: number; se: number };
@@ -53,6 +64,7 @@ export interface ModelData {
   };
   allPaths: StructuralPath[];
   fitMeasures: FitMeasures;
+  totalEffectPath: StructuralPath | null;
 
   // Dose-response
   doseCoefficients: DoseCoefficients;
@@ -70,6 +82,10 @@ export interface ModelData {
     distress: number;
     engagement: number;
     adjustment: number;
+  };
+  modelSelections: {
+    structural: ModelSelection;
+    totalEffect: ModelSelection;
   };
 
   validation: ModelDataValidation;
