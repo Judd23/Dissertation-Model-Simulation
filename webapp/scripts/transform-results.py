@@ -506,6 +506,24 @@ def main():
     # 6. Write metadata with timestamp
     print("\n[6/6] Writing data metadata...")
     now = datetime.now()
+    pipeline_run_id = os.environ.get("PIPELINE_RUN_ID") or now.strftime("%Y%m%d%H%M%S")
+    input_files = [
+        main_params_path,
+        main_fit_path,
+        data_path,
+        CODEBOOK_DIR / "Variable_Table.csv",
+    ]
+    input_files_metadata = []
+    for filepath in input_files:
+        exists = filepath.exists()
+        modified_at = None
+        if exists:
+            modified_at = datetime.fromtimestamp(filepath.stat().st_mtime).isoformat()
+        input_files_metadata.append({
+            "path": str(filepath),
+            "exists": exists,
+            "modifiedAt": modified_at,
+        })
     metadata = {
         "generatedAt": now.isoformat(),
         "generatedAtFormatted": now.strftime("%B %d, %Y at %I:%M %p"),
@@ -513,7 +531,9 @@ def main():
         "pipelineVersion": "1.0.0",
         "dataSource": "run_all_RQs_official.R",
         "bootstrapReplicates": 2000,
-        "ciType": "bca.simple"
+        "ciType": "bca.simple",
+        "pipelineRunId": pipeline_run_id,
+        "inputFiles": input_files_metadata,
     }
     
     with open(OUTPUT_DIR / "dataMetadata.json", "w") as f:
