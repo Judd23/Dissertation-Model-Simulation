@@ -1,8 +1,10 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { DANCE_SPRING_HEAVY, TIMING_SECONDS } from "../../lib/transitionConfig";
-import { groupComparisons } from "../../data/adapters/groupComparisons";
-import { sampleDescriptives } from "../../data/adapters/sampleDescriptives";
+import { fetchGroupComparisons } from "../../data/adapters/groupComparisons";
+import { fetchSampleDescriptives } from "../../data/adapters/sampleDescriptives";
+import type { GroupComparisonsJson } from "../../data/types/groupComparisons";
+import type { SampleDescriptives } from "../../data/types/sampleDescriptives";
 import styles from "./GroupComparison.module.css";
 
 /* ─────────────────────────────────────────────────────────
@@ -25,37 +27,37 @@ interface GroupComparisonProps {
    DATA BUILDER
    ───────────────────────────────────────────────────────── */
 function getGroupData(
+  demographics: SampleDescriptives["demographics"],
+  groupComparisons: GroupComparisonsJson,
   grouping: GroupComparisonProps["grouping"],
   pathway: "a1" | "a2"
 ): GroupEffect[] {
-  const demographics = sampleDescriptives.demographics;
-
   const sampleSizes: Record<string, Record<string, number>> = {
     race: {
-      "Hispanic/Latino": demographics.race["Hispanic/Latino"]?.n || 2350,
-      White: demographics.race["White"]?.n || 1069,
-      Asian: demographics.race["Asian"]?.n || 835,
+      "Hispanic/Latino": demographics.race["Hispanic/Latino"].n,
+      White: demographics.race["White"].n,
+      Asian: demographics.race["Asian"].n,
       "Black/African American":
-        demographics.race["Black/African American"]?.n || 200,
+        demographics.race["Black/African American"].n,
       "Other/Multiracial":
-        demographics.race["Other/Multiracial/Unknown"]?.n || 546,
+        demographics.race["Other/Multiracial/Unknown"].n,
     },
     firstgen: {
-      "First-Gen": demographics.firstgen?.yes?.n || 2353,
-      "Continuing-Gen": demographics.firstgen?.no?.n || 2647,
+      "First-Gen": demographics.firstgen.yes.n,
+      "Continuing-Gen": demographics.firstgen.no.n,
     },
     pell: {
-      "Pell Eligible": demographics.pell?.yes?.n || 2158,
-      "Not Pell Eligible": demographics.pell?.no?.n || 2842,
+      "Pell Eligible": demographics.pell.yes.n,
+      "Not Pell Eligible": demographics.pell.no.n,
     },
     sex: {
-      Women: demographics.sex?.women?.n || 3104,
-      Men: demographics.sex?.men?.n || 1896,
+      Women: demographics.sex.women.n,
+      Men: demographics.sex.men.n,
     },
     living: {
-      "With Family": 2946,
-      "Off-Campus": 945,
-      "On-Campus": 1109,
+      "With Family": demographics.living["With Family"].n,
+      "Off-Campus": demographics.living["Off-Campus"].n,
+      "On-Campus": demographics.living["On-Campus"].n,
     },
   };
 
@@ -74,10 +76,10 @@ function getGroupData(
 
   return jsonData.groups.map((g) => ({
     label: g.label,
-    estimate: g.effects[pathway]?.estimate || 0,
-    se: g.effects[pathway]?.se || 0.05,
-    pvalue: g.effects[pathway]?.pvalue || 1,
-    n: sampleSizes[grouping]?.[g.label] || 500,
+    estimate: g.effects[pathway].estimate,
+    se: g.effects[pathway].se,
+    pvalue: g.effects[pathway].pvalue,
+    n: sampleSizes[grouping][g.label],
   }));
 }
 
@@ -88,9 +90,40 @@ export default function GroupComparison({
   grouping,
   pathway,
 }: GroupComparisonProps) {
+  const [groupComparisons, setGroupComparisons] = useState<GroupComparisonsJson | null>(null);
+  const [sampleDescriptives, setSampleDescriptives] = useState<SampleDescriptives | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadData = async () => {
+      try {
+        const [comparisons, descriptives] = await Promise.all([
+          fetchGroupComparisons(),
+          fetchSampleDescriptives(),
+        ]);
+        if (isMounted) {
+          setGroupComparisons(comparisons);
+          setSampleDescriptives(descriptives);
+        }
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.error('(NO $) [GroupComparison] data load failed:', error);
+        }
+      }
+    };
+    loadData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!groupComparisons || !sampleDescriptives) {
+    return null;
+  }
+
   const data = useMemo(
-    () => getGroupData(grouping, pathway),
-    [grouping, pathway]
+    () => getGroupData(sampleDescriptives.demographics, groupComparisons, grouping, pathway),
+    [grouping, pathway, groupComparisons, sampleDescriptives]
   );
 
   if (data.length === 0) {

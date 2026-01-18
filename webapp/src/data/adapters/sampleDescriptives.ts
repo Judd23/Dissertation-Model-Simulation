@@ -1,10 +1,16 @@
-import sampleDescriptivesData from '../sampleDescriptives.json';
 import type { SampleDescriptives } from '../types/sampleDescriptives';
 
-const sampleDescriptives = sampleDescriptivesData as unknown as SampleDescriptives;
+const DATA_BASE_PATH = '/data';
 
-export function getSampleDescriptives(): SampleDescriptives {
-  return sampleDescriptives;
+async function fetchJson(filename: string) {
+  const response = await fetch(`${DATA_BASE_PATH}/${filename}?t=${Date.now()}`, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load ${filename} (${response.status})`);
+  }
+  return response.json();
 }
 
-export { sampleDescriptives };
+export async function fetchSampleDescriptives(): Promise<SampleDescriptives> {
+  const data = await fetchJson('sampleDescriptives.json');
+  return data as SampleDescriptives;
+}

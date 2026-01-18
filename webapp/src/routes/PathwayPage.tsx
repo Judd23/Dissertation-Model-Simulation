@@ -28,6 +28,14 @@ export default function PathwayPage() {
     togglePathLabels,
   } = useResearch();
   const { paths } = useModelData();
+  console.log('(NO $) [PathwayPage] path snapshot:', {
+    a1: paths.a1?.estimate,
+    a2: paths.a2?.estimate,
+    b1: paths.b1?.estimate,
+    b2: paths.b2?.estimate,
+    c: paths.c?.estimate,
+    cz: paths.cz?.estimate,
+  });
   const [isStuck, setIsStuck] = useState(false);
   const controlsRef = useRef<HTMLElement>(null);
 

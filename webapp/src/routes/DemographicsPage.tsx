@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useResearch } from "../app/contexts";
 import GroupComparison from "../features/charts/GroupComparison";
@@ -11,9 +11,10 @@ import {
   itemVariants,
   VIEWPORT_CONFIG,
 } from "../lib/transitionConfig";
-
-import { fastComparison } from "../data/adapters/fastComparison";
-import { sampleDescriptives } from "../data/adapters/sampleDescriptives";
+import { fetchFastComparison } from "../data/adapters/fastComparison";
+import { fetchSampleDescriptives } from "../data/adapters/sampleDescriptives";
+import type { FastComparison } from "../data/types/fastComparison";
+import type { SampleDescriptives } from "../data/types/sampleDescriptives";
 import styles from "./DemographicsPage.module.css";
 
 const groupingOptions = [
@@ -51,6 +52,37 @@ const groupingOptions = [
 export default function DemographicsPage() {
   const { groupingVariable, setGroupingVariable } = useResearch();
   const [showComparison, setShowComparison] = useState(false);
+  const [fastComparison, setFastComparison] = useState<FastComparison | null>(null);
+  const [sampleDescriptives, setSampleDescriptives] = useState<SampleDescriptives | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadData = async () => {
+      try {
+        const [comparison, descriptives] = await Promise.all([
+          fetchFastComparison(),
+          fetchSampleDescriptives(),
+        ]);
+        if (isMounted) {
+          setFastComparison(comparison);
+          setSampleDescriptives(descriptives);
+        }
+      } catch (error) {
+        if (import.meta.env.DEV) {
+          console.error('(NO $) [DemographicsPage] data load failed:', error);
+        }
+      }
+    };
+    loadData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!fastComparison || !sampleDescriptives) {
+    return null;
+  }
+
   const demographics = sampleDescriptives.demographics;
 
   return (
@@ -154,16 +186,15 @@ export default function DemographicsPage() {
                                 className={styles.demoBarFill}
                                 style={{
                                   width: `${
-                                    fastComparison.demographics.race[group]
-                                      ?.fast.pct || 0
+                                    fastComparison.demographics.race[group].fast
+                                      .pct
                                   }%`,
                                   backgroundColor: "var(--color-fast)",
                                 }}
                               />
                             </div>
                             <span>
-                              {fastComparison.demographics.race[group]?.fast
-                                .pct || 0}
+                              {fastComparison.demographics.race[group].fast.pct}
                               %
                             </span>
                           </div>
@@ -177,15 +208,15 @@ export default function DemographicsPage() {
                                 style={{
                                   width: `${
                                     fastComparison.demographics.race[group]
-                                      ?.nonfast.pct || 0
+                                      .nonfast.pct
                                   }%`,
                                   backgroundColor: "var(--color-text-muted)",
                                 }}
                               />
                             </div>
                             <span>
-                              {fastComparison.demographics.race[group]?.nonfast
-                                .pct || 0}
+                              {fastComparison.demographics.race[group].nonfast
+                                .pct}
                               %
                             </span>
                           </div>
@@ -354,16 +385,15 @@ export default function DemographicsPage() {
                                 className={styles.demoBarFill}
                                 style={{
                                   width: `${
-                                    fastComparison.demographics.sex?.[group]
-                                      ?.fast.pct ?? 0
+                                    fastComparison.demographics.sex[group].fast
+                                      .pct
                                   }%`,
                                   backgroundColor: "var(--color-fast)",
                                 }}
                               />
                             </div>
                             <span>
-                              {fastComparison.demographics.sex?.[group]?.fast
-                                .pct ?? 0}
+                              {fastComparison.demographics.sex[group].fast.pct}
                               %
                             </span>
                           </div>
@@ -376,16 +406,16 @@ export default function DemographicsPage() {
                                 className={styles.demoBarFill}
                                 style={{
                                   width: `${
-                                    fastComparison.demographics.sex?.[group]
-                                      ?.nonfast.pct ?? 0
+                                    fastComparison.demographics.sex[group]
+                                      .nonfast.pct
                                   }%`,
                                   backgroundColor: "var(--color-text-muted)",
                                 }}
                               />
                             </div>
                             <span>
-                              {fastComparison.demographics.sex?.[group]?.nonfast
-                                .pct ?? 0}
+                              {fastComparison.demographics.sex[group].nonfast
+                                .pct}
                               %
                             </span>
                           </div>
@@ -433,16 +463,16 @@ export default function DemographicsPage() {
                                 className={styles.demoBarFill}
                                 style={{
                                   width: `${
-                                    fastComparison.demographics.living?.[group]
-                                      ?.fast.pct ?? 0
+                                    fastComparison.demographics.living[group]
+                                      .fast.pct
                                   }%`,
                                   backgroundColor: "var(--color-fast)",
                                 }}
                               />
                             </div>
                             <span>
-                              {fastComparison.demographics.living?.[group]?.fast
-                                .pct ?? 0}
+                              {fastComparison.demographics.living[group].fast
+                                .pct}
                               %
                             </span>
                           </div>
@@ -455,16 +485,16 @@ export default function DemographicsPage() {
                                 className={styles.demoBarFill}
                                 style={{
                                   width: `${
-                                    fastComparison.demographics.living?.[group]
-                                      ?.nonfast.pct ?? 0
+                                    fastComparison.demographics.living[group]
+                                      .nonfast.pct
                                   }%`,
                                   backgroundColor: "var(--color-text-muted)",
                                 }}
                               />
                             </div>
                             <span>
-                              {fastComparison.demographics.living?.[group]
-                                ?.nonfast.pct ?? 0}
+                              {fastComparison.demographics.living[group]
+                                .nonfast.pct}
                               %
                             </span>
                           </div>
