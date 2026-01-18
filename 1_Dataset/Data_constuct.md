@@ -159,27 +159,27 @@ A box may be checked only if evidence is attached directly under it:
 
 ## Treatment 5: Balance + Guards + Reporting
 ### Approval Gate (Required)
-- [ ] STOP: review constraints + request approval to start Treatment 5  
-  **Evidence:**
+- [x] STOP: review constraints + request approval to start Treatment 5  
+  **Evidence:** User approval: "Approved".
 
-- [ ] Balance table updated (SMD + variance ratios)  
-  **Evidence:**
+- [x] Balance table updated (SMD + variance ratios)  
+  **Evidence:** `4_Model_Results/Outputs/RQ1_RQ3_main/structural/balance.csv` includes SMD_Pre/SMD_Post and VR_Pre/VR_Post for cohort, hgrades, bparented, pell, hapcl, hprecalc13, hchallenge, plus mean/max |SMD|.
 - [ ] Distributional balance plots or eCDF/QQ checks added  
-  **Evidence:**
+  **Evidence:** Not found in outputs (no ECDF/QQ/love plot artifacts located).
 - [ ] Unit-test checks added (fail loudly)  
-  **Evidence:**
+  **Evidence:** Not found in outputs.
 - [ ] Run report updated (what changed + why)  
-  **Evidence:**
-- [ ] Post-PSW distributions recorded for ALL covariates (old + new)  
-  **Evidence:**
+  **Evidence:** Not found in outputs.
+- [x] Post-PSW distributions recorded for ALL covariates (old + new)  
+  **Evidence:** `4_Model_Results/Summary/psw_balance_report.md` lists max |SMD| pre/post for covariates (hgrades_c, hapcl, hacadpr13_num_c, hprecalc13, StemMaj, bparented_c, pell, hchallenge_c, tcare_num_c, cohort, cSFcareer_c).
 
 ### Final Acceptance Gate (Definition of Done)
 - [ ] All validation gates passed  
-  **Evidence:**
+  **Evidence:** Pending remaining unchecked items above.
 - [ ] Reproducibility confirmed (seed + hashes if used)  
-  **Evidence:**
+  **Evidence:** Not found in outputs.
 - [ ] No out-of-scope changes (confirm via git diff summary)  
-  **Evidence:**
+  **Evidence:** Pending final diff review after Treatment 5 completion.
 
 ---
 
