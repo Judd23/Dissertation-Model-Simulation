@@ -1,3 +1,0 @@
-level	n
-Female	3020
-Male	1980

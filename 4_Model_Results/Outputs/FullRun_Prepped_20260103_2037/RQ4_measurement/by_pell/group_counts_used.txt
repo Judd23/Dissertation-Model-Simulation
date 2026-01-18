@@ -1,3 +1,0 @@
-level	n
-Non-Pell	2766
-Pell	2234

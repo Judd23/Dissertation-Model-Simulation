@@ -1,2 +1,0 @@
-Error: lavaan->lav_data_full():  
-   some variables have no variance in group 1 : pell

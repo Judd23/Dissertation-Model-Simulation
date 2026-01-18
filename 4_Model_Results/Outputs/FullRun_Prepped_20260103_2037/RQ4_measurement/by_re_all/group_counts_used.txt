@@ -1,5 +1,0 @@
-level	n
-Asian	1182
-Hispanic/Latino	1900
-Other/Multiracial/Unknown	489
-White	1279
