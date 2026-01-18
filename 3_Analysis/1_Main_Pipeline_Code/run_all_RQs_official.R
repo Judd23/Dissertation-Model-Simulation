@@ -190,6 +190,9 @@ SMOKE_BOOT_CI_TYPE <- Sys.getenv("SMOKE_BOOT_CI_TYPE", unset = "perc")
 # Skip post-processing stages (plots, tables) for fast smoke tests
 SKIP_POST_PROCESSING <- env_flag("SKIP_POST_PROCESSING", default = FALSE)
 
+# Skip RQ4 structural multi-group block (optional)
+SKIP_RQ4_STRUCT_MG <- env_flag("SKIP_RQ4_STRUCT_MG", default = FALSE)
+
 # USE_PREPPED_DATA: Skip all data prep, use a previously cleaned+PSW dataset
 # Set to the path of an existing rep_data_with_psw.csv to skip data generation,
 # cleaning, archetype merge, PSW estimation, etc. The bootstrap resampling will
@@ -1215,169 +1218,173 @@ W_VARS_STRUCT_OK <- character(0)
 #   Same SEM across W groups; structural paths allowed to differ by group.
 #   Fast by default: no bootstrap unless BOOTSTRAP_MG == TRUE.
 # -------------------------
-out_mg <- file.path(OUT_BASE, "RQ4_structural_MG")
-dir.create(out_mg, recursive = TRUE, showWarnings = FALSE)
+if (!isTRUE(SKIP_RQ4_STRUCT_MG)) {
+  out_mg <- file.path(OUT_BASE, "RQ4_structural_MG")
+  dir.create(out_mg, recursive = TRUE, showWarnings = FALSE)
 
-# Use the same weighted data as main model
-dat_mg_base <- dat_main
+  # Use the same weighted data as main model
+  dat_mg_base <- dat_main
 
-W_VARS_STRUCT_OK <- W_VARS_STRUCT[W_VARS_STRUCT %in% names(dat_mg_base)]
+  W_VARS_STRUCT_OK <- W_VARS_STRUCT[W_VARS_STRUCT %in% names(dat_mg_base)]
 
-# Decide bootstrap settings for MG runs
-MG_BOOT <- if (isTRUE(BOOTSTRAP_MG)) B_BOOT_MG else 0
-MG_CI   <- if (MG_BOOT > 0) BOOT_CI_TYPE_MG else "none"
+  # Decide bootstrap settings for MG runs
+  MG_BOOT <- if (isTRUE(BOOTSTRAP_MG)) B_BOOT_MG else 0
+  MG_CI   <- if (MG_BOOT > 0) BOOT_CI_TYPE_MG else "none"
 
-for (i in seq_along(W_VARS_STRUCT_OK)) {
-  wvar <- W_VARS_STRUCT_OK[[i]]
-  out_w <- file.path(out_mg, paste0("W", i, "_", wvar))
-  dir.create(out_w, recursive = TRUE, showWarnings = FALSE)
+  for (i in seq_along(W_VARS_STRUCT_OK)) {
+    wvar <- W_VARS_STRUCT_OK[[i]]
+    out_w <- file.path(out_mg, paste0("W", i, "_", wvar))
+    dir.create(out_w, recursive = TRUE, showWarnings = FALSE)
 
-  dW <- dat_mg_base
+    dW <- dat_mg_base
 
-  # Coerce to factor for stable grouping
-  dW[[wvar]] <- as.character(dW[[wvar]])
-  dW[[wvar]] <- trimws(dW[[wvar]])
-  dW[[wvar]][dW[[wvar]] == ""] <- NA
+    # Coerce to factor for stable grouping
+    dW[[wvar]] <- as.character(dW[[wvar]])
+    dW[[wvar]] <- trimws(dW[[wvar]])
+    dW[[wvar]][dW[[wvar]] == ""] <- NA
 
-  # Handle small categories
-  tab <- table(dW[[wvar]], useNA = "no")
-  small_levels <- names(tab)[tab < MIN_W_N_STRUCT]
+    # Handle small categories
+    tab <- table(dW[[wvar]], useNA = "no")
+    small_levels <- names(tab)[tab < MIN_W_N_STRUCT]
 
-  if (length(small_levels) > 0) {
-    if (HANDLE_SMALL_W_STRUCT == "drop") {
-      dW[[wvar]][dW[[wvar]] %in% small_levels] <- NA
-    } else if (HANDLE_SMALL_W_STRUCT == "combine") {
-      dW[[wvar]][dW[[wvar]] %in% small_levels] <- OTHER_LABEL_W_STRUCT
-    } else {
-      # warn: keep as-is
-      writeLines(
-        paste0("Warning: small levels kept for ", wvar, ": ", paste(small_levels, collapse = ", ")),
-        con = file.path(out_w, "small_levels_warning.txt")
-      )
+    if (length(small_levels) > 0) {
+      if (HANDLE_SMALL_W_STRUCT == "drop") {
+        dW[[wvar]][dW[[wvar]] %in% small_levels] <- NA
+      } else if (HANDLE_SMALL_W_STRUCT == "combine") {
+        dW[[wvar]][dW[[wvar]] %in% small_levels] <- OTHER_LABEL_W_STRUCT
+      } else {
+        # warn: keep as-is
+        writeLines(
+          paste0("Warning: small levels kept for ", wvar, ": ", paste(small_levels, collapse = ", ")),
+          con = file.path(out_w, "small_levels_warning.txt")
+        )
+      }
     }
-  }
 
-  # Drop rows with missing group (after handling)
-  keep_idx <- !is.na(dW[[wvar]])
-  dW <- dW[keep_idx, , drop = FALSE]
+    # Drop rows with missing group (after handling)
+    keep_idx <- !is.na(dW[[wvar]])
+    dW <- dW[keep_idx, , drop = FALSE]
 
-  # Recompute counts and decide whether to run
-  tab2 <- table(dW[[wvar]], useNA = "no")
-  ok_levels <- names(tab2)[tab2 >= MIN_W_N_STRUCT]
+    # Recompute counts and decide whether to run
+    tab2 <- table(dW[[wvar]], useNA = "no")
+    ok_levels <- names(tab2)[tab2 >= MIN_W_N_STRUCT]
 
-  if (length(ok_levels) < 2) {
+    if (length(ok_levels) < 2) {
+      writeLines(
+        c(
+          paste0("Skipped MG for W=", wvar, ": fewer than 2 groups with n>=", MIN_W_N_STRUCT),
+          "Counts:",
+          paste0(names(tab2), " = ", as.integer(tab2))
+        ),
+        con = file.path(out_w, "skipped_reason.txt")
+      )
+      next
+    }
+
+    # Keep only ok levels (drop any remaining small ones)
+    dW <- dW[dW[[wvar]] %in% ok_levels, , drop = FALSE]
+    dW[[wvar]] <- factor(dW[[wvar]])
+
+    # Set preferred reference group (g1) when present
+    canon <- function(x) {
+      x <- as.character(x)
+      x <- trimws(x)
+      x <- tolower(x)
+      x <- gsub("[^a-z0-9]+", "", x)
+      x
+    }
+
+    ref_pref <- W_REF_LEVEL[[wvar]]
+    ref_level <- levels(dW[[wvar]])[1]
+    if (!is.null(ref_pref)) {
+      levs <- levels(dW[[wvar]])
+      m <- which(canon(levs) == canon(ref_pref))
+      if (length(m) == 1) {
+        ref_level <- levs[[m]]
+        dW[[wvar]] <- stats::relevel(dW[[wvar]], ref = ref_level)
+      } else {
+        message(
+          "[RQ4 structural MG] ", wvar,
+          ": reference level '", ref_pref,
+          "' not found uniquely after cleaning; keeping default reference='", ref_level,
+          "'. Levels: ", paste(levs, collapse = ", ")
+        )
+      }
+    }
+
+    # Record reference and levels used
     writeLines(
       c(
-        paste0("Skipped MG for W=", wvar, ": fewer than 2 groups with n>=", MIN_W_N_STRUCT),
-        "Counts:",
-        paste0(names(tab2), " = ", as.integer(tab2))
+        paste0("W_index = ", i),
+        paste0("W = ", wvar),
+        paste0("reference = ", ref_level),
+        "levels:",
+        paste0("- ", levels(dW[[wvar]]))
       ),
-      con = file.path(out_w, "skipped_reason.txt")
+      con = file.path(out_w, "reference_group.txt")
     )
-    next
-  }
 
-  # Keep only ok levels (drop any remaining small ones)
-  dW <- dW[dW[[wvar]] %in% ok_levels, , drop = FALSE]
-  dW[[wvar]] <- factor(dW[[wvar]])
+    # Fit MG structural model
+    if (identical(wvar, "pell")) {
+      # Special-case: when grouping by pell, pell is constant within each group.
+      # So the MG-by-pell model must omit pell from within-group regressions.
+      # Note: build_model_fast_treat_control_mg() automatically excludes group_var from covars.
 
-  # Set preferred reference group (g1) when present
-  canon <- function(x) {
-    x <- as.character(x)
-    x <- trimws(x)
-    x <- tolower(x)
-    x <- gsub("[^a-z0-9]+", "", x)
-    x
-  }
+      # Build a MG model syntax (pell auto-excluded as covariate since it's the group_var)
+      model_mg <- build_model_fast_treat_control_mg(
+        dW,
+        group_var = wvar,
+        w_label = paste0("W", i)
+      )
 
-  ref_pref <- W_REF_LEVEL[[wvar]]
-  ref_level <- levels(dW[[wvar]])[1]
-  if (!is.null(ref_pref)) {
-    levs <- levels(dW[[wvar]])
-    m <- which(canon(levs) == canon(ref_pref))
-    if (length(m) == 1) {
-      ref_level <- levs[[m]]
-      dW[[wvar]] <- stats::relevel(dW[[wvar]], ref = ref_level)
+      writeLines(model_mg, con = file.path(out_w, "executed_model_mg.lav"))
+
+      se_arg <- if (MG_BOOT > 0) "bootstrap" else "standard"
+      boot_arg <- if (MG_BOOT > 0) MG_BOOT else NULL
+
+      fit <- lavaan::sem(
+        model = model_mg,
+        data = dW,
+        group = wvar,
+        estimator = "ML",
+        missing = "fiml",
+        fixed.x = TRUE,
+        sampling.weights = "psw",
+        se = se_arg,
+        bootstrap = boot_arg,
+        check.lv.names = FALSE,
+        meanstructure = TRUE,
+        check.gradient = FALSE,
+        control = list(iter.max = 20000),
+        parallel = if (MG_BOOT > 0) BOOT_PARALLEL else "no",
+        ncpus = if (MG_BOOT > 0) BOOT_NCPUS else 1
+      )
+
+      out_struct <- file.path(out_w, "structural")
+      dir.create(out_struct, recursive = TRUE, showWarnings = FALSE)
+      writeLines(paste0("group = ", wvar), con = file.path(out_struct, "group_var.txt"))
+      writeLines(paste0("w_label = W", i), con = file.path(out_struct, "w_label.txt"))
+      write_lavaan_txt_tables(fit, out_struct, "structural", boot_ci_type = MG_CI)
+      run_wald_tests_fast_vs_nonfast(fit, out_dir = file.path(out_struct, "wald"), prefix = "wald")
     } else {
-      message(
-        "[RQ4 structural MG] ", wvar,
-        ": reference level '", ref_pref,
-        "' not found uniquely after cleaning; keeping default reference='", ref_level,
-        "'. Levels: ", paste(levs, collapse = ", ")
+      fit_mg_fast_vs_nonfast_with_outputs(
+        dat = dW,
+        group = wvar,
+        w_label = paste0("W", i),
+        out_dir = file.path(out_w, "structural"),
+        estimator = "ML",
+        missing = "fiml",
+        fixed.x = TRUE,
+        weight_var = "psw",
+        bootstrap = MG_BOOT,
+        boot_ci_type = MG_CI,
+        parallel = if (MG_BOOT > 0) BOOT_PARALLEL else "no",
+        ncpus = if (MG_BOOT > 0) BOOT_NCPUS else 1
       )
     }
   }
-
-  # Record reference and levels used
-  writeLines(
-    c(
-      paste0("W_index = ", i),
-      paste0("W = ", wvar),
-      paste0("reference = ", ref_level),
-      "levels:",
-      paste0("- ", levels(dW[[wvar]]))
-    ),
-    con = file.path(out_w, "reference_group.txt")
-  )
-
-  # Fit MG structural model
-  if (identical(wvar, "pell")) {
-    # Special-case: when grouping by pell, pell is constant within each group.
-    # So the MG-by-pell model must omit pell from within-group regressions.
-    # Note: build_model_fast_treat_control_mg() automatically excludes group_var from covars.
-
-    # Build a MG model syntax (pell auto-excluded as covariate since it's the group_var)
-    model_mg <- build_model_fast_treat_control_mg(
-      dW,
-      group_var = wvar,
-      w_label = paste0("W", i)
-    )
-
-    writeLines(model_mg, con = file.path(out_w, "executed_model_mg.lav"))
-
-    se_arg <- if (MG_BOOT > 0) "bootstrap" else "standard"
-    boot_arg <- if (MG_BOOT > 0) MG_BOOT else NULL
-
-    fit <- lavaan::sem(
-      model = model_mg,
-      data = dW,
-      group = wvar,
-      estimator = "ML",
-      missing = "fiml",
-      fixed.x = TRUE,
-      sampling.weights = "psw",
-      se = se_arg,
-      bootstrap = boot_arg,
-      check.lv.names = FALSE,
-      meanstructure = TRUE,
-      check.gradient = FALSE,
-      control = list(iter.max = 20000),
-      parallel = if (MG_BOOT > 0) BOOT_PARALLEL else "no",
-      ncpus = if (MG_BOOT > 0) BOOT_NCPUS else 1
-    )
-
-    out_struct <- file.path(out_w, "structural")
-    dir.create(out_struct, recursive = TRUE, showWarnings = FALSE)
-    writeLines(paste0("group = ", wvar), con = file.path(out_struct, "group_var.txt"))
-    writeLines(paste0("w_label = W", i), con = file.path(out_struct, "w_label.txt"))
-    write_lavaan_txt_tables(fit, out_struct, "structural", boot_ci_type = MG_CI)
-    run_wald_tests_fast_vs_nonfast(fit, out_dir = file.path(out_struct, "wald"), prefix = "wald")
-  } else {
-    fit_mg_fast_vs_nonfast_with_outputs(
-      dat = dW,
-      group = wvar,
-      w_label = paste0("W", i),
-      out_dir = file.path(out_w, "structural"),
-      estimator = "ML",
-      missing = "fiml",
-      fixed.x = TRUE,
-      weight_var = "psw",
-      bootstrap = MG_BOOT,
-      boot_ci_type = MG_CI,
-      parallel = if (MG_BOOT > 0) BOOT_PARALLEL else "no",
-      ncpus = if (MG_BOOT > 0) BOOT_NCPUS else 1
-    )
-  }
+} else {
+  message("[RQ4 structural MG] Skipped via SKIP_RQ4_STRUCT_MG=TRUE.")
 }
 
 # -------------------------
@@ -1458,6 +1465,7 @@ cat("DO_PSW: ", DO_PSW, "\n", sep = "")
 cat("TABLE_CHECK_MODE: ", TABLE_CHECK_MODE, "\n", sep = "")
 cat("SMOKE_ONLY_A: ", SMOKE_ONLY_A, "\n", sep = "")
 cat("SKIP_POST_PROCESSING: ", SKIP_POST_PROCESSING, "\n", sep = "")
+cat("SKIP_RQ4_STRUCT_MG: ", SKIP_RQ4_STRUCT_MG, "\n", sep = "")
 cat("B_BOOT_MAIN: ", B_BOOT_MAIN, "\n", sep = "")
 cat("BOOT_CI_TYPE_MAIN: ", BOOT_CI_TYPE_MAIN, "\n", sep = "")
 cat("B_BOOT_TOTAL: ", B_BOOT_TOTAL, "\n", sep = "")
