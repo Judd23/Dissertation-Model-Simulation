@@ -52,10 +52,17 @@ def weighted_std(x, w):
 def weighted_sem(x, w):
     """Approximate weighted standard error of the mean."""
     mask = ~np.isnan(x) & ~np.isnan(w)
-    n_eff = mask.sum()  # Use sample size as approximation
+    n_eff = weighted_n_eff(w[mask])
     if n_eff <= 1:
         return np.nan
     return weighted_std(x, w) / np.sqrt(n_eff)
+
+def weighted_n_eff(w):
+    """Effective sample size for weights."""
+    w = w[~np.isnan(w)]
+    if w.size == 0:
+        return 0
+    return (w.sum() ** 2) / np.sum(w ** 2)
 
 def weighted_proportion(binary_col, w):
     """Calculate weighted proportion for binary variable."""
@@ -87,6 +94,42 @@ def weighted_groupby_sem(df, group_col, val_col, weights):
         mask = df[group_col] == grp
         result[grp] = weighted_sem(df.loc[mask, val_col].values, weights[mask])
     return pd.Series(result)
+
+def weighted_linregress(x, y, w):
+    """Weighted linear regression with r and p-value."""
+    mask = ~np.isnan(x) & ~np.isnan(y) & ~np.isnan(w)
+    x = x[mask]
+    y = y[mask]
+    w = w[mask]
+    if x.size < 3:
+        return np.nan, np.nan, np.nan, np.nan
+    w_sum = w.sum()
+    x_bar = np.sum(w * x) / w_sum
+    y_bar = np.sum(w * y) / w_sum
+    dx = x - x_bar
+    dy = y - y_bar
+    sxx = np.sum(w * dx * dx)
+    sxy = np.sum(w * dx * dy)
+    syy = np.sum(w * dy * dy)
+    if sxx == 0 or syy == 0:
+        return np.nan, np.nan, np.nan, np.nan
+    slope = sxy / sxx
+    intercept = y_bar - slope * x_bar
+    r = sxy / np.sqrt(sxx * syy)
+    n_eff = weighted_n_eff(w)
+    if n_eff > 2:
+        y_hat = intercept + slope * x
+        sse = np.sum(w * (y - y_hat) ** 2)
+        sigma2 = sse / (n_eff - 2)
+        se_slope = np.sqrt(sigma2 / sxx)
+        if se_slope > 0:
+            t = slope / se_slope
+            p = 2 * (1 - stats.t.cdf(abs(t), df=n_eff - 2))
+        else:
+            p = np.nan
+    else:
+        p = np.nan
+    return slope, intercept, r, p
 
 def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', weight_col=None):
     os.makedirs(outdir, exist_ok=True)
@@ -172,11 +215,15 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     y_max = means.max() + 1.96*sems.max() + 0.2
     ax.set_ylim(max(1, y_min), min(distress_max, y_max))
     
-    # Add trend line (unweighted for simplicity)
-    slope, intercept, r, p, se = stats.linregress(df['risk_count'], df['mean_distress'])
+    # Add trend line (weighted)
+    slope, intercept, r, p = weighted_linregress(df['risk_count'].values, df['mean_distress'].values, w)
     x_line = np.array([0, 4])
-    ax.plot(x_line, intercept + slope * x_line, '--', color='gray', alpha=0.7,
-            label=f'Linear trend: β={slope:.3f}, p<.001')
+    if not np.isnan(slope):
+        p_txt = ""
+        if not np.isnan(p):
+            p_txt = f", p={p:.3f}" if p >= 0.001 else ", p<.001"
+        ax.plot(x_line, intercept + slope * x_line, '--', color='gray', alpha=0.7,
+                label=f'Weighted trend: β={slope:.3f}{p_txt}')
     ax.legend(loc='lower right')
     
     # 7c. Mean engagement by risk count (weighted)
@@ -202,10 +249,14 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     y_max = means.max() + 1.96*sems.max() + 0.2
     ax.set_ylim(max(1, y_min), min(engage_max, y_max))
     
-    slope, intercept, r, p, se = stats.linregress(df['risk_count'], df['mean_engagement'])
+    slope, intercept, r, p = weighted_linregress(df['risk_count'].values, df['mean_engagement'].values, w)
     x_line = np.array([0, 4])
-    ax.plot(x_line, intercept + slope * x_line, '--', color='gray', alpha=0.7,
-            label=f'Linear trend: β={slope:.3f}, p<.001')
+    if not np.isnan(slope):
+        p_txt = ""
+        if not np.isnan(p):
+            p_txt = f", p={p:.3f}" if p >= 0.001 else ", p<.001"
+        ax.plot(x_line, intercept + slope * x_line, '--', color='gray', alpha=0.7,
+                label=f'Weighted trend: β={slope:.3f}{p_txt}')
     ax.legend(loc='upper right')
     
     # 7d. % Low belonging by risk count (weighted)
@@ -220,8 +271,8 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         mask = df['risk_count'] == rc
         pct = weighted_proportion(df.loc[mask, 'low_belonging'].values.astype(float), w[mask]) * 100
         pct_low[rc] = pct
-        n = mask.sum()
-        se = np.sqrt(pct/100 * (1-pct/100) / n) * 100
+        n_eff = weighted_n_eff(w[mask])
+        se = np.sqrt(pct/100 * (1-pct/100) / n_eff) * 100 if n_eff > 0 else np.nan
         ci_low.append(max(0, pct - 1.96*se))
         ci_high.append(min(100, pct + 1.96*se))
     
@@ -269,6 +320,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
                                 (fast_mask, colors['fast'], 'FASt')]:  # Orange for FASt
         x = credits[mask].values
         y = df.loc[mask, 'mean_distress'].values
+        w_mask = w[mask]
         # Bin and average for smooth line
         bins = np.linspace(0, max(credits), 15)
         bin_means = []
@@ -277,7 +329,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
             bin_mask = (x >= bins[i]) & (x < bins[i+1])
             if bin_mask.sum() > 5:
                 bin_centers.append((bins[i] + bins[i+1])/2)
-                bin_means.append(y[bin_mask].mean())
+                bin_means.append(weighted_mean(y[bin_mask], w_mask[bin_mask]))
         if len(bin_centers) > 2:
             ax.plot(bin_centers, bin_means, '-', color=color, linewidth=3, alpha=0.8)
     
@@ -299,18 +351,24 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     gap_ses = []
     bin_labels = []
     for bin_label in ['0-3', '4-6', '7-12', '13-20', '21+']:
-        bin_data = df[df['credit_bin'] == bin_label]
-        if len(bin_data) > 10:
-            fast_mean = bin_data[bin_data['x_FASt']==1]['mean_distress'].mean()
-            nonfast_mean = bin_data[bin_data['x_FASt']==0]['mean_distress'].mean()
-            fast_n = (bin_data['x_FASt']==1).sum()
-            nonfast_n = (bin_data['x_FASt']==0).sum()
+        mask_bin = df['credit_bin'] == bin_label
+        if mask_bin.sum() > 10:
+            mask_fast = mask_bin & (df['x_FASt'] == 1)
+            mask_nonfast = mask_bin & (df['x_FASt'] == 0)
+            fast_vals = df.loc[mask_fast, 'mean_distress'].values
+            nonfast_vals = df.loc[mask_nonfast, 'mean_distress'].values
+            fast_w = w[mask_fast]
+            nonfast_w = w[mask_nonfast]
+            fast_n = weighted_n_eff(fast_w)
+            nonfast_n = weighted_n_eff(nonfast_w)
             
             if fast_n > 5 and nonfast_n > 5:
+                fast_mean = weighted_mean(fast_vals, fast_w)
+                nonfast_mean = weighted_mean(nonfast_vals, nonfast_w)
                 gap = fast_mean - nonfast_mean
                 # Pooled SE
-                fast_var = bin_data[bin_data['x_FASt']==1]['mean_distress'].var()
-                nonfast_var = bin_data[bin_data['x_FASt']==0]['mean_distress'].var()
+                fast_var = weighted_std(fast_vals, fast_w) ** 2
+                nonfast_var = weighted_std(nonfast_vals, nonfast_w) ** 2
                 se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
                 gaps.append(gap)
                 gap_ses.append(se)
@@ -341,12 +399,22 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         window = 5
         mask = (credits >= cv - window) & (credits <= cv + window)
         if mask.sum() > 20:
-            fast_data = df.loc[mask & (df['x_FASt']==1), 'mean_distress']
-            nonfast_data = df.loc[mask & (df['x_FASt']==0), 'mean_distress']
+            mask_fast = mask & (df['x_FASt']==1)
+            mask_nonfast = mask & (df['x_FASt']==0)
+            fast_data = df.loc[mask_fast, 'mean_distress'].values
+            nonfast_data = df.loc[mask_nonfast, 'mean_distress'].values
+            fast_w = w[mask_fast]
+            nonfast_w = w[mask_nonfast]
             
             if len(fast_data) > 5 and len(nonfast_data) > 5:
-                effect = fast_data.mean() - nonfast_data.mean()
-                se = np.sqrt(fast_data.var()/len(fast_data) + nonfast_data.var()/len(nonfast_data))
+                fast_mean = weighted_mean(fast_data, fast_w)
+                nonfast_mean = weighted_mean(nonfast_data, nonfast_w)
+                effect = fast_mean - nonfast_mean
+                fast_var = weighted_std(fast_data, fast_w) ** 2
+                nonfast_var = weighted_std(nonfast_data, nonfast_w) ** 2
+                fast_n = weighted_n_eff(fast_w)
+                nonfast_n = weighted_n_eff(nonfast_w)
+                se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
                 effects.append(effect)
                 ci_lows.append(effect - 1.96*se)
                 ci_highs.append(effect + 1.96*se)
@@ -379,12 +447,22 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         window = 5
         mask = (credits >= cv - window) & (credits <= cv + window)
         if mask.sum() > 20:
-            fast_data = df.loc[mask & (df['x_FASt']==1), 'mean_engagement']
-            nonfast_data = df.loc[mask & (df['x_FASt']==0), 'mean_engagement']
+            mask_fast = mask & (df['x_FASt']==1)
+            mask_nonfast = mask & (df['x_FASt']==0)
+            fast_data = df.loc[mask_fast, 'mean_engagement'].values
+            nonfast_data = df.loc[mask_nonfast, 'mean_engagement'].values
+            fast_w = w[mask_fast]
+            nonfast_w = w[mask_nonfast]
             
             if len(fast_data) > 5 and len(nonfast_data) > 5:
-                effect = fast_data.mean() - nonfast_data.mean()
-                se = np.sqrt(fast_data.var()/len(fast_data) + nonfast_data.var()/len(nonfast_data))
+                fast_mean = weighted_mean(fast_data, fast_w)
+                nonfast_mean = weighted_mean(nonfast_data, nonfast_w)
+                effect = fast_mean - nonfast_mean
+                fast_var = weighted_std(fast_data, fast_w) ** 2
+                nonfast_var = weighted_std(nonfast_data, nonfast_w) ** 2
+                fast_n = weighted_n_eff(fast_w)
+                nonfast_n = weighted_n_eff(nonfast_w)
+                se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
                 effects.append(effect)
                 ci_lows.append(effect - 1.96*se)
                 ci_highs.append(effect + 1.96*se)
@@ -433,11 +511,14 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax = axes[0, 0]
     ax.scatter(df['mean_distress'], df['mean_devadj'], alpha=0.2, c='gray', s=10)
     
-    # Add regression line
-    slope, intercept, r, p, se = stats.linregress(df['mean_distress'], df['mean_devadj'])
+    # Add regression line (weighted)
+    slope, intercept, r, p = weighted_linregress(df['mean_distress'].values, df['mean_devadj'].values, w)
     x_line = np.array([df['mean_distress'].min(), df['mean_distress'].max()])
+    p_txt = ""
+    if not np.isnan(p):
+        p_txt = f", p={p:.3f}" if p >= 0.001 else ", p<.001"
     ax.plot(x_line, intercept + slope * x_line, '-', color=colors['distress'], linewidth=3,
-            label=f'r = {r:.3f}, p < .001')
+            label=f'r = {r:.3f}{p_txt}')
     ax.set_xlabel('Emotional Distress (EmoDiss)', fontsize=11)
     ax.set_ylabel('Developmental Adjustment (DevAdj)', fontsize=11)
     ax.set_title('Mediator Path: EmoDiss → DevAdj', fontsize=12, fontweight='bold')
@@ -447,10 +528,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax = axes[0, 1]
     ax.scatter(df['mean_engagement'], df['mean_devadj'], alpha=0.2, c='gray', s=10)
     
-    slope, intercept, r, p, se = stats.linregress(df['mean_engagement'], df['mean_devadj'])
+    slope, intercept, r, p = weighted_linregress(df['mean_engagement'].values, df['mean_devadj'].values, w)
     x_line = np.array([df['mean_engagement'].min(), df['mean_engagement'].max()])
+    p_txt = ""
+    if not np.isnan(p):
+        p_txt = f", p={p:.3f}" if p >= 0.001 else ", p<.001"
     ax.plot(x_line, intercept + slope * x_line, '-', color=colors['engagement'], linewidth=3,
-            label=f'r = {r:.3f}, p < .001')
+            label=f'r = {r:.3f}{p_txt}')
     ax.set_xlabel('Quality of Engagement (QualEngag)', fontsize=11)
     ax.set_ylabel('Developmental Adjustment (DevAdj)', fontsize=11)
     ax.set_title('Mediator Path: QualEngag → DevAdj', fontsize=12, fontweight='bold')
@@ -520,20 +604,22 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # Calculate descriptive path estimates for visualization
     # Note: These are bivariate associations, not causal estimates from the SEM
     # a1: Mean difference in distress (FASt - Non-FASt)
-    a1 = df.groupby('x_FASt')['mean_distress'].mean().diff().iloc[1]
+    fast_mask = df['x_FASt'] == 1
+    nonfast_mask = df['x_FASt'] == 0
+    a1 = weighted_mean(df.loc[fast_mask, 'mean_distress'].values, w[fast_mask]) - weighted_mean(df.loc[nonfast_mask, 'mean_distress'].values, w[nonfast_mask])
     # b1: Distress-DevAdj slope
-    b1 = stats.linregress(df['mean_distress'], df['mean_devadj'])[0]
+    b1 = weighted_linregress(df['mean_distress'].values, df['mean_devadj'].values, w)[0]
     # a2: Mean difference in engagement (FASt - Non-FASt)
-    a2 = df.groupby('x_FASt')['mean_engagement'].mean().diff().iloc[1]
+    a2 = weighted_mean(df.loc[fast_mask, 'mean_engagement'].values, w[fast_mask]) - weighted_mean(df.loc[nonfast_mask, 'mean_engagement'].values, w[nonfast_mask])
     # b2: Engagement-DevAdj slope
-    b2 = stats.linregress(df['mean_engagement'], df['mean_devadj'])[0]
+    b2 = weighted_linregress(df['mean_engagement'].values, df['mean_devadj'].values, w)[0]
     
     ind_distress = a1 * b1
     ind_engage = a2 * b2
     total_indirect = ind_distress + ind_engage
     
     # Direct effect (unadjusted mean difference)
-    direct = df.groupby('x_FASt')['mean_devadj'].mean().diff().iloc[1]
+    direct = weighted_mean(df.loc[fast_mask, 'mean_devadj'].values, w[fast_mask]) - weighted_mean(df.loc[nonfast_mask, 'mean_devadj'].values, w[nonfast_mask])
     
     effects = ['Indirect via\nEmoDiss (a1*b1)', 'Indirect via\nQualEngag (a2*b2)', 'Direct Effect\n(c\')', 'Total Effect\n(c\' + indirect)']
     values = [ind_distress, ind_engage, direct, direct + total_indirect]
@@ -590,16 +676,20 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         # Non-FASt
         mask_nf = (df['x_FASt'].astype(str) == '0') & (df['firstgen'].astype(str) == fg) & (df['urm'].astype(str) == urm)
         if mask_nf.sum() > 0:
-            nonfast_distress.append(df.loc[mask_nf, 'mean_distress'].mean())
-            nonfast_distress_err.append(1.96 * df.loc[mask_nf, 'mean_distress'].sem())
+            vals = df.loc[mask_nf, 'mean_distress'].values
+            w_nf = w[mask_nf]
+            nonfast_distress.append(weighted_mean(vals, w_nf))
+            nonfast_distress_err.append(1.96 * weighted_sem(vals, w_nf))
         else:
             nonfast_distress.append(np.nan)
             nonfast_distress_err.append(0)
         # FASt
         mask_f = (df['x_FASt'].astype(str) == '1') & (df['firstgen'].astype(str) == fg) & (df['urm'].astype(str) == urm)
         if mask_f.sum() > 0:
-            fast_distress.append(df.loc[mask_f, 'mean_distress'].mean())
-            fast_distress_err.append(1.96 * df.loc[mask_f, 'mean_distress'].sem())
+            vals = df.loc[mask_f, 'mean_distress'].values
+            w_f = w[mask_f]
+            fast_distress.append(weighted_mean(vals, w_f))
+            fast_distress_err.append(1.96 * weighted_sem(vals, w_f))
         else:
             fast_distress.append(np.nan)
             fast_distress_err.append(0)
@@ -630,16 +720,20 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         # Non-FASt
         mask_nf = (df['x_FASt'].astype(str) == '0') & (df['firstgen'].astype(str) == fg) & (df['urm'].astype(str) == urm)
         if mask_nf.sum() > 0:
-            nonfast_engage.append(df.loc[mask_nf, 'mean_engagement'].mean())
-            nonfast_engage_err.append(1.96 * df.loc[mask_nf, 'mean_engagement'].sem())
+            vals = df.loc[mask_nf, 'mean_engagement'].values
+            w_nf = w[mask_nf]
+            nonfast_engage.append(weighted_mean(vals, w_nf))
+            nonfast_engage_err.append(1.96 * weighted_sem(vals, w_nf))
         else:
             nonfast_engage.append(np.nan)
             nonfast_engage_err.append(0)
         # FASt
         mask_f = (df['x_FASt'].astype(str) == '1') & (df['firstgen'].astype(str) == fg) & (df['urm'].astype(str) == urm)
         if mask_f.sum() > 0:
-            fast_engage.append(df.loc[mask_f, 'mean_engagement'].mean())
-            fast_engage_err.append(1.96 * df.loc[mask_f, 'mean_engagement'].sem())
+            vals = df.loc[mask_f, 'mean_engagement'].values
+            w_f = w[mask_f]
+            fast_engage.append(weighted_mean(vals, w_f))
+            fast_engage_err.append(1.96 * weighted_sem(vals, w_f))
         else:
             fast_engage.append(np.nan)
             fast_engage_err.append(0)
@@ -660,9 +754,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     
     # 10c. Heatmap: FASt × First-Gen interaction on distress
     ax = axes[1, 0]
-    pivot = df.pivot_table(values='mean_distress', index='firstgen', columns='x_FASt', aggfunc='mean')
-    pivot.index = ['Continuing-Gen', 'First-Gen']
-    pivot.columns = ['Non-FASt', 'FASt']
+    pivot_vals = np.empty((2, 2))
+    for i, fg in enumerate([0, 1]):
+        for j, fast in enumerate([0, 1]):
+            mask = (df['firstgen'] == fg) & (df['x_FASt'] == fast)
+            pivot_vals[i, j] = weighted_mean(df.loc[mask, 'mean_distress'].values, w[mask])
+    pivot = pd.DataFrame(pivot_vals, index=['Continuing-Gen', 'First-Gen'], columns=['Non-FASt', 'FASt'])
     
     # Auto-scale heatmap colors
     vmin_d, vmax_d = pivot.values.min() - 0.1, pivot.values.max() + 0.1
@@ -683,9 +780,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     
     # 10d. Heatmap: FASt × URM interaction on engagement
     ax = axes[1, 1]
-    pivot_eng = df.pivot_table(values='mean_engagement', index='urm', columns='x_FASt', aggfunc='mean')
-    pivot_eng.index = ['Non-URM', 'URM']
-    pivot_eng.columns = ['Non-FASt', 'FASt']
+    pivot_eng_vals = np.empty((2, 2))
+    for i, urm in enumerate([0, 1]):
+        for j, fast in enumerate([0, 1]):
+            mask = (df['urm'] == urm) & (df['x_FASt'] == fast)
+            pivot_eng_vals[i, j] = weighted_mean(df.loc[mask, 'mean_engagement'].values, w[mask])
+    pivot_eng = pd.DataFrame(pivot_eng_vals, index=['Non-URM', 'URM'], columns=['Non-FASt', 'FASt'])
     
     # Auto-scale heatmap colors
     vmin_e, vmax_e = pivot_eng.values.min() - 0.1, pivot_eng.values.max() + 0.1
@@ -735,10 +835,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     outcomes = ['mean_distress', 'mean_engagement', 'mean_belonging', 'mean_gains', 'mean_support']
     outcome_labels = ['Emotional\nDistress', 'Quality of\nEngagement', 'Sense of\nBelonging', 'Perceived\nGains', 'Support\nEnvironment']
     
-    fast_means = [df[df['x_FASt']==1][out].mean() for out in outcomes]
-    fast_sems = [df[df['x_FASt']==1][out].sem() for out in outcomes]
-    nonfast_means = [df[df['x_FASt']==0][out].mean() for out in outcomes]
-    nonfast_sems = [df[df['x_FASt']==0][out].sem() for out in outcomes]
+    fast_mask = df['x_FASt'] == 1
+    nonfast_mask = df['x_FASt'] == 0
+    fast_means = [weighted_mean(df.loc[fast_mask, out].values, w[fast_mask]) for out in outcomes]
+    fast_sems = [weighted_sem(df.loc[fast_mask, out].values, w[fast_mask]) for out in outcomes]
+    nonfast_means = [weighted_mean(df.loc[nonfast_mask, out].values, w[nonfast_mask]) for out in outcomes]
+    nonfast_sems = [weighted_sem(df.loc[nonfast_mask, out].values, w[nonfast_mask]) for out in outcomes]
     
     x = np.arange(len(outcomes))
     width = 0.35
@@ -793,11 +895,11 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     
     bars_list = []
     for i, (out, label) in enumerate(zip(outcomes, outcome_short)):
-        means = [df[df['risk_count']==r][out].mean() for r in risk_levels]
+        means = [weighted_mean(df.loc[df['risk_count']==r, out].values, w[df['risk_count']==r]) for r in risk_levels]
         # Normalize to z-scores for comparison across different scales
-        grand_mean = df[out].mean()
-        grand_sd = df[out].std()
-        z_means = [(m - grand_mean) / grand_sd for m in means]
+        grand_mean = weighted_mean(df[out].values, w)
+        grand_sd = weighted_std(df[out].values, w)
+        z_means = [(m - grand_mean) / grand_sd if grand_sd > 0 else np.nan for m in means]
         
         offset = (i - 2) * width
         bars = ax.bar(x + offset, z_means, width, label=label, color=outcome_colors[i], edgecolor='black', linewidth=0.8)
@@ -828,53 +930,56 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     
     # 12a. Distress trend by cohort - RED theme
     ax = axes[0, 0]
-    cohort_distress = df.groupby('cohort')['mean_distress'].agg(['mean', 'sem'])
-    cohort_years = [cohort_labels.get(c, str(c)) for c in cohort_distress.index]
-    ax.errorbar(cohort_years, cohort_distress['mean'], 
-                yerr=1.96*cohort_distress['sem'], fmt='o-', capsize=5, 
+    cohort_levels = sorted(df['cohort'].dropna().unique())
+    cohort_distress_mean = [weighted_mean(df.loc[df['cohort']==c, 'mean_distress'].values, w[df['cohort']==c]) for c in cohort_levels]
+    cohort_distress_sem = [weighted_sem(df.loc[df['cohort']==c, 'mean_distress'].values, w[df['cohort']==c]) for c in cohort_levels]
+    cohort_years = [cohort_labels.get(c, str(c)) for c in cohort_levels]
+    ax.errorbar(cohort_years, cohort_distress_mean, 
+                yerr=1.96*np.array(cohort_distress_sem), fmt='o-', capsize=5, 
                 color=colors['distress'], markersize=10, linewidth=2)
     ax.set_xlabel('Cohort Year', fontsize=11)
     ax.set_ylabel('Mean Distress', fontsize=11)
     ax.set_title('Distress Trends Across Cohorts', fontsize=12, fontweight='bold')
     # Auto-scale y-axis
-    y_min, y_max = cohort_distress['mean'].min(), cohort_distress['mean'].max()
+    y_min, y_max = np.min(cohort_distress_mean), np.max(cohort_distress_mean)
     y_range = y_max - y_min
     ax.set_ylim(y_min - max(0.3, y_range*0.5), y_max + max(0.3, y_range*0.5))
     
     # 12b. Engagement trend by cohort - BLUE theme
     ax = axes[0, 1]
-    cohort_engage = df.groupby('cohort')['mean_engagement'].agg(['mean', 'sem'])
-    ax.errorbar(cohort_years, cohort_engage['mean'], 
-                yerr=1.96*cohort_engage['sem'], fmt='s-', capsize=5, 
+    cohort_engage_mean = [weighted_mean(df.loc[df['cohort']==c, 'mean_engagement'].values, w[df['cohort']==c]) for c in cohort_levels]
+    cohort_engage_sem = [weighted_sem(df.loc[df['cohort']==c, 'mean_engagement'].values, w[df['cohort']==c]) for c in cohort_levels]
+    ax.errorbar(cohort_years, cohort_engage_mean, 
+                yerr=1.96*np.array(cohort_engage_sem), fmt='s-', capsize=5, 
                 color=colors['engagement'], markersize=10, linewidth=2)
     ax.set_xlabel('Cohort Year', fontsize=11)
     ax.set_ylabel('Mean Engagement', fontsize=11)
     ax.set_title('Engagement Trends Across Cohorts', fontsize=12, fontweight='bold')
     # Auto-scale y-axis
-    y_min, y_max = cohort_engage['mean'].min(), cohort_engage['mean'].max()
+    y_min, y_max = np.min(cohort_engage_mean), np.max(cohort_engage_mean)
     y_range = y_max - y_min
     ax.set_ylim(y_min - max(0.3, y_range*0.5), y_max + max(0.3, y_range*0.5))
     
     # 12c. FASt % by cohort - neutral blue
     ax = axes[1, 0]
-    fast_by_cohort = df.groupby('cohort')['x_FASt'].mean() * 100
-    cohort_year_labels = [cohort_labels.get(c, str(c)) for c in fast_by_cohort.index]
-    bars = ax.bar(cohort_year_labels, fast_by_cohort.values, color=colors['fast'], edgecolor='black', linewidth=1)  # Orange for FASt
+    fast_by_cohort = [weighted_proportion(df.loc[df['cohort']==c, 'x_FASt'].values.astype(float), w[df['cohort']==c]) * 100 for c in cohort_levels]
+    cohort_year_labels = [cohort_labels.get(c, str(c)) for c in cohort_levels]
+    bars = ax.bar(cohort_year_labels, fast_by_cohort, color=colors['fast'], edgecolor='black', linewidth=1)  # Orange for FASt
     ax.set_xlabel('Cohort Year', fontsize=11)
     ax.set_ylabel('% FASt Students', fontsize=11)
     ax.set_title('FASt Enrollment by Cohort', fontsize=12, fontweight='bold')
-    for i, v in enumerate(fast_by_cohort.values):
+    for i, v in enumerate(fast_by_cohort):
         ax.text(i, v + 0.5, f'{v:.1f}%', ha='center', fontsize=10)
-    ax.set_ylim(0, max(fast_by_cohort.values) * 1.15)
+    ax.set_ylim(0, max(fast_by_cohort) * 1.15)
     
     # 12d. FASt gap by cohort - RED theme (distress gaps)
     ax = axes[1, 1]
     gaps = []
-    cohorts = sorted(df['cohort'].unique())
+    cohorts = cohort_levels
     for cohort in cohorts:
-        cohort_data = df[df['cohort'] == cohort]
-        fast_mean = cohort_data[cohort_data['x_FASt']==1]['mean_distress'].mean()
-        nonfast_mean = cohort_data[cohort_data['x_FASt']==0]['mean_distress'].mean()
+        cohort_data = df['cohort'] == cohort
+        fast_mean = weighted_mean(df.loc[cohort_data & (df['x_FASt']==1), 'mean_distress'].values, w[cohort_data & (df['x_FASt']==1)])
+        nonfast_mean = weighted_mean(df.loc[cohort_data & (df['x_FASt']==0), 'mean_distress'].values, w[cohort_data & (df['x_FASt']==0)])
         gaps.append(fast_mean - nonfast_mean)
     
     cohort_year_labels = [cohort_labels.get(c, str(c)) for c in cohorts]

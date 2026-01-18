@@ -1,12 +1,12 @@
 Wald tests: linear constraints (treatment and moderation terms)
 $stat
-[1] 18.37539
+[1] 22.58974
 
 $df
 [1] 8
 
 $p.value
-[1] 0.01858167
+[1] 0.0039329
 
 $se
 [1] "robust.huber.white"

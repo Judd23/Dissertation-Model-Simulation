@@ -13,6 +13,11 @@ import styles from "./SoWhatPage.module.css";
 
 export default function SoWhatPage() {
   const { paths, fastPercent } = useModelData();
+  console.log('(NO $) [SoWhatPage] data snapshot:', {
+    fastPercent,
+    a1: paths.a1?.estimate,
+    a2: paths.a2?.estimate,
+  });
 
   // Get effect directions from data
   const distressEffect = paths.a1?.estimate ?? 0;

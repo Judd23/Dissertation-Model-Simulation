@@ -1,8 +1,0 @@
-PSW overlap weights
-PS model:  x_FASt ~ hgrades + bparented_c + hapcl + hprecalc13 + hchallenge_c +      cSFcareer_c + cohort 
-
-Weights summary (non-missing):
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
- 0.5121  0.8083  0.9922  1.0000  1.1808  1.6335  
-
-Weights normalized to mean 1

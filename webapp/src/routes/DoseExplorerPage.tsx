@@ -42,6 +42,14 @@ function getDoseZone(dose: number): (typeof DOSE_ZONES)[number]["id"] {
 export default function DoseExplorerPage() {
   const { selectedDose, setSelectedDose, showCIs, toggleCIs } = useResearch();
   const { doseCoefficients } = useModelData();
+  console.log('(NO $) [DoseExplorerPage] dose snapshot:', {
+    selectedDose,
+    showCIs,
+    distressMain: doseCoefficients.distress.main,
+    distressModeration: doseCoefficients.distress.moderation,
+    engagementMain: doseCoefficients.engagement.main,
+    engagementModeration: doseCoefficients.engagement.moderation,
+  });
 
   // Current dose zone
   const currentZone = useMemo(() => getDoseZone(selectedDose), [selectedDose]);

@@ -1,3 +1,0 @@
-level	n
-Continuing-gen	2328
-First-gen	2672

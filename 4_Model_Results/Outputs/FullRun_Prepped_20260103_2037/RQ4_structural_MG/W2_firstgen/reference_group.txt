@@ -1,6 +1,0 @@
-W_index = 2
-W = firstgen
-reference = 0
-levels:
-- 0
-- 1

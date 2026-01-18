@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import BackToTop from "../../components/ui/BackToTop";
+import ScrollToTop from "../../components/ui/ScrollToTop";
 import MobileNav from "./MobileNav";
 import { useModelData } from "../contexts";
 import styles from "./Layout.module.css";
@@ -17,6 +18,7 @@ export default function Layout() {
 
   return (
     <div className={isLandingPage ? styles.layoutLanding : styles.layout}>
+      <ScrollToTop />
       {showDataInvalidBanner && (
         <div
           style={{

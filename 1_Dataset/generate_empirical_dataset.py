@@ -33,19 +33,24 @@ np.random.seed(42)
 # =============================================================================
 
 N_TOTAL = 5000
+FAST_TARGET = 0.27
+FAST_CONF_SCALE = 0.20
+FAST_BASE_SHIFT = 0.04
+PELL_TARGET = 0.52
+SEX_FEMALE_PROB = 0.53
 
 # Archetype definitions with prevalence and characteristics
 # Demographics use PROBABILITIES (0.0-1.0) for binary vars to ensure variance within groups
 # pell/firstgen: probability of being 1 (e.g., 0.65 = 65% pell, 35% non-pell)
 #
 # CSU DEMOGRAPHIC TARGETS (2024):
-#   Race: Hispanic 47%, White 21%, Asian 16%, Black 4%, Other/Multiracial 12%
-#   First-gen: ~45%, Pell: ~42%, Female: ~58%
+#   Race: Hispanic 54%, White 15%, Asian 15-18%, Black 4%, Other/Multiracial ~9%
+#   First-gen: ~45-53%, Pell: ~52%, Female: ~60%
 #   Living: ~52% family, ~23% on-campus, ~25% off-campus
 ARCHETYPES = {
     1: {
         'name': 'Latina Commuter Caretaker',
-        'prevalence': 0.22,  # Hispanic target contribution
+        'prevalence': 0.25,  # Hispanic target contribution
         'demographics': {'re_all': 'Hispanic/Latino', 'sex': 'Female', 'firstgen': 0.65, 'pell': 0.60},
         'living': 'With family (commuting)',
         'fast_prob': 0.20,
@@ -57,7 +62,7 @@ ARCHETYPES = {
     },
     2: {
         'name': 'Latino Off-Campus Working',
-        'prevalence': 0.08,  # Hispanic off-campus segment
+        'prevalence': 0.09,  # Hispanic off-campus segment
         'demographics': {'re_all': 'Hispanic/Latino', 'sex': 'Male', 'firstgen': 0.60, 'pell': 0.55},
         'living': 'Off-campus (rent/apartment)',
         'fast_prob': 0.25,
@@ -105,7 +110,7 @@ ARCHETYPES = {
     },
     6: {
         'name': 'White Residential Traditional',
-        'prevalence': 0.04,  # White campus segment
+        'prevalence': 0.03,  # White campus segment
         'demographics': {'re_all': 'White', 'sex': None, 'firstgen': 0.12, 'pell': 0.18},
         'living': 'On-campus (residence hall)',
         'fast_prob': 0.35,
@@ -117,7 +122,7 @@ ARCHETYPES = {
     },
     7: {
         'name': 'White Off-Campus Working',
-        'prevalence': 0.04,  # White off-campus segment
+        'prevalence': 0.03,  # White off-campus segment
         'demographics': {'re_all': 'White', 'sex': None, 'firstgen': 0.45, 'pell': 0.50},
         'living': 'Off-campus (rent/apartment)',
         'fast_prob': 0.20,
@@ -141,7 +146,7 @@ ARCHETYPES = {
     },
     9: {
         'name': 'Hispanic On-Campus Transitioner',
-        'prevalence': 0.17,  # Hispanic campus segment (largest on-campus group)
+        'prevalence': 0.20,  # Hispanic campus segment (largest on-campus group)
         'demographics': {'re_all': 'Hispanic/Latino', 'sex': None, 'firstgen': 0.50, 'pell': 0.45},
         'living': 'On-campus (residence hall)',
         'fast_prob': 0.30,
@@ -153,7 +158,7 @@ ARCHETYPES = {
     },
     10: {
         'name': 'Continuing-Gen Cruiser',
-        'prevalence': 0.05,  # Mixed race (distributes by population proportions)
+        'prevalence': 0.04,  # Mixed race (distributes by population proportions)
         'demographics': {'re_all': None, 'sex': None, 'firstgen': 0.10, 'pell': 0.15},
         'living': None,  # Mixed living distribution
         'fast_prob': 0.40,
@@ -166,7 +171,7 @@ ARCHETYPES = {
     # Additional archetypes for demographic diversity
     11: {
         'name': 'White Rural First-Gen',
-        'prevalence': 0.06,  # White family segment
+        'prevalence': 0.04,  # White family segment
         'demographics': {'re_all': 'White', 'sex': None, 'firstgen': 0.60, 'pell': 0.55},
         'living': 'With family (commuting)',
         'fast_prob': 0.22,
@@ -190,7 +195,7 @@ ARCHETYPES = {
     },
     13: {
         'name': 'White Working-Class Striver',
-        'prevalence': 0.05,  # White off-campus segment
+        'prevalence': 0.03,  # White off-campus segment
         'demographics': {'re_all': 'White', 'sex': None, 'firstgen': 0.50, 'pell': 0.45},
         'living': 'Off-campus (rent/apartment)',
         'fast_prob': 0.18,
@@ -308,24 +313,43 @@ def sample_time_use_midpoints(n, probs):
     return np.random.choice(midpoints, size=n, p=probs)
 
 
-def generate_treatment_and_dose(archetype_id, hgrades, hapcl, bparented, n):
+def shift_time_use_bins(values, direction, shift_prob=0.35):
+    """Shift midpoint-coded time-use values up/down by one bin for a subset."""
+    midpoints = np.array([0, 3, 8, 13, 18, 23, 28, 35])
+    shift = np.random.random(len(values)) < shift_prob
+    idx_map = {v: i for i, v in enumerate(midpoints)}
+    shifted = values.copy()
+    for i, v in enumerate(values):
+        if not shift[i]:
+            continue
+        idx = idx_map.get(v, None)
+        if idx is None:
+            continue
+        if direction == "up":
+            shifted[i] = midpoints[min(idx + 1, len(midpoints) - 1)]
+        elif direction == "down":
+            shifted[i] = midpoints[max(idx - 1, 0)]
+    return shifted
+
+
+def generate_treatment_and_dose(archetype_id, hgrades, hapcl, bparented, n, fast_scale):
     """
     Generate FASt status and credit dose with CONFOUNDING.
     Higher SES, better HS prep → more likely FASt.
     """
     arch = ARCHETYPES[archetype_id]
-    base_prob = arch['fast_prob']
+    base_prob = max(0.05, arch['fast_prob'] * fast_scale - FAST_BASE_SHIFT)
 
     # Create propensity with confounding
     propensity = np.zeros(n)
     for i in range(n):
         p = base_prob
         # Higher grades increase probability
-        p += (hgrades[i] - 5) * 0.05
+        p += (hgrades[i] - 5) * 0.05 * FAST_CONF_SCALE
         # AP courses increase probability
-        p += hapcl[i] * 0.10
+        p += hapcl[i] * 0.10 * FAST_CONF_SCALE
         # Higher parent ed increases probability
-        p += (bparented[i] - 4) * 0.03
+        p += (bparented[i] - 4) * 0.03 * FAST_CONF_SCALE
         # Clip to valid probability
         propensity[i] = np.clip(p, 0.05, 0.80)
 
@@ -525,6 +549,18 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
     for arch_id, n in archetype_ns.items():
         print(f"  {arch_id}. {ARCHETYPES[arch_id]['name']}: n={n}")
 
+    expected_base_fast = sum(
+        archetype_ns[arch_id] * ARCHETYPES[arch_id]['fast_prob']
+        for arch_id in archetype_ns
+    ) / N_TOTAL
+    fast_scale = min(1.0, FAST_TARGET / expected_base_fast)
+
+    expected_pell = sum(
+        archetype_ns[arch_id] * ARCHETYPES[arch_id]['demographics']['pell']
+        for arch_id in archetype_ns
+    ) / N_TOTAL
+    pell_scale = PELL_TARGET / expected_pell
+
     # Time-use distributions (midpoint recodes)
     hacadpr13_probs = np.array([0.01, 0.32, 0.30, 0.18, 0.10, 0.05, 0.02, 0.03])
     tcare_probs = np.array([0.72, 0.12, 0.07, 0.04, 0.025, 0.015, 0.006, 0.004])
@@ -548,14 +584,14 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
             # For "Continuing-Gen Cruiser", mix of non-URM
             re_all = np.random.choice(
                 ['White', 'Asian', 'Other/Multiracial/Unknown'],
-                n, p=[0.50, 0.35, 0.15]
+                n, p=[0.40, 0.40, 0.20]
             )
 
         # Sex
         if demographics['sex'] is not None:
             sex = np.array([demographics['sex']] * n)
         else:
-            sex = np.random.choice(['Female', 'Male'], n, p=[0.58, 0.42])
+            sex = np.random.choice(['Female', 'Male'], n, p=[SEX_FEMALE_PROB, 1 - SEX_FEMALE_PROB])
 
         # First-gen: now uses probability (0.0-1.0) instead of absolute 0/1
         firstgen_prob = demographics['firstgen']
@@ -563,7 +599,7 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
 
         # Pell: now uses probability (0.0-1.0) instead of absolute 0/1
         pell_prob = demographics['pell']
-        pell = np.random.binomial(1, pell_prob, n)
+        pell = np.random.binomial(1, min(1.0, pell_prob * pell_scale), n)
 
         # Living situation
         if arch['living'] is not None:
@@ -571,7 +607,7 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
         else:
             living18 = np.random.choice(
                 ['With family (commuting)', 'Off-campus (rent/apartment)', 'On-campus (residence hall)'],
-                n, p=[0.55, 0.25, 0.20]
+                n, p=[0.60, 0.22, 0.18]
             )
 
         # Cohort (50/50 split)
@@ -583,9 +619,17 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
         # HS time-use covariates (midpoint recodes)
         hacadpr13 = sample_time_use_midpoints(n, hacadpr13_probs)
         tcare = sample_time_use_midpoints(n, tcare_probs)
+        if arch_id in [3, 4]:
+            hacadpr13 = shift_time_use_bins(hacadpr13, "up")
+            tcare = shift_time_use_bins(tcare, "down")
+        if arch_id in [1, 2, 7]:
+            hacadpr13 = shift_time_use_bins(hacadpr13, "down")
+            tcare = shift_time_use_bins(tcare, "up")
 
         # Treatment assignment (with confounding!)
-        x_FASt, credit_dose = generate_treatment_and_dose(arch_id, hgrades, hapcl, bparented, n)
+        x_FASt, credit_dose = generate_treatment_and_dose(
+            arch_id, hgrades, hapcl, bparented, n, fast_scale
+        )
 
         # Generate construct scores with treatment effects
         construct_scores = generate_construct_scores(arch_id, x_FASt, credit_dose, n)
@@ -670,12 +714,6 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
     df['StemMaj'] = np.random.binomial(1, 0.25, len(df))
     df['StemMaj_c'] = df['StemMaj'] - df['StemMaj'].mean()
 
-    # Additional SFcareer items for completeness
-    df['SFcareer'] = df['cSFcareer']
-    df['SFotherwork'] = np.clip(np.random.normal(2.5, 0.8, len(df)), 1, 4).astype(int)
-    df['SFdiscuss'] = np.clip(np.random.normal(2.8, 0.8, len(df)), 1, 4).astype(int)
-    df['SFperform'] = np.clip(np.random.normal(2.6, 0.8, len(df)), 1, 4).astype(int)
-
     # r variables (auxiliary for bootstrap)
     df['r'] = np.random.randint(-15, 35, len(df))
     df['r_minus'] = df['r'] / 10 - 0.5
@@ -700,7 +738,6 @@ def generate_dataset() -> Tuple[pd.DataFrame, np.ndarray]:
         'evalexp', 'sameinst',
         'MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial',
         'QIstudent', 'QIadvisor', 'QIfaculty', 'QIstaff', 'QIadmin',
-        'SFcareer', 'SFotherwork', 'SFdiscuss', 'SFperform',
         'id', 'DE_group_temp', 'hdc17', 'DC_student'
     ]
 

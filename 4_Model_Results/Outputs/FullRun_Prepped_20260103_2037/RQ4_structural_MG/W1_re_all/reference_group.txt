@@ -1,8 +1,0 @@
-W_index = 1
-W = re_all
-reference = White
-levels:
-- White
-- Asian
-- Hispanic/Latino
-- Other/Multiracial/Unknown

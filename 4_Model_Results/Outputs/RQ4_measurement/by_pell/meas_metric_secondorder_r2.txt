@@ -1,28 +1,28 @@
-$Pell
-     sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.753         0.697         0.805         0.517         0.616 
-       pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.530         0.507         0.593         0.671         0.661 
-    SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.573         0.569         0.604         0.735         0.752 
-     MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.808         0.848         0.883         0.868         0.842 
-MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.719         0.800         0.828         0.841         0.861 
-      QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.845         0.233         0.096         0.209         0.281 
-
 $`Non-Pell`
      sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
-        0.770         0.710         0.811         0.523         0.625 
+        0.763         0.720         0.778         0.533         0.632 
        pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
-        0.545         0.491         0.598         0.693         0.675 
+        0.565         0.499         0.577         0.687         0.670 
     SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
-        0.608         0.581         0.635         0.759         0.779 
+        0.617         0.565         0.634         0.777         0.715 
      MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
-        0.831         0.868         0.892         0.874         0.852 
+        0.840         0.872         0.895         0.898         0.861 
 MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
-        0.768         0.812         0.828         0.848         0.873 
+        0.763         0.772         0.797         0.838         0.863 
       QIstaff        Belong         Gains    SupportEnv        Satisf 
-        0.843         0.263         0.116         0.237         0.324 
+        0.825         0.235         0.069         0.218         0.247 
+
+$Pell
+     sbvalued      sbmyself   sbcommunity     pganalyze       pgthink 
+        0.757         0.700         0.797         0.540         0.625 
+       pgwork      pgvalues   pgprobsolve    SEacademic    SEwellness 
+        0.554         0.510         0.578         0.692         0.671 
+    SEnonacad  SEactivities     SEdiverse      sameinst       evalexp 
+        0.616         0.547         0.628         0.752         0.739 
+     MHWdacad    MHWdlonely    MHWdmental   MHWdexhaust     MHWdsleep 
+        0.811         0.860         0.881         0.860         0.831 
+MHWdfinancial       QIadmin     QIstudent     QIadvisor     QIfaculty 
+        0.739         0.807         0.808         0.850         0.883 
+      QIstaff        Belong         Gains    SupportEnv        Satisf 
+        0.841         0.230         0.065         0.213         0.231 
 

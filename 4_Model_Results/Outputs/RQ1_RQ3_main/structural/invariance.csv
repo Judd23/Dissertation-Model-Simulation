@@ -1,4 +1,0 @@
-"Model","chi_sq","df","CFI","RMSEA","delta_CFI","delta_RMSEA","Decision"
-"Configural",720.11,292,0.979,0.024,NA,NA,"Baseline"
-"Metric",749.83,307,0.979,0.024,0,0,"Supported"
-"Scalar",791.96,322,0.977,0.024,-0.002,0,"Supported"

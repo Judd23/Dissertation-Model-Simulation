@@ -44,6 +44,14 @@ export default function HomePage() {
     engagementEffect: paths.a2?.estimate ?? 0,
     adjustmentDirect: paths.c?.estimate ?? 0,
   };
+  console.log('(NO $) [HomePage] data snapshot:', {
+    sampleSize,
+    fastPercent,
+    cfi: fitMeasures.cfi,
+    a1: paths.a1?.estimate,
+    a2: paths.a2?.estimate,
+    c: paths.c?.estimate,
+  });
 
   return (
     <div className={styles.page}>

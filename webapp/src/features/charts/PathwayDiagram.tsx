@@ -155,6 +155,17 @@ export default function PathwayDiagram({
     useResearch();
   const { resolvedTheme } = useTheme();
   const { paths, doseCoefficients } = useModelData();
+  console.log('(NO $) [PathwayDiagram] data snapshot:', {
+    selectedDose,
+    showPathLabels,
+    a1: paths.a1?.estimate,
+    a2: paths.a2?.estimate,
+    b1: paths.b1?.estimate,
+    b2: paths.b2?.estimate,
+    c: paths.c?.estimate,
+    distressMain: doseCoefficients.distress.main,
+    engagementMain: doseCoefficients.engagement.main,
+  });
 
   // Memoized dimension updater to prevent memory leaks from recreating listener
   const updateDimensions = useCallback(() => {

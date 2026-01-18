@@ -1,4 +1,4 @@
-name: pages-build-deploy
+name: Deploy Vite site to Pages
 
 on:
   push:
@@ -28,16 +28,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: npm
           cache-dependency-path: webapp/package-lock.json
 
-      - name: Install
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
 
-      - name: Upload artifact
+      - name: Upload Vite build
         uses: actions/upload-pages-artifact@v3
         with:
           path: webapp/dist

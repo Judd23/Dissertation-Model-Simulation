@@ -1,6 +1,0 @@
-W_index = 3
-W = pell
-reference = 0
-levels:
-- 0
-- 1

@@ -1,18 +1,41 @@
-import modelResultsData from '../modelResults.json';
-import doseEffectsData from '../doseEffects.json';
-import sampleDescriptivesData from '../sampleDescriptives.json';
 import { DoseEffectsDataSchema, ModelResultsSchema, SampleDescriptivesSchema, safeParseData } from '../schemas/modelData';
 import type { ModelData, StructuralPath, FitMeasures, DoseCoefficients, DoseEffect, ModelDataValidation } from '../types/modelData';
 
 // Parse the JSON data into stable view models.
-export function parseModelData(): ModelData {
+export type ModelDataPayload = {
+  modelResults?: unknown;
+  doseEffects?: unknown;
+  sampleDescriptives?: unknown;
+};
+
+const DATA_BASE_PATH = '/data';
+
+async function fetchJson(filename: string) {
+  const response = await fetch(`${DATA_BASE_PATH}/${filename}?t=${Date.now()}`, { cache: 'no-store' });
+  if (!response.ok) {
+    throw new Error(`Failed to load ${filename} (${response.status})`);
+  }
+  return response.json();
+}
+
+export async function fetchModelData(): Promise<ModelData> {
+  const [modelResults, doseEffects, sampleDescriptives] = await Promise.all([
+    fetchJson('modelResults.json'),
+    fetchJson('doseEffects.json'),
+    fetchJson('sampleDescriptives.json'),
+  ]);
+
+  return parseModelData({ modelResults, doseEffects, sampleDescriptives });
+}
+
+export function parseModelData(payload: ModelDataPayload = {}): ModelData {
   const errors: string[] = [];
 
-  const modelResultsResult = safeParseData(ModelResultsSchema, modelResultsData, 'modelResults.json');
-  const doseEffectsResult = safeParseData(DoseEffectsDataSchema, doseEffectsData, 'doseEffects.json');
+  const modelResultsResult = safeParseData(ModelResultsSchema, payload.modelResults ?? null, 'modelResults.json');
+  const doseEffectsResult = safeParseData(DoseEffectsDataSchema, payload.doseEffects ?? null, 'doseEffects.json');
   const sampleDescriptivesResult = safeParseData(
     SampleDescriptivesSchema,
-    sampleDescriptivesData,
+    payload.sampleDescriptives ?? null,
     'sampleDescriptives.json'
   );
 
@@ -22,12 +45,14 @@ export function parseModelData(): ModelData {
 
   const validation: ModelDataValidation = { isValid: errors.length === 0, errors };
 
-  const structuralPaths = modelResultsResult.success
-    ? (modelResultsResult.data.mainModel.structuralPaths as StructuralPath[])
-    : [];
-  const fitMeasures = modelResultsResult.success
-    ? (modelResultsResult.data.mainModel.fitMeasures as FitMeasures)
-    : ({} as FitMeasures);
+  const mainModel = modelResultsResult.success ? modelResultsResult.data.mainModel : null;
+  const totalEffectModel = modelResultsResult.success ? modelResultsResult.data.totalEffectModel : null;
+
+  const structuralPaths = mainModel ? (mainModel.structuralPaths as StructuralPath[]) : [];
+  const fitMeasures = mainModel ? (mainModel.fitMeasures as FitMeasures) : ({} as FitMeasures);
+  const totalEffectPath = totalEffectModel
+    ? ((totalEffectModel.structuralPaths as StructuralPath[]).find(path => path.id === 'c_total') ?? null)
+    : null;
   const doseCoefficients = doseEffectsResult.success
     ? (doseEffectsResult.data.coefficients as DoseCoefficients)
     : ({} as DoseCoefficients);
@@ -67,6 +92,19 @@ export function parseModelData(): ModelData {
   const fastCount = sampleDescriptivesResult.success ? sampleDescriptivesResult.data.demographics.fast.yes.n : 0;
   const fastPercent = sampleDescriptivesResult.success ? sampleDescriptivesResult.data.demographics.fast.yes.pct : 0;
 
+  const modelSelections = {
+    structural: {
+      key: 'mainModel',
+      label: 'Structural (Direct Effect) Model',
+      sourcePaths: mainModel?.sourcePaths ?? { parameterEstimates: '', fitMeasures: '' },
+    },
+    totalEffect: {
+      key: 'totalEffectModel',
+      label: 'Total Effect Model',
+      sourcePaths: totalEffectModel?.sourcePaths ?? { parameterEstimates: '', fitMeasures: '' },
+    },
+  };
+
   return {
     paths: {
       a1: getPath('a1'),
@@ -83,6 +121,7 @@ export function parseModelData(): ModelData {
     },
     allPaths: structuralPaths,
     fitMeasures,
+    totalEffectPath,
     doseCoefficients: safeDoseCoefficients,
     doseEffects,
     doseRange: {
@@ -96,8 +135,7 @@ export function parseModelData(): ModelData {
     fastPercent,
     getPath,
     getEffectAtDose,
+    modelSelections,
     validation,
   };
 }
-
-export { modelResultsData, doseEffectsData, sampleDescriptivesData };

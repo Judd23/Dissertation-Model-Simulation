@@ -10,11 +10,11 @@ Reads:
   - 1_Dataset/rep_data.csv (for descriptives)
 
 Writes:
-  - webapp/src/data/modelResults.json
-  - webapp/src/data/doseEffects.json
-  - webapp/src/data/groupComparisons.json
-  - webapp/src/data/sampleDescriptives.json
-  - webapp/src/data/variableMetadata.json
+  - webapp/public/data/modelResults.json
+  - webapp/public/data/doseEffects.json
+  - webapp/public/data/groupComparisons.json
+  - webapp/public/data/sampleDescriptives.json
+  - webapp/public/data/variableMetadata.json
 """
 
 import json
@@ -29,10 +29,11 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 OUTPUTS_DIR = PROJECT_ROOT / "4_Model_Results" / "Outputs"
 DATA_DIR = PROJECT_ROOT / "1_Dataset"
 CODEBOOK_DIR = PROJECT_ROOT / "2_Codebooks"
-OUTPUT_DIR = Path(__file__).parent.parent / "src" / "data"
+OUTPUT_DIR = Path(__file__).parent.parent / "public" / "data"
 
 # Key structural paths we want to extract
 KEY_PATHS = ["a1", "a1z", "a2", "a2z", "b1", "b2", "c", "cz", "g1", "g2", "g3"]
+TOTAL_EFFECT_KEYS = ["c_total"]
 
 
 def parse_parameter_estimates(filepath: Path) -> pd.DataFrame:
@@ -45,7 +46,7 @@ def parse_parameter_estimates(filepath: Path) -> pd.DataFrame:
     return df
 
 
-def extract_key_paths(params: pd.DataFrame) -> list:
+def extract_key_paths(params: pd.DataFrame, key_paths: list = None) -> list:
     """Extract key structural path coefficients from parameter estimates."""
     if params.empty:
         return []
@@ -53,10 +54,11 @@ def extract_key_paths(params: pd.DataFrame) -> list:
     # Filter to structural paths with labels
     structural = params[(params["op"] == "~") & (params["label"].notna()) & (params["label"] != "")].copy()
 
+    active_keys = key_paths if key_paths is not None else KEY_PATHS
     paths = []
     for _, row in structural.iterrows():
         label = row["label"]
-        if label not in KEY_PATHS:
+        if label not in active_keys:
             continue
 
         path = {
@@ -115,24 +117,52 @@ def compute_dose_effects(main_paths: list) -> dict:
     c = get_path(main_paths, "c")
     cz = get_path(main_paths, "cz")
 
-    # Use actual coefficients if available, else defaults
+    # Use actual coefficients if available; mark missing data for the UI.
     coefficients = {
         "distress": {
-            "main": a1["estimate"] if a1 else 0.127,
-            "moderation": a1z["estimate"] if a1z else 0.003,
-            "se": a1["se"] if a1 else 0.037,
+            "main": a1["estimate"] if a1 and a1["estimate"] is not None else None,
+            "moderation": a1z["estimate"] if a1z and a1z["estimate"] is not None else None,
+            "se": a1["se"] if a1 and a1["se"] is not None else None,
         },
         "engagement": {
-            "main": a2["estimate"] if a2 else -0.010,
-            "moderation": a2z["estimate"] if a2z else -0.014,
-            "se": a2["se"] if a2 else 0.036,
+            "main": a2["estimate"] if a2 and a2["estimate"] is not None else None,
+            "moderation": a2z["estimate"] if a2z and a2z["estimate"] is not None else None,
+            "se": a2["se"] if a2 and a2["se"] is not None else None,
         },
         "adjustment": {
-            "main": c["estimate"] if c else 0.041,
-            "moderation": cz["estimate"] if cz else -0.009,
-            "se": c["se"] if c else 0.013,
+            "main": c["estimate"] if c and c["estimate"] is not None else None,
+            "moderation": cz["estimate"] if cz and cz["estimate"] is not None else None,
+            "se": c["se"] if c and c["se"] is not None else None,
         },
     }
+
+    missing = []
+    for label, path in [("a1", a1), ("a1z", a1z), ("a2", a2), ("a2z", a2z), ("c", c), ("cz", cz)]:
+        if not path or path["estimate"] is None:
+            missing.append(label)
+    for label, path in [("a1_se", a1), ("a2_se", a2), ("c_se", c)]:
+        if not path or path["se"] is None:
+            missing.append(label)
+
+    if missing:
+        return {
+            "creditDoseRange": {
+                "min": 0,
+                "max": 80,
+                "threshold": 12,
+                "units": "credits",
+            },
+            "coefficients": coefficients,
+            "effects": [],
+            "johnsonNeymanPoints": {
+                "distress": {"lower": None, "upper": None},
+                "engagement": {"crossover": 15.2},
+            },
+            "validation": {
+                "status": "missing_coefficients",
+                "missing": missing,
+            },
+        }
 
     dose_range = list(range(0, 81, 5))
     effects = []
@@ -289,6 +319,61 @@ def build_group_comparisons() -> dict:
     """Build group comparison data from multi-group analyses by parsing actual output files."""
     group_data = {}
 
+    def extract_group_paths(params: pd.DataFrame, group_labels: list) -> dict:
+        if params.empty:
+            return {}
+
+        group_column = None
+        if "group.label" in params.columns:
+            group_column = "group.label"
+        elif "group" in params.columns:
+            group_column = "group"
+        else:
+            return {}
+
+        group_values = params[group_column].dropna().unique().tolist()
+        group_map = {}
+
+        if group_column == "group.label":
+            if all(label in group_values for label in group_labels):
+                group_map = {label: label for label in group_labels}
+            else:
+                group_map = {
+                    value: group_labels[i]
+                    for i, value in enumerate(group_values)
+                    if i < len(group_labels)
+                }
+        else:
+            group_map = {
+                value: group_labels[i]
+                for i, value in enumerate(group_values)
+                if i < len(group_labels)
+            }
+
+        grouped = {}
+        for value, label in group_map.items():
+            group_params = params[params[group_column] == value]
+            grouped[label] = extract_key_paths(group_params)
+        return grouped
+
+    def extract_group_paths_from_dirs(base_dir: Path, group_labels: list) -> dict:
+        grouped = {}
+        group_paths = sorted(base_dir.glob("*/structural/structural_parameterEstimates.txt"))
+        for idx, params_path in enumerate(group_paths):
+            folder_name = params_path.parent.parent.name
+            label = next(
+                (candidate for candidate in group_labels
+                 if candidate.lower().replace(" ", "_").replace("-", "_") in folder_name.lower()),
+                None,
+            )
+            if label is None and idx < len(group_labels):
+                label = group_labels[idx]
+            if label is None:
+                continue
+            params = parse_parameter_estimates(params_path)
+            grouped[label] = extract_key_paths(params)
+        return grouped
+
     # Race/ethnicity subgroups
     race_dir = OUTPUTS_DIR / "RQ4_structural_by_re_all"
     if race_dir.exists():
@@ -345,36 +430,39 @@ def build_group_comparisons() -> dict:
 
         for folder, key, variable, group_labels in mg_configs:
             params_path = mg_dir / folder / "structural" / "structural_parameterEstimates.txt"
+            grouped_paths = {}
             if params_path.exists():
                 params = parse_parameter_estimates(params_path)
-                # For MG models, we need to extract group-specific estimates
-                # This is a simplified version - actual parsing would need group-level extraction
-                paths = extract_key_paths(params)
+                grouped_paths = extract_group_paths(params, group_labels)
+            if not grouped_paths:
+                grouped_paths = extract_group_paths_from_dirs(mg_dir / folder, group_labels)
 
-                if paths:
-                    groups = []
-                    for i, label in enumerate(group_labels):
-                        # In actual implementation, parse group-specific estimates
-                        # For now, use the pooled estimates as placeholder
-                        a1 = next((p for p in paths if p["id"] == "a1"), None)
-                        a2 = next((p for p in paths if p["id"] == "a2"), None)
+            if grouped_paths:
+                groups = []
+                for label in group_labels:
+                    paths = grouped_paths.get(label, [])
+                    a1 = next((p for p in paths if p["id"] == "a1"), None)
+                    a2 = next((p for p in paths if p["id"] == "a2"), None)
 
-                        group = {"label": label, "effects": {}}
-                        if a1:
-                            # Add some variation for demo purposes
-                            group["effects"]["a1"] = {
-                                "estimate": round(a1["estimate"] * (1 + (i - 0.5) * 0.1), 4),
-                                "se": a1["se"],
-                                "pvalue": a1["pvalue"] * (1 + i * 0.5),
-                            }
-                        if a2:
-                            group["effects"]["a2"] = {
-                                "estimate": round(a2["estimate"] * (1 + (i - 0.5) * 0.15), 4),
-                                "se": a2["se"],
-                                "pvalue": a2["pvalue"],
-                            }
-                        groups.append(group)
+                    if not (a1 or a2):
+                        continue
 
+                    group = {"label": label, "effects": {}}
+                    if a1:
+                        group["effects"]["a1"] = {
+                            "estimate": a1["estimate"],
+                            "se": a1["se"],
+                            "pvalue": a1["pvalue"],
+                        }
+                    if a2:
+                        group["effects"]["a2"] = {
+                            "estimate": a2["estimate"],
+                            "se": a2["se"],
+                            "pvalue": a2["pvalue"],
+                        }
+                    groups.append(group)
+
+                if groups:
                     group_data[key] = {
                         "groupVariable": variable,
                         "groups": groups,
@@ -437,6 +525,25 @@ def build_variable_metadata() -> dict:
     return metadata
 
 
+def build_model_results(model_dir: Path, key_paths: list) -> dict:
+    """Build model result payload with source path metadata."""
+    params_path = model_dir / "structural_parameterEstimates.txt"
+    fit_path = model_dir / "structural_fitMeasures.txt"
+
+    params = parse_parameter_estimates(params_path)
+    paths = extract_key_paths(params, key_paths)
+    fit = parse_fit_measures(fit_path)
+
+    return {
+        "fitMeasures": fit,
+        "structuralPaths": paths,
+        "sourcePaths": {
+            "parameterEstimates": str(params_path.relative_to(PROJECT_ROOT)),
+            "fitMeasures": str(fit_path.relative_to(PROJECT_ROOT)),
+        },
+    }
+
+
 def main():
     """Main function to transform all outputs."""
     print("=" * 60)
@@ -448,18 +555,15 @@ def main():
 
     # 1. Model Results
     print("\n[1/5] Processing main model results...")
-    main_params_path = OUTPUTS_DIR / "RQ1_RQ3_main" / "structural" / "structural_parameterEstimates.txt"
-    main_fit_path = OUTPUTS_DIR / "RQ1_RQ3_main" / "structural" / "structural_fitMeasures.txt"
+    main_model_dir = OUTPUTS_DIR / "RQ1_RQ3_main" / "structural"
+    total_effect_model_dir = OUTPUTS_DIR / "A0_total_effect" / "structural"
 
-    params = parse_parameter_estimates(main_params_path)
-    paths = extract_key_paths(params)
-    fit = parse_fit_measures(main_fit_path)
+    main_model = build_model_results(main_model_dir, KEY_PATHS)
+    total_effect_model = build_model_results(total_effect_model_dir, TOTAL_EFFECT_KEYS)
 
     model_results = {
-        "mainModel": {
-            "fitMeasures": fit,
-            "structuralPaths": paths,
-        },
+        "mainModel": main_model,
+        "totalEffectModel": total_effect_model,
         "bootstrap": {
             "n_replicates": 2000,
             "ci_type": "bca.simple",
@@ -468,11 +572,15 @@ def main():
 
     with open(OUTPUT_DIR / "modelResults.json", "w") as f:
         json.dump(model_results, f, indent=2)
-    print(f"  ✓ Wrote modelResults.json ({len(paths)} key paths, {len(fit)} fit measures)")
+    print(
+        "  ✓ Wrote modelResults.json ("
+        f"{len(main_model['structuralPaths'])} main paths, {len(main_model['fitMeasures'])} main fit measures; "
+        f"{len(total_effect_model['structuralPaths'])} total paths, {len(total_effect_model['fitMeasures'])} total fit measures)"
+    )
 
     # 2. Dose Effects
     print("\n[2/5] Computing dose-response effects...")
-    dose_effects = compute_dose_effects(paths)
+    dose_effects = compute_dose_effects(main_model["structuralPaths"])
 
     with open(OUTPUT_DIR / "doseEffects.json", "w") as f:
         json.dump(dose_effects, f, indent=2)
@@ -506,6 +614,24 @@ def main():
     # 6. Write metadata with timestamp
     print("\n[6/6] Writing data metadata...")
     now = datetime.now()
+    pipeline_run_id = os.environ.get("PIPELINE_RUN_ID") or now.strftime("%Y%m%d%H%M%S")
+    input_files = [
+        main_params_path,
+        main_fit_path,
+        data_path,
+        CODEBOOK_DIR / "Variable_Table.csv",
+    ]
+    input_files_metadata = []
+    for filepath in input_files:
+        exists = filepath.exists()
+        modified_at = None
+        if exists:
+            modified_at = datetime.fromtimestamp(filepath.stat().st_mtime).isoformat()
+        input_files_metadata.append({
+            "path": str(filepath),
+            "exists": exists,
+            "modifiedAt": modified_at,
+        })
     metadata = {
         "generatedAt": now.isoformat(),
         "generatedAtFormatted": now.strftime("%B %d, %Y at %I:%M %p"),
@@ -513,7 +639,9 @@ def main():
         "pipelineVersion": "1.0.0",
         "dataSource": "run_all_RQs_official.R",
         "bootstrapReplicates": 2000,
-        "ciType": "bca.simple"
+        "ciType": "bca.simple",
+        "pipelineRunId": pipeline_run_id,
+        "inputFiles": input_files_metadata,
     }
     
     with open(OUTPUT_DIR / "dataMetadata.json", "w") as f:

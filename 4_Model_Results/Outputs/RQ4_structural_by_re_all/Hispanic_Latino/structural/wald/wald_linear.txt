@@ -1,6 +1,6 @@
 Wald tests: linear constraints (treatment and moderation terms)
 $stat
-[1] 376.301
+[1] 181.6864
 
 $df
 [1] 8
