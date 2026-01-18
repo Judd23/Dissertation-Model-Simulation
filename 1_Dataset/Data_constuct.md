@@ -137,23 +137,23 @@ A box may be checked only if evidence is attached directly under it:
 
 ## Treatment 4: PS Model + Weights (Post-PSW)
 ### Approval Gate (Required)
-- [ ] STOP: review constraints + request approval to start Treatment 4  
-  **Evidence:**
+- [x] STOP: review constraints + request approval to start Treatment 4  
+  **Evidence:** User approval: "Approved".
 
-- [ ] Update PS formula (paste exact formula)  
-  **Evidence:**
-- [ ] Compute propensity + overlap weights  
-  **Evidence:**
-- [ ] Export weighted dataset with diagnostics  
-  **Evidence:**
+- [x] Update PS formula (paste exact formula)  
+  **Evidence:** `x_FASt ~ hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c` (from `4_Model_Results/Outputs/RQ1_RQ3_main/psw_stage_report.txt`).
+- [x] Compute propensity + overlap weights  
+  **Evidence:** PSW weights summary (non-missing): Min=0.4389, 1Q=0.6211, Median=0.7203, Mean=1.0000, 3Q=1.6845, Max=2.1280 (from `psw_stage_report.txt`).
+- [x] Export weighted dataset with diagnostics  
+  **Evidence:** `4_Model_Results/Outputs/RQ1_RQ3_main/rep_data_with_psw.csv`, `psw_stage_report.txt`, `psw_balance_smd.txt` exist.
 
 ### Validation Gate 4
-- [ ] Coefficient directions sanity check (report ORs)  
-  **Evidence:**
-- [ ] Overlap diagnostics (PS quantiles + weight quantiles)  
-  **Evidence:**
-- [ ] ESS computed (report values)  
-  **Evidence:**
+- [x] Coefficient directions sanity check (report ORs)  
+  **Evidence:** ORs (logit PS model): hgrades_c=1.106, bparented_c=1.047, hapcl_c=1.311, hprecalc13_c=1.244, hchallenge_c=1.033, cSFcareer_c=1.000, hacadpr13_c=1.008, tcare_c=0.994, StemMaj_c=1.008.
+- [x] Overlap diagnostics (PS quantiles + weight quantiles)  
+  **Evidence:** PS quantiles (1%,5%,50%,95%,99%): 0.191, 0.205, 0.258, 0.343, 0.380. PSW quantiles (1%,5%,50%,95%,99%): 0.498, 0.539, 0.720, 2.001, 2.071.
+- [x] ESS computed (report values)  
+  **Evidence:** ESS overall=3851.8; treated=1316.0; control=3589.6.
 
 ---
 
