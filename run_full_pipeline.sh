@@ -4,7 +4,8 @@
 
 set -e  # Exit on error
 
-cd /Users/jjohnson3/Documents/GitHub/Process-SEM
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
 
 LOG_FILE="run_production_$(date +%Y%m%d_%H%M%S).log"
 
