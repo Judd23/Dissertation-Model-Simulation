@@ -117,43 +117,43 @@ A box may be checked only if evidence is attached directly under it:
 
 ## Treatment 3: Missingness (MAR/MCAR)
 ### Approval Gate (Required)
-- [ ] STOP: review constraints + request approval to start Treatment 3  
-  **Evidence:**
+- [x] STOP: review constraints + request approval to start Treatment 3  
+  **Evidence:** User approval: "approved".
 
-- [ ] MCAR missingness applied (report % by variable)  
-  **Evidence:**
-- [ ] MAR missingness applied (report % by group)  
-  **Evidence:**
+- [x] MCAR missingness applied (report % by variable)  
+  **Evidence:** QI items overall missingness (%): QIadmin=4.34, QIstudent=4.16, QIadvisor=4.40, QIfaculty=4.44, QIstaff=4.00.
+- [x] MAR missingness applied (report % by group)  
+  **Evidence:** MHW items missingness (%), Asian vs Non-Asian: MHWdacad 8.72 vs 5.01; MHWdlonely 12.59 vs 6.11; MHWdmental 10.41 vs 5.63; MHWdexhaust 7.02 vs 5.37; MHWdsleep 11.99 vs 5.68; MHWdfinancial 9.20 vs 5.15.
 - [ ] PS model still fits with missingness strategy  
-  **Evidence:**
+  **Evidence:** Not run (statsmodels/sklearn not available in environment).
 
 ### Validation Gate 3
-- [ ] Missingness summary table created (overall + by key groups)  
-  **Evidence:**
-- [ ] No accidental 0% or runaway missingness  
-  **Evidence:**
+- [x] Missingness summary table created (overall + by key groups)  
+  **Evidence:** Overall (%): MHWdacad=5.62, MHWdlonely=7.18, MHWdmental=6.42, MHWdexhaust=5.64, MHWdsleep=6.72, MHWdfinancial=5.82, QIadmin=4.34, QIstudent=4.16, QIadvisor=4.40, QIfaculty=4.44, QIstaff=4.00. By living (% QI items): With family QIadmin=4.90/QIstudent=4.40/QIadvisor=4.73/QIfaculty=4.36/QIstaff=4.85; On-campus QIadmin=3.38/QIstudent=3.38/QIadvisor=3.38/QIfaculty=3.45/QIstaff=2.04; Off-campus QIadmin=4.37/QIstudent=4.62/QIadvisor=4.97/QIfaculty=5.82/QIstaff=4.62.
+- [x] No accidental 0% or runaway missingness  
+  **Evidence:** Targeted missingness ranges 2.04%–12.59% across affected items; no 0% or extreme missingness.
 
 ---
 
 ## Treatment 4: PS Model + Weights (Post-PSW)
 ### Approval Gate (Required)
-- [ ] STOP: review constraints + request approval to start Treatment 4  
-  **Evidence:**
+- [x] STOP: review constraints + request approval to start Treatment 4  
+  **Evidence:** User approval: "Approved".
 
-- [ ] Update PS formula (paste exact formula)  
-  **Evidence:**
-- [ ] Compute propensity + overlap weights  
-  **Evidence:**
-- [ ] Export weighted dataset with diagnostics  
-  **Evidence:**
+- [x] Update PS formula (paste exact formula)  
+  **Evidence:** `x_FASt ~ hgrades_c + bparented_c + hapcl_c + hprecalc13_c + hchallenge_c + cSFcareer_c + hacadpr13_c + tcare_c + StemMaj_c` (from `4_Model_Results/Outputs/RQ1_RQ3_main/psw_stage_report.txt`).
+- [x] Compute propensity + overlap weights  
+  **Evidence:** PSW weights summary (non-missing): Min=0.4389, 1Q=0.6211, Median=0.7203, Mean=1.0000, 3Q=1.6845, Max=2.1280 (from `psw_stage_report.txt`).
+- [x] Export weighted dataset with diagnostics  
+  **Evidence:** `4_Model_Results/Outputs/RQ1_RQ3_main/rep_data_with_psw.csv`, `psw_stage_report.txt`, `psw_balance_smd.txt` exist.
 
 ### Validation Gate 4
-- [ ] Coefficient directions sanity check (report ORs)  
-  **Evidence:**
-- [ ] Overlap diagnostics (PS quantiles + weight quantiles)  
-  **Evidence:**
-- [ ] ESS computed (report values)  
-  **Evidence:**
+- [x] Coefficient directions sanity check (report ORs)  
+  **Evidence:** ORs (logit PS model): hgrades_c=1.106, bparented_c=1.047, hapcl_c=1.311, hprecalc13_c=1.244, hchallenge_c=1.033, cSFcareer_c=1.000, hacadpr13_c=1.008, tcare_c=0.994, StemMaj_c=1.008.
+- [x] Overlap diagnostics (PS quantiles + weight quantiles)  
+  **Evidence:** PS quantiles (1%,5%,50%,95%,99%): 0.191, 0.205, 0.258, 0.343, 0.380. PSW quantiles (1%,5%,50%,95%,99%): 0.498, 0.539, 0.720, 2.001, 2.071.
+- [x] ESS computed (report values)  
+  **Evidence:** ESS overall=3851.8; treated=1316.0; control=3589.6.
 
 ---
 
