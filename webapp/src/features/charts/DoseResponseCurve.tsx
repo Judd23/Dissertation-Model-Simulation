@@ -20,6 +20,13 @@ export default function DoseResponseCurve({
   const { showCIs } = useResearch();
   const { resolvedTheme } = useTheme();
   const { doseCoefficients } = useModelData();
+  console.log('(NO $) [DoseResponseCurve] data snapshot:', {
+    outcome,
+    showCIs,
+    main: doseCoefficients[outcome].main,
+    moderation: doseCoefficients[outcome].moderation,
+    se: doseCoefficients[outcome].se,
+  });
   const [dimensions, setDimensions] = useState({ width: 500, height: 300 });
   const [tooltip, setTooltip] = useState<{
     x: number;

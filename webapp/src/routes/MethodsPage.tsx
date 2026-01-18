@@ -26,6 +26,12 @@ export default function MethodsPage() {
     if (!modelData?.fitMeasures) return null;
     return modelData.fitMeasures;
   }, [modelData]);
+  console.log('(NO $) [MethodsPage] fit measures:', {
+    cfi: fitMeasures?.cfi,
+    tli: fitMeasures?.tli,
+    rmsea: fitMeasures?.rmsea,
+    srmr: fitMeasures?.srmr,
+  });
 
   const fitRings = useMemo(() => {
     if (!fitMeasures) return [];
