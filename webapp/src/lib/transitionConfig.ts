@@ -186,7 +186,7 @@ export const BREATHING_ANIMATION = {
  */
 export function calculateCenterOutDelay(
   distanceFromCenter: number,
-  maxDistance: number = 1
+  maxDistance: number = 1,
 ): number {
   const normalizedDistance = Math.min(distanceFromCenter / maxDistance, 1);
   return normalizedDistance * STAGGER_CONFIG.delay;
