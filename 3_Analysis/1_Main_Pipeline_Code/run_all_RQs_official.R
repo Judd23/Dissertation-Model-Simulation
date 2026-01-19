@@ -49,8 +49,22 @@ if (!nzchar(REP_DATA_CSV)) {
 # When you have your actual dissertation data, change this path accordingly.
 # =============================================================================
 
+# -------------------------
+# MANIFEST-DRIVEN RUN ARCHITECTURE (PHASE 2)
+# -------------------------
+# RUN_ID is REQUIRED — fail fast if not provided.
+# OUT_BASE defaults to 4_Model_Results/Outputs.
+# All outputs go to: OUT_BASE/runs/RUN_ID/
+RUN_ID <- Sys.getenv("RUN_ID", unset = "")
+if (!nzchar(RUN_ID)) {
+  stop("FATAL: RUN_ID environment variable is REQUIRED. Example: RUN_ID=smoke_20260119_120000")
+}
+RUN_MODE <- Sys.getenv("RUN_MODE", unset = "main")  # smoke | main | Full_Deploy
+
 # Predeclare globals (used with <<- inside set_out_base)
 OUT_BASE <- NULL
+OUT_RUN <- NULL     # The actual run folder: OUT_BASE/runs/RUN_ID
+OUT_RAW <- NULL     # Raw lavaan outputs
 OUT_FIGURES <- NULL
 OUT_TABLES <- NULL
 OUT_SYNTAX <- NULL
@@ -58,31 +72,29 @@ OUT_LOGS <- NULL
 OUT_SENS <- NULL
 
 # Keep all derived output paths in sync with OUT_BASE.
-# Per 0_Overview.md structure:
-#   4_Model_Results/Outputs/  = raw model outputs (lavaan .txt, CSVs)
-#   4_Model_Results/Figures/  = publication figures (PNG)
-#   4_Model_Results/Tables/   = publication tables (DOCX)
-set_out_base <- function(out_base) {
+# MANIFEST-DRIVEN: All outputs go to OUT_BASE/runs/RUN_ID/
+set_out_base <- function(out_base, run_id) {
   OUT_BASE <<- out_base
+  OUT_RUN  <<- file.path(out_base, "runs", run_id)
   
-  # Derive parent dir (4_Model_Results) for sibling folders
-  parent_dir <- dirname(out_base)
+  # All outputs within the run folder (manifest-driven structure)
+  OUT_RAW       <<- file.path(OUT_RUN, "raw")
+  OUT_FIGURES   <<- file.path(OUT_RUN, "figures")
+  OUT_TABLES    <<- file.path(OUT_RUN, "tables")
+  OUT_SYNTAX    <<- file.path(OUT_RUN, "raw", "syntax")
+  OUT_LOGS      <<- file.path(OUT_RUN, "logs")
+  OUT_SENS      <<- file.path(OUT_RUN, "raw", "sensitivity")
 
-  # Publication outputs go to sibling folders (per 0_Overview.md)
-  OUT_FIGURES   <<- file.path(parent_dir, "Figures")
-  OUT_TABLES    <<- file.path(parent_dir, "Tables")
-  
-  # Raw outputs stay inside OUT_BASE
-  OUT_SYNTAX    <<- file.path(OUT_BASE, "syntax")
-  OUT_LOGS      <<- file.path(OUT_BASE, "logs")
-  OUT_SENS      <<- file.path(OUT_BASE, "sensitivity")
-
-  for (d in c(OUT_FIGURES, OUT_TABLES, OUT_SYNTAX, OUT_LOGS, OUT_SENS)) {
+  for (d in c(OUT_RUN, OUT_RAW, OUT_FIGURES, OUT_TABLES, OUT_SYNTAX, OUT_LOGS, OUT_SENS)) {
     dir.create(d, recursive = TRUE, showWarnings = FALSE)
   }
+  
+  message("RUN_ID: ", run_id)
+  message("RUN_MODE: ", RUN_MODE)
+  message("Output folder: ", OUT_RUN)
 }
 
-set_out_base(Sys.getenv("OUT_BASE", unset = "4_Model_Results/Outputs"))
+set_out_base(Sys.getenv("OUT_BASE", unset = "4_Model_Results/Outputs"), RUN_ID)
 
 # Treatment/control definition for official RQs:
 #   X = FASt status (>= 12 transferable credits applied at matriculation)
@@ -202,8 +214,8 @@ SKIP_RQ4_STRUCT_MG <- env_flag("SKIP_RQ4_STRUCT_MG", default = FALSE)
 USE_PREPPED_DATA <- Sys.getenv("USE_PREPPED_DATA", unset = "")
 
 if (isTRUE(SMOKE_ONLY_A)) {
-  # Route smoke test outputs to SmokeTest subfolder
-  set_out_base(file.path(OUT_BASE, "SmokeTest"))
+  # SMOKE mode: use reduced bootstraps (RUN_MODE should be "smoke")
+  # Note: Output folder is already determined by RUN_ID (manifest-driven)
   
   # Auto-skip post-processing (plots/tables) in smoke mode unless explicitly requested
   if (!has_env("SKIP_POST_PROCESSING")) SKIP_POST_PROCESSING <- TRUE
@@ -1045,7 +1057,7 @@ balance_table <- function(d, x = "x_FASt", covars, wcol = "psw") {
 # -------------------------
 # RUN A: RQ1–RQ3 (+ RQ4c) overall model
 # -------------------------
-out_main <- file.path(OUT_BASE, "RQ1_RQ3_main")
+out_main <- file.path(OUT_RAW, "RQ1_RQ3_main")
 dir.create(out_main, recursive = TRUE, showWarnings = FALSE)
 
 # USE_PREPPED_DATA: Skip data prep if a pre-computed PSW dataset is provided
@@ -1112,7 +1124,7 @@ if ("living18" %in% names(dat_main)) {
 # RUN A0: Total effect (Eq. 1): DevAdj ~ X only (no mediators, no moderator)
 #   Uses the same analysis sample + weights as RUN A for comparability.
 # -------------------------
-out_total <- file.path(OUT_BASE, "A0_total_effect")
+out_total <- file.path(OUT_RAW, "A0_total_effect")
 dir.create(out_total, recursive = TRUE, showWarnings = FALSE)
 fit_total <- fit_mg_fast_vs_nonfast_with_outputs(
   dat = dat_main,
@@ -1144,11 +1156,11 @@ fit_main <- fit_mg_fast_vs_nonfast_with_outputs(
 
 # -----------------------------------------------------------------------------
 # Export bootstrap-ready results for Dissertation_Tables.docx
-#   build_dissertation_tables.py expects OUT_BASE/bootstrap_results.csv
+#   build_dissertation_tables.py expects OUT_RAW/bootstrap_results.csv
 #   Source = the already-exported structural_parameterEstimates.txt
 # -----------------------------------------------------------------------------
 message("\n=== Exporting bootstrap_results.csv (for dissertation tables) ===")
-BOOTSTRAP_RESULTS_CSV <- file.path(OUT_BASE, "bootstrap_results.csv")
+BOOTSTRAP_RESULTS_CSV <- file.path(OUT_RAW, "bootstrap_results.csv")
 BOOTSTRAP_SOURCE_TSV <- file.path(out_main, "structural", "structural_parameterEstimates.txt")
 if (file.exists(BOOTSTRAP_SOURCE_TSV)) {
   pe <- tryCatch(read.delim(BOOTSTRAP_SOURCE_TSV, stringsAsFactors = FALSE), error = function(e) NULL)
@@ -1207,7 +1219,7 @@ fit_sens <- fit_mg_fast_vs_nonfast_with_outputs(
 # RUN A1: Serial mediation (exploratory add-on)
 #   Runs the serial variant (adds EmoDiss -> QualEngag) after the parallel primary model.
 # -------------------------
-out_serial <- file.path(OUT_BASE, "A1_serial_exploratory")
+out_serial <- file.path(OUT_RAW, "A1_serial_exploratory")
 dir.create(out_serial, recursive = TRUE, showWarnings = FALSE)
 fit_serial <- fit_mg_fast_vs_nonfast_with_outputs(
   dat = dat_main,
@@ -1236,7 +1248,7 @@ if (isTRUE(SMOKE_ONLY_A) || isTRUE(SKIP_RQ4)) {
 # -------------------------
 # RUN B: RQ4 measurement invariance for each W individually
 # -------------------------
-out_meas <- file.path(OUT_BASE, "RQ4_measurement")
+out_meas <- file.path(OUT_RAW, "RQ4_measurement")
 dir.create(out_meas, recursive = TRUE, showWarnings = FALSE)
 
 # Use the weighted dataset so measurement checks match the analysis sample
@@ -1267,7 +1279,7 @@ W_VARS_STRUCT_OK <- character(0)
 #   Fast by default: no bootstrap unless BOOTSTRAP_MG == TRUE.
 # -------------------------
 if (!isTRUE(SKIP_RQ4_STRUCT_MG)) {
-  out_mg <- file.path(OUT_BASE, "RQ4_structural_MG")
+  out_mg <- file.path(OUT_RAW, "RQ4_structural_MG")
   dir.create(out_mg, recursive = TRUE, showWarnings = FALSE)
 
   # Use the same weighted data as main model
@@ -1440,7 +1452,7 @@ if (!isTRUE(SKIP_RQ4_STRUCT_MG)) {
 #   Fit the same SEM within each race category (within-group run; NOT multi-group).
 #   Fast by default: no bootstrap unless BOOTSTRAP_RACE == TRUE.
 # -------------------------
-out_race <- file.path(OUT_BASE, paste0("RQ4_structural_by_", RACE_VAR))
+out_race <- file.path(OUT_RAW, paste0("RQ4_structural_by_", RACE_VAR))
 dir.create(out_race, recursive = TRUE, showWarnings = FALSE)
 
 dat_race_base <- dat_main
@@ -1610,12 +1622,41 @@ if (viz_result == 0) {
 }
 
 # =============================================================================
+# PYTHON STAGE: Tables and Figures
+# =============================================================================
+# MANIFEST_FIRST_PYTHON: When TRUE, use the single manifest-first entrypoint
+# instead of calling individual Python scripts.
+MANIFEST_FIRST_PYTHON <- env_flag("MANIFEST_FIRST_PYTHON", default = FALSE)
+
+if (isTRUE(MANIFEST_FIRST_PYTHON)) {
+  # -----------------------------------------------------------------------------
+  # MANIFEST-FIRST MODE: Single Python entrypoint reads manifest.json
+  # -----------------------------------------------------------------------------
+  message("\n=== Running Python Stage (manifest-first mode) ===")
+  manifest_path <- file.path(OUT_RUN, "manifest.json")
+  
+  python_stage_cmd <- sprintf(
+    "python3 3_Analysis/run_python_stage.py --manifest '%s'",
+    manifest_path
+  )
+  python_result <- system(python_stage_cmd, intern = FALSE)
+  if (python_result == 0) {
+    message("Python stage completed successfully")
+  } else {
+    warning("Python stage failed (exit code ", python_result, ")")
+  }
+  
+} else {
+  # -----------------------------------------------------------------------------
+  # LEGACY MODE: Call individual Python scripts directly
+  # -----------------------------------------------------------------------------
+
 # Build Bootstrap Tables (DOCX)
 # =============================================================================
 message("\n=== Building Bootstrap Tables ===")
 
 # Find the parameter estimates file from the main structural run
-boot_csv_path <- file.path(OUT_BASE, "RQ1_RQ3_main", "structural", "structural_parameterEstimates.txt")
+boot_csv_path <- file.path(OUT_RAW, "RQ1_RQ3_main", "structural", "structural_parameterEstimates.txt")
 if (file.exists(boot_csv_path)) {
   tables_cmd <- sprintf(
     "python3 3_Analysis/3_Tables_Code/build_bootstrap_tables.py --csv '%s' --B %d --ci_type '%s' --out '%s'",
@@ -1632,6 +1673,39 @@ if (file.exists(boot_csv_path)) {
 }
 
 # =============================================================================
+# Build Dissertation Tables (DOCX) - comprehensive APA 7 tables
+# =============================================================================
+message("\n=== Building Dissertation Tables ===")
+
+# build_dissertation_tables.py reads from OUT_RAW and outputs to OUT_TABLES
+diss_tables_cmd <- sprintf(
+  "python3 3_Analysis/3_Tables_Code/build_dissertation_tables.py --outdir '%s' --out '%s' --B %d --ci_type '%s'",
+  OUT_RAW, OUT_TABLES, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN
+)
+diss_tables_result <- system(diss_tables_cmd, intern = FALSE)
+if (diss_tables_result == 0) {
+  message("Dissertation tables saved to: ", OUT_TABLES, "/Dissertation_Tables.docx")
+} else {
+  warning("build_dissertation_tables.py failed (exit code ", diss_tables_result, ")")
+}
+
+# =============================================================================
+# Build Plain Language Summary (DOCX) - accessible findings for stakeholders
+# =============================================================================
+message("\n=== Building Plain Language Summary ===")
+
+plain_summary_cmd <- sprintf(
+  "python3 3_Analysis/3_Tables_Code/build_plain_language_summary.py --outdir '%s' --out '%s' --B %d --ci_type '%s'",
+  OUT_RAW, OUT_TABLES, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN
+)
+plain_summary_result <- system(plain_summary_cmd, intern = FALSE)
+if (plain_summary_result == 0) {
+  message("Plain language summary saved to: ", OUT_TABLES, "/Plain_Language_Summary.docx")
+} else {
+  warning("build_plain_language_summary.py failed (exit code ", plain_summary_result, ")")
+}
+
+# =============================================================================
 # Generate Descriptive Plots (repopulated with fresh data each run)
 # All outputs go to OUT_BASE (same folder as tables, results, figures)
 # Uses PSW-weighted data for causal inference visualizations
@@ -1639,7 +1713,7 @@ if (file.exists(boot_csv_path)) {
 message("\n=== Generating Descriptive Plots ===")
 
 # Use PSW-weighted data file which includes the 'psw' column
-PSW_DATA_CSV <- file.path(OUT_BASE, "RQ1_RQ3_main", "rep_data_with_psw.csv")
+PSW_DATA_CSV <- file.path(OUT_RAW, "RQ1_RQ3_main", "rep_data_with_psw.csv")
 if (!file.exists(PSW_DATA_CSV)) {
   stop("PSW data file not found: ", PSW_DATA_CSV, " (PSW-weighted outputs are required)")
 } else {
@@ -1669,6 +1743,8 @@ if (deep_result == 0) {
 } else {
   warning("plot_deep_cuts.py failed (exit code ", deep_result, ")")
 }
+
+}  # end MANIFEST_FIRST_PYTHON else block (legacy mode)
 
 # =============================================================================
 # Webapp JSON exports (webapp/public/data)
@@ -1844,4 +1920,83 @@ if (file.exists(psw_src)) {
   }
 }
 
-message("ALL RQs run complete. Outputs under: ", OUT_BASE)
+# -------------------------
+# WRITE MANIFEST (PHASE 2)
+# -------------------------
+# Collect all produced artifacts and write manifest.json
+write_manifest <- function() {
+  manifest <- list(
+    run_id = RUN_ID,
+    timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%S"),
+    mode = RUN_MODE,
+    settings = list(
+      seed = if (exists("SEED")) SEED else NULL,
+      N = if (exists("dat_main") && is.data.frame(dat_main)) nrow(dat_main) else NULL,
+      estimator = if (exists("ESTIMATOR_MAIN")) ESTIMATOR_MAIN else "ML",
+      bootstrap = if (exists("B_BOOT_MAIN")) B_BOOT_MAIN else NULL,
+      CI = if (exists("BOOT_CI_TYPE_MAIN")) BOOT_CI_TYPE_MAIN else NULL,
+      group_flags = list(
+        DO_PSW = if (exists("DO_PSW")) DO_PSW else NULL,
+        TABLE_CHECK_MODE = if (exists("TABLE_CHECK_MODE")) TABLE_CHECK_MODE else NULL
+      )
+    ),
+    artifacts = list(
+      # Web-friendly relative paths (from run folder)
+      fit_measures = "raw/RQ1_RQ3_main/structural/structural_fitMeasures.txt",
+      parameters = "raw/RQ1_RQ3_main/structural/structural_parameterEstimates.txt",
+      executed_model_syntax = "raw/syntax/measurement_syntax.lav",
+      verification_checklist = "logs/verification_checklist.txt",
+      bootstrap_results = "raw/bootstrap_results.csv",
+      tables = list.files(OUT_TABLES, pattern = "\\.(csv|txt|tsv|docx)$", full.names = FALSE),
+      figures = list.files(OUT_FIGURES, pattern = "\\.(png|pdf|svg)$", full.names = FALSE)
+    )
+  )
+  
+  manifest_path <- file.path(OUT_RUN, "manifest.json")
+  tryCatch({
+    jsonlite_available <- requireNamespace("jsonlite", quietly = TRUE)
+    if (jsonlite_available) {
+      writeLines(jsonlite::toJSON(manifest, auto_unbox = TRUE, pretty = TRUE), manifest_path)
+    } else {
+      # Fallback: write minimal JSON manually
+      json_lines <- c(
+        "{",
+        sprintf("  \"run_id\": \"%s\",", RUN_ID),
+        sprintf("  \"timestamp\": \"%s\",", format(Sys.time(), "%Y-%m-%dT%H:%M:%S")),
+        sprintf("  \"mode\": \"%s\"", RUN_MODE),
+        "}"
+      )
+      writeLines(json_lines, manifest_path)
+    }
+    message("Wrote manifest: ", manifest_path)
+  }, error = function(e) {
+    warning("Failed to write manifest: ", e$message)
+  })
+  
+  invisible(manifest)
+}
+
+write_manifest()
+
+# -------------------------
+# SYNC TO WEBAPP (PHASE 4)
+# -------------------------
+# Copies run artifacts to webapp/public/results/<RUN_ID>/ for the UI.
+# Set SKIP_WEBAPP_SYNC=1 to skip this step.
+SKIP_WEBAPP_SYNC <- env_flag("SKIP_WEBAPP_SYNC", default = FALSE)
+
+if (!isTRUE(SKIP_WEBAPP_SYNC)) {
+  message("\n=== Syncing run to webapp ===")
+  sync_cmd <- sprintf(
+    "python3 scripts/sync_run_to_webapp.py --run-dir '%s'",
+    OUT_RUN
+  )
+  sync_result <- system(sync_cmd, intern = FALSE)
+  if (sync_result == 0) {
+    message("Run synced to webapp/public/results/", RUN_ID)
+  } else {
+    warning("sync_run_to_webapp.py failed (exit code ", sync_result, ")")
+  }
+}
+
+message("ALL RQs run complete. Outputs under: ", OUT_RUN)
