@@ -145,6 +145,18 @@ def write_fig_data(outdir, filename, data, index=False):
     data.to_csv(path, index=index, na_rep="NA")
     return path
 
+def load_lavaan_params(path):
+    """Load lavaan parameter estimates table or return None if missing."""
+    if not os.path.exists(path):
+        return None
+    try:
+        return pd.read_csv(path, sep="\t")
+    except Exception:
+        try:
+            return pd.read_csv(path, sep=r"\s+")
+        except Exception:
+            return None
+
 def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', weight_col=None):
     os.makedirs(outdir, exist_ok=True)
     
@@ -160,6 +172,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ]
     ensure_columns(df, required_cols)
     plt.style.use('seaborn-v0_8-whitegrid')
+
+    lavaan_params_path = os.getenv(
+        "LAVAAN_PARAMS_PATH",
+        "4_Model_Results/Outputs/RQ1_RQ3_main/structural/structural_parameterEstimates.txt"
+    )
+    lavaan_params = load_lavaan_params(lavaan_params_path)
     
     # Setup weighting
     use_weights = weight_col is not None and weight_col in df.columns
@@ -374,446 +392,179 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     plt.savefig(f'{outdir}/fig7_cumulative_risk.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 7: Cumulative Risk Analysis saved')
+
+    def param_stats(label):
+        if lavaan_params is None or 'label' not in lavaan_params.columns:
+            return np.nan, np.nan, np.nan
+        rows = lavaan_params[lavaan_params['label'] == label]
+        if rows.empty:
+            return np.nan, np.nan, np.nan
+        row = rows.iloc[0]
+        return (
+            row.get('est', np.nan),
+            row.get('ci.lower', np.nan),
+            row.get('ci.upper', np.nan)
+        )
+
+    def plot_effects_by_z(ax, label_prefix, title, color, panel_name, rows_list):
+        z_levels = ['low', 'mid', 'high']
+        ests = []
+        ci_lows = []
+        ci_highs = []
+        for z in z_levels:
+            label = f"{label_prefix}_z_{z}"
+            est, ci_low, ci_high = param_stats(label)
+            rows_list.append({
+                'panel': panel_name,
+                'z_level': z,
+                'label': label,
+                'estimate': est,
+                'ci_low': ci_low,
+                'ci_high': ci_high
+            })
+            ests.append(est)
+            ci_lows.append(ci_low)
+            ci_highs.append(ci_high)
+        x = np.arange(len(z_levels))
+        ax.bar(x, ests, color=color, alpha=0.7, edgecolor='black')
+        if np.all(np.isfinite(ests)) and np.all(np.isfinite(ci_lows)) and np.all(np.isfinite(ci_highs)):
+            yerr = [np.array(ests) - np.array(ci_lows), np.array(ci_highs) - np.array(ests)]
+            ax.errorbar(x, ests, yerr=yerr, fmt='none', ecolor='black', capsize=4)
+        ax.axhline(0, color='black', linewidth=0.8)
+        ax.set_xticks(x)
+        ax.set_xticklabels(['Low', 'Mid', 'High'])
+        ax.set_xlabel('Credit Dose (Z)', fontsize=10)
+        ax.set_ylabel('Effect', fontsize=10)
+        ax.set_title(title, fontsize=12, fontweight='bold')
+        if not np.any(np.isfinite(ests)):
+            ax.text(0.5, 0.5, 'NA', transform=ax.transAxes, ha='center', va='center', fontsize=12)
+
+    def plot_single_effect(ax, label, title, color, panel_name, rows_list):
+        est, ci_low, ci_high = param_stats(label)
+        rows_list.append({
+            'panel': panel_name,
+            'z_level': np.nan,
+            'label': label,
+            'estimate': est,
+            'ci_low': ci_low,
+            'ci_high': ci_high
+        })
+        ax.bar([0], [est], color=color, alpha=0.7, edgecolor='black')
+        if np.isfinite(est) and np.isfinite(ci_low) and np.isfinite(ci_high):
+            yerr = [[est - ci_low], [ci_high - est]]
+            ax.errorbar([0], [est], yerr=yerr, fmt='none', ecolor='black', capsize=4)
+        ax.axhline(0, color='black', linewidth=0.8)
+        ax.set_xticks([0])
+        ax.set_xticklabels([label])
+        ax.set_ylabel('Effect', fontsize=10)
+        ax.set_title(title, fontsize=12, fontweight='bold')
+        if not np.isfinite(est):
+            ax.text(0.5, 0.5, 'NA', transform=ax.transAxes, ha='center', va='center', fontsize=12)
     
     # =========================================================================
     # FIGURE 8: Credit Dose × FASt Interaction (Moderation Visualization)
     # =========================================================================
-    if 'trnsfr_cr' in df.columns or 'credit_dose' in df.columns:
-        fig, axes = plt.subplots(2, 2, figsize=(14, 12))
-        
-        # Reconstruct raw credits if needed
-        if 'trnsfr_cr' in df.columns:
-            credits = df['trnsfr_cr']
-        else:
-            credits = df['credit_dose'] * 10 + 12  # reverse transformation
-        credits = pd.to_numeric(credits, errors='coerce')
-        
-        # 8a. Scatter: Credits vs Distress by FASt status
-        ax = axes[0, 0]
-        fast_mask = df['x_FASt'] == 1
-        fig8_frames = []
-        fig8_frames.append(pd.DataFrame({
-            'panel': 'scatter_distress',
-            'group': np.where(fast_mask, 'FASt', 'Non-FASt'),
-            'credit': credits,
-            'value': df['mean_distress'],
-            'weight': w
-        }))
-        
-        ax.scatter(credits[~fast_mask], df.loc[~fast_mask, 'mean_distress'], 
-                   alpha=0.3, c=colors['nonfast'], label='Non-FASt', s=20)
-        ax.scatter(credits[fast_mask], df.loc[fast_mask, 'mean_distress'], 
-                   alpha=0.5, c=colors['fast'], label='FASt', s=30)  # Orange for FASt
-        
-        # Add LOESS-style smoothed lines
-        for mask, color, label in [(~fast_mask, colors['nonfast'], 'Non-FASt'), 
-                                    (fast_mask, colors['fast'], 'FASt')]:  # Orange for FASt
-            x = credits[mask].values
-            y = df.loc[mask, 'mean_distress'].values
-            w_mask = w[mask]
-            # Bin and average for smooth line
-            credit_max = credits.max(skipna=True)
-            if not np.isfinite(credit_max):
-                credit_max = 0
-            bins = np.linspace(0, credit_max, 15)
-            bin_means = []
-            bin_centers = []
-            for i in range(len(bins)-1):
-                bin_mask = (x >= bins[i]) & (x < bins[i+1])
-                if bin_mask.sum() > 5:
-                    bin_centers.append((bins[i] + bins[i+1])/2)
-                    bin_means.append(weighted_mean(y[bin_mask], w_mask[bin_mask]))
-            if len(bin_centers) > 2:
-                ax.plot(bin_centers, bin_means, '-', color=color, linewidth=3, alpha=0.8)
-            if len(bin_centers) > 0:
-                fig8_frames.append(pd.DataFrame({
-                    'panel': 'smooth_distress',
-                    'group': label,
-                    'credit': bin_centers,
-                    'value': bin_means
-                }))
-        
-        ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2)  # Yellow credit threshold
-        ax.set_xlabel('Transfer Credits', fontsize=11)
-        ax.set_ylabel('Mean Emotional Distress', fontsize=11)
-        ax.set_title('Credit Dose → Distress by FASt Status', fontsize=12, fontweight='bold')
-        ax.legend()
-        
-        # 8b. Conditional effects at different credit doses
-        ax = axes[0, 1]
-        
-        # Create credit dose bins
-        credit_bins = pd.cut(credits, bins=[0, 3, 6, 12, 20, 60], labels=['0-3', '4-6', '7-12', '13-20', '21+'])
-        df['credit_bin'] = credit_bins
-        
-        # Calculate FASt gap at each bin
-        gaps = []
-        gap_ses = []
-        bin_labels = []
-        for bin_label in ['0-3', '4-6', '7-12', '13-20', '21+']:
-            mask_bin = df['credit_bin'] == bin_label
-            if mask_bin.sum() > 10:
-                mask_fast = mask_bin & (df['x_FASt'] == 1)
-                mask_nonfast = mask_bin & (df['x_FASt'] == 0)
-                fast_vals = df.loc[mask_fast, 'mean_distress'].values
-                nonfast_vals = df.loc[mask_nonfast, 'mean_distress'].values
-                fast_w = w[mask_fast]
-                nonfast_w = w[mask_nonfast]
-                fast_n = weighted_n_eff(fast_w)
-                nonfast_n = weighted_n_eff(nonfast_w)
-                
-                if fast_n > 5 and nonfast_n > 5:
-                    fast_mean = weighted_mean(fast_vals, fast_w)
-                    nonfast_mean = weighted_mean(nonfast_vals, nonfast_w)
-                    gap = fast_mean - nonfast_mean
-                    # Pooled SE
-                    fast_var = weighted_std(fast_vals, fast_w) ** 2
-                    nonfast_var = weighted_std(nonfast_vals, nonfast_w) ** 2
-                    se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
-                    gaps.append(gap)
-                    gap_ses.append(se)
-                    bin_labels.append(bin_label)
-        
-        x_pos = np.arange(len(bin_labels))
-        # Use orange for FASt-related gaps
-        bars = ax.bar(x_pos, gaps, yerr=[1.96*se for se in gap_ses], 
-                      capsize=5, color=[colors['fast'] if g > 0 else colors['engagement'] for g in gaps])
-        ax.axhline(0, color='black', linewidth=0.8)
-        ax.set_xticks(x_pos)
-        ax.set_xticklabels(bin_labels)
-        ax.set_xlabel('Credit Dose Range', fontsize=11)
-        ax.set_ylabel('FASt - Non-FASt Gap (Distress)', fontsize=11)
-        ax.set_title('FASt Effect by Credit Dose\n(+ = FASt higher distress)', fontsize=12, fontweight='bold')
-        if len(bin_labels) > 0:
-            fig8_frames.append(pd.DataFrame({
-                'panel': 'gap_by_bin',
-                'bin_label': bin_labels,
-                'value': gaps,
-                'se': gap_ses,
-                'ci_low': [g - 1.96 * s for g, s in zip(gaps, gap_ses)],
-                'ci_high': [g + 1.96 * s for g, s in zip(gaps, gap_ses)]
-            }))
-        
-        # 8c. Johnson-Neyman style: At what credit level does FASt effect become significant?
-        ax = axes[1, 0]
-        
-        # Compute rolling FASt effect
-        credit_vals = np.arange(0, 35, 2)
-        effects = []
-        ci_lows = []
-        ci_highs = []
-        
-        for cv in credit_vals:
-            # Window around this credit value
-            window = 5
-            mask = (credits >= cv - window) & (credits <= cv + window)
-            if mask.sum() > 20:
-                mask_fast = mask & (df['x_FASt']==1)
-                mask_nonfast = mask & (df['x_FASt']==0)
-                fast_data = df.loc[mask_fast, 'mean_distress'].values
-                nonfast_data = df.loc[mask_nonfast, 'mean_distress'].values
-                fast_w = w[mask_fast]
-                nonfast_w = w[mask_nonfast]
-                
-                if len(fast_data) > 5 and len(nonfast_data) > 5:
-                    fast_mean = weighted_mean(fast_data, fast_w)
-                    nonfast_mean = weighted_mean(nonfast_data, nonfast_w)
-                    effect = fast_mean - nonfast_mean
-                    fast_var = weighted_std(fast_data, fast_w) ** 2
-                    nonfast_var = weighted_std(nonfast_data, nonfast_w) ** 2
-                    fast_n = weighted_n_eff(fast_w)
-                    nonfast_n = weighted_n_eff(nonfast_w)
-                    se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
-                    effects.append(effect)
-                    ci_lows.append(effect - 1.96*se)
-                    ci_highs.append(effect + 1.96*se)
-                else:
-                    effects.append(np.nan)
-                    ci_lows.append(np.nan)
-                    ci_highs.append(np.nan)
-            else:
-                effects.append(np.nan)
-                ci_lows.append(np.nan)
-                ci_highs.append(np.nan)
-        
-        ax.fill_between(credit_vals, ci_lows, ci_highs, alpha=0.3, color=colors['fast'])  # Orange for FASt
-        ax.plot(credit_vals, effects, '-', color=colors['fast'], linewidth=2)  # Orange
-        ax.axhline(0, color='black', linewidth=1)
-        ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2, label='FASt threshold')  # Yellow
-        ax.set_xlabel('Transfer Credits', fontsize=11)
-        ax.set_ylabel('FASt Effect on Distress', fontsize=11)
-        ax.set_title('Conditional FASt Effect Across Credit Spectrum\n(Rolling window, 95% CI)', fontsize=12, fontweight='bold')
-        ax.legend()
-        fig8_frames.append(pd.DataFrame({
-            'panel': 'rolling_distress',
-            'credit': credit_vals,
-            'value': effects,
-            'ci_low': ci_lows,
-            'ci_high': ci_highs
-        }))
-        
-        # 8d. Engagement pattern
-        ax = axes[1, 1]
-        
-        effects = []
-        ci_lows = []
-        ci_highs = []
-        
-        for cv in credit_vals:
-            window = 5
-            mask = (credits >= cv - window) & (credits <= cv + window)
-            if mask.sum() > 20:
-                mask_fast = mask & (df['x_FASt']==1)
-                mask_nonfast = mask & (df['x_FASt']==0)
-                fast_data = df.loc[mask_fast, 'mean_engagement'].values
-                nonfast_data = df.loc[mask_nonfast, 'mean_engagement'].values
-                fast_w = w[mask_fast]
-                nonfast_w = w[mask_nonfast]
-                
-                if len(fast_data) > 5 and len(nonfast_data) > 5:
-                    fast_mean = weighted_mean(fast_data, fast_w)
-                    nonfast_mean = weighted_mean(nonfast_data, nonfast_w)
-                    effect = fast_mean - nonfast_mean
-                    fast_var = weighted_std(fast_data, fast_w) ** 2
-                    nonfast_var = weighted_std(nonfast_data, nonfast_w) ** 2
-                    fast_n = weighted_n_eff(fast_w)
-                    nonfast_n = weighted_n_eff(nonfast_w)
-                    se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
-                    effects.append(effect)
-                    ci_lows.append(effect - 1.96*se)
-                    ci_highs.append(effect + 1.96*se)
-                else:
-                    effects.append(np.nan)
-                    ci_lows.append(np.nan)
-                    ci_highs.append(np.nan)
-            else:
-                effects.append(np.nan)
-                ci_lows.append(np.nan)
-                ci_highs.append(np.nan)
-        
-        ax.fill_between(credit_vals, ci_lows, ci_highs, alpha=0.3, color=colors['engagement'])
-        ax.plot(credit_vals, effects, '-', color=colors['engagement'], linewidth=2)
-        ax.axhline(0, color='black', linewidth=1)
-        ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2, label='FASt threshold')  # Yellow
-        ax.set_xlabel('Transfer Credits', fontsize=11)
-        ax.set_ylabel('FASt Effect on Engagement', fontsize=11)
-        ax.set_title('Conditional FASt Effect on Engagement\n(Rolling window, 95% CI)', fontsize=12, fontweight='bold')
-        ax.legend()
-        fig8_frames.append(pd.DataFrame({
-            'panel': 'rolling_engagement',
-            'credit': credit_vals,
-            'value': effects,
-            'ci_low': ci_lows,
-            'ci_high': ci_highs
-        }))
-        
-        if len(fig8_frames) > 0:
-            fig8_data = pd.concat(fig8_frames, ignore_index=True, sort=False)
-        else:
-            fig8_data = pd.DataFrame([{'panel': np.nan, 'credit': np.nan, 'value': np.nan}])
-        write_fig_data(outdir, 'fig8_credit_dose_moderation_data.csv', fig8_data)
-        
-        plt.suptitle('Figure 8 (Descriptive)\nCredit Dose × FASt Moderation Pattern', fontsize=14, fontweight='bold', y=1.02)
-        plt.tight_layout()
-        add_sim_note(fig)
-        plt.savefig(f'{outdir}/fig8_credit_dose_moderation.png', dpi=300, bbox_inches='tight')
-        plt.close()
-        print('✓ Figure 8: Credit Dose Moderation saved')
-    else:
-        print("⚠ Figure 8 skipped: requires 'trnsfr_cr' or 'credit_dose' column.")
+    fig, axes = plt.subplots(2, 2, figsize=(14, 12))
+    fig8_rows = []
+
+    plot_effects_by_z(
+        axes[0, 0],
+        'a1',
+        'FASt → Emotional Distress (a1)\nby Credit Dose',
+        colors['distress'],
+        'a1_by_z',
+        fig8_rows
+    )
+    plot_effects_by_z(
+        axes[0, 1],
+        'a2',
+        'FASt → Engagement (a2)\nby Credit Dose',
+        colors['engagement'],
+        'a2_by_z',
+        fig8_rows
+    )
+    plot_single_effect(
+        axes[1, 0],
+        'a1z',
+        'FASt × Credit Dose → Distress (a1z)',
+        colors['distress'],
+        'a1z',
+        fig8_rows
+    )
+    plot_single_effect(
+        axes[1, 1],
+        'a2z',
+        'FASt × Credit Dose → Engagement (a2z)',
+        colors['engagement'],
+        'a2z',
+        fig8_rows
+    )
+
+    fig8_data = pd.DataFrame(fig8_rows) if fig8_rows else pd.DataFrame([{'panel': np.nan}])
+    write_fig_data(outdir, 'fig8_credit_dose_moderation_data.csv', fig8_data)
+
+    plt.suptitle(
+        'Figure 8 (Diagnostic)\nCredit Dose × FASt Moderation (SEM)' + (' (PSW Weighted)' if use_weights else ''),
+        fontsize=14,
+        fontweight='bold',
+        y=1.02
+    )
+    plt.tight_layout()
+    add_sim_note(fig, weighted=use_weights)
+    plt.savefig(f'{outdir}/fig8_credit_dose_moderation.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print('✓ Figure 8: Credit Dose Moderation saved')
     
     # =========================================================================
-    # FIGURE 9: Mediation Pathway Visualization
+    # FIGURE 9: Mediation Pathways (SEM diagnostics)
     # =========================================================================
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
-    
-    # Create composite outcome measures
-    sb_cols = ['sbvalued', 'sbmyself', 'sbcommunity']
-    pg_cols = ['pgthink', 'pganalyze', 'pgwork', 'pgvalues', 'pgprobsolve']
-    se_cols = ['SEwellness', 'SEnonacad', 'SEactivities', 'SEacademic', 'SEdiverse']
-    
-    df['mean_belonging'] = df[sb_cols].mean(axis=1)
-    df['mean_gains'] = df[pg_cols].mean(axis=1)
-    df['mean_support'] = df[se_cols].mean(axis=1)
-    df['mean_devadj'] = (df['mean_belonging'] + df['mean_gains'] + df['mean_support'] + 
-                         df[['evalexp', 'sameinst']].mean(axis=1)) / 4
-    fig9_frames = []
-    fig9_frames.append(pd.DataFrame({
-        'panel': 'scatter_distress_devadj',
-        'x': df['mean_distress'],
-        'y': df['mean_devadj'],
-        'weight': w
-    }))
-    fig9_frames.append(pd.DataFrame({
-        'panel': 'scatter_engagement_devadj',
-        'x': df['mean_engagement'],
-        'y': df['mean_devadj'],
-        'weight': w
-    }))
-    
-    # 9a. Distress → Developmental Adjustment scatter
-    ax = axes[0, 0]
-    ax.scatter(df['mean_distress'], df['mean_devadj'], alpha=0.2, c='gray', s=10)
-    
-    # Add regression line (weighted)
-    slope, intercept, r, p = weighted_linregress(df['mean_distress'].values, df['mean_devadj'].values, w)
-    x_line = np.array([df['mean_distress'].min(), df['mean_distress'].max()])
-    p_txt = ""
-    if not np.isnan(p):
-        p_txt = f", p={p:.3f}" if p >= 0.001 else ", p<.001"
-    ax.plot(x_line, intercept + slope * x_line, '-', color=colors['distress'], linewidth=3,
-            label=f'r = {r:.3f}{p_txt}')
-    fig9_frames.append(pd.DataFrame([{
-        'panel': 'regression_distress_devadj',
-        'slope': slope,
-        'intercept': intercept,
-        'r': r,
-        'p': p
-    }]))
-    ax.set_xlabel('Emotional Distress (EmoDiss)', fontsize=11)
-    ax.set_ylabel('Developmental Adjustment (DevAdj)', fontsize=11)
-    ax.set_title('Mediator Path: EmoDiss → DevAdj', fontsize=12, fontweight='bold')
-    ax.legend()
-    
-    # 9b. Engagement → Developmental Adjustment scatter
-    ax = axes[0, 1]
-    ax.scatter(df['mean_engagement'], df['mean_devadj'], alpha=0.2, c='gray', s=10)
-    
-    slope, intercept, r, p = weighted_linregress(df['mean_engagement'].values, df['mean_devadj'].values, w)
-    x_line = np.array([df['mean_engagement'].min(), df['mean_engagement'].max()])
-    p_txt = ""
-    if not np.isnan(p):
-        p_txt = f", p={p:.3f}" if p >= 0.001 else ", p<.001"
-    ax.plot(x_line, intercept + slope * x_line, '-', color=colors['engagement'], linewidth=3,
-            label=f'r = {r:.3f}{p_txt}')
-    fig9_frames.append(pd.DataFrame([{
-        'panel': 'regression_engagement_devadj',
-        'slope': slope,
-        'intercept': intercept,
-        'r': r,
-        'p': p
-    }]))
-    ax.set_xlabel('Quality of Engagement (QualEngag)', fontsize=11)
-    ax.set_ylabel('Developmental Adjustment (DevAdj)', fontsize=11)
-    ax.set_title('Mediator Path: QualEngag → DevAdj', fontsize=12, fontweight='bold')
-    ax.legend()
-    
-    # 9c. Parallel Mediation Model Diagram
-    ax = axes[1, 0]
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
-    ax.axis('off')
-    
-    # Draw boxes
-    boxes = {
-        'X': (1, 5, 'FASt\nStatus\n(X)'),
-        'M1': (5, 7.5, 'Emotional\nDistress\n(M1)'),
-        'M2': (5, 2.5, 'Quality of\nEngagement\n(M2)'),
-        'Y': (9, 5, 'Developmental\nAdjustment\n(Y)')
-    }
-    
-    for key, (x, y, label) in boxes.items():
-        # M1 (Distress) = light red, M2 (Engagement) = light blue, X (FASt) = light orange, Y = light green
-        if key == 'M1':
-            box_color = '#ffcccc'  # Light red
-        elif key == 'M2':
-            box_color = '#cce5ff'  # Light blue
-        elif key == 'X':
-            box_color = '#ffe6b3'  # Light orange for FASt
-        else:  # Y
-            box_color = '#ccffcc'  # Light green for outcome
-        rect = FancyBboxPatch((x-0.9, y-0.8), 1.8, 1.6, boxstyle="round,pad=0.05",
-                              facecolor=box_color,
-                              edgecolor='black', linewidth=2)
-        ax.add_patch(rect)
-        ax.text(x, y, label, ha='center', va='center', fontsize=9, fontweight='bold')
-    
-    # Draw arrows with path labels - RED for distress paths, BLUE for engagement paths
-    # a1 path (X → M1: FASt increases distress) - RED
-    ax.annotate('', xy=(4.1, 7.5), xytext=(1.9, 5.8),
-                arrowprops=dict(arrowstyle='->', color=colors['distress'], lw=2))
-    ax.text(2.5, 7.2, 'a1', fontsize=11, fontweight='bold', color=colors['distress'])
-    
-    # a2 path (X → M2: FASt decreases engagement) - BLUE
-    ax.annotate('', xy=(4.1, 2.5), xytext=(1.9, 4.2),
-                arrowprops=dict(arrowstyle='->', color=colors['engagement'], lw=2))
-    ax.text(2.5, 2.8, 'a2', fontsize=11, fontweight='bold', color=colors['engagement'])
-    
-    # b1 path (M1 → Y: Distress decreases adjustment) - RED
-    ax.annotate('', xy=(8.1, 5.8), xytext=(5.9, 7.5),
-                arrowprops=dict(arrowstyle='->', color=colors['distress'], lw=2))
-    ax.text(7.3, 7.2, 'b1', fontsize=11, fontweight='bold', color=colors['distress'])
-    
-    # b2 path (M2 → Y: Engagement increases adjustment) - BLUE
-    ax.annotate('', xy=(8.1, 4.2), xytext=(5.9, 2.5),
-                arrowprops=dict(arrowstyle='->', color=colors['engagement'], lw=2))
-    ax.text(7.3, 2.8, 'b2', fontsize=11, fontweight='bold', color=colors['engagement'])
-    
-    # c' path (X → Y direct effect)
-    ax.annotate('', xy=(8.1, 5), xytext=(1.9, 5),
-                arrowprops=dict(arrowstyle='->', color='gray', lw=1.5, ls='--'))
-    ax.text(5, 5.4, "c'", fontsize=11, fontweight='bold', color='gray')
-    
-    ax.set_title('Parallel Mediation Model', fontsize=12, fontweight='bold')
-    
-    # 9d. Effect decomposition (descriptive estimates)
-    ax = axes[1, 1]
-    
-    # Calculate descriptive path estimates for visualization
-    # Note: These are bivariate associations, not causal estimates from the SEM
-    # a1: Mean difference in distress (FASt - Non-FASt)
-    fast_mask = df['x_FASt'] == 1
-    nonfast_mask = df['x_FASt'] == 0
-    a1 = weighted_mean(df.loc[fast_mask, 'mean_distress'].values, w[fast_mask]) - weighted_mean(df.loc[nonfast_mask, 'mean_distress'].values, w[nonfast_mask])
-    # b1: Distress-DevAdj slope
-    b1 = weighted_linregress(df['mean_distress'].values, df['mean_devadj'].values, w)[0]
-    # a2: Mean difference in engagement (FASt - Non-FASt)
-    a2 = weighted_mean(df.loc[fast_mask, 'mean_engagement'].values, w[fast_mask]) - weighted_mean(df.loc[nonfast_mask, 'mean_engagement'].values, w[nonfast_mask])
-    # b2: Engagement-DevAdj slope
-    b2 = weighted_linregress(df['mean_engagement'].values, df['mean_devadj'].values, w)[0]
-    
-    ind_distress = a1 * b1
-    ind_engage = a2 * b2
-    total_indirect = ind_distress + ind_engage
-    
-    # Direct effect (unadjusted mean difference)
-    direct = weighted_mean(df.loc[fast_mask, 'mean_devadj'].values, w[fast_mask]) - weighted_mean(df.loc[nonfast_mask, 'mean_devadj'].values, w[nonfast_mask])
-    
-    effects = ['Indirect via\nEmoDiss (a1*b1)', 'Indirect via\nQualEngag (a2*b2)', 'Direct Effect\n(c\')', 'Total Effect\n(c\' + indirect)']
-    values = [ind_distress, ind_engage, direct, direct + total_indirect]
-    colors_bar = [colors['distress'], colors['engagement'], '#7f7f7f', '#2ca02c']  # Red, Blue, Gray, Green
-    
-    bars = ax.barh(effects, values, color=colors_bar)
-    ax.axvline(0, color='black', linewidth=1)
-    ax.set_xlabel('Effect on Developmental Adjustment', fontsize=11)
-    ax.set_title('Effect Decomposition\n(Descriptive bivariate estimates)', fontsize=12, fontweight='bold')
-    
-    # Adjust text positioning - place values inside bars for larger effects
-    for i, (bar, val) in enumerate(zip(bars, values)):
-        bar_width = abs(val)
-        # Place text inside bar if bar is wide enough, otherwise outside
-        if bar_width > 0.05:
-            # Inside the bar - white text for contrast
-            text_x = val / 2  # Center of bar
-            ax.text(text_x, i, f'{val:.3f}', va='center', ha='center', 
-                    fontsize=10, fontweight='bold', color='white')
-        else:
-            # Outside the bar for small values
-            offset = 0.01
-            ax.text(val + offset if val > 0 else val - offset, i, f'{val:.3f}', 
-                    va='center', ha='left' if val > 0 else 'right', fontsize=10)
-    fig9_frames.append(pd.DataFrame({
-        'panel': ['effect_decomposition'] * len(effects),
-        'effect': effects,
-        'value': values
-    }))
-    
-    fig9_data = pd.concat(fig9_frames, ignore_index=True, sort=False) if len(fig9_frames) > 0 else pd.DataFrame([{'panel': np.nan}])
+    fig9_rows = []
+
+    plot_effects_by_z(
+        axes[0, 0],
+        'dir',
+        'Direct Effect (X → DevAdj)\nby Credit Dose',
+        colors['fast'],
+        'direct_by_z',
+        fig9_rows
+    )
+    plot_effects_by_z(
+        axes[0, 1],
+        'ind_EmoDiss',
+        'Indirect via EmoDiss\nby Credit Dose',
+        colors['distress'],
+        'ind_emodiss_by_z',
+        fig9_rows
+    )
+    plot_effects_by_z(
+        axes[1, 0],
+        'ind_QualEngag',
+        'Indirect via QualEngag\nby Credit Dose',
+        colors['engagement'],
+        'ind_qualengag_by_z',
+        fig9_rows
+    )
+    plot_effects_by_z(
+        axes[1, 1],
+        'total',
+        'Total Effect (X → DevAdj)\nby Credit Dose',
+        colors['gains'],
+        'total_by_z',
+        fig9_rows
+    )
+
+    fig9_data = pd.DataFrame(fig9_rows) if fig9_rows else pd.DataFrame([{'panel': np.nan}])
     write_fig_data(outdir, 'fig9_mediation_pathways_data.csv', fig9_data)
-    
-    plt.suptitle('Figure 9 (Descriptive)\nMediation Pathway Analysis', fontsize=14, fontweight='bold', y=1.02)
+
+    plt.suptitle(
+        'Figure 9 (Diagnostic)\nMediation Pathways (SEM)' + (' (PSW Weighted)' if use_weights else ''),
+        fontsize=14,
+        fontweight='bold',
+        y=1.02
+    )
     plt.tight_layout()
-    add_sim_note(fig)
+    add_sim_note(fig, weighted=use_weights)
     plt.savefig(f'{outdir}/fig9_mediation_pathways.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 9: Mediation Pathways saved')
@@ -1030,7 +781,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     fig10_data = pd.DataFrame(fig10_rows) if fig10_rows else pd.DataFrame([{'panel': np.nan}])
     write_fig_data(outdir, 'fig10_intersectionality_data.csv', fig10_data)
     
-    plt.suptitle('Figure 10 (Descriptive)\nIntersectionality Analysis', fontsize=14, fontweight='bold', y=1.02)
+    plt.suptitle('Figure 10 (Diagnostic)\nIntersectionality Analysis', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig)
     plt.savefig(f'{outdir}/fig10_intersectionality.png', dpi=300, bbox_inches='tight')
@@ -1157,7 +908,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     
     write_fig_data(outdir, 'fig11_outcome_profiles_data.csv', pd.DataFrame(fig11_rows))
     
-    plt.suptitle('Figure 11 (Descriptive)\nStudent Outcome Profiles', fontsize=14, fontweight='bold', y=1.02)
+    plt.suptitle('Figure 11 (Diagnostic)\nStudent Outcome Profiles', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig)
     plt.savefig(f'{outdir}/fig11_outcome_profiles.png', dpi=300, bbox_inches='tight')
@@ -1279,7 +1030,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     
     write_fig_data(outdir, 'fig12_cohort_patterns_data.csv', pd.DataFrame(fig12_rows))
     
-    plt.suptitle('Figure 12 (Descriptive)\nCohort Comparison Patterns' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
+    plt.suptitle('Figure 12 (Diagnostic)\nCohort Comparison Patterns' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig, weighted=use_weights)
     plt.savefig(f'{outdir}/fig12_cohort_patterns.png', dpi=300, bbox_inches='tight')

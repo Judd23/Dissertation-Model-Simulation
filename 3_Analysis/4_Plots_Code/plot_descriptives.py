@@ -61,6 +61,26 @@ def weighted_proportion(binary_col, w):
         return np.nan
     return np.average(binary_col[mask], weights=w[mask])
 
+def weighted_corr(x, y, w):
+    """Weighted Pearson correlation."""
+    mask = ~np.isnan(x) & ~np.isnan(y) & ~np.isnan(w)
+    if mask.sum() < 2:
+        return np.nan
+    x = x[mask]
+    y = y[mask]
+    w = w[mask]
+    w_sum = w.sum()
+    if w_sum == 0:
+        return np.nan
+    x_bar = np.sum(w * x) / w_sum
+    y_bar = np.sum(w * y) / w_sum
+    cov = np.sum(w * (x - x_bar) * (y - y_bar)) / w_sum
+    var_x = np.sum(w * (x - x_bar) ** 2) / w_sum
+    var_y = np.sum(w * (y - y_bar) ** 2) / w_sum
+    if var_x <= 0 or var_y <= 0:
+        return np.nan
+    return cov / np.sqrt(var_x * var_y)
+
 def weighted_hist(ax, data, weights, bins=20, **kwargs):
     """Create weighted histogram."""
     mask = ~np.isnan(data) & ~np.isnan(weights)
@@ -383,6 +403,9 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         low_pct = weighted_proportion(low_mask.values, w) * 100
         ax.set_title(f'{label}\n({low_pct:.1f}% low)', fontsize=10, fontweight='bold')
         ax.set_xticks(range(1, sb_max + 1))
+        wtd_mean = weighted_mean(df[col].values, w)
+        wtd_sd = weighted_std(df[col].values, w)
+        wtd_n = np.sum(~np.isnan(df[col].values) & ~np.isnan(w))
         if counts.empty:
             fig4_rows.append({
                 'panel': 'belonging_item',
@@ -390,7 +413,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
                 'variable': col,
                 'response': np.nan,
                 'weighted_count': np.nan,
-                'low_pct': low_pct
+                'low_pct': low_pct,
+                'weighted_mean': wtd_mean,
+                'weighted_sd': wtd_sd,
+                'weighted_n': wtd_n,
+                'scale_min': 1,
+                'scale_max': sb_max
             })
         else:
             for resp, count in counts.items():
@@ -400,7 +428,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
                     'variable': col,
                     'response': resp,
                     'weighted_count': count,
-                    'low_pct': low_pct
+                    'low_pct': low_pct,
+                    'weighted_mean': wtd_mean,
+                    'weighted_sd': wtd_sd,
+                    'weighted_n': wtd_n,
+                    'scale_min': 1,
+                    'scale_max': sb_max
                 })
     
     # Summary belonging (weighted)
@@ -424,7 +457,10 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         fig4_rows.append({
             'panel': 'belonging_summary',
             'item': label,
-            'low_pct': pct
+            'low_pct': pct,
+            'weighted_n': np.nan,
+            'scale_min': 1,
+            'scale_max': sb_max
         })
     
     # Gains items (Perceived Gains) - CYAN (weighted)
@@ -434,18 +470,22 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     pg_max = int(pg_max_raw) if np.isfinite(pg_max_raw) else 4
     means = [weighted_mean(df[c].values, w) for c in pg_cols]
     sds = [weighted_std(df[c].values, w) for c in pg_cols]
+    ns = [np.sum(~np.isnan(df[c].values) & ~np.isnan(w)) for c in pg_cols]
     
     ax = axes[1, 0]
     ax.barh(pg_labels, means, xerr=sds, color=devadj_colors['gains'], capsize=3)
     ax.set_xlabel(f'M ± SD (1-{pg_max} scale)', fontsize=10)
     ax.set_title('Perceived Gains', fontsize=10, fontweight='bold')
     ax.set_xlim(1, pg_max)
-    for label, mean_val, sd_val in zip(pg_labels, means, sds):
+    for label, mean_val, sd_val, n_val in zip(pg_labels, means, sds, ns):
         fig4_rows.append({
             'panel': 'gains',
             'item': label,
             'weighted_mean': mean_val,
-            'weighted_sd': sd_val
+            'weighted_sd': sd_val,
+            'weighted_n': n_val,
+            'scale_min': 1,
+            'scale_max': pg_max
         })
     
     # SE items (Supportive Environment) - PURPLE (weighted)
@@ -455,18 +495,22 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     se_max = int(se_max_raw) if np.isfinite(se_max_raw) else 4
     means = [weighted_mean(df[c].values, w) for c in se_cols]
     sds = [weighted_std(df[c].values, w) for c in se_cols]
+    ns = [np.sum(~np.isnan(df[c].values) & ~np.isnan(w)) for c in se_cols]
     
     ax = axes[1, 1]
     ax.barh(se_labels, means, xerr=sds, color=devadj_colors['support'], capsize=3)
     ax.set_xlabel(f'M ± SD (1-{se_max} scale)', fontsize=10)
     ax.set_title('Supportive Environment', fontsize=10, fontweight='bold')
     ax.set_xlim(1, se_max)
-    for label, mean_val, sd_val in zip(se_labels, means, sds):
+    for label, mean_val, sd_val, n_val in zip(se_labels, means, sds, ns):
         fig4_rows.append({
             'panel': 'support',
             'item': label,
             'weighted_mean': mean_val,
-            'weighted_sd': sd_val
+            'weighted_sd': sd_val,
+            'weighted_n': n_val,
+            'scale_min': 1,
+            'scale_max': se_max
         })
     
     # Satisfaction - BROWN (weighted)
@@ -477,16 +521,20 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     sat_max = int(sat_max_raw) if np.isfinite(sat_max_raw) else 4
     means = [weighted_mean(df[c].values, w) for c in sat_cols]
     sds = [weighted_std(df[c].values, w) for c in sat_cols]
+    ns = [np.sum(~np.isnan(df[c].values) & ~np.isnan(w)) for c in sat_cols]
     ax.barh(sat_labels, means, xerr=sds, color=devadj_colors['satisfaction'], capsize=3)
     ax.set_xlabel(f'M ± SD (1-{sat_max} scale)', fontsize=10)
     ax.set_title('Satisfaction', fontsize=10, fontweight='bold')
     ax.set_xlim(1, sat_max)
-    for label, mean_val, sd_val in zip(sat_labels, means, sds):
+    for label, mean_val, sd_val, n_val in zip(sat_labels, means, sds, ns):
         fig4_rows.append({
             'panel': 'satisfaction',
             'item': label,
             'weighted_mean': mean_val,
-            'weighted_sd': sd_val
+            'weighted_sd': sd_val,
+            'weighted_n': n_val,
+            'scale_min': 1,
+            'scale_max': sat_max
         })
     
     axes[1, 3].axis('off')
@@ -642,78 +690,50 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     write_fig_data(outdir, 'fig5_equity_gaps_data.csv', pd.DataFrame(fig5_rows))
     
     # =========================================================================
-    # FIGURE 6: Correlation Heatmap - Key Variables (grouped by construct)
-    # Note: Spearman correlations are not PSW-weighted (correlation is a bivariate measure)
+    # FIGURE 6: Correlation Heatmap - Spearman (weighted, all analysis variables)
     # =========================================================================
     fig, ax = plt.subplots(figsize=(14, 12))
-    
-    # Organized by conceptual model: X/Z → Mediators → Outcome
-    key_vars = [
-        # Treatment & Moderator
-        'x_FASt', 'credit_dose',
-        # Covariates
-        'firstgen', 'pell',
-        # Mediator 1: Emotional Distress (EmoDiss)
-        'MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial',
-        # Mediator 2: Quality of Engagement (QualEngag)
-        'QIstudent', 'QIfaculty', 'QIadvisor', 'QIstaff', 'QIadmin',
-        # Outcome: DevAdj - Belong
-        'sbvalued', 'sbmyself', 'sbcommunity',
-        # Outcome: DevAdj - Gains
-        'pgthink', 'pganalyze', 'pgwork',
-        # Outcome: DevAdj - Satisf
-        'evalexp', 'sameinst'
-    ]
-    
-    var_labels = [
-        # Treatment & Moderator
-        'X: FASt Status', 'Z: Credit Dose',
-        # Covariates  
-        'First-Gen', 'Pell',
-        # EmoDiss
-        'ED: Academic', 'ED: Lonely', 'ED: Mental', 'ED: Exhaust', 'ED: Sleep', 'ED: Financial',
-        # QualEngag
-        'QE: Students', 'QE: Faculty', 'QE: Advisors', 'QE: Staff', 'QE: Admin',
-        # Belong
-        'Bel: Valued', 'Bel: Myself', 'Bel: Community',
-        # Gains
-        'Gain: Think', 'Gain: Analyze', 'Gain: Work',
-        # Satisf
-        'Sat: Experience', 'Sat: Same Inst'
-    ]
-    
-    # Filter to available columns
-    available = [(v, l) for v, l in zip(key_vars, var_labels) if v in df.columns]
-    key_vars = [v for v, l in available]
-    var_labels = [l for v, l in available]
-    
-    corr_matrix = df[key_vars].corr(method='spearman')
+
+    analysis_cols = [c for c in df.columns if c != weight_col]
+    corr_df = df[analysis_cols].copy()
+    if use_weights:
+        ranks = corr_df.rank(method='average', na_option='keep')
+        corr_matrix = pd.DataFrame(index=analysis_cols, columns=analysis_cols, dtype=float)
+        for col_i in analysis_cols:
+            xi = ranks[col_i].values
+            mask_i = ~np.isnan(xi) & ~np.isnan(w)
+            if not np.any(mask_i):
+                corr_matrix.loc[col_i, :] = np.nan
+                continue
+            for col_j in analysis_cols:
+                yj = ranks[col_j].values
+                mask = mask_i & ~np.isnan(yj)
+                if mask.sum() < 2:
+                    corr_matrix.loc[col_i, col_j] = np.nan
+                    continue
+                corr_matrix.loc[col_i, col_j] = weighted_corr(xi[mask], yj[mask], w[mask])
+    else:
+        corr_matrix = corr_df.corr(method='spearman')
+
     write_fig_data(outdir, 'fig6_correlation_heatmap_data.csv', corr_matrix, index=True)
 
     # Use a diverging colormap where RED = positive, BLUE = negative
     # (common interpretation for correlation heatmaps)
     im = ax.imshow(corr_matrix, cmap='RdBu', vmin=-1, vmax=1)
-    ax.set_xticks(range(len(var_labels)))
-    ax.set_yticks(range(len(var_labels)))
-    ax.set_xticklabels(var_labels, rotation=45, ha='right', fontsize=8)
-    ax.set_yticklabels(var_labels, fontsize=8)
+    ax.set_xticks(range(len(analysis_cols)))
+    ax.set_yticks(range(len(analysis_cols)))
+    ax.set_xticklabels(analysis_cols, rotation=45, ha='right', fontsize=7)
+    ax.set_yticklabels(analysis_cols, fontsize=7)
     
     # Add correlation values
-    for i in range(len(var_labels)):
-        for j in range(len(var_labels)):
+    for i in range(len(analysis_cols)):
+        for j in range(len(analysis_cols)):
             val = corr_matrix.iloc[i, j]
             color = 'white' if abs(val) > 0.4 else 'black'
             ax.text(j, i, f'{val:.2f}', ha='center', va='center', color=color, fontsize=6)
-    
-    # Add construct separator lines
-    separators = [2, 4, 10, 15, 18, 21]  # After each construct group
-    for sep in separators:
-        if sep < len(var_labels):
-            ax.axhline(sep - 0.5, color='black', linewidth=1.5)
-            ax.axvline(sep - 0.5, color='black', linewidth=1.5)
-    
-    plt.colorbar(im, ax=ax, label='Spearman rho (red=positive, blue=negative)', shrink=0.8)
-    ax.set_title('Figure 6\nCorrelation Matrix by Construct\n(X/Z | Covariates | EmoDiss | QualEngag | Belong | Gains | Satisf)', 
+
+    plt.colorbar(im, ax=ax, label='Spearman rho (weighted)', shrink=0.8)
+    ax.set_title('Figure 6\nSpearman Correlation Matrix (All Analysis Variables)', 
                  fontsize=14, fontweight='bold')
     plt.tight_layout()
     add_sim_note(fig, y_offset=0.01)

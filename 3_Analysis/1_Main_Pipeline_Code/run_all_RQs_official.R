@@ -1729,12 +1729,15 @@ figure_sources <- data.frame(
     file.path(OUT_FIGURES, "standards_data.json")
   ),
   source_inputs = c(
-    rep(file.path(out_main, "rep_data_with_psw.csv"), 12),
+    rep(file.path(out_main, "rep_data_with_psw.csv"), 7),
+    rep(file.path(out_main, "structural", "structural_parameterEstimates.txt"), 2),
+    rep(file.path(out_main, "rep_data_with_psw.csv"), 3),
     file.path(out_main, "psw_balance_smd.txt"),
     rep(file.path(out_main, "structural", "structural_fitMeasures.txt"), 3)
   ),
   figure_type = c(
-    rep("descriptive", 13),
+    rep("descriptive", 7),
+    rep("diagnostic", 6),
     rep("lavaan", 3)
   ),
   stringsAsFactors = FALSE
