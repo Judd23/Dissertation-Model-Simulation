@@ -24,7 +24,8 @@
   text-align: center;
 }
 
-.header h1 {
+.header h1,
+.header .title {
   font-size: clamp(1.75rem, 4vw, var(--font-size-3xl));
   margin-bottom: var(--spacing-md);
   text-align: center;
