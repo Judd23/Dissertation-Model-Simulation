@@ -17,11 +17,13 @@ from datetime import datetime
 
 try:
     from docx import Document
+    from docx.document import Document as DocumentClass
     from docx.shared import Pt, Inches
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     HAS_DOCX = True
 except ImportError:
     HAS_DOCX = False
+    DocumentClass = None  # type: ignore[misc,assignment]
     print("Warning: python-docx not installed. Install with: pip install python-docx")
 
 try:
@@ -31,14 +33,14 @@ except ImportError:
     HAS_PANDAS = False
 
 
-def add_heading(doc: "Document", text: str, level: int = 1) -> None:
+def add_heading(doc: "DocumentClass", text: str, level: int = 1) -> None:
     """Add a heading with consistent formatting."""
     heading = doc.add_heading(text, level=level)
     if hasattr(heading, 'runs') and heading.runs:
         heading.runs[0].font.name = 'Times New Roman'
 
 
-def add_paragraph(doc: "Document", text: str, bold: bool = False, italic: bool = False) -> None:
+def add_paragraph(doc: "DocumentClass", text: str, bold: bool = False, italic: bool = False) -> None:
     """Add a paragraph with optional formatting."""
     p = doc.add_paragraph()
     run = p.add_run(text)
@@ -76,7 +78,7 @@ def format_effect(est: float, ci_lower: float, ci_upper: float, sig: bool) -> st
     return f"β = {est:.3f}{sig_marker}, 95% CI [{ci_lower:.3f}, {ci_upper:.3f}]"
 
 
-def build_summary(doc: "Document", outdir: Path, B: int, ci_type: str) -> None:
+def build_summary(doc: "DocumentClass", outdir: Path, B: int, ci_type: str) -> None:
     """Build the plain language summary content."""
     
     # Title

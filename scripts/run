@@ -9,16 +9,19 @@
 #   ./scripts/run Full_Deploy  # Production run (full bootstrap)
 #
 # Requirements:
-#   - Docker (for rocker/verse R environment)
+#   - Docker (for rocker/verse R environment) OR SKIP_DOCKER=1
 #   - Python 3.9+ with .venv at repo root
 #
 # Environment Variables (optional):
 #   RUN_ID        Override auto-generated run ID
 #   SKIP_DOCKER   Set to 1 to run R locally instead of in Docker
+#   BOOT_NCPUS    Number of CPU cores for bootstrap (default: 4)
+#   SKIP_RQ4      Set to 1 to skip RQ4 measurement invariance
+#   SKIP_RQ4_STRUCT_MG  Set to 1 to skip RQ4 structural multi-group
 #
 # ==============================================================================
 
-set -euo pipefail
+set -eo pipefail
 
 # -----------------------------------------------------------------------------
 # Configuration
@@ -26,13 +29,6 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-
-# Mode defaults (can be overridden by mode argument)
-declare -A BOOTSTRAP_SETTINGS=(
-  [smoke]="B_BOOT_MAIN=10 B_BOOT_MG=4 BOOT_CI_TYPE_MAIN=perc"
-  [main]="B_BOOT_MAIN=500 B_BOOT_MG=4 BOOT_CI_TYPE_MAIN=bca.simple"
-  [Full_Deploy]="B_BOOT_MAIN=2000 B_BOOT_MG=100 BOOT_CI_TYPE_MAIN=bca.simple"
-)
 
 # Colors for output
 RED='\033[0;31m'
@@ -90,12 +86,29 @@ check_dependencies() {
 main() {
   local mode="${1:-smoke}"
   
-  # Validate mode
-  if [[ ! "${BOOTSTRAP_SETTINGS[$mode]+isset}" ]]; then
-    log_error "Invalid mode: $mode"
-    echo "Valid modes: smoke, main, Full_Deploy"
-    exit 1
-  fi
+  # Validate mode and set bootstrap settings
+  case "$mode" in
+    smoke)
+      B_BOOT_MAIN="${B_BOOT_MAIN:-10}"
+      B_BOOT_MG="${B_BOOT_MG:-4}"
+      BOOT_CI_TYPE_MAIN="${BOOT_CI_TYPE_MAIN:-perc}"
+      ;;
+    main)
+      B_BOOT_MAIN="${B_BOOT_MAIN:-500}"
+      B_BOOT_MG="${B_BOOT_MG:-4}"
+      BOOT_CI_TYPE_MAIN="${BOOT_CI_TYPE_MAIN:-bca.simple}"
+      ;;
+    Full_Deploy)
+      B_BOOT_MAIN="${B_BOOT_MAIN:-2000}"
+      B_BOOT_MG="${B_BOOT_MG:-100}"
+      BOOT_CI_TYPE_MAIN="${BOOT_CI_TYPE_MAIN:-bca.simple}"
+      ;;
+    *)
+      log_error "Invalid mode: $mode"
+      echo "Valid modes: smoke, main, Full_Deploy"
+      exit 1
+      ;;
+  esac
   
   log_info "Starting pipeline in '$mode' mode..."
   
@@ -110,16 +123,17 @@ main() {
   log_info "Run ID: $run_id"
   log_info "Run Mode: $mode"
   
-  # Parse bootstrap settings for this mode
-  local settings="${BOOTSTRAP_SETTINGS[$mode]}"
-  for setting in $settings; do
-    export "$setting"
-  done
+  # Export bootstrap settings
+  export B_BOOT_MAIN
+  export B_BOOT_MG
+  export BOOT_CI_TYPE_MAIN
   
   # Set common environment variables
-  export MANIFEST_FIRST_PYTHON=FALSE  # Use legacy mode (Python called from R)
-  export SKIP_WEBAPP_SYNC=FALSE       # Enable sync to webapp
+  export MANIFEST_FIRST_PYTHON="${MANIFEST_FIRST_PYTHON:-FALSE}"
+  export SKIP_WEBAPP_SYNC="${SKIP_WEBAPP_SYNC:-FALSE}"
   export BOOT_NCPUS="${BOOT_NCPUS:-4}"
+  export SKIP_RQ4="${SKIP_RQ4:-0}"
+  export SKIP_RQ4_STRUCT_MG="${SKIP_RQ4_STRUCT_MG:-0}"
   
   # Define output paths
   local run_dir="$REPO_ROOT/4_Model_Results/Outputs/runs/$run_id"
