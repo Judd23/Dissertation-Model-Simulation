@@ -126,7 +126,44 @@
         "pvalue": 0.842610588763325,
         "std_estimate": 0.0042
       }
-    ]
+    ],
+    "sourcePaths": {
+      "parameterEstimates": "4_Model_Results/Outputs/RQ1_RQ3_main/structural/structural_parameterEstimates.txt",
+      "fitMeasures": "4_Model_Results/Outputs/RQ1_RQ3_main/structural/structural_fitMeasures.txt"
+    }
+  },
+  "totalEffectModel": {
+    "fitMeasures": {
+      "df": 319.0,
+      "chisq": 2503.1433,
+      "pvalue": 0.0,
+      "cfi": 0.9789,
+      "tli": 0.9768,
+      "rmsea": 0.037,
+      "srmr": 0.1405,
+      "cfi.scaled": 0.9797,
+      "tli.scaled": 0.9776,
+      "rmsea.scaled": 0.0317,
+      "cfi.robust": 0.9807,
+      "tli.robust": 0.9788,
+      "rmsea.robust": 0.0362
+    },
+    "structuralPaths": [
+      {
+        "id": "c_total",
+        "from": "x_FASt",
+        "to": "DevAdj",
+        "estimate": -0.0216,
+        "se": 0.0166,
+        "z": -1.295,
+        "pvalue": 0.195269006080688,
+        "std_estimate": -0.032
+      }
+    ],
+    "sourcePaths": {
+      "parameterEstimates": "4_Model_Results/Outputs/A0_total_effect/structural/structural_parameterEstimates.txt",
+      "fitMeasures": "4_Model_Results/Outputs/A0_total_effect/structural/structural_fitMeasures.txt"
+    }
   },
   "bootstrap": {
     "n_replicates": 2000,

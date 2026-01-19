@@ -927,7 +927,7 @@ def table7_cfa(doc, table_num, data_dir, compact=True):
                 if not x:
                     return x
                 if x.startswith(' '):
-                    return '  ' + get_label(x.strip())
+                    return '  'get_label(x.strip())
                 return get_label(x.strip())
             df['Item/Factor'] = df['Item/Factor'].apply(format_item)
         data_rows = df.values.tolist()

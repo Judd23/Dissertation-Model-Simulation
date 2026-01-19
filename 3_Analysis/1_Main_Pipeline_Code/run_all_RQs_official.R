@@ -180,6 +180,8 @@ if (isTRUE(TABLE_CHECK_MODE)) {
 
 # Smoke mode: run only A0/A/A1 with a small bootstrap and cheap CIs, skip RUN B/C2/C
 SMOKE_ONLY_A <- env_flag("SMOKE_ONLY_A", FALSE)
+# Skip all RQ4 blocks (RUN B/C2/C) without enabling smoke overrides
+SKIP_RQ4 <- env_flag("SKIP_RQ4", FALSE)
 SMOKE_B_BOOT <- suppressWarnings(as.integer(Sys.getenv(
   "SMOKE_B_BOOT",
   unset = if (isTRUE(TABLE_CHECK_MODE)) "10" else "10"  # 10 is sufficient for smoke (just verify syntax)
@@ -1140,6 +1142,48 @@ fit_main <- fit_mg_fast_vs_nonfast_with_outputs(
   ncpus = if (B_BOOT_MAIN > 0) BOOT_NCPUS else 1
 )
 
+# -----------------------------------------------------------------------------
+# Export bootstrap-ready results for Dissertation_Tables.docx
+#   build_dissertation_tables.py expects OUT_BASE/bootstrap_results.csv
+#   Source = the already-exported structural_parameterEstimates.txt
+# -----------------------------------------------------------------------------
+message("\n=== Exporting bootstrap_results.csv (for dissertation tables) ===")
+BOOTSTRAP_RESULTS_CSV <- file.path(OUT_BASE, "bootstrap_results.csv")
+BOOTSTRAP_SOURCE_TSV <- file.path(out_main, "structural", "structural_parameterEstimates.txt")
+if (file.exists(BOOTSTRAP_SOURCE_TSV)) {
+  pe <- tryCatch(read.delim(BOOTSTRAP_SOURCE_TSV, stringsAsFactors = FALSE), error = function(e) NULL)
+  if (!is.null(pe) && is.data.frame(pe) && nrow(pe) > 0) {
+    param <- rep(NA_character_, nrow(pe))
+    is_def <- !is.na(pe$op) & pe$op == ":="
+    param[is_def] <- as.character(pe$lhs[is_def])
+    has_label <- (!is_def) & ("label" %in% names(pe)) & !is.na(pe$label) & nzchar(pe$label)
+    param[has_label] <- as.character(pe$label[has_label])
+
+    out_boot <- data.frame(
+      parameter = param,
+      est = if ("est" %in% names(pe)) pe$est else NA_real_,
+      boot_se = if ("se" %in% names(pe)) pe$se else NA_real_,
+      ci_lower = if ("ci.lower" %in% names(pe)) pe$ci.lower else NA_real_,
+      ci_upper = if ("ci.upper" %in% names(pe)) pe$ci.upper else NA_real_,
+      stringsAsFactors = FALSE
+    )
+    out_boot <- out_boot[!is.na(out_boot$parameter) & nzchar(out_boot$parameter), , drop = FALSE]
+    out_boot <- out_boot[!duplicated(out_boot$parameter), , drop = FALSE]
+    out_boot$sig <- with(
+      out_boot,
+      (!is.na(ci_lower) & !is.na(ci_upper)) &
+        ((ci_lower > 0 & ci_upper > 0) | (ci_lower < 0 & ci_upper < 0))
+    )
+
+    utils::write.csv(out_boot, file = BOOTSTRAP_RESULTS_CSV, row.names = FALSE, na = "NA")
+    message("Wrote: ", BOOTSTRAP_RESULTS_CSV)
+  } else {
+    warning("Could not parse: ", BOOTSTRAP_SOURCE_TSV)
+  }
+} else {
+  warning("Bootstrap source not found: ", BOOTSTRAP_SOURCE_TSV)
+}
+
 # -------------------------
 # Sensitivity: unweighted parallel fit (for Table 12)
 # -------------------------
@@ -1179,8 +1223,12 @@ fit_serial <- fit_mg_fast_vs_nonfast_with_outputs(
   ncpus = if (B_BOOT_SERIAL > 0) BOOT_NCPUS else 1
 )
 
-if (isTRUE(SMOKE_ONLY_A)) {
-  message("[SMOKE] SMOKE_ONLY_A=TRUE: completed A0/A/A1 only; skipping RUN B/C2/C.")
+if (isTRUE(SMOKE_ONLY_A) || isTRUE(SKIP_RQ4)) {
+  message(if (isTRUE(SMOKE_ONLY_A)) {
+    "[SMOKE] SMOKE_ONLY_A=TRUE: completed A0/A/A1 only; skipping RUN B/C2/C."
+  } else {
+    "[SKIP_RQ4] SKIP_RQ4=TRUE: completed A0/A/A1 only; skipping RUN B/C2/C."
+  })
   W_VARS_MEAS_OK <- character(0)
   W_VARS_STRUCT_OK <- character(0)
 } else {
@@ -1464,6 +1512,7 @@ cat("TREATMENT_VAR: ", TREATMENT_VAR, "\n", sep = "")
 cat("DO_PSW: ", DO_PSW, "\n", sep = "")
 cat("TABLE_CHECK_MODE: ", TABLE_CHECK_MODE, "\n", sep = "")
 cat("SMOKE_ONLY_A: ", SMOKE_ONLY_A, "\n", sep = "")
+cat("SKIP_RQ4: ", SKIP_RQ4, "\n", sep = "")
 cat("SKIP_POST_PROCESSING: ", SKIP_POST_PROCESSING, "\n", sep = "")
 cat("SKIP_RQ4_STRUCT_MG: ", SKIP_RQ4_STRUCT_MG, "\n", sep = "")
 cat("B_BOOT_MAIN: ", B_BOOT_MAIN, "\n", sep = "")
@@ -1619,6 +1668,33 @@ if (deep_result == 0) {
   message("Deep-cut plots saved to: ", OUT_FIGURES)
 } else {
   warning("plot_deep_cuts.py failed (exit code ", deep_result, ")")
+}
+
+# =============================================================================
+# Webapp JSON exports (webapp/public/data)
+# =============================================================================
+message("\n=== Exporting webapp fetch JSONs ===")
+WEBAPP_DATA_DIR <- file.path("webapp", "public", "data")
+dir.create(WEBAPP_DATA_DIR, recursive = TRUE, showWarnings = FALSE)
+
+webapp_cmd <- sprintf(
+  "PYTHONDONTWRITEBYTECODE=1 python3 webapp/scripts/transform-results.py"
+)
+webapp_result <- system(webapp_cmd, intern = FALSE)
+if (webapp_result == 0) {
+  message("Webapp model JSONs written to: ", WEBAPP_DATA_DIR)
+} else {
+  warning("transform-results.py failed (exit code ", webapp_result, ")")
+}
+
+fast_cmd <- sprintf(
+  "PYTHONDONTWRITEBYTECODE=1 python3 webapp/scripts/generate_fast_comparison.py"
+)
+fast_result <- system(fast_cmd, intern = FALSE)
+if (fast_result == 0) {
+  message("Webapp fastComparison.json written to: ", WEBAPP_DATA_DIR)
+} else {
+  warning("generate_fast_comparison.py failed (exit code ", fast_result, ")")
 }
 
 }  # end if (!SKIP_POST_PROCESSING)

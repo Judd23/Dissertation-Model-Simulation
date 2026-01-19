@@ -222,7 +222,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax = axes[0, 0]
     risk_weights = weighted_value_counts(df['risk_count'], w)
     risk_weights = risk_weights.sort_index()
-    total_weight = w.sum()
+    total_weight = np.sum(w)
     # Gray gradient: more risk factors = darker
     risk_colors = ['#cccccc', '#999999', '#666666', '#444444', '#222222']
     bars = ax.bar(risk_weights.index, risk_weights.values, 
