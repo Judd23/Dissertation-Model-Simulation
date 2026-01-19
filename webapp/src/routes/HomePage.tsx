@@ -35,6 +35,7 @@ function describeEffectSize(beta: number): string {
 export default function HomePage() {
   const { sampleSize, fitMeasures, paths, fastPercent } = useModelData();
   const { refreshModelData, isRefreshing } = useModelDataActions();
+  const refreshLabel = isRefreshing ? "Refreshing data" : "Refresh data";
 
   // Derive key findings dynamically from pipeline data
   const keyFindings = {
@@ -93,6 +94,28 @@ export default function HomePage() {
             </GlossaryTerm>
             .
           </p>
+          <div
+            className={styles.actions}
+            role="group"
+            aria-label="Get started with the research"
+          >
+            <InteractiveSurface
+              as="link"
+              to="/pathway"
+              className="button button-primary button-lg interactiveSurface"
+              aria-label="Explore the pathway diagram showing how credits affect student outcomes"
+            >
+              Explore the Connections
+            </InteractiveSurface>
+            <InteractiveSurface
+              as="link"
+              to="#findings-heading"
+              className="button button-secondary button-lg interactiveSurface"
+              aria-label="Jump to the key findings section"
+            >
+              See Key Findings
+            </InteractiveSurface>
+          </div>
         </div>
       </motion.section>
 
@@ -105,6 +128,9 @@ export default function HomePage() {
         variants={containerVariants}
       >
         <div className="container">
+          <p className={styles.statsContext}>
+            Model summary from the latest CSU first-year dataset refresh.
+          </p>
           <div className={styles.statsGrid}>
             <motion.div variants={itemVariants}>
               <StatCard
@@ -160,9 +186,10 @@ export default function HomePage() {
               type="button"
               className="button button-secondary button-sm interactiveSurface"
               onClick={handleRefreshData}
-              aria-label="Refresh data from the latest model run"
+              aria-label={`${refreshLabel} from the latest model run`}
+              disabled={isRefreshing}
             >
-              Refresh data
+              {refreshLabel}
             </InteractiveSurface>
           </div>
         </div>
@@ -181,6 +208,11 @@ export default function HomePage() {
           <h2 id="findings-heading" className={styles.findingsTitle}>
             Key Findings
           </h2>
+          <div className={styles.findingsNav} aria-label="Key findings">
+            <a href="#finding-1-title">01 Stress</a>
+            <a href="#finding-2-title">02 Engagement</a>
+            <a href="#finding-3-title">03 Credits</a>
+          </div>
           <hr className="section-divider" aria-hidden="true" />
         </div>
 
@@ -468,6 +500,9 @@ export default function HomePage() {
         variants={revealVariantsScale}
       >
         <div className="container">
+          <p className={styles.nextStepIntro}>
+            Ready for the equity lens? This is the best place to continue.
+          </p>
           <h2 id="next-step-heading">Next: Explore Equity Differences</h2>
           <p>
             Start with the equity frame to see how effects differ across race,
