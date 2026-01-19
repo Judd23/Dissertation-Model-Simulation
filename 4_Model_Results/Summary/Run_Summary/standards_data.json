@@ -10,7 +10,7 @@
   "cfi_robust": 0.9973,
   "tli_robust": 0.997,
   "rmsea_robust": 0.0101,
-  "bootstrap_b": 2000,
-  "bootstrap_converged": 2000,
+  "bootstrap_b": 10,
+  "bootstrap_converged": 10,
   "bootstrap_pct": 100
 }

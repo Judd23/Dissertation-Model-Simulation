@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "run_id": "run_20260119_144223",
+    "timestamp": "2026-01-19T14:46:28",
+    "label": "smoke - run_20260119_144223",
+    "manifest_path": "run_20260119_144223/manifest.json"
+  }
+]
