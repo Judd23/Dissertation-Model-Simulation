@@ -1126,10 +1126,12 @@ fit_total <- fit_mg_fast_vs_nonfast_with_outputs(
   ncpus = if (B_BOOT_TOTAL > 0) BOOT_NCPUS else 1
 )
 
+BOOTSTRAP_RESULTS_CSV <- file.path(OUT_BASE, "bootstrap_results.csv")
 fit_main <- fit_mg_fast_vs_nonfast_with_outputs(
   dat = dat_main,
   out_dir = file.path(out_main, "structural"),
   model_type = "parallel",
+  bootstrap_results_out = BOOTSTRAP_RESULTS_CSV,
   estimator = "ML",
   missing = "fiml",
   fixed.x = TRUE,

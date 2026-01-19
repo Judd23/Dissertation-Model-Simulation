@@ -1,0 +1,55 @@
+Wrote verification checklist: 4_Model_Results/Outputs/logs/verification_checklist.txt
+[living18] levels after cleaning: Off-campus (rent/apartment), On-campus (residence hall), With family (commuting)
+[RQ4 structural MG] Skipped via SKIP_RQ4_STRUCT_MG=TRUE.
+There were 14 warnings (use warnings() to see them)
+
+=== Generating Standards Compliance Visualizations ===
+Wrote standards data: 4_Model_Results/Figures/standards_data.json
+Matplotlib is building the font cache; this may take a moment.
+Loaded data from: 4_Model_Results/Figures/standards_data.json
+Saved: 4_Model_Results/Figures/standards_compliance_dashboard.png
+Saved: 4_Model_Results/Figures/standards_compliance_dashboard.pdf
+Saved: 4_Model_Results/Figures/standards_sample_modelfit.png
+Saved: 4_Model_Results/Figures/standards_bootstrap_effects.png
+
+✅ Professional standards visualizations complete!
+Standards visualizations saved to: 4_Model_Results/Figures
+
+=== Building Bootstrap Tables ===
+/Users/jjohnson3/Documents/GitHub/Dissertation-Model-Simulation_clean/3_Analysis/3_Tables_Code/build_bootstrap_tables.py:46: FutureWarning: Truth-testing of elements was a source of confusion and will always return True in future versions. Use specific 'len(elem)' or 'elem is not None' test instead.
+  tblPr = tbl.tblPr or parse_xml(r'<w:tblPr %s/>' % nsdecls('w'))
+Wrote: 4_Model_Results/Tables/Bootstrap_Tables.docx
+Tables: 3 | B = 2,000 | CI = bca.simple
+Bootstrap tables saved to: 4_Model_Results/Tables
+
+=== Generating Descriptive Plots ===
+✓ Using PSW weights from column 'psw'
+✓ Figure 1: Demographics saved
+✓ Figure 2: Emotional Distress saved
+✓ Figure 3: Quality of Engagement saved
+✓ Figure 4: Developmental Adjustment saved
+✓ Figure 5: Equity Gaps saved
+✓ Figure 6: Correlation Heatmap saved
+✓ Figure 13: Love Plot saved
+
+✓ All figures saved to 4_Model_Results/Figures/
+Descriptive plots saved to: 4_Model_Results/Figures
+✓ Using PSW weights from column 'psw'
+✓ Figure 7: Cumulative Risk Analysis saved
+✓ Figure 8: Credit Dose Moderation saved
+✓ Figure 9: Mediation Pathways saved
+✓ Figure 10: Intersectionality Analysis saved
+✓ Figure 11: Outcome Profiles saved
+✓ Figure 12: Cohort Patterns saved
+
+✓ All deep-cut figures saved to 4_Model_Results/Figures/
+Deep-cut plots saved to: 4_Model_Results/Figures
+[1] TRUE
+[1] TRUE
+[1] TRUE
+[1] TRUE
+[1] TRUE
+[1] TRUE
+[1] TRUE
+[1] TRUE
+ALL RQs run complete. Outputs under: 4_Model_Results/Outputs
