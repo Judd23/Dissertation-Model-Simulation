@@ -7,7 +7,7 @@ import PathwayDiagram from "../features/charts/PathwayDiagram";
 import DataTimestamp from "../components/ui/DataTimestamp";
 import { InteractiveSurface } from "../components/ui/InteractiveSurface";
 import { Link } from "react-router-dom";
-import { useModelData } from "../app/contexts";
+import { useModelData, useModelDataActions } from "../app/contexts";
 import {
   revealVariantsScale,
   containerVariants,
@@ -34,6 +34,7 @@ function describeEffectSize(beta: number): string {
 
 export default function HomePage() {
   const { sampleSize, fitMeasures, paths, fastPercent } = useModelData();
+  const { refreshModelData, isRefreshing } = useModelDataActions();
 
   // Derive key findings dynamically from pipeline data
   const keyFindings = {
@@ -88,6 +89,17 @@ export default function HomePage() {
             </GlossaryTerm>
             .
           </p>
+          <div className="cta-container">
+            <button
+              type="button"
+              className="button button-secondary button-sm interactiveSurface"
+              onClick={refreshModelData}
+              disabled={isRefreshing}
+              aria-busy={isRefreshing}
+            >
+              {isRefreshing ? "Refreshing…" : "Refresh data"}
+            </button>
+          </div>
         </div>
       </motion.section>
 
