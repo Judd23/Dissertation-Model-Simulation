@@ -1,0 +1,143 @@
+{
+  "overall": {
+    "n": 5000,
+    "fast_n": 1321,
+    "nonfast_n": 3679
+  },
+  "demographics": {
+    "race": {
+      "Hispanic/Latino": {
+        "fast": {
+          "n": 632,
+          "pct": 47.8
+        },
+        "nonfast": {
+          "n": 2068,
+          "pct": 56.2
+        }
+      },
+      "White": {
+        "fast": {
+          "n": 183,
+          "pct": 13.9
+        },
+        "nonfast": {
+          "n": 553,
+          "pct": 15.0
+        }
+      },
+      "Asian": {
+        "fast": {
+          "n": 349,
+          "pct": 26.4
+        },
+        "nonfast": {
+          "n": 477,
+          "pct": 13.0
+        }
+      },
+      "Black/African American": {
+        "fast": {
+          "n": 34,
+          "pct": 2.6
+        },
+        "nonfast": {
+          "n": 166,
+          "pct": 4.5
+        }
+      },
+      "Other/Multiracial/Unknown": {
+        "fast": {
+          "n": 123,
+          "pct": 9.3
+        },
+        "nonfast": {
+          "n": 415,
+          "pct": 11.3
+        }
+      }
+    },
+    "firstgen": {
+      "yes": {
+        "fast": {
+          "n": 554,
+          "pct": 41.9
+        },
+        "nonfast": {
+          "n": 1823,
+          "pct": 49.6
+        }
+      },
+      "no": {
+        "fast": {
+          "n": 767,
+          "pct": 58.1
+        },
+        "nonfast": {
+          "n": 1856,
+          "pct": 50.4
+        }
+      }
+    },
+    "pell": {
+      "yes": {
+        "fast": {
+          "n": 618,
+          "pct": 46.8
+        },
+        "nonfast": {
+          "n": 2013,
+          "pct": 54.7
+        }
+      },
+      "no": {
+        "fast": {
+          "n": 703,
+          "pct": 53.2
+        },
+        "nonfast": {
+          "n": 1666,
+          "pct": 45.3
+        }
+      }
+    },
+    "sex": {
+      "women": {
+        "fast": {
+          "n": 0,
+          "pct": 0.0
+        },
+        "nonfast": {
+          "n": 0,
+          "pct": 0.0
+        }
+      },
+      "men": {
+        "fast": {
+          "n": 0,
+          "pct": 0.0
+        },
+        "nonfast": {
+          "n": 0,
+          "pct": 0.0
+        }
+      }
+    },
+    "transferCredits": {
+      "fast": {
+        "mean": 33.3,
+        "sd": 16.5,
+        "min": 12,
+        "max": 80,
+        "median": 30.0
+      },
+      "nonfast": {
+        "mean": 5.5,
+        "sd": 3.4,
+        "min": 0,
+        "max": 11,
+        "median": 6.0
+      }
+    }
+  }
+}

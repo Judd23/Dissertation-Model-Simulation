@@ -180,6 +180,8 @@ if (isTRUE(TABLE_CHECK_MODE)) {
 
 # Smoke mode: run only A0/A/A1 with a small bootstrap and cheap CIs, skip RUN B/C2/C
 SMOKE_ONLY_A <- env_flag("SMOKE_ONLY_A", FALSE)
+# Skip all RQ4 blocks (RUN B/C2/C) without enabling smoke overrides
+SKIP_RQ4 <- env_flag("SKIP_RQ4", FALSE)
 SMOKE_B_BOOT <- suppressWarnings(as.integer(Sys.getenv(
   "SMOKE_B_BOOT",
   unset = if (isTRUE(TABLE_CHECK_MODE)) "10" else "10"  # 10 is sufficient for smoke (just verify syntax)
@@ -1221,8 +1223,12 @@ fit_serial <- fit_mg_fast_vs_nonfast_with_outputs(
   ncpus = if (B_BOOT_SERIAL > 0) BOOT_NCPUS else 1
 )
 
-if (isTRUE(SMOKE_ONLY_A)) {
-  message("[SMOKE] SMOKE_ONLY_A=TRUE: completed A0/A/A1 only; skipping RUN B/C2/C.")
+if (isTRUE(SMOKE_ONLY_A) || isTRUE(SKIP_RQ4)) {
+  message(if (isTRUE(SMOKE_ONLY_A)) {
+    "[SMOKE] SMOKE_ONLY_A=TRUE: completed A0/A/A1 only; skipping RUN B/C2/C."
+  } else {
+    "[SKIP_RQ4] SKIP_RQ4=TRUE: completed A0/A/A1 only; skipping RUN B/C2/C."
+  })
   W_VARS_MEAS_OK <- character(0)
   W_VARS_STRUCT_OK <- character(0)
 } else {
@@ -1506,6 +1512,7 @@ cat("TREATMENT_VAR: ", TREATMENT_VAR, "\n", sep = "")
 cat("DO_PSW: ", DO_PSW, "\n", sep = "")
 cat("TABLE_CHECK_MODE: ", TABLE_CHECK_MODE, "\n", sep = "")
 cat("SMOKE_ONLY_A: ", SMOKE_ONLY_A, "\n", sep = "")
+cat("SKIP_RQ4: ", SKIP_RQ4, "\n", sep = "")
 cat("SKIP_POST_PROCESSING: ", SKIP_POST_PROCESSING, "\n", sep = "")
 cat("SKIP_RQ4_STRUCT_MG: ", SKIP_RQ4_STRUCT_MG, "\n", sep = "")
 cat("B_BOOT_MAIN: ", B_BOOT_MAIN, "\n", sep = "")

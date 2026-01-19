@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-01-19T00:20:08.833836",
+  "generatedAtFormatted": "January 19, 2026 at 12:20 AM",
+  "generatedAtShort": "2026-01-19 00:20",
+  "pipelineVersion": "1.0.0",
+  "dataSource": "run_all_RQs_official.R",
+  "bootstrapReplicates": 2000,
+  "ciType": "bca.simple",
+  "pipelineRunId": "20260119002008",
+  "inputFiles": [
+    {
+      "path": "/Users/jjohnson3/Documents/GitHub/Dissertation-Model-Simulation_clean/4_Model_Results/Outputs/RQ1_RQ3_main/structural/structural_parameterEstimates.txt",
+      "exists": true,
+      "modifiedAt": "2026-01-18T22:39:06.897227"
+    },
+    {
+      "path": "/Users/jjohnson3/Documents/GitHub/Dissertation-Model-Simulation_clean/4_Model_Results/Outputs/RQ1_RQ3_main/structural/structural_fitMeasures.txt",
+      "exists": true,
+      "modifiedAt": "2026-01-18T22:39:06.893449"
+    },
+    {
+      "path": "/Users/jjohnson3/Documents/GitHub/Dissertation-Model-Simulation_clean/1_Dataset/rep_data.csv",
+      "exists": true,
+      "modifiedAt": "2026-01-18T15:46:17.498697"
+    },
+    {
+      "path": "/Users/jjohnson3/Documents/GitHub/Dissertation-Model-Simulation_clean/2_Codebooks/Variable_Table.csv",
+      "exists": true,
+      "modifiedAt": "2026-01-10T20:29:53"
+    }
+  ]
+}
