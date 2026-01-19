@@ -990,68 +990,6 @@ write_lavaan_txt_tables <- function(fit, out_dir, prefix, boot_ci_type = NULL) {
   invisible(list(fitMeasures = fm, parameterEstimates = pe, standardizedSolution = ss, r2 = r2))
 }
 
-# Helper: export bootstrap-ready results for dissertation tables
-write_bootstrap_results_csv <- function(fit, out_csv, boot_ci_type = NULL) {
-  if (is.null(out_csv) || !is.character(out_csv) || length(out_csv) != 1 || !nzchar(out_csv)) {
-    return(invisible(FALSE))
-  }
-
-  .dir_create(dirname(out_csv))
-
-  pe <- tryCatch(
-    {
-      if (is.character(boot_ci_type) && length(boot_ci_type) == 1 && identical(boot_ci_type, "none")) {
-        lavaan::parameterEstimates(fit, ci = FALSE, standardized = FALSE)
-      } else if (is.null(boot_ci_type)) {
-        lavaan::parameterEstimates(fit, ci = TRUE, standardized = FALSE)
-      } else {
-        lavaan::parameterEstimates(fit, ci = TRUE, standardized = FALSE, boot.ci.type = boot_ci_type)
-      }
-    },
-    error = function(e) NULL
-  )
-
-  if (is.null(pe) || !is.data.frame(pe) || nrow(pe) == 0) {
-    return(invisible(FALSE))
-  }
-
-  # Parameter naming convention expected by build_dissertation_tables.py:
-  #  - labeled free parameters use `label`
-  #  - defined parameters use `lhs` when op == ":="
-  param <- rep(NA_character_, nrow(pe))
-  is_def <- !is.na(pe$op) & pe$op == ":="
-  param[is_def] <- as.character(pe$lhs[is_def])
-  if ("label" %in% names(pe)) {
-    has_label <- !is.na(pe$label) & nzchar(pe$label)
-    param[!is_def & has_label] <- as.character(pe$label[!is_def & has_label])
-  }
-
-  out <- data.frame(
-    parameter = param,
-    est = if ("est" %in% names(pe)) pe$est else NA_real_,
-    boot_se = if ("se" %in% names(pe)) pe$se else NA_real_,
-    ci_lower = if ("ci.lower" %in% names(pe)) pe$ci.lower else NA_real_,
-    ci_upper = if ("ci.upper" %in% names(pe)) pe$ci.upper else NA_real_,
-    stringsAsFactors = FALSE
-  )
-
-  out <- out[!is.na(out$parameter) & nzchar(out$parameter), , drop = FALSE]
-  out <- out[!duplicated(out$parameter), , drop = FALSE]
-
-  if (nrow(out) == 0) {
-    return(invisible(FALSE))
-  }
-
-  out$sig <- with(
-    out,
-    (!is.na(ci_lower) & !is.na(ci_upper)) &
-      ((ci_lower > 0 & ci_upper > 0) | (ci_lower < 0 & ci_upper < 0))
-  )
-
-  utils::write.csv(out, file = out_csv, row.names = FALSE, na = "NA")
-  invisible(TRUE)
-}
-
 # Helper: compute fit-change criteria between two models
 fit_change <- function(fit_prev, fit_next) {
   pick <- function(f, key_fallback, key_pref) {
@@ -1372,7 +1310,6 @@ fit_mg_fast_vs_nonfast_with_outputs <- function(
   w_label = NULL,
   model_type = c("parallel", "serial", "total"),
   out_dir = file.path("results", "fast_treat_control", "structural"),
-  bootstrap_results_out = NULL,
   estimator = "ML",
   missing = "fiml",
   fixed.x = TRUE,
@@ -1413,9 +1350,6 @@ fit_mg_fast_vs_nonfast_with_outputs <- function(
 
   # Main text tables
   write_lavaan_txt_tables(fit, out_dir, "structural", boot_ci_type = boot_ci_type)
-
-  # Bootstrap-ready summary for Dissertation_Tables.docx
-  write_bootstrap_results_csv(fit, bootstrap_results_out, boot_ci_type = boot_ci_type)
 
   # Wald tests
   run_wald_tests_fast_vs_nonfast(fit, out_dir = file.path(out_dir, "wald"), prefix = "wald")
