@@ -1664,6 +1664,87 @@ copy_if_exists(file.path(OUT_SYNTAX, "executed_sem_serial.lav"), run_summary_dir
 copy_if_exists(file.path(OUT_SYNTAX, "executed_sem_total.lav"), run_summary_dir)
 copy_if_exists(file.path(OUT_FIGURES, "standards_data.json"), run_summary_dir)
 
+fig_data_files <- c(
+  file.path(OUT_FIGURES, "fig1_demographics_data.csv"),
+  file.path(OUT_FIGURES, "fig2_emotional_distress_data.csv"),
+  file.path(OUT_FIGURES, "fig3_quality_engagement_data.csv"),
+  file.path(OUT_FIGURES, "fig4_developmental_adjustment_data.csv"),
+  file.path(OUT_FIGURES, "fig5_equity_gaps_data.csv"),
+  file.path(OUT_FIGURES, "fig6_correlation_heatmap_data.csv"),
+  file.path(OUT_FIGURES, "fig7_cumulative_risk_data.csv"),
+  file.path(OUT_FIGURES, "fig8_credit_dose_moderation_data.csv"),
+  file.path(OUT_FIGURES, "fig9_mediation_pathways_data.csv"),
+  file.path(OUT_FIGURES, "fig10_intersectionality_data.csv"),
+  file.path(OUT_FIGURES, "fig11_outcome_profiles_data.csv"),
+  file.path(OUT_FIGURES, "fig12_cohort_patterns_data.csv"),
+  file.path(OUT_FIGURES, "fig13_love_plot_data.csv")
+)
+for (f in fig_data_files) {
+  copy_if_exists(f, run_summary_dir)
+}
+
+figure_sources <- data.frame(
+  figure_id = c(
+    "fig1_demographics", "fig2_emotional_distress", "fig3_quality_engagement",
+    "fig4_developmental_adjustment", "fig5_equity_gaps", "fig6_correlation_heatmap",
+    "fig7_cumulative_risk", "fig8_credit_dose_moderation", "fig9_mediation_pathways",
+    "fig10_intersectionality", "fig11_outcome_profiles", "fig12_cohort_patterns",
+    "fig13_love_plot",
+    "standards_compliance_dashboard", "standards_sample_modelfit", "standards_bootstrap_effects"
+  ),
+  figure_file = c(
+    file.path(OUT_FIGURES, "fig1_demographics.png"),
+    file.path(OUT_FIGURES, "fig2_emotional_distress.png"),
+    file.path(OUT_FIGURES, "fig3_quality_engagement.png"),
+    file.path(OUT_FIGURES, "fig4_developmental_adjustment.png"),
+    file.path(OUT_FIGURES, "fig5_equity_gaps.png"),
+    file.path(OUT_FIGURES, "fig6_correlation_heatmap.png"),
+    file.path(OUT_FIGURES, "fig7_cumulative_risk.png"),
+    file.path(OUT_FIGURES, "fig8_credit_dose_moderation.png"),
+    file.path(OUT_FIGURES, "fig9_mediation_pathways.png"),
+    file.path(OUT_FIGURES, "fig10_intersectionality.png"),
+    file.path(OUT_FIGURES, "fig11_outcome_profiles.png"),
+    file.path(OUT_FIGURES, "fig12_cohort_patterns.png"),
+    file.path(OUT_FIGURES, "fig13_love_plot.png"),
+    file.path(OUT_FIGURES, "standards_compliance_dashboard.png"),
+    file.path(OUT_FIGURES, "standards_sample_modelfit.png"),
+    file.path(OUT_FIGURES, "standards_bootstrap_effects.png")
+  ),
+  data_file = c(
+    file.path(OUT_FIGURES, "fig1_demographics_data.csv"),
+    file.path(OUT_FIGURES, "fig2_emotional_distress_data.csv"),
+    file.path(OUT_FIGURES, "fig3_quality_engagement_data.csv"),
+    file.path(OUT_FIGURES, "fig4_developmental_adjustment_data.csv"),
+    file.path(OUT_FIGURES, "fig5_equity_gaps_data.csv"),
+    file.path(OUT_FIGURES, "fig6_correlation_heatmap_data.csv"),
+    file.path(OUT_FIGURES, "fig7_cumulative_risk_data.csv"),
+    file.path(OUT_FIGURES, "fig8_credit_dose_moderation_data.csv"),
+    file.path(OUT_FIGURES, "fig9_mediation_pathways_data.csv"),
+    file.path(OUT_FIGURES, "fig10_intersectionality_data.csv"),
+    file.path(OUT_FIGURES, "fig11_outcome_profiles_data.csv"),
+    file.path(OUT_FIGURES, "fig12_cohort_patterns_data.csv"),
+    file.path(OUT_FIGURES, "fig13_love_plot_data.csv"),
+    file.path(OUT_FIGURES, "standards_data.json"),
+    file.path(OUT_FIGURES, "standards_data.json"),
+    file.path(OUT_FIGURES, "standards_data.json")
+  ),
+  source_inputs = c(
+    rep(file.path(out_main, "rep_data_with_psw.csv"), 12),
+    file.path(out_main, "psw_balance_smd.txt"),
+    rep(file.path(out_main, "structural", "structural_fitMeasures.txt"), 3)
+  ),
+  figure_type = c(
+    rep("descriptive", 13),
+    rep("lavaan", 3)
+  ),
+  stringsAsFactors = FALSE
+)
+figure_sources$figure_exists <- file.exists(figure_sources$figure_file)
+figure_sources$data_exists <- file.exists(figure_sources$data_file)
+figure_sources_path <- file.path(summary_dir, "figure_sources.tsv")
+write.table(figure_sources, file = figure_sources_path, sep = "\t", row.names = FALSE, quote = FALSE, na = "NA")
+copy_if_exists(figure_sources_path, run_summary_dir)
+
 # PSW balance summary table + report
 psw_src <- file.path(out_main, "psw_balance_smd.txt")
 psw_csv_out <- file.path(summary_dir, "psw_balance_smd_table.csv")

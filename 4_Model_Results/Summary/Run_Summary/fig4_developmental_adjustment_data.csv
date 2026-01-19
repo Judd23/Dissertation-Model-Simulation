@@ -1,0 +1,28 @@
+panel,item,variable,response,weighted_count,low_pct,weighted_mean,weighted_sd
+belonging_item,Feel Valued,sbvalued,1.0,263.8389143795948,39.86189252276209,NA,NA
+belonging_item,Feel Valued,sbvalued,2.0,1729.2557117585095,39.86189252276209,NA,NA
+belonging_item,Feel Valued,sbvalued,3.0,2266.453198038069,39.86189252276209,NA,NA
+belonging_item,Feel Valued,sbvalued,4.0,740.4521758238268,39.86189252276209,NA,NA
+belonging_item,Can Be Myself,sbmyself,1.0,287.35752701641593,39.612975687336295,NA,NA
+belonging_item,Can Be Myself,sbmyself,2.0,1693.2912573503988,39.612975687336295,NA,NA
+belonging_item,Can Be Myself,sbmyself,3.0,2260.56045655014,39.612975687336295,NA,NA
+belonging_item,Can Be Myself,sbmyself,4.0,758.7907590830456,39.612975687336295,NA,NA
+belonging_item,Part of Community,sbcommunity,1.0,250.64506262058404,39.69975948141433,NA,NA
+belonging_item,Part of Community,sbcommunity,2.0,1734.3429114501323,39.69975948141433,NA,NA
+belonging_item,Part of Community,sbcommunity,3.0,2278.311415169491,39.69975948141433,NA,NA
+belonging_item,Part of Community,sbcommunity,4.0,736.700610759793,39.69975948141433,NA,NA
+belonging_summary,Feel Valued,NA,NA,NA,39.86189252276209,NA,NA
+belonging_summary,Can Be Myself,NA,NA,NA,39.612975687336295,NA,NA
+belonging_summary,Part of Community,NA,NA,NA,39.69975948141433,NA,NA
+gains,Think Critically,NA,NA,NA,NA,2.9534531471631404,0.6692228239746473
+gains,Analyze Info,NA,NA,NA,NA,2.950076161974494,0.7158586946133007
+gains,Work with Others,NA,NA,NA,NA,2.9483504873148427,0.6988424590700233
+gains,Develop Values,NA,NA,NA,NA,2.9359187618141567,0.7331688929665877
+gains,Problem Solving,NA,NA,NA,NA,2.948537156668905,0.6795628406956898
+support,Wellness Support,NA,NA,NA,NA,2.7142580207653695,0.7667423845100296
+support,Non-Academic Support,NA,NA,NA,NA,2.7271719946950364,0.7976015290708579
+support,Co-Curricular Activities,NA,NA,NA,NA,2.7130514680893483,0.8071244814359743
+support,Academic Support,NA,NA,NA,NA,2.726492352693311,0.740172176610471
+support,Diverse Interactions,NA,NA,NA,NA,2.7163676352676744,0.785438608165229
+satisfaction,Rate Overall Experience,NA,NA,NA,NA,2.905814606103833,0.6703304512641561
+satisfaction,Choose Same Institution,NA,NA,NA,NA,2.8998330334613165,0.6702303223583181

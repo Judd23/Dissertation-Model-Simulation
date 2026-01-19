@@ -131,10 +131,34 @@ def weighted_linregress(x, y, w):
         p = np.nan
     return slope, intercept, r, p
 
+def ensure_columns(df, cols):
+    """Ensure required columns exist; fill missing with NA."""
+    for col in cols:
+        if col not in df.columns:
+            df[col] = np.nan
+
+def write_fig_data(outdir, filename, data, index=False):
+    """Write figure data to CSV with NA for missing values."""
+    path = os.path.join(outdir, filename)
+    if not isinstance(data, pd.DataFrame):
+        data = pd.DataFrame(data)
+    data.to_csv(path, index=index, na_rep="NA")
+    return path
+
 def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', weight_col=None):
     os.makedirs(outdir, exist_ok=True)
     
     df = pd.read_csv(data_path)
+    required_cols = [
+        're_all', 'x_FASt', 'firstgen', 'pell', 'credit_dose', 'trnsfr_cr', 'cohort', 'psw',
+        'MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial',
+        'QIstudent', 'QIadvisor', 'QIfaculty', 'QIstaff', 'QIadmin',
+        'sbvalued', 'sbmyself', 'sbcommunity',
+        'pgthink', 'pganalyze', 'pgwork', 'pgvalues', 'pgprobsolve',
+        'SEwellness', 'SEnonacad', 'SEactivities', 'SEacademic', 'SEdiverse',
+        'evalexp', 'sameinst'
+    ]
+    ensure_columns(df, required_cols)
     plt.style.use('seaborn-v0_8-whitegrid')
     
     # Setup weighting
@@ -198,12 +222,15 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     df['mean_distress'] = df[mhw_cols].mean(axis=1)
     
     # Detect scale from data (1-6 for NSSE distress items)
-    distress_max = int(df[mhw_cols].max().max())
+    distress_max_raw = pd.to_numeric(df[mhw_cols].max().max(), errors='coerce')
+    distress_max = int(distress_max_raw) if np.isfinite(distress_max_raw) else 6
     
     means = weighted_groupby_mean(df, 'risk_count', 'mean_distress', w)
     sems = weighted_groupby_sem(df, 'risk_count', 'mean_distress', w)
     means = means.sort_index()
     sems = sems.reindex(means.index)
+    distress_means = means.copy()
+    distress_sems = sems.copy()
     
     ax.errorbar(means.index, means.values, yerr=1.96*sems.values, 
                 fmt='o-', color=colors['distress'], capsize=5, markersize=10, linewidth=2)
@@ -211,9 +238,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_ylabel(f'Mean Emotional Distress (1-{distress_max})', fontsize=11)
     ax.set_title('Cumulative Risk → Distress\n(95% CI)' + (' (PSW)' if use_weights else ''), fontsize=12, fontweight='bold')
     # Auto-scale y-axis with padding
-    y_min = np.nanmin(means.values) - 1.96*np.nanmax(sems.values) - 0.2
-    y_max = np.nanmax(means.values) + 1.96*np.nanmax(sems.values) + 0.2
-    ax.set_ylim(max(1, y_min), min(distress_max, y_max))
+    mean_vals = means.values
+    sem_vals = sems.values
+    if np.isfinite(mean_vals).any() and np.isfinite(sem_vals).any():
+        y_min = np.nanmin(mean_vals) - 1.96*np.nanmax(sem_vals) - 0.2
+        y_max = np.nanmax(mean_vals) + 1.96*np.nanmax(sem_vals) + 0.2
+        if np.isfinite(y_min) and np.isfinite(y_max):
+            ax.set_ylim(max(1, y_min), min(distress_max, y_max))
     
     # Add trend line (weighted)
     slope, intercept, r, p = weighted_linregress(df['risk_count'].values, df['mean_distress'].values, w)
@@ -232,12 +263,15 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     df['mean_engagement'] = df[qi_cols].mean(axis=1)
     
     # Detect scale from data (1-7 for QI items)
-    engage_max = int(df[qi_cols].max().max())
+    engage_max_raw = pd.to_numeric(df[qi_cols].max().max(), errors='coerce')
+    engage_max = int(engage_max_raw) if np.isfinite(engage_max_raw) else 7
     
     means = weighted_groupby_mean(df, 'risk_count', 'mean_engagement', w)
     sems = weighted_groupby_sem(df, 'risk_count', 'mean_engagement', w)
     means = means.sort_index()
     sems = sems.reindex(means.index)
+    engagement_means = means.copy()
+    engagement_sems = sems.copy()
     
     ax.errorbar(means.index, means.values, yerr=1.96*sems.values, 
                 fmt='s-', color=colors['engagement'], capsize=5, markersize=10, linewidth=2)
@@ -245,9 +279,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_ylabel(f'Mean Quality of Engagement (1-{engage_max})', fontsize=11)
     ax.set_title('Cumulative Risk → Engagement\n(95% CI)' + (' (PSW)' if use_weights else ''), fontsize=12, fontweight='bold')
     # Auto-scale y-axis with padding
-    y_min = means.min() - 1.96*sems.max() - 0.2
-    y_max = means.max() + 1.96*sems.max() + 0.2
-    ax.set_ylim(max(1, y_min), min(engage_max, y_max))
+    mean_vals = means.values
+    sem_vals = sems.values
+    if np.isfinite(mean_vals).any() and np.isfinite(sem_vals).any():
+        y_min = np.nanmin(mean_vals) - 1.96*np.nanmax(sem_vals) - 0.2
+        y_max = np.nanmax(mean_vals) + 1.96*np.nanmax(sem_vals) + 0.2
+        if np.isfinite(y_min) and np.isfinite(y_max):
+            ax.set_ylim(max(1, y_min), min(engage_max, y_max))
     
     slope, intercept, r, p = weighted_linregress(df['risk_count'].values, df['mean_engagement'].values, w)
     x_line = np.array([0, 4])
@@ -288,7 +326,49 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.axhline(42, color='gray', linestyle='--', alpha=0.7, label='National avg (42%)')
     ax.legend()
     
-    plt.suptitle('Figure 7\nCumulative Disadvantage Analysis' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
+    fig7_rows = []
+    total_weight_safe = total_weight if total_weight > 0 else np.nan
+    for rc, val in zip(risk_weights.index, risk_weights.values):
+        pct = val / total_weight_safe * 100 if np.isfinite(total_weight_safe) else np.nan
+        fig7_rows.append({
+            'panel': 'risk_distribution',
+            'risk_count': rc,
+            'weighted_count': val,
+            'percent': pct
+        })
+    for rc in distress_means.index:
+        mean_val = distress_means.loc[rc]
+        se_val = distress_sems.loc[rc]
+        fig7_rows.append({
+            'panel': 'distress_by_risk',
+            'risk_count': rc,
+            'mean': mean_val,
+            'se': se_val,
+            'ci_low': mean_val - 1.96 * se_val,
+            'ci_high': mean_val + 1.96 * se_val
+        })
+    for rc in engagement_means.index:
+        mean_val = engagement_means.loc[rc]
+        se_val = engagement_sems.loc[rc]
+        fig7_rows.append({
+            'panel': 'engagement_by_risk',
+            'risk_count': rc,
+            'mean': mean_val,
+            'se': se_val,
+            'ci_low': mean_val - 1.96 * se_val,
+            'ci_high': mean_val + 1.96 * se_val
+        })
+    for idx, rc in enumerate(pct_low.index):
+        fig7_rows.append({
+            'panel': 'low_belonging',
+            'risk_count': rc,
+            'percent_low': pct_low.loc[rc],
+            'ci_low': ci_low[idx] if idx < len(ci_low) else np.nan,
+            'ci_high': ci_high[idx] if idx < len(ci_high) else np.nan
+        })
+    write_fig_data(outdir, 'fig7_cumulative_risk_data.csv', pd.DataFrame(fig7_rows))
+    
+    plt.suptitle('Figure 7 (Descriptive)\nCumulative Disadvantage Analysis' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig, weighted=use_weights)
     plt.savefig(f'{outdir}/fig7_cumulative_risk.png', dpi=300, bbox_inches='tight')
@@ -306,10 +386,19 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
             credits = df['trnsfr_cr']
         else:
             credits = df['credit_dose'] * 10 + 12  # reverse transformation
+        credits = pd.to_numeric(credits, errors='coerce')
         
         # 8a. Scatter: Credits vs Distress by FASt status
         ax = axes[0, 0]
         fast_mask = df['x_FASt'] == 1
+        fig8_frames = []
+        fig8_frames.append(pd.DataFrame({
+            'panel': 'scatter_distress',
+            'group': np.where(fast_mask, 'FASt', 'Non-FASt'),
+            'credit': credits,
+            'value': df['mean_distress'],
+            'weight': w
+        }))
         
         ax.scatter(credits[~fast_mask], df.loc[~fast_mask, 'mean_distress'], 
                    alpha=0.3, c=colors['nonfast'], label='Non-FASt', s=20)
@@ -323,7 +412,10 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
             y = df.loc[mask, 'mean_distress'].values
             w_mask = w[mask]
             # Bin and average for smooth line
-            bins = np.linspace(0, max(credits), 15)
+            credit_max = credits.max(skipna=True)
+            if not np.isfinite(credit_max):
+                credit_max = 0
+            bins = np.linspace(0, credit_max, 15)
             bin_means = []
             bin_centers = []
             for i in range(len(bins)-1):
@@ -333,6 +425,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
                     bin_means.append(weighted_mean(y[bin_mask], w_mask[bin_mask]))
             if len(bin_centers) > 2:
                 ax.plot(bin_centers, bin_means, '-', color=color, linewidth=3, alpha=0.8)
+            if len(bin_centers) > 0:
+                fig8_frames.append(pd.DataFrame({
+                    'panel': 'smooth_distress',
+                    'group': label,
+                    'credit': bin_centers,
+                    'value': bin_means
+                }))
         
         ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2)  # Yellow credit threshold
         ax.set_xlabel('Transfer Credits', fontsize=11)
@@ -385,6 +484,15 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         ax.set_xlabel('Credit Dose Range', fontsize=11)
         ax.set_ylabel('FASt - Non-FASt Gap (Distress)', fontsize=11)
         ax.set_title('FASt Effect by Credit Dose\n(+ = FASt higher distress)', fontsize=12, fontweight='bold')
+        if len(bin_labels) > 0:
+            fig8_frames.append(pd.DataFrame({
+                'panel': 'gap_by_bin',
+                'bin_label': bin_labels,
+                'value': gaps,
+                'se': gap_ses,
+                'ci_low': [g - 1.96 * s for g, s in zip(gaps, gap_ses)],
+                'ci_high': [g + 1.96 * s for g, s in zip(gaps, gap_ses)]
+            }))
         
         # 8c. Johnson-Neyman style: At what credit level does FASt effect become significant?
         ax = axes[1, 0]
@@ -436,6 +544,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         ax.set_ylabel('FASt Effect on Distress', fontsize=11)
         ax.set_title('Conditional FASt Effect Across Credit Spectrum\n(Rolling window, 95% CI)', fontsize=12, fontweight='bold')
         ax.legend()
+        fig8_frames.append(pd.DataFrame({
+            'panel': 'rolling_distress',
+            'credit': credit_vals,
+            'value': effects,
+            'ci_low': ci_lows,
+            'ci_high': ci_highs
+        }))
         
         # 8d. Engagement pattern
         ax = axes[1, 1]
@@ -484,8 +599,21 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         ax.set_ylabel('FASt Effect on Engagement', fontsize=11)
         ax.set_title('Conditional FASt Effect on Engagement\n(Rolling window, 95% CI)', fontsize=12, fontweight='bold')
         ax.legend()
+        fig8_frames.append(pd.DataFrame({
+            'panel': 'rolling_engagement',
+            'credit': credit_vals,
+            'value': effects,
+            'ci_low': ci_lows,
+            'ci_high': ci_highs
+        }))
         
-        plt.suptitle('Figure 8\nCredit Dose × FASt Moderation Pattern', fontsize=14, fontweight='bold', y=1.02)
+        if len(fig8_frames) > 0:
+            fig8_data = pd.concat(fig8_frames, ignore_index=True, sort=False)
+        else:
+            fig8_data = pd.DataFrame([{'panel': np.nan, 'credit': np.nan, 'value': np.nan}])
+        write_fig_data(outdir, 'fig8_credit_dose_moderation_data.csv', fig8_data)
+        
+        plt.suptitle('Figure 8 (Descriptive)\nCredit Dose × FASt Moderation Pattern', fontsize=14, fontweight='bold', y=1.02)
         plt.tight_layout()
         add_sim_note(fig)
         plt.savefig(f'{outdir}/fig8_credit_dose_moderation.png', dpi=300, bbox_inches='tight')
@@ -509,6 +637,19 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     df['mean_support'] = df[se_cols].mean(axis=1)
     df['mean_devadj'] = (df['mean_belonging'] + df['mean_gains'] + df['mean_support'] + 
                          df[['evalexp', 'sameinst']].mean(axis=1)) / 4
+    fig9_frames = []
+    fig9_frames.append(pd.DataFrame({
+        'panel': 'scatter_distress_devadj',
+        'x': df['mean_distress'],
+        'y': df['mean_devadj'],
+        'weight': w
+    }))
+    fig9_frames.append(pd.DataFrame({
+        'panel': 'scatter_engagement_devadj',
+        'x': df['mean_engagement'],
+        'y': df['mean_devadj'],
+        'weight': w
+    }))
     
     # 9a. Distress → Developmental Adjustment scatter
     ax = axes[0, 0]
@@ -522,6 +663,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         p_txt = f", p={p:.3f}" if p >= 0.001 else ", p<.001"
     ax.plot(x_line, intercept + slope * x_line, '-', color=colors['distress'], linewidth=3,
             label=f'r = {r:.3f}{p_txt}')
+    fig9_frames.append(pd.DataFrame([{
+        'panel': 'regression_distress_devadj',
+        'slope': slope,
+        'intercept': intercept,
+        'r': r,
+        'p': p
+    }]))
     ax.set_xlabel('Emotional Distress (EmoDiss)', fontsize=11)
     ax.set_ylabel('Developmental Adjustment (DevAdj)', fontsize=11)
     ax.set_title('Mediator Path: EmoDiss → DevAdj', fontsize=12, fontweight='bold')
@@ -538,6 +686,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         p_txt = f", p={p:.3f}" if p >= 0.001 else ", p<.001"
     ax.plot(x_line, intercept + slope * x_line, '-', color=colors['engagement'], linewidth=3,
             label=f'r = {r:.3f}{p_txt}')
+    fig9_frames.append(pd.DataFrame([{
+        'panel': 'regression_engagement_devadj',
+        'slope': slope,
+        'intercept': intercept,
+        'r': r,
+        'p': p
+    }]))
     ax.set_xlabel('Quality of Engagement (QualEngag)', fontsize=11)
     ax.set_ylabel('Developmental Adjustment (DevAdj)', fontsize=11)
     ax.set_title('Mediator Path: QualEngag → DevAdj', fontsize=12, fontweight='bold')
@@ -647,8 +802,16 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
             offset = 0.01
             ax.text(val + offset if val > 0 else val - offset, i, f'{val:.3f}', 
                     va='center', ha='left' if val > 0 else 'right', fontsize=10)
+    fig9_frames.append(pd.DataFrame({
+        'panel': ['effect_decomposition'] * len(effects),
+        'effect': effects,
+        'value': values
+    }))
     
-    plt.suptitle('Figure 9\nMediation Pathway Analysis', fontsize=14, fontweight='bold', y=1.02)
+    fig9_data = pd.concat(fig9_frames, ignore_index=True, sort=False) if len(fig9_frames) > 0 else pd.DataFrame([{'panel': np.nan}])
+    write_fig_data(outdir, 'fig9_mediation_pathways_data.csv', fig9_data)
+    
+    plt.suptitle('Figure 9 (Descriptive)\nMediation Pathway Analysis', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig)
     plt.savefig(f'{outdir}/fig9_mediation_pathways.png', dpi=300, bbox_inches='tight')
@@ -660,6 +823,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # Redesigned: Grouped bars for direct FASt vs Non-FASt comparison
     # =========================================================================
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
+    fig10_rows = []
     
     # Define demographic subgroups (4 combinations of First-Gen × URM)
     subgroup_labels = ['Cont-Gen\nNon-URM', 'Cont-Gen\nURM', 'First-Gen\nNon-URM', 'First-Gen\nURM']
@@ -696,6 +860,23 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         else:
             fast_distress.append(np.nan)
             fast_distress_err.append(0)
+    for (fg, urm), nf_mean, f_mean, nf_err, f_err in zip(subgroup_keys, nonfast_distress, fast_distress, nonfast_distress_err, fast_distress_err):
+        fig10_rows.append({
+            'panel': 'distress_by_subgroup',
+            'firstgen': fg,
+            'urm': urm,
+            'fast': 0,
+            'mean': nf_mean,
+            'se': nf_err / 1.96 if nf_err else np.nan
+        })
+        fig10_rows.append({
+            'panel': 'distress_by_subgroup',
+            'firstgen': fg,
+            'urm': urm,
+            'fast': 1,
+            'mean': f_mean,
+            'se': f_err / 1.96 if f_err else np.nan
+        })
     
     bars1 = ax.bar(x - width/2, nonfast_distress, width, yerr=nonfast_distress_err, capsize=4,
                    label='Non-FASt', color='#ff6666', edgecolor='black', hatch='///')
@@ -740,6 +921,23 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         else:
             fast_engage.append(np.nan)
             fast_engage_err.append(0)
+    for (fg, urm), nf_mean, f_mean, nf_err, f_err in zip(subgroup_keys, nonfast_engage, fast_engage, nonfast_engage_err, fast_engage_err):
+        fig10_rows.append({
+            'panel': 'engagement_by_subgroup',
+            'firstgen': fg,
+            'urm': urm,
+            'fast': 0,
+            'mean': nf_mean,
+            'se': nf_err / 1.96 if nf_err else np.nan
+        })
+        fig10_rows.append({
+            'panel': 'engagement_by_subgroup',
+            'firstgen': fg,
+            'urm': urm,
+            'fast': 1,
+            'mean': f_mean,
+            'se': f_err / 1.96 if f_err else np.nan
+        })
     
     bars1 = ax.bar(x - width/2, nonfast_engage, width, yerr=nonfast_engage_err, capsize=4,
                    label='Non-FASt', color='#3399ff', edgecolor='black', hatch='///')
@@ -765,7 +963,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     pivot = pd.DataFrame(pivot_vals, index=['Continuing-Gen', 'First-Gen'], columns=['Non-FASt', 'FASt'])
     
     # Auto-scale heatmap colors
-    vmin_d, vmax_d = pivot.values.min() - 0.1, pivot.values.max() + 0.1
+    if np.all(np.isnan(pivot.values)):
+        vmin_d, vmax_d = 0, 1
+    else:
+        vmin_d, vmax_d = np.nanmin(pivot.values) - 0.1, np.nanmax(pivot.values) + 0.1
+    if not np.isfinite(vmin_d) or not np.isfinite(vmax_d):
+        vmin_d, vmax_d = 0, 1
     im = ax.imshow(pivot.values, cmap='Reds', vmin=vmin_d, vmax=vmax_d)
     ax.set_xticks([0, 1])
     ax.set_yticks([0, 1])
@@ -777,6 +980,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         for j in range(2):
             ax.text(j, i, f'{pivot.values[i, j]:.2f}', ha='center', va='center', 
                     fontsize=14, fontweight='bold', color='white' if pivot.values[i, j] > mid_d else 'black')
+            fig10_rows.append({
+                'panel': 'heatmap_distress',
+                'firstgen': pivot.index[i],
+                'fast': pivot.columns[j],
+                'mean': pivot.values[i, j]
+            })
     
     ax.set_title('FASt × First-Gen → Distress\n(Cell means)', fontsize=12, fontweight='bold')
     plt.colorbar(im, ax=ax, label='Mean Distress')
@@ -791,7 +1000,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     pivot_eng = pd.DataFrame(pivot_eng_vals, index=['Non-URM', 'URM'], columns=['Non-FASt', 'FASt'])
     
     # Auto-scale heatmap colors
-    vmin_e, vmax_e = pivot_eng.values.min() - 0.1, pivot_eng.values.max() + 0.1
+    if np.all(np.isnan(pivot_eng.values)):
+        vmin_e, vmax_e = 0, 1
+    else:
+        vmin_e, vmax_e = np.nanmin(pivot_eng.values) - 0.1, np.nanmax(pivot_eng.values) + 0.1
+    if not np.isfinite(vmin_e) or not np.isfinite(vmax_e):
+        vmin_e, vmax_e = 0, 1
     im = ax.imshow(pivot_eng.values, cmap='Blues', vmin=vmin_e, vmax=vmax_e)
     ax.set_xticks([0, 1])
     ax.set_yticks([0, 1])
@@ -803,11 +1017,20 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         for j in range(2):
             ax.text(j, i, f'{pivot_eng.values[i, j]:.2f}', ha='center', va='center', 
                     fontsize=14, fontweight='bold', color='white' if pivot_eng.values[i, j] < mid_e else 'black')
+            fig10_rows.append({
+                'panel': 'heatmap_engagement',
+                'urm': pivot_eng.index[i],
+                'fast': pivot_eng.columns[j],
+                'mean': pivot_eng.values[i, j]
+            })
     
     ax.set_title('FASt × URM → Engagement\n(Cell means)', fontsize=12, fontweight='bold')
     plt.colorbar(im, ax=ax, label='Mean Engagement')
     
-    plt.suptitle('Figure 10\nIntersectionality Analysis', fontsize=14, fontweight='bold', y=1.02)
+    fig10_data = pd.DataFrame(fig10_rows) if fig10_rows else pd.DataFrame([{'panel': np.nan}])
+    write_fig_data(outdir, 'fig10_intersectionality_data.csv', fig10_data)
+    
+    plt.suptitle('Figure 10 (Descriptive)\nIntersectionality Analysis', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig)
     plt.savefig(f'{outdir}/fig10_intersectionality.png', dpi=300, bbox_inches='tight')
@@ -818,6 +1041,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # FIGURE 11: Outcome Comparison by FASt Status and Risk Level
     # =========================================================================
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+    fig11_rows = []
     
     # Create composite outcome variables if not already present
     mhw_cols = ['MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial']
@@ -844,6 +1068,15 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     fast_sems = [weighted_sem(df.loc[fast_mask, out].values, w[fast_mask]) for out in outcomes]
     nonfast_means = [weighted_mean(df.loc[nonfast_mask, out].values, w[nonfast_mask]) for out in outcomes]
     nonfast_sems = [weighted_sem(df.loc[nonfast_mask, out].values, w[nonfast_mask]) for out in outcomes]
+    for label, f_mean, nf_mean, f_se, nf_se in zip(outcome_labels, fast_means, nonfast_means, fast_sems, nonfast_sems):
+        fig11_rows.append({
+            'panel': 'outcome_means_by_fast',
+            'outcome': label,
+            'fast_mean': f_mean,
+            'nonfast_mean': nf_mean,
+            'fast_sem': f_se,
+            'nonfast_sem': nf_se
+        })
     
     x = np.arange(len(outcomes))
     width = 0.35
@@ -903,6 +1136,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         grand_mean = weighted_mean(df[out].values, w)
         grand_sd = weighted_std(df[out].values, w)
         z_means = [(m - grand_mean) / grand_sd if grand_sd > 0 else np.nan for m in means]
+        for r, z in zip(risk_levels, z_means):
+            fig11_rows.append({
+                'panel': 'outcome_z_by_risk',
+                'outcome': label,
+                'risk_count': r,
+                'z_mean': z
+            })
         
         offset = (i - 2) * width
         bars = ax.bar(x + offset, z_means, width, label=label, color=outcome_colors[i], edgecolor='black', linewidth=0.8)
@@ -915,7 +1155,9 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.legend(loc='upper right', fontsize=9)
     ax.axhline(0, color='black', linewidth=0.5, linestyle='--')
     
-    plt.suptitle('Figure 11\nStudent Outcome Profiles', fontsize=14, fontweight='bold', y=1.02)
+    write_fig_data(outdir, 'fig11_outcome_profiles_data.csv', pd.DataFrame(fig11_rows))
+    
+    plt.suptitle('Figure 11 (Descriptive)\nStudent Outcome Profiles', fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig)
     plt.savefig(f'{outdir}/fig11_outcome_profiles.png', dpi=300, bbox_inches='tight')
@@ -926,6 +1168,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # FIGURE 12: Longitudinal Cohort Patterns
     # =========================================================================
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    fig12_rows = []
     
     # Map cohort codes to years (0 = 2023, 1 = 2024)
     cohort_labels = {0: '2023', 1: '2024'}
@@ -944,9 +1187,19 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_ylabel('Mean Distress', fontsize=11)
     ax.set_title('Distress Trends Across Cohorts', fontsize=12, fontweight='bold')
     # Auto-scale y-axis
-    y_min, y_max = np.min(cohort_distress_mean), np.max(cohort_distress_mean)
-    y_range = y_max - y_min
-    ax.set_ylim(y_min - max(0.3, y_range*0.5), y_max + max(0.3, y_range*0.5))
+    cohort_distress_vals = np.array(cohort_distress_mean, dtype=float)
+    if np.isfinite(cohort_distress_vals).any():
+        y_min = np.nanmin(cohort_distress_vals)
+        y_max = np.nanmax(cohort_distress_vals)
+        y_range = y_max - y_min
+        ax.set_ylim(y_min - max(0.3, y_range*0.5), y_max + max(0.3, y_range*0.5))
+    for cohort, mean_val, se_val in zip(cohort_years, cohort_distress_mean, cohort_distress_sem):
+        fig12_rows.append({
+            'panel': 'cohort_distress',
+            'cohort': cohort,
+            'mean': mean_val,
+            'se': se_val
+        })
     
     # 12b. Engagement trend by cohort - BLUE theme
     ax = axes[0, 1]
@@ -959,9 +1212,19 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_ylabel('Mean Engagement', fontsize=11)
     ax.set_title('Engagement Trends Across Cohorts', fontsize=12, fontweight='bold')
     # Auto-scale y-axis
-    y_min, y_max = np.min(cohort_engage_mean), np.max(cohort_engage_mean)
-    y_range = y_max - y_min
-    ax.set_ylim(y_min - max(0.3, y_range*0.5), y_max + max(0.3, y_range*0.5))
+    cohort_engage_vals = np.array(cohort_engage_mean, dtype=float)
+    if np.isfinite(cohort_engage_vals).any():
+        y_min = np.nanmin(cohort_engage_vals)
+        y_max = np.nanmax(cohort_engage_vals)
+        y_range = y_max - y_min
+        ax.set_ylim(y_min - max(0.3, y_range*0.5), y_max + max(0.3, y_range*0.5))
+    for cohort, mean_val, se_val in zip(cohort_years, cohort_engage_mean, cohort_engage_sem):
+        fig12_rows.append({
+            'panel': 'cohort_engagement',
+            'cohort': cohort,
+            'mean': mean_val,
+            'se': se_val
+        })
     
     # 12c. FASt % by cohort - neutral blue
     ax = axes[1, 0]
@@ -973,7 +1236,15 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_title('FASt Enrollment by Cohort', fontsize=12, fontweight='bold')
     for i, v in enumerate(fast_by_cohort):
         ax.text(i, v + 0.5, f'{v:.1f}%', ha='center', fontsize=10)
-    ax.set_ylim(0, max(fast_by_cohort) * 1.15)
+    fast_vals = np.array(fast_by_cohort, dtype=float)
+    if np.isfinite(fast_vals).any():
+        ax.set_ylim(0, np.nanmax(fast_vals) * 1.15)
+    for cohort, pct in zip(cohort_year_labels, fast_by_cohort):
+        fig12_rows.append({
+            'panel': 'cohort_fast_pct',
+            'cohort': cohort,
+            'percent_fast': pct
+        })
     
     # 12d. FASt gap by cohort - RED theme (distress gaps)
     ax = axes[1, 1]
@@ -994,10 +1265,21 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_ylabel('FASt - Non-FASt Gap (Distress)', fontsize=11)
     ax.set_title('FASt Effect on Distress by Cohort', fontsize=12, fontweight='bold')
     # Auto-scale y-axis symmetrically around 0
-    max_gap = max(abs(min(gaps)), abs(max(gaps)))
-    ax.set_ylim(-max_gap * 1.2, max_gap * 1.2)
+    gap_vals = np.array(gaps, dtype=float)
+    if np.isfinite(gap_vals).any():
+        max_gap = np.nanmax(np.abs(gap_vals))
+        if max_gap > 0:
+            ax.set_ylim(-max_gap * 1.2, max_gap * 1.2)
+    for cohort, gap in zip(cohort_year_labels, gaps):
+        fig12_rows.append({
+            'panel': 'cohort_gap_distress',
+            'cohort': cohort,
+            'gap': gap
+        })
     
-    plt.suptitle('Figure 12\nCohort Comparison Patterns' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
+    write_fig_data(outdir, 'fig12_cohort_patterns_data.csv', pd.DataFrame(fig12_rows))
+    
+    plt.suptitle('Figure 12 (Descriptive)\nCohort Comparison Patterns' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig, weighted=use_weights)
     plt.savefig(f'{outdir}/fig12_cohort_patterns.png', dpi=300, bbox_inches='tight')

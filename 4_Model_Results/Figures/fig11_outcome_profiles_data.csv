@@ -1,0 +1,36 @@
+panel,outcome,fast_mean,nonfast_mean,fast_sem,nonfast_sem,risk_count,z_mean
+outcome_means_by_fast,"Emotional
+Distress",3.9391519295898814,3.766071323867489,0.030160497922506302,0.016201777933892745,NA,NA
+outcome_means_by_fast,"Quality of
+Engagement",4.8186597660259105,4.864729442326368,0.02831347460004132,0.01657076929094304,NA,NA
+outcome_means_by_fast,"Sense of
+Belonging",2.6711225846058113,2.725593503004077,0.020070782481078134,0.011757219501329385,NA,NA
+outcome_means_by_fast,"Perceived
+Gains",2.945549539808798,2.9489847461654155,0.015527474127242579,0.00940130515035321,NA,NA
+outcome_means_by_fast,"Support
+Environment",2.716363075282059,2.722573513322233,0.01817229014750882,0.01085779883195859,NA,NA
+outcome_z_by_risk,Distress,NA,NA,NA,NA,0.0,-0.13018600603297534
+outcome_z_by_risk,Distress,NA,NA,NA,NA,1.0,-0.09221377208034817
+outcome_z_by_risk,Distress,NA,NA,NA,NA,2.0,-0.053557448441254034
+outcome_z_by_risk,Distress,NA,NA,NA,NA,3.0,0.08146976029147059
+outcome_z_by_risk,Distress,NA,NA,NA,NA,4.0,0.34682783475092366
+outcome_z_by_risk,Engagement,NA,NA,NA,NA,0.0,0.2369240089457137
+outcome_z_by_risk,Engagement,NA,NA,NA,NA,1.0,0.18204808339838827
+outcome_z_by_risk,Engagement,NA,NA,NA,NA,2.0,0.0012666371420928858
+outcome_z_by_risk,Engagement,NA,NA,NA,NA,3.0,-0.16354936520617433
+outcome_z_by_risk,Engagement,NA,NA,NA,NA,4.0,-0.27012217823426976
+outcome_z_by_risk,Belonging,NA,NA,NA,NA,0.0,0.03694492709569138
+outcome_z_by_risk,Belonging,NA,NA,NA,NA,1.0,-0.03829675834292169
+outcome_z_by_risk,Belonging,NA,NA,NA,NA,2.0,0.0412638115594253
+outcome_z_by_risk,Belonging,NA,NA,NA,NA,3.0,-0.01755369346515644
+outcome_z_by_risk,Belonging,NA,NA,NA,NA,4.0,-0.021215974237460553
+outcome_z_by_risk,Gains,NA,NA,NA,NA,0.0,0.16347918927187366
+outcome_z_by_risk,Gains,NA,NA,NA,NA,1.0,0.015740463842396215
+outcome_z_by_risk,Gains,NA,NA,NA,NA,2.0,0.012017718122404469
+outcome_z_by_risk,Gains,NA,NA,NA,NA,3.0,-0.051080239530707415
+outcome_z_by_risk,Gains,NA,NA,NA,NA,4.0,-0.09744248365098157
+outcome_z_by_risk,Support,NA,NA,NA,NA,0.0,0.17628061175008905
+outcome_z_by_risk,Support,NA,NA,NA,NA,1.0,0.04826680667522788
+outcome_z_by_risk,Support,NA,NA,NA,NA,2.0,-0.019886679813057254
+outcome_z_by_risk,Support,NA,NA,NA,NA,3.0,-0.06873637373299629
+outcome_z_by_risk,Support,NA,NA,NA,NA,4.0,-0.03341019781584053

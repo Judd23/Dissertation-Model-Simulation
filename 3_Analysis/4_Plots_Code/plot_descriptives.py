@@ -84,10 +84,33 @@ def normalize_is_woman(sex_series):
     is_woman = is_woman.where(sex_series.notna())
     return is_woman.astype(float)
 
+def ensure_columns(df, cols):
+    """Ensure required columns exist; fill missing with NA."""
+    for col in cols:
+        if col not in df.columns:
+            df[col] = np.nan
+
+def write_fig_data(outdir, filename, data, index=False):
+    """Write figure data to CSV with NA for missing values."""
+    path = os.path.join(outdir, filename)
+    if not isinstance(data, pd.DataFrame):
+        data = pd.DataFrame(data)
+    data.to_csv(path, index=index, na_rep="NA")
+    return path
+
 def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', weight_col=None):
     os.makedirs(outdir, exist_ok=True)
     
     df = pd.read_csv(data_path)
+    required_cols = [
+        're_all', 'firstgen', 'pell', 'sex', 'x_FASt', 'trnsfr_cr', 'credit_dose', 'cohort',
+        'MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial',
+        'QIstudent', 'QIadvisor', 'QIfaculty', 'QIstaff', 'QIadmin',
+        'sbvalued', 'sbmyself', 'sbcommunity', 'pgthink', 'pganalyze', 'pgwork', 'pgvalues', 'pgprobsolve',
+        'SEwellness', 'SEnonacad', 'SEactivities', 'SEacademic', 'SEdiverse',
+        'evalexp', 'sameinst'
+    ]
+    ensure_columns(df, required_cols)
     plt.style.use('seaborn-v0_8-whitegrid')
     
     # Setup weighting
@@ -189,6 +212,30 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     for i, v in enumerate(cohort_weights.values):
         ax.text(i, v + total_weight*0.01, f'{v:.0f}', ha='center', fontsize=10)
     
+    fig1_rows = []
+    total_weight_safe = total_weight if total_weight > 0 else np.nan
+    for cat, val in zip(race_order, race_weights.values):
+        pct = val / total_weight_safe * 100 if np.isfinite(total_weight_safe) else np.nan
+        fig1_rows.append({'panel': 'race', 'category': cat, 'weighted_count': val, 'percent': pct})
+    for cat, yes, no in zip(categories, yes_pct, no_pct):
+        fig1_rows.append({'panel': 'indicator', 'category': cat, 'yes_pct': yes, 'no_pct': no})
+    mask = ~np.isnan(credit_data) & ~np.isnan(w)
+    if mask.sum() > 0:
+        counts, edges = np.histogram(credit_data[mask], bins=20, weights=w[mask])
+        for i in range(len(counts)):
+            fig1_rows.append({
+                'panel': 'credit_hist',
+                'bin_left': edges[i],
+                'bin_right': edges[i + 1],
+                'weighted_count': counts[i]
+            })
+    else:
+        fig1_rows.append({'panel': 'credit_hist', 'bin_left': np.nan, 'bin_right': np.nan, 'weighted_count': np.nan})
+    fig1_rows.append({'panel': 'credit_summary', 'mean': wtd_mean, 'fast_threshold': 12})
+    for cohort, val in zip(cohort_weights.index.astype(str), cohort_weights.values):
+        fig1_rows.append({'panel': 'cohort', 'category': cohort, 'weighted_count': val})
+    write_fig_data(outdir, 'fig1_demographics_data.csv', pd.DataFrame(fig1_rows))
+    
     plt.suptitle('Figure 1\nSample Demographics Overview' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
     add_sim_note(fig, weighted=use_weights)
@@ -202,13 +249,15 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     fig, axes = plt.subplots(2, 3, figsize=(14, 9))
     mhw_cols = ['MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial']
     mhw_labels = ['Academic Difficulties', 'Loneliness', 'Mental Health', 'Exhaustion', 'Sleep Problems', 'Financial Stress']
+    fig2_rows = []
     
     # Red gradient: lighter for low values, darker for high values (more distress = darker red)
     for idx, (col, label) in enumerate(zip(mhw_cols, mhw_labels)):
         ax = axes[idx // 3, idx % 3]
         counts = weighted_value_counts(df[col], w)
         counts = counts.sort_index()
-        max_val = int(df[col].max())
+        max_val_raw = pd.to_numeric(df[col].max(), errors='coerce')
+        max_val = int(max_val_raw) if np.isfinite(max_val_raw) else 6
         # Create red gradient based on response value
         red_gradient = plt.cm.Reds(np.linspace(0.2, 0.9, max_val))
         bar_colors = [red_gradient[int(v)-1] for v in counts.index]
@@ -219,6 +268,23 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         elevated_pct = weighted_proportion((df[col] >= threshold).astype(float).values, w) * 100
         ax.set_title(f'{label}\n({elevated_pct:.1f}% elevated)', fontsize=11, fontweight='bold')
         ax.set_xticks(range(1, max_val + 1))
+        if counts.empty:
+            fig2_rows.append({
+                'item': label,
+                'variable': col,
+                'response': np.nan,
+                'weighted_count': np.nan,
+                'elevated_pct': elevated_pct
+            })
+        else:
+            for resp, count in counts.items():
+                fig2_rows.append({
+                    'item': label,
+                    'variable': col,
+                    'response': resp,
+                    'weighted_count': count,
+                    'elevated_pct': elevated_pct
+                })
     
     plt.suptitle('Figure 2\nEmotional Distress Indicators (EmoDiss)' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
@@ -226,6 +292,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     plt.savefig(f'{outdir}/fig2_emotional_distress.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 2: Emotional Distress saved')
+    write_fig_data(outdir, 'fig2_emotional_distress_data.csv', pd.DataFrame(fig2_rows))
     
     # =========================================================================
     # FIGURE 3: Quality of Engagement (QualEngag) Distributions - BLUE theme (weighted)
@@ -233,6 +300,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     fig, axes = plt.subplots(2, 3, figsize=(14, 9))
     qi_cols = ['QIstudent', 'QIadvisor', 'QIfaculty', 'QIstaff', 'QIadmin']
     qi_labels = ['Other Students', 'Academic Advisors', 'Faculty', 'Staff', 'Administrators']
+    fig3_rows = []
     
     # Blue gradient: lighter for low values, darker for high values
     blue_gradient = ['#cce5ff', '#99ccff', '#66b3ff', '#3399ff', '#0066cc', '#004c99', '#003366']
@@ -251,6 +319,25 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         ax.set_title(f'Quality of Interactions: {label}\n(M={wtd_m:.2f}, SD={wtd_sd:.2f})', 
                      fontsize=11, fontweight='bold')
         ax.set_xticks(range(1, 8))
+        if counts.empty:
+            fig3_rows.append({
+                'item': label,
+                'variable': col,
+                'response': np.nan,
+                'weighted_count': np.nan,
+                'weighted_mean': wtd_m,
+                'weighted_sd': wtd_sd
+            })
+        else:
+            for resp, count in counts.items():
+                fig3_rows.append({
+                    'item': label,
+                    'variable': col,
+                    'response': resp,
+                    'weighted_count': count,
+                    'weighted_mean': wtd_m,
+                    'weighted_sd': wtd_sd
+                })
     
     axes[1, 2].axis('off')
     
@@ -260,11 +347,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     plt.savefig(f'{outdir}/fig3_quality_engagement.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 3: Quality of Engagement saved')
+    write_fig_data(outdir, 'fig3_quality_engagement_data.csv', pd.DataFrame(fig3_rows))
     
     # =========================================================================
     # FIGURE 4: Developmental Adjustment (DevAdj) - Belonging, Gains, Support, Satisfaction
     # =========================================================================
     fig, axes = plt.subplots(2, 4, figsize=(16, 9))
+    fig4_rows = []
     
     # DevAdj color palette (greens/teals for positive outcomes)
     devadj_colors = {
@@ -277,7 +366,8 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # Belonging items (Sense of Belonging) - GREEN gradient
     sb_cols = ['sbvalued', 'sbmyself', 'sbcommunity']
     sb_labels = ['Feel Valued', 'Can Be Myself', 'Part of Community']
-    sb_max = int(df[sb_cols].max().max())  # Auto-detect scale
+    sb_max_raw = pd.to_numeric(df[sb_cols].max().max(), errors='coerce')
+    sb_max = int(sb_max_raw) if np.isfinite(sb_max_raw) else 4
     green_gradient = plt.cm.Greens(np.linspace(0.3, 0.9, sb_max))
     
     for idx, (col, label) in enumerate(zip(sb_cols, sb_labels)):
@@ -293,6 +383,25 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
         low_pct = weighted_proportion(low_mask.values, w) * 100
         ax.set_title(f'{label}\n({low_pct:.1f}% low)', fontsize=10, fontweight='bold')
         ax.set_xticks(range(1, sb_max + 1))
+        if counts.empty:
+            fig4_rows.append({
+                'panel': 'belonging_item',
+                'item': label,
+                'variable': col,
+                'response': np.nan,
+                'weighted_count': np.nan,
+                'low_pct': low_pct
+            })
+        else:
+            for resp, count in counts.items():
+                fig4_rows.append({
+                    'panel': 'belonging_item',
+                    'item': label,
+                    'variable': col,
+                    'response': resp,
+                    'weighted_count': count,
+                    'low_pct': low_pct
+                })
     
     # Summary belonging (weighted)
     ax = axes[0, 3]
@@ -311,11 +420,18 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_xlim(0, min(100, max_pct))
     for i, v in enumerate(low_belong):
         ax.text(v + 1, i, f'{v:.1f}%', va='center', fontsize=10)
+    for label, pct in zip(sb_labels, low_belong):
+        fig4_rows.append({
+            'panel': 'belonging_summary',
+            'item': label,
+            'low_pct': pct
+        })
     
     # Gains items (Perceived Gains) - CYAN (weighted)
     pg_cols = ['pgthink', 'pganalyze', 'pgwork', 'pgvalues', 'pgprobsolve']
     pg_labels = ['Think Critically', 'Analyze Info', 'Work with Others', 'Develop Values', 'Problem Solving']
-    pg_max = int(df[pg_cols].max().max())  # Auto-detect scale
+    pg_max_raw = pd.to_numeric(df[pg_cols].max().max(), errors='coerce')
+    pg_max = int(pg_max_raw) if np.isfinite(pg_max_raw) else 4
     means = [weighted_mean(df[c].values, w) for c in pg_cols]
     sds = [weighted_std(df[c].values, w) for c in pg_cols]
     
@@ -324,11 +440,19 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_xlabel(f'M ± SD (1-{pg_max} scale)', fontsize=10)
     ax.set_title('Perceived Gains', fontsize=10, fontweight='bold')
     ax.set_xlim(1, pg_max)
+    for label, mean_val, sd_val in zip(pg_labels, means, sds):
+        fig4_rows.append({
+            'panel': 'gains',
+            'item': label,
+            'weighted_mean': mean_val,
+            'weighted_sd': sd_val
+        })
     
     # SE items (Supportive Environment) - PURPLE (weighted)
     se_cols = ['SEwellness', 'SEnonacad', 'SEactivities', 'SEacademic', 'SEdiverse']
     se_labels = ['Wellness Support', 'Non-Academic Support', 'Co-Curricular Activities', 'Academic Support', 'Diverse Interactions']
-    se_max = int(df[se_cols].max().max())  # Auto-detect scale
+    se_max_raw = pd.to_numeric(df[se_cols].max().max(), errors='coerce')
+    se_max = int(se_max_raw) if np.isfinite(se_max_raw) else 4
     means = [weighted_mean(df[c].values, w) for c in se_cols]
     sds = [weighted_std(df[c].values, w) for c in se_cols]
     
@@ -337,18 +461,33 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_xlabel(f'M ± SD (1-{se_max} scale)', fontsize=10)
     ax.set_title('Supportive Environment', fontsize=10, fontweight='bold')
     ax.set_xlim(1, se_max)
+    for label, mean_val, sd_val in zip(se_labels, means, sds):
+        fig4_rows.append({
+            'panel': 'support',
+            'item': label,
+            'weighted_mean': mean_val,
+            'weighted_sd': sd_val
+        })
     
     # Satisfaction - BROWN (weighted)
     ax = axes[1, 2]
     sat_cols = ['evalexp', 'sameinst']
     sat_labels = ['Rate Overall Experience', 'Choose Same Institution']
-    sat_max = int(df[sat_cols].max().max())  # Auto-detect scale
+    sat_max_raw = pd.to_numeric(df[sat_cols].max().max(), errors='coerce')
+    sat_max = int(sat_max_raw) if np.isfinite(sat_max_raw) else 4
     means = [weighted_mean(df[c].values, w) for c in sat_cols]
     sds = [weighted_std(df[c].values, w) for c in sat_cols]
     ax.barh(sat_labels, means, xerr=sds, color=devadj_colors['satisfaction'], capsize=3)
     ax.set_xlabel(f'M ± SD (1-{sat_max} scale)', fontsize=10)
     ax.set_title('Satisfaction', fontsize=10, fontweight='bold')
     ax.set_xlim(1, sat_max)
+    for label, mean_val, sd_val in zip(sat_labels, means, sds):
+        fig4_rows.append({
+            'panel': 'satisfaction',
+            'item': label,
+            'weighted_mean': mean_val,
+            'weighted_sd': sd_val
+        })
     
     axes[1, 3].axis('off')
     
@@ -358,11 +497,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     plt.savefig(f'{outdir}/fig4_developmental_adjustment.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 4: Developmental Adjustment saved')
+    write_fig_data(outdir, 'fig4_developmental_adjustment_data.csv', pd.DataFrame(fig4_rows))
     
     # =========================================================================
     # FIGURE 5: Equity Gaps Visualization (weighted)
     # =========================================================================
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    fig5_rows = []
     
     # Create masks for FASt/Non-FASt
     fast_mask = df['x_FASt'] == 1
@@ -381,13 +522,21 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.bar(x + width/2, fast_means, width, label='FASt', color=colors['fast'], 
            edgecolor='black', linewidth=1)
     # Auto-detect scale from data
-    max_scale = int(df[mhw_cols].max().max())
+    max_scale_raw = pd.to_numeric(df[mhw_cols].max().max(), errors='coerce')
+    max_scale = int(max_scale_raw) if np.isfinite(max_scale_raw) else 6
     ax.set_ylabel(f'Mean Distress (1-{max_scale})', fontsize=11)
     ax.set_title('Emotional Distress by FASt Status', fontsize=12, fontweight='bold')
     ax.set_xticks(x)
     ax.set_xticklabels(mhw_short, fontsize=9)
     ax.legend()
     ax.set_ylim(1, max_scale)
+    for label, f_mean, nf_mean in zip(mhw_short, fast_means, nonfast_means):
+        fig5_rows.append({
+            'panel': 'fast_nonfast_distress',
+            'item': label,
+            'fast_mean': f_mean,
+            'nonfast_mean': nf_mean
+        })
     
     # 5b. FASt vs Non-FASt - Quality of Engagement (BLUE theme, FASt=Orange accent)
     ax = axes[0, 1]
@@ -406,6 +555,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_xticklabels(qi_short, fontsize=9)
     ax.legend()
     ax.set_ylim(1, 7)
+    for label, f_mean, nf_mean in zip(qi_short, fast_means, nonfast_means):
+        fig5_rows.append({
+            'panel': 'fast_nonfast_engagement',
+            'item': label,
+            'fast_mean': f_mean,
+            'nonfast_mean': nf_mean
+        })
     
     # 5c. First-gen gaps - use construct-appropriate colors (weighted)
     ax = axes[1, 0]
@@ -432,6 +588,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_xticks(x)
     ax.set_xticklabels(key_labels, fontsize=9)
     ax.legend()
+    for label, fg_mean, cg_mean in zip(key_labels, fg_means, cg_means):
+        fig5_rows.append({
+            'panel': 'firstgen_key',
+            'item': label,
+            'firstgen_mean': fg_mean,
+            'contgen_mean': cg_mean
+        })
     
     # 5d. Gap summary (effect sizes) - weighted Cohen's d
     ax = axes[1, 1]
@@ -463,6 +626,12 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_xlabel("Cohen's d (FASt vs Non-FASt)", fontsize=11)
     ax.set_title('FASt Effect Sizes\n(+) = FASt higher, (−) = FASt lower', fontsize=12, fontweight='bold')
     ax.set_xlim(-0.5, 0.5)
+    for label, d in zip(gap_labels, fast_d):
+        fig5_rows.append({
+            'panel': 'fast_effect_sizes',
+            'item': label,
+            'cohens_d': d
+        })
     
     plt.suptitle('Figure 5\nEquity Gaps Analysis' + (' (PSW Weighted)' if use_weights else ''), fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
@@ -470,6 +639,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     plt.savefig(f'{outdir}/fig5_equity_gaps.png', dpi=300, bbox_inches='tight')
     plt.close()
     print('✓ Figure 5: Equity Gaps saved')
+    write_fig_data(outdir, 'fig5_equity_gaps_data.csv', pd.DataFrame(fig5_rows))
     
     # =========================================================================
     # FIGURE 6: Correlation Heatmap - Key Variables (grouped by construct)
@@ -518,6 +688,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     var_labels = [l for v, l in available]
     
     corr_matrix = df[key_vars].corr(method='spearman')
+    write_fig_data(outdir, 'fig6_correlation_heatmap_data.csv', corr_matrix, index=True)
 
     # Use a diverging colormap where RED = positive, BLUE = negative
     # (common interpretation for correlation heatmaps)
@@ -554,11 +725,13 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # FIGURE 13: Love Plot - PSW Balance (unweighted vs weighted SMDs)
     # =========================================================================
     psw_path = os.path.join(os.path.dirname(outdir), "Outputs", "RQ1_RQ3_main", "psw_balance_smd.txt")
+    fig13_data = pd.DataFrame([{'covariate': np.nan, 'smd_unweighted': np.nan, 'smd_weighted': np.nan}])
     if os.path.exists(psw_path):
         bal = pd.read_csv(psw_path, sep='\t')
         req_cols = {'covariate', 'smd_unweighted', 'smd_weighted'}
         if req_cols.issubset(bal.columns):
             bal = bal.dropna(subset=['smd_unweighted', 'smd_weighted'])
+            fig13_data = bal[['covariate', 'smd_unweighted', 'smd_weighted']].copy()
             covs = bal['covariate'].astype(str).tolist()
             y_pos = np.arange(len(covs))
             fig, ax = plt.subplots(figsize=(10, max(6, len(covs) * 0.3)))
@@ -584,6 +757,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
             print('! Figure 13 skipped: psw_balance_smd.txt missing required columns')
     else:
         print('! Figure 13 skipped: psw_balance_smd.txt not found')
+    write_fig_data(outdir, 'fig13_love_plot_data.csv', fig13_data)
     
     print(f'\n✓ All figures saved to {outdir}/')
     return outdir
