@@ -1,0 +1,14 @@
+# Canonical run storage location
+# Each run creates: runs/<RUN_ID>/
+#
+#   raw/      - R model outputs (lavaan .txt, TSV, CSV)
+#   tables/   - DOCX tables (Python-generated)
+#   figures/  - PNG figures (Python-generated)
+#   logs/     - Verification checklist, run logs
+#   manifest.json - Required artifact manifest
+#
+# Run Summaries (in tables/):
+#   Dissertation_Tables.docx  - APA 7 formatted dissertation tables
+#   Bootstrap_Tables.docx     - Bootstrap results tables
+#   Plain_Language_Summary.docx - APA 7 formatted findings summary
+

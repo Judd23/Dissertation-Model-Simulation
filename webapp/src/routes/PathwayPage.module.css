@@ -117,6 +117,7 @@
   border-color: var(--button-color, var(--color-accent));
   color: var(--button-text, white);
   box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.15),
     0 2px 12px
       color-mix(
         in srgb,
@@ -188,12 +189,30 @@
 .mobileHint {
   display: none;
   font-size: var(--font-size-xs);
+  font-weight: 500;
   color: var(--color-text-muted);
   text-align: center;
   margin-top: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-md);
-  background: color-mix(in srgb, var(--color-background) 35%, transparent);
+  background: color-mix(in srgb, var(--color-background) 50%, transparent);
   border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+  animation: hintPulse 1.5s ease-out 1;
+}
+
+@keyframes hintPulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .mobileHint::before {
@@ -242,7 +261,7 @@
 
 /* Coefficients */
 .coefficients {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
   border-top: 1px solid var(--color-border-light);
   padding-top: var(--spacing-2xl);
 }
@@ -263,8 +282,12 @@
 .badgeLegend {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: var(--spacing-sm);
-  margin-left: var(--spacing-sm);
+  justify-content: center;
+  gap: var(--spacing-xs) var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
 }
 
 .legendStrong,
@@ -333,7 +356,8 @@
 /* Hover handled by glass.css */
 
 .coefficientCard.dimmed {
-  opacity: 0.4;
+  opacity: 0.55;
+  filter: grayscale(0.2);
 }
 
 .coefficientHeader {
@@ -519,8 +543,10 @@
 
 .formulaResult {
   margin-top: var(--spacing-sm);
-  padding-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
   border-top: 2px solid var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -544,6 +570,7 @@
   color: var(--color-text-muted);
   line-height: 1.6;
   margin: 0;
+  text-align: left;
 }
 
 /* Summary */
@@ -767,6 +794,7 @@
   font-size: var(--font-size-lg);
   color: var(--color-text);
   margin: 0 0 var(--spacing-sm) 0;
+  text-align: center;
 }
 
 .fairComparisonsCard p {
@@ -775,6 +803,7 @@
   color: var(--color-text-muted);
   line-height: 1.7;
   margin: 0 0 var(--spacing-md) 0;
+  text-align: left;
 }
 
 .covariatesDetails {

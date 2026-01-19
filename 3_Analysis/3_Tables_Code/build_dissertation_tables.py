@@ -136,9 +136,9 @@ VARIABLE_LABELS = {
 }
 
 
-def get_label(var_name):
+def get_label(var_name: str) -> str:
     """Get readable label for a variable name."""
-    return VARIABLE_LABELS.get(var_name, var_name)
+    return VARIABLE_LABELS.get(var_name, var_name) or var_name
 
 
 def find_csv(data_dir, filename):
@@ -927,7 +927,7 @@ def table7_cfa(doc, table_num, data_dir, compact=True):
                 if not x:
                     return x
                 if x.startswith(' '):
-                    return '  'get_label(x.strip())
+                    return '  ' + get_label(x.strip())
                 return get_label(x.strip())
             df['Item/Factor'] = df['Item/Factor'].apply(format_item)
         data_rows = df.values.tolist()
@@ -1413,8 +1413,9 @@ def main():
     # Create document
     doc = Document()
     style = doc.styles['Normal']
-    style.font.name = 'Times New Roman'
-    style.font.size = Pt(12)
+    if hasattr(style, 'font') and style.font is not None:  # type: ignore[union-attr]
+        style.font.name = 'Times New Roman'  # type: ignore[union-attr]
+        style.font.size = Pt(12)  # type: ignore[union-attr]
     
     # Set narrow margins for more content per page
     for section in doc.sections:

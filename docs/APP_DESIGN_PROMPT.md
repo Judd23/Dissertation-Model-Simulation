@@ -58,7 +58,7 @@ The platform should feel like an interactive supplement to a peer-reviewed journ
 
 ### Plain Language Standards
 
-Research findings should be communicated in clear, accessible language while maintaining academic precision. The goal is comprehension, not condescension.
+Research findings should be communicated in clear, accessible language while maintaining academic precision. The goal is comprehension, not condescension. Don't use Em-Dashes. Don't use the phrase "Plain Language".
 
 | Technical Term | Accessible Alternative |
 |----------------|----------------------|
