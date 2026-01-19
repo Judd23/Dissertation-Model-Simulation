@@ -35,6 +35,7 @@ function describeEffectSize(beta: number): string {
 export default function HomePage() {
   const { sampleSize, fitMeasures, paths, fastPercent } = useModelData();
   const { refreshModelData, isRefreshing } = useModelDataActions();
+  const refreshLabel = isRefreshing ? "Refreshing data" : "Refresh data";
 
   // Derive key findings dynamically from pipeline data
   const keyFindings = {
@@ -93,6 +94,20 @@ export default function HomePage() {
             </GlossaryTerm>
             .
           </p>
+          <div
+            className={styles.actions}
+            role="group"
+            aria-label="Get started with the research"
+          >
+            <InteractiveSurface
+              as="link"
+              to="/pathway"
+              className="button button-primary button-lg interactiveSurface"
+              aria-label="Explore the pathway diagram showing how credits affect student outcomes"
+            >
+              Explore the Connections
+            </InteractiveSurface>
+          </div>
         </div>
       </motion.section>
 
@@ -160,9 +175,10 @@ export default function HomePage() {
               type="button"
               className="button button-secondary button-sm interactiveSurface"
               onClick={handleRefreshData}
-              aria-label="Refresh data from the latest model run"
+              aria-label={`${refreshLabel} from the latest model run`}
+              disabled={isRefreshing}
             >
-              Refresh data
+              {refreshLabel}
             </InteractiveSurface>
           </div>
         </div>
