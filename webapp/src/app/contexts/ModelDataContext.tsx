@@ -33,10 +33,15 @@ export function ModelDataProvider({ children }: { children: ReactNode }) {
 
     loadData();
     const interval = window.setInterval(loadData, POLL_INTERVAL_MS);
+    const handleRefresh = () => {
+      loadData();
+    };
+    window.addEventListener('model-data-refresh', handleRefresh);
 
     return () => {
       isMountedRef.current = false;
       window.clearInterval(interval);
+      window.removeEventListener('model-data-refresh', handleRefresh);
     };
   }, []);
 
