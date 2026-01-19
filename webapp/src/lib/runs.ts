@@ -1,6 +1,6 @@
 /**
  * Run Library data fetching utilities.
- * 
+ *
  * Fetches runs_index.json and individual run manifests using BASE_URL.
  */
 
@@ -8,7 +8,7 @@
 export interface RunManifest {
   run_id: string;
   timestamp: string;
-  mode: 'smoke' | 'main' | 'Full_Deploy';
+  mode: "smoke" | "main" | "Full_Deploy";
   settings?: {
     seed?: number | null;
     N?: number | null;
@@ -37,19 +37,19 @@ export interface RunIndexEntry {
 }
 
 // BASE_URL-aware path for results
-const RESULTS_BASE_PATH = new URL('results', import.meta.env.BASE_URL).pathname;
+const RESULTS_BASE_PATH = new URL("results", import.meta.env.BASE_URL).pathname;
 
 /**
  * Fetch JSON with cache-busting and error handling.
  */
 async function fetchJson<T>(path: string): Promise<T> {
   const url = `${RESULTS_BASE_PATH}/${path}?t=${Date.now()}`;
-  const response = await fetch(url, { cache: 'no-store' });
-  
+  const response = await fetch(url, { cache: "no-store" });
+
   if (!response.ok) {
     throw new Error(`Failed to load ${path} (${response.status})`);
   }
-  
+
   return response.json();
 }
 
@@ -58,10 +58,10 @@ async function fetchJson<T>(path: string): Promise<T> {
  */
 export async function fetchRunsIndex(): Promise<RunIndexEntry[]> {
   try {
-    const runs = await fetchJson<RunIndexEntry[]>('runs_index.json');
+    const runs = await fetchJson<RunIndexEntry[]>("runs_index.json");
     return Array.isArray(runs) ? runs : [];
   } catch (error) {
-    console.warn('[runs] Failed to fetch runs_index.json:', error);
+    console.warn("[runs] Failed to fetch runs_index.json:", error);
     return [];
   }
 }
@@ -69,7 +69,9 @@ export async function fetchRunsIndex(): Promise<RunIndexEntry[]> {
 /**
  * Fetch a specific run's manifest.
  */
-export async function fetchRunManifest(runId: string): Promise<RunManifest | null> {
+export async function fetchRunManifest(
+  runId: string,
+): Promise<RunManifest | null> {
   try {
     return await fetchJson<RunManifest>(`${runId}/manifest.json`);
   } catch (error) {
@@ -91,12 +93,12 @@ export function getArtifactUrl(runId: string, relativePath: string): string {
 export function formatRunTimestamp(timestamp: string): string {
   try {
     const date = new Date(timestamp);
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   } catch {
     return timestamp;
@@ -108,11 +110,11 @@ export function formatRunTimestamp(timestamp: string): string {
  */
 export function getModeColor(mode: string): string {
   switch (mode) {
-    case 'smoke':
-      return 'var(--color-warning, #f59e0b)';
-    case 'Full_Deploy':
-      return 'var(--color-success, #10b981)';
+    case "smoke":
+      return "var(--color-warning, #f59e0b)";
+    case "Full_Deploy":
+      return "var(--color-success, #10b981)";
     default:
-      return 'var(--color-primary, #3b82f6)';
+      return "var(--color-primary, #3b82f6)";
   }
 }
