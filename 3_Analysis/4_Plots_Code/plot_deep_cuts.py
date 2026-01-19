@@ -211,8 +211,8 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     ax.set_ylabel(f'Mean Emotional Distress (1-{distress_max})', fontsize=11)
     ax.set_title('Cumulative Risk → Distress\n(95% CI)' + (' (PSW)' if use_weights else ''), fontsize=12, fontweight='bold')
     # Auto-scale y-axis with padding
-    y_min = means.min() - 1.96*sems.max() - 0.2
-    y_max = means.max() + 1.96*sems.max() + 0.2
+    y_min = np.nanmin(means.values) - 1.96*np.nanmax(sems.values) - 0.2
+    y_max = np.nanmax(means.values) + 1.96*np.nanmax(sems.values) + 0.2
     ax.set_ylim(max(1, y_min), min(distress_max, y_max))
     
     # Add trend line (weighted)
