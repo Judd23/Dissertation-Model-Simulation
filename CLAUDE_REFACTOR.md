@@ -122,6 +122,80 @@ This single rule prevents half the "why is the UI blank?" debugging.
 
 ---
 
+## WIRING DIAGRAM (Phases 0-4)
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ ENV: RUN_ID=xxx (REQUIRED)                                          │
+│ ENV: RUN_MODE=smoke|main|Full_Deploy (default: main)                │
+│ ENV: MANIFEST_FIRST_PYTHON=0|1 (default: 0 = legacy mode)           │
+└──────────────────────────────────┬──────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ R: 3_Analysis/1_Main_Pipeline_Code/run_all_RQs_official.R           │
+│                                                                     │
+│   1. set_out_base() → 4_Model_Results/Outputs/runs/<RUN_ID>/        │
+│       ├─ raw/      (lavaan outputs)                                 │
+│       ├─ tables/   (DOCX)                                           │
+│       ├─ figures/  (PNG)                                            │
+│       └─ logs/     (verification)                                   │
+│                                                                     │
+│   2. [SEM fitting: RQ1-RQ4, PSW, bootstrap]                         │
+│                                                                     │
+│   3. Python stage (if !SKIP_POST_PROCESSING):                       │
+│       if (MANIFEST_FIRST_PYTHON) {                                  │
+│         → run_python_stage.py --manifest manifest.json              │
+│       } else {                                                      │
+│         → Individual Python calls (legacy)                          │
+│       }                                                             │
+│                                                                     │
+│   4. write_manifest() → manifest.json                               │
+│                                                                     │
+│   5. if (!SKIP_WEBAPP_SYNC) {                                       │
+│        → sync_run_to_webapp.py --run-dir OUT_RUN                    │
+│      }                                                              │
+└──────────────────────────────────┬──────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ Python: scripts/sync_run_to_webapp.py                               │
+│   ├─ Copies manifest + artifacts → webapp/public/results/<RUN_ID>/ │
+│   └─ Updates runs_index.json (newest-first, deduped)                │
+└──────────────────────────────────┬──────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ webapp/public/results/                                              │
+│   ├─ runs_index.json                                                │
+│   └─ <RUN_ID>/                                                      │
+│       ├─ manifest.json                                              │
+│       ├─ raw/...                                                    │
+│       ├─ tables/*.docx                                              │
+│       └─ figures/*.png                                              │
+└──────────────────────────────────┬──────────────────────────────────┘
+                                   │
+                                   ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ Webapp UI (Phase 5): #/runs route                                   │
+│   ├─ Fetch: results/runs_index.json                                 │
+│   ├─ Fetch: results/<RUN_ID>/manifest.json                          │
+│   └─ Display: Run Library + Run Details                             │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Key Files
+
+| File                                                     | Purpose                          |
+| -------------------------------------------------------- | -------------------------------- |
+| `3_Analysis/1_Main_Pipeline_Code/run_all_RQs_official.R` | R entrypoint (SEM pipeline)      |
+| `3_Analysis/run_python_stage.py`                         | Manifest-first Python entrypoint |
+| `scripts/sync_run_to_webapp.py`                          | Sync run to webapp public folder |
+| `webapp/public/results/runs_index.json`                  | Index of all synced runs         |
+| `4_Model_Results/Outputs/runs/<RUN_ID>/manifest.json`    | Canonical run manifest           |
+
+---
+
 ## PHASED EXECUTION PLAN (DO THIS IN MULTIPLE TASKS)
 
 You will proceed phase-by-phase. At the end of each phase, **STOP and ask for approval** before continuing.

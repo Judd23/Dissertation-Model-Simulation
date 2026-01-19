@@ -60,12 +60,13 @@
   font-weight: 600;
   margin-bottom: var(--spacing-md);
   color: var(--color-text);
+  text-align: center;
 }
 
 .groupButtons {
   display: flex;
   gap: var(--spacing-sm);
-  justify-content: flex-start;
+  justify-content: center;
   flex-wrap: wrap;
   margin-bottom: var(--spacing-md);
 }
@@ -112,7 +113,8 @@
   );
   border-color: var(--color-accent-hover);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 85, 187, 0.3),
+  box-shadow: 0 0 0 3px rgba(0, 85, 187, 0.15),
+    0 4px 12px rgba(0, 85, 187, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
   font-weight: 600;
@@ -128,6 +130,7 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   margin: 0;
+  text-align: center;
 }
 
 .plainTalk {
@@ -154,6 +157,8 @@
   font-size: var(--font-size-xl);
   margin: 0;
   text-align: center;
+  flex: 1;
+  padding-left: 120px; /* Balance toggle width on right */
 }
 
 .demographicsGrid {
@@ -296,6 +301,7 @@
   font-size: var(--font-size-sm);
   margin: 0 auto var(--spacing-lg);
   max-width: 640px;
+  text-align: center;
 }
 
 .sampleGrid {
@@ -372,12 +378,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-xs) 0;
-  border-bottom: 1px dotted var(--color-border-light);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .statRow:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .statLabel {
@@ -506,7 +513,11 @@
   .demographicsHeader {
     flex-direction: column;
     gap: var(--spacing-md);
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  .demographicsHeader h2 {
+    padding-left: 0;
   }
 
   .demographicsGrid {
