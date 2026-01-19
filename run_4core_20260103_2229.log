@@ -1,6 +1,0 @@
-Wrote verification checklist: 4_Model_Results/Outputs/logs/verification_checklist.txt
-[USE_PREPPED_DATA] Loading pre-computed PSW dataset: /Users/jjohnson3/Documents/GitHub/Process-SEM/4_Model_Results/Outputs/RQ1_RQ3_main/rep_data_with_psw.csv
-Error in read.table(file = file, header = header, sep = sep, quote = quote,  : 
-  no lines available in input
-Calls: read.csv -> read.table
-Execution halted

@@ -1,2 +1,0 @@
-Wald tests: nonlinear constraints (conditional indirect/total differences: high vs low Z)
-(none applicable for this model)
