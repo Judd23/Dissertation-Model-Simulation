@@ -1,4 +1,5 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
+import { fetchModelData } from '../data/adapters/modelData';
 
 interface Props {
   children: ReactNode;
@@ -48,7 +49,11 @@ export class ErrorBoundary extends Component<Props, State> {
             An unexpected error occurred. Please refresh the page to try again.
           </p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              void fetchModelData().finally(() => {
+                window.location.reload();
+              });
+            }}
             style={{
               padding: '0.75rem 1.5rem',
               background: '#2563eb',
