@@ -11,6 +11,7 @@ import DemographicsPage from "../routes/DemographicsPage";
 import PathwayPage from "../routes/PathwayPage";
 import MethodsPage from "../routes/MethodsPage";
 import ResearcherPage from "../routes/ResearcherPage";
+import RunsPage from "../routes/RunsPage";
 
 /**
  * AppRoutes - Handles route transitions with shared layout scope.
@@ -35,6 +36,7 @@ export function AppRoutes() {
           <Route path="pathway" element={<PathwayPage />} />
           <Route path="methods" element={<MethodsPage />} />
           <Route path="researcher" element={<ResearcherPage />} />
+          <Route path="runs" element={<RunsPage />} />
           <Route path="about" element={<Navigate to="/researcher" replace />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Route>

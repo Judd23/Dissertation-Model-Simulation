@@ -385,18 +385,25 @@ Only copy what the UI needs (manifest + referenced artifacts). Keep it simple an
 
 Implement (or minimally extend) UI to:
 
-- [ ] Load `runs_index.json` using BASE_URL:
+- [x] Load `runs_index.json` using BASE_URL:
   ```js
   new URL("results/runs_index.json", import.meta.env.BASE_URL);
   ```
-- [ ] Load a run manifest the same way:
+- [x] Load a run manifest the same way:
   ```js
   new URL(`results/${runId}/manifest.json`, import.meta.env.BASE_URL);
   ```
-- [ ] Render a basic "Run Library" list and "Run Details" view (no design changes, minimal UI).
-- [ ] Add graceful missing-file handling (plain text message).
+- [x] Render a basic "Run Library" list and "Run Details" view (no design changes, minimal UI).
+- [x] Add graceful missing-file handling (plain text message).
 
 Do NOT change styling/animations unless necessary. Motion remains framer-motion only.
+
+**Files created/modified:**
+
+- `webapp/src/lib/runs.ts` — Fetch utilities and types
+- `webapp/src/routes/RunsPage.tsx` — Run Library UI component
+- `webapp/src/routes/RunsPage.module.css` — Styling for RunsPage
+- `webapp/src/app/routes.tsx` — Added `/runs` route
 
 **⛔ STOP and ask for approval before moving to PHASE 6.**
 
@@ -420,16 +427,20 @@ that supports:
 
 It must:
 
-- [ ] Generate `RUN_ID`
-- [ ] Run R pipeline via `docker run rocker/verse` (direct, not compose)
-- [ ] **CHECK**: If `manifest.json` not found after R, exit with clear error message
-- [ ] Run Python stage in local `.venv` (manifest-first)
-- [ ] Sync to `webapp/public/results/<RUN_ID>`
-- [ ] Update `runs_index.json`
-- [ ] Print final instructions:
-  - [ ] `run_id`
-  - [ ] where artifacts are
-  - [ ] how to view in webapp (`npm run dev`)
+- [x] Generate `RUN_ID`
+- [x] Run R pipeline via `docker run rocker/verse` (direct, not compose)
+- [x] **CHECK**: If `manifest.json` not found after R, exit with clear error message
+- [x] Run Python stage in local `.venv` (manifest-first)
+- [x] Sync to `webapp/public/results/<RUN_ID>`
+- [x] Update `runs_index.json`
+- [x] Print final instructions:
+  - [x] `run_id`
+  - [x] where artifacts are
+  - [x] how to view in webapp (`npm run dev`)
+
+**Files created:**
+
+- `scripts/run` — One-button orchestrator (bash script)
 
 **⛔ STOP and ask for approval before moving to PHASE 7.**
 
