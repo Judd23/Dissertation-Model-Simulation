@@ -1,0 +1,6 @@
+level	n
+Asian	826
+Black/African American	200
+Hispanic/Latino	2700
+Other/Multiracial/Unknown	538
+White	736
