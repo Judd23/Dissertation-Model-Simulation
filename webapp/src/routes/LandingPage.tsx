@@ -248,8 +248,8 @@ export default function LandingPage() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            animate={BREATHING_ANIMATION.animate}
-            transition={BREATHING_ANIMATION.transition}
+            animate={{ ...BREATHING_ANIMATION.animate }}
+            transition={{ ...BREATHING_ANIMATION.transition }}
           >
             <polyline points="6 9 12 15 18 9" />
           </motion.svg>

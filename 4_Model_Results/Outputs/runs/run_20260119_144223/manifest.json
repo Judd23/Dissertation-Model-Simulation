@@ -19,7 +19,28 @@
     "executed_model_syntax": "raw/syntax/measurement_syntax.lav",
     "verification_checklist": "logs/verification_checklist.txt",
     "bootstrap_results": "raw/bootstrap_results.csv",
-    "tables": ["Bootstrap_Tables.docx", "Dissertation_Tables.docx", "Plain_Language_Summary.docx"],
-    "figures": ["fig1_demographics.png", "fig10_intersectionality.png", "fig11_outcome_profiles.png", "fig12_cohort_patterns.png", "fig2_emotional_distress.png", "fig3_quality_engagement.png", "fig4_developmental_adjustment.png", "fig5_equity_gaps.png", "fig6_correlation_heatmap.png", "fig7_cumulative_risk.png", "fig8_credit_dose_moderation.png", "fig9_mediation_pathways.png", "standards_bootstrap_effects.png", "standards_compliance_dashboard.pdf", "standards_compliance_dashboard.png", "standards_sample_modelfit.png"]
-  }
+    "tables": [
+      "Bootstrap_Tables.docx",
+      "Dissertation_Tables.docx",
+      "Plain_Language_Summary.docx"
+    ],
+    "figures": [
+      "fig5_equity_gaps.png",
+      "fig2_emotional_distress.png",
+      "fig6_correlation_heatmap.png",
+      "fig1_demographics.png",
+      "fig7_cumulative_risk.png",
+      "fig11_outcome_profiles.png",
+      "fig3_quality_engagement.png",
+      "fig10_intersectionality.png",
+      "fig8_credit_dose_moderation.png",
+      "standards_sample_modelfit.png",
+      "fig4_developmental_adjustment.png",
+      "standards_compliance_dashboard.png",
+      "fig12_cohort_patterns.png",
+      "standards_bootstrap_effects.png",
+      "fig9_mediation_pathways.png"
+    ]
+  },
+  "python_stage_completed": "2026-01-19T14:49:21.423185"
 }

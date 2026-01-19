@@ -178,7 +178,7 @@ export const BREATHING_ANIMATION = {
     repeat: Infinity,
     ease: "easeInOut" as const,
   },
-} as const;
+};
 
 /**
  * Calculate stagger delay based on distance from viewport center
