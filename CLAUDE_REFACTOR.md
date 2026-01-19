@@ -136,18 +136,29 @@ This single rule prevents half the "why is the UI blank?" debugging.
 │ R: 3_Analysis/1_Main_Pipeline_Code/run_all_RQs_official.R           │
 │                                                                     │
 │   1. set_out_base() → 4_Model_Results/Outputs/runs/<RUN_ID>/        │
-│       ├─ raw/      (lavaan outputs)                                 │
+│       ├─ raw/                                                       │
+│       │   ├─ RQ1_RQ3_main/structural/                               │
+│       │   │   ├─ structural_parameterEstimates.txt  (PSW-weighted)  │
+│       │   │   ├─ structural_fitMeasures.txt                         │
+│       │   │   └─ rep_data_with_psw.csv              (has psw col)   │
+│       │   ├─ bootstrap_results.csv                  (PSW-weighted)  │
+│       │   └─ psw_balance_smd.txt                    (SMD table)     │
 │       ├─ tables/   (DOCX)                                           │
 │       ├─ figures/  (PNG)                                            │
 │       └─ logs/     (verification)                                   │
 │                                                                     │
 │   2. [SEM fitting: RQ1-RQ4, PSW, bootstrap]                         │
+│      └─ lavaan::sem(..., sampling.weights = "psw")                  │
 │                                                                     │
 │   3. Python stage (if !SKIP_POST_PROCESSING):                       │
 │       if (MANIFEST_FIRST_PYTHON) {                                  │
 │         → run_python_stage.py --manifest manifest.json              │
 │       } else {                                                      │
 │         → Individual Python calls (legacy)                          │
+│           • build_bootstrap_tables.py (reads PSW-weighted .txt)     │
+│           • build_dissertation_tables.py (reads PSW-weighted .txt)  │
+│           • build_plain_language_summary.py (reads bootstrap .csv)  │
+│           • plot_descriptives.py --weights psw (applies PSW)        │
 │       }                                                             │
 │                                                                     │
 │   4. write_manifest() → manifest.json                               │
