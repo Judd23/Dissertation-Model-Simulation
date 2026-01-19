@@ -1,0 +1,6 @@
+W_index = 3
+W = pell
+reference = Non-Pell
+levels:
+- Non-Pell
+- Pell
