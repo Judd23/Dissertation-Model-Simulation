@@ -557,6 +557,8 @@ def main():
     print("\n[1/5] Processing main model results...")
     main_model_dir = OUTPUTS_DIR / "RQ1_RQ3_main" / "structural"
     total_effect_model_dir = OUTPUTS_DIR / "A0_total_effect" / "structural"
+    main_params_path = main_model_dir / "structural_parameterEstimates.txt"
+    main_fit_path = main_model_dir / "structural_fitMeasures.txt"
 
     main_model = build_model_results(main_model_dir, KEY_PATHS)
     total_effect_model = build_model_results(total_effect_model_dir, TOTAL_EFFECT_KEYS)
