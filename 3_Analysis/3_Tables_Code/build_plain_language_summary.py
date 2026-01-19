@@ -11,48 +11,64 @@ Usage:
 Output: Plain_Language_Summary.docx
 """
 
+from __future__ import annotations
+
 import argparse
+import sys
 from pathlib import Path
 from datetime import datetime
+from typing import TYPE_CHECKING, Any
+
+# Optional imports with graceful degradation
+HAS_DOCX = False
+HAS_PANDAS = False
+Document = None  # type: Any
+Pt = None  # type: Any
+Inches = None  # type: Any
+WD_ALIGN_PARAGRAPH = None  # type: Any
+pd = None  # type: Any
 
 try:
-    from docx import Document
-    from docx.document import Document as DocumentClass
-    from docx.shared import Pt, Inches
-    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx import Document as _Document
+    from docx.shared import Pt as _Pt, Inches as _Inches
+    from docx.enum.text import WD_ALIGN_PARAGRAPH as _WD_ALIGN_PARAGRAPH
+    Document = _Document
+    Pt = _Pt
+    Inches = _Inches
+    WD_ALIGN_PARAGRAPH = _WD_ALIGN_PARAGRAPH
     HAS_DOCX = True
 except ImportError:
-    HAS_DOCX = False
-    DocumentClass = None  # type: ignore[misc,assignment]
     print("Warning: python-docx not installed. Install with: pip install python-docx")
 
 try:
-    import pandas as pd
+    import pandas as _pd
+    pd = _pd
     HAS_PANDAS = True
 except ImportError:
-    HAS_PANDAS = False
+    pass
 
 
-def add_heading(doc: "DocumentClass", text: str, level: int = 1) -> None:
+def add_heading(doc: Any, text: str, level: int = 1) -> None:
     """Add a heading with consistent formatting."""
     heading = doc.add_heading(text, level=level)
     if hasattr(heading, 'runs') and heading.runs:
         heading.runs[0].font.name = 'Times New Roman'
 
 
-def add_paragraph(doc: "DocumentClass", text: str, bold: bool = False, italic: bool = False) -> None:
+def add_paragraph(doc: Any, text: str, bold: bool = False, italic: bool = False) -> None:
     """Add a paragraph with optional formatting."""
     p = doc.add_paragraph()
     run = p.add_run(text)
     run.bold = bold
     run.italic = italic
     run.font.name = 'Times New Roman'
-    run.font.size = Pt(12)
+    if Pt is not None:
+        run.font.size = Pt(12)
 
 
-def load_bootstrap_results(outdir: Path) -> "pd.DataFrame | None":
+def load_bootstrap_results(outdir: Path) -> Any:
     """Load bootstrap results if available."""
-    if not HAS_PANDAS:
+    if not HAS_PANDAS or pd is None:
         return None
     
     # Try multiple possible locations
@@ -78,12 +94,13 @@ def format_effect(est: float, ci_lower: float, ci_upper: float, sig: bool) -> st
     return f"β = {est:.3f}{sig_marker}, 95% CI [{ci_lower:.3f}, {ci_upper:.3f}]"
 
 
-def build_summary(doc: "DocumentClass", outdir: Path, B: int, ci_type: str) -> None:
+def build_summary(doc: Any, outdir: Path, B: int, ci_type: str) -> None:
     """Build the plain language summary content."""
     
     # Title
     title = doc.add_heading("Plain Language Summary of Findings", level=0)
-    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    if WD_ALIGN_PARAGRAPH is not None:
+        title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     
     # Metadata
     add_paragraph(doc, f"Generated: {datetime.now().strftime('%B %d, %Y')}", italic=True)
@@ -175,7 +192,7 @@ def build_summary(doc: "DocumentClass", outdir: Path, B: int, ci_type: str) -> N
     )
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(description='Build plain language summary document')
     parser.add_argument('--outdir', type=str, required=True, 
                         help='Input directory with results data (raw/ folder)')
@@ -187,7 +204,7 @@ def main():
                         help='CI type: bca, perc, norm (for display)')
     args = parser.parse_args()
     
-    if not HAS_DOCX:
+    if not HAS_DOCX or Document is None:
         print("ERROR: python-docx is required. Install with: pip install python-docx")
         return 1
     
@@ -200,16 +217,18 @@ def main():
     
     # Set default font
     style = doc.styles['Normal']
-    if hasattr(style, 'font') and style.font is not None:  # type: ignore[union-attr]
-        style.font.name = 'Times New Roman'  # type: ignore[union-attr]
-        style.font.size = Pt(12)  # type: ignore[union-attr]
+    if hasattr(style, 'font') and style.font is not None:
+        style.font.name = 'Times New Roman'
+        if Pt is not None:
+            style.font.size = Pt(12)
     
     # Set margins
-    for section in doc.sections:
-        section.top_margin = Inches(1)
-        section.bottom_margin = Inches(1)
-        section.left_margin = Inches(1)
-        section.right_margin = Inches(1)
+    if Inches is not None:
+        for section in doc.sections:
+            section.top_margin = Inches(1)
+            section.bottom_margin = Inches(1)
+            section.left_margin = Inches(1)
+            section.right_margin = Inches(1)
     
     # Build content
     build_summary(doc, outdir, args.B, args.ci_type)
@@ -223,6 +242,8 @@ def main():
     print(f"{'='*60}")
     print("\nNote: This is a STUB document with placeholders.")
     print("      Edit the script to extract actual findings from bootstrap results.")
+    
+    return 0
     
     return 0
 
