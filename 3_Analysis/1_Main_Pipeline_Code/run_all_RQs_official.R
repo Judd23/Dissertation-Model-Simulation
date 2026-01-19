@@ -1590,7 +1590,7 @@ if (file.exists(boot_csv_path)) {
 message("\n=== Generating Descriptive Plots ===")
 
 # Use PSW-weighted data file which includes the 'psw' column
-PSW_DATA_CSV <- file.path(OUT_RQ1, "rep_data_with_psw.csv")
+PSW_DATA_CSV <- file.path(out_main, "rep_data_with_psw.csv")
 if (!file.exists(PSW_DATA_CSV)) {
   message("PSW data file not found, using analysis data without weights")
   PSW_DATA_CSV <- ANALYSIS_DATA_CSV
