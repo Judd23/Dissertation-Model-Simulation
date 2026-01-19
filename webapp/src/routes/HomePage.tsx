@@ -93,17 +93,6 @@ export default function HomePage() {
             </GlossaryTerm>
             .
           </p>
-          <div className="cta-container">
-            <button
-              type="button"
-              className="button button-secondary button-sm interactiveSurface"
-              onClick={refreshModelData}
-              disabled={isRefreshing}
-              aria-busy={isRefreshing}
-            >
-              {isRefreshing ? "Refreshing…" : "Refresh data"}
-            </button>
-          </div>
         </div>
       </motion.section>
 

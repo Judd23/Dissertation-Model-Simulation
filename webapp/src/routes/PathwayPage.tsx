@@ -28,6 +28,11 @@ export default function PathwayPage() {
     togglePathLabels,
   } = useResearch();
   const { paths } = useModelData();
+
+  const handleRefreshData = useCallback(() => {
+    window.dispatchEvent(new Event('model-data-refresh'));
+  }, []);
+
   console.log('(NO $) [PathwayPage] path snapshot:', {
     a1: paths.a1?.estimate,
     a2: paths.a2?.estimate,
@@ -390,6 +395,7 @@ export default function PathwayPage() {
           variants={containerVariants}
         >
           <h2 id="coefficients-heading">Key Findings</h2>
+          <InteractiveSurface as="div" className={styles.keyFindingsCard} hoverLift={0}>
           <p className={styles.coefficientNote}>
             Evidence badges reflect p-value thresholds:{" "}
             <span className={styles.badgeLegend}>
@@ -467,6 +473,18 @@ export default function PathwayPage() {
               );
             })}
           </div>
+          <div className={styles.cardFooter}>
+            <InteractiveSurface
+              as="button"
+              type="button"
+              className="button button-secondary button-sm interactiveSurface"
+              onClick={handleRefreshData}
+              aria-label="Refresh data from the latest model run"
+            >
+              Refresh data
+            </InteractiveSurface>
+          </div>
+          </InteractiveSurface>
         </motion.section>
 
         <motion.section

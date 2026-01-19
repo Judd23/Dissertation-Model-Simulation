@@ -694,7 +694,7 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # =========================================================================
     fig, ax = plt.subplots(figsize=(14, 12))
 
-    analysis_cols = [c for c in df.columns if c != weight_col]
+    analysis_cols = [c for c in df.columns if c != weight_col and not c.endswith('_c')]
     corr_df = df[analysis_cols].copy()
     if use_weights:
         ranks = corr_df.rank(method='average', na_option='keep')

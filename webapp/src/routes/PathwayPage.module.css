@@ -292,6 +292,19 @@
   color: white;
 }
 
+.keyFindingsCard {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+}
+
+.cardFooter {
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border-light);
+  display: flex;
+  justify-content: center;
+}
+
 .coefficientGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
