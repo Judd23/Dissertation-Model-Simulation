@@ -45,7 +45,7 @@ export default function HomePage() {
     engagementEffect: paths.a2?.estimate ?? 0,
     adjustmentDirect: paths.c?.estimate ?? 0,
   };
-  console.log('(NO $) [HomePage] data snapshot:', {
+  console.log("(NO $) [HomePage] data snapshot:", {
     sampleSize,
     fastPercent,
     cfi: fitMeasures.cfi,
@@ -55,7 +55,7 @@ export default function HomePage() {
   });
 
   const handleRefreshData = () => {
-    window.dispatchEvent(new Event('model-data-refresh'));
+    window.dispatchEvent(new Event("model-data-refresh"));
   };
 
   return (

@@ -213,7 +213,8 @@
   -webkit-overflow-scrolling: touch;
   position: relative;
   /* Transform handled by Framer Motion */
-  transition: box-shadow var(--transition-fast),
+  transition:
+    box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -259,7 +260,8 @@
   position: relative;
   text-decoration: none;
   /* Transform handled by Framer Motion DANCE_SPRING_HEAVY */
-  transition: box-shadow var(--transition-fast),
+  transition:
+    box-shadow var(--transition-fast),
     border-color var(--transition-fast);
 }
 
@@ -278,7 +280,8 @@
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-md);
   color: var(--color-accent);
-  transition: background-color var(--transition-fast),
+  transition:
+    background-color var(--transition-fast),
     transform var(--transition-fast);
 }
 

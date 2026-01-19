@@ -30,10 +30,10 @@ export default function PathwayPage() {
   const { paths } = useModelData();
 
   const handleRefreshData = useCallback(() => {
-    window.dispatchEvent(new Event('model-data-refresh'));
+    window.dispatchEvent(new Event("model-data-refresh"));
   }, []);
 
-  console.log('(NO $) [PathwayPage] path snapshot:', {
+  console.log("(NO $) [PathwayPage] path snapshot:", {
     a1: paths.a1?.estimate,
     a2: paths.a2?.estimate,
     b1: paths.b1?.estimate,
@@ -66,7 +66,7 @@ export default function PathwayPage() {
       setWalkthroughStep(step);
       setHighlightedPath(highlightedPath);
     },
-    [setHighlightedPath]
+    [setHighlightedPath],
   );
 
   const handleWalkthroughClose = useCallback(() => {
@@ -88,7 +88,7 @@ export default function PathwayPage() {
       ([entry]) => {
         setIsStuck(!entry.isIntersecting);
       },
-      { threshold: [1], rootMargin: "-10px 0px 0px 0px" }
+      { threshold: [1], rootMargin: "-10px 0px 0px 0px" },
     );
 
     if (controlsRef.current) {
@@ -182,7 +182,7 @@ export default function PathwayPage() {
         type: "moderation",
       },
     ],
-    [paths]
+    [paths],
   );
 
   type PathwayButton = {
@@ -279,14 +279,30 @@ export default function PathwayPage() {
             <details className={styles.covariatesDetails}>
               <summary>Factors We Controlled For</summary>
               <ul className={styles.covariatesList}>
-                <li><strong>hgrades</strong> — High school GPA</li>
-                <li><strong>bparented</strong> — Parent education level</li>
-                <li><strong>pell</strong> — Pell grant eligibility (income proxy)</li>
-                <li><strong>hapcl</strong> — Number of AP courses taken</li>
-                <li><strong>hprecalc13</strong> — Pre-calculus proficiency</li>
-                <li><strong>hchallenge_c</strong> — High school challenge level</li>
-                <li><strong>cSFcareer_c</strong> — Career expectations</li>
-                <li><strong>cohort</strong> — Enrollment year</li>
+                <li>
+                  <strong>hgrades</strong> — High school GPA
+                </li>
+                <li>
+                  <strong>bparented</strong> — Parent education level
+                </li>
+                <li>
+                  <strong>pell</strong> — Pell grant eligibility (income proxy)
+                </li>
+                <li>
+                  <strong>hapcl</strong> — Number of AP courses taken
+                </li>
+                <li>
+                  <strong>hprecalc13</strong> — Pre-calculus proficiency
+                </li>
+                <li>
+                  <strong>hchallenge_c</strong> — High school challenge level
+                </li>
+                <li>
+                  <strong>cSFcareer_c</strong> — Career expectations
+                </li>
+                <li>
+                  <strong>cohort</strong> — Enrollment year
+                </li>
               </ul>
             </details>
           </InteractiveSurface>
@@ -339,12 +355,12 @@ export default function PathwayPage() {
                     {btn.id === null
                       ? pathData.length
                       : btn.id === "distress"
-                      ? 3
-                      : btn.id === "engagement"
-                      ? 3
-                      : btn.id === "serial"
-                      ? 4
-                      : 2}{" "}
+                        ? 3
+                        : btn.id === "engagement"
+                          ? 3
+                          : btn.id === "serial"
+                            ? 4
+                            : 2}{" "}
                     paths
                   </span>
                 )}
@@ -395,95 +411,103 @@ export default function PathwayPage() {
           variants={containerVariants}
         >
           <h2 id="coefficients-heading">Key Findings</h2>
-          <InteractiveSurface as="div" className={styles.keyFindingsCard} hoverLift={0}>
-          <p className={styles.coefficientNote}>
-            Evidence badges reflect p-value thresholds:{" "}
-            <span className={styles.badgeLegend}>
-              <span className={styles.legendStrong}>Strong (p&lt;.001)</span>{" "}
-              <span className={styles.legendGood}>Good (p&lt;.05)</span>{" "}
-              <span className={styles.legendSuggestive}>
-                Suggestive (p&lt;.10)
-              </span>{" "}
-              <span className={styles.legendUncertain}>Uncertain (p≥.10)</span>
-            </span>
-          </p>
-          <div className={styles.coefficientGrid}>
-            {pathData.map((path) => {
-              const isHighlighted =
-                !highlightedPath ||
-                (highlightedPath === "distress" &&
-                  (path.id === "a1" ||
-                    path.id === "b1" ||
-                    path.id === "a1z")) ||
-                (highlightedPath === "engagement" &&
-                  (path.id === "a2" ||
-                    path.id === "b2" ||
-                    path.id === "a2z")) ||
-                (highlightedPath === "serial" &&
-                  (path.id === "a1" ||
-                    path.id === "b1" ||
-                    path.id === "a2" ||
-                    path.id === "b2")) ||
-                (highlightedPath === "direct" &&
-                  (path.id === "c" || path.id === "cz"));
+          <InteractiveSurface
+            as="div"
+            className={styles.keyFindingsCard}
+            hoverLift={0}
+          >
+            <p className={styles.coefficientNote}>
+              Evidence badges reflect p-value thresholds:{" "}
+              <span className={styles.badgeLegend}>
+                <span className={styles.legendStrong}>Strong (p&lt;.001)</span>{" "}
+                <span className={styles.legendGood}>Good (p&lt;.05)</span>{" "}
+                <span className={styles.legendSuggestive}>
+                  Suggestive (p&lt;.10)
+                </span>{" "}
+                <span className={styles.legendUncertain}>
+                  Uncertain (p≥.10)
+                </span>
+              </span>
+            </p>
+            <div className={styles.coefficientGrid}>
+              {pathData.map((path) => {
+                const isHighlighted =
+                  !highlightedPath ||
+                  (highlightedPath === "distress" &&
+                    (path.id === "a1" ||
+                      path.id === "b1" ||
+                      path.id === "a1z")) ||
+                  (highlightedPath === "engagement" &&
+                    (path.id === "a2" ||
+                      path.id === "b2" ||
+                      path.id === "a2z")) ||
+                  (highlightedPath === "serial" &&
+                    (path.id === "a1" ||
+                      path.id === "b1" ||
+                      path.id === "a2" ||
+                      path.id === "b2")) ||
+                  (highlightedPath === "direct" &&
+                    (path.id === "c" || path.id === "cz"));
 
-              const strengthBadge =
-                path.pvalue < 0.001
-                  ? "Strong evidence"
-                  : path.pvalue < 0.05
-                  ? "Good evidence"
-                  : path.pvalue < 0.1
-                  ? "Suggestive"
-                  : "Uncertain";
-              const badgeClass =
-                path.pvalue < 0.001
-                  ? styles.strong
-                  : path.pvalue < 0.05
-                  ? styles.good
-                  : path.pvalue < 0.1
-                  ? styles.suggestive
-                  : styles.uncertain;
+                const strengthBadge =
+                  path.pvalue < 0.001
+                    ? "Strong evidence"
+                    : path.pvalue < 0.05
+                      ? "Good evidence"
+                      : path.pvalue < 0.1
+                        ? "Suggestive"
+                        : "Uncertain";
+                const badgeClass =
+                  path.pvalue < 0.001
+                    ? styles.strong
+                    : path.pvalue < 0.05
+                      ? styles.good
+                      : path.pvalue < 0.1
+                        ? styles.suggestive
+                        : styles.uncertain;
 
-              return (
-                <motion.div key={path.id} variants={itemVariants}>
-                  <InteractiveSurface
-                    as="article"
-                    className={`${styles.coefficientCard} ${
-                      !isHighlighted ? styles.dimmed : ""
-                    } interactiveSurface`}
-                    hoverLift={4}
-                  >
-                    <div className={styles.coefficientHeader}>
-                      <span className={styles.coefficientLabel}>
-                        {path.label}
-                      </span>
-                      <span className={`${styles.strengthBadge} ${badgeClass}`}>
-                        {strengthBadge}
-                      </span>
-                    </div>
-                    <div className={styles.coefficientValue}>
-                      Effect size: {path.estimate > 0 ? "+" : ""}
-                      {path.estimate.toFixed(2)}
-                    </div>
-                    <p className={styles.coefficientInterpretation}>
-                      {path.interpretation}
-                    </p>
-                  </InteractiveSurface>
-                </motion.div>
-              );
-            })}
-          </div>
-          <div className={styles.cardFooter}>
-            <InteractiveSurface
-              as="button"
-              type="button"
-              className="button button-secondary button-sm interactiveSurface"
-              onClick={handleRefreshData}
-              aria-label="Refresh data from the latest model run"
-            >
-              Refresh data
-            </InteractiveSurface>
-          </div>
+                return (
+                  <motion.div key={path.id} variants={itemVariants}>
+                    <InteractiveSurface
+                      as="article"
+                      className={`${styles.coefficientCard} ${
+                        !isHighlighted ? styles.dimmed : ""
+                      } interactiveSurface`}
+                      hoverLift={4}
+                    >
+                      <div className={styles.coefficientHeader}>
+                        <span className={styles.coefficientLabel}>
+                          {path.label}
+                        </span>
+                        <span
+                          className={`${styles.strengthBadge} ${badgeClass}`}
+                        >
+                          {strengthBadge}
+                        </span>
+                      </div>
+                      <div className={styles.coefficientValue}>
+                        Effect size: {path.estimate > 0 ? "+" : ""}
+                        {path.estimate.toFixed(2)}
+                      </div>
+                      <p className={styles.coefficientInterpretation}>
+                        {path.interpretation}
+                      </p>
+                    </InteractiveSurface>
+                  </motion.div>
+                );
+              })}
+            </div>
+            <div className={styles.cardFooter}>
+              <InteractiveSurface
+                as="button"
+                type="button"
+                className="button button-secondary button-sm interactiveSurface"
+                onClick={handleRefreshData}
+                aria-label="Refresh data from the latest model run"
+              >
+                Refresh data
+              </InteractiveSurface>
+            </div>
           </InteractiveSurface>
         </motion.section>
 
