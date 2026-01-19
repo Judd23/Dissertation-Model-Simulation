@@ -309,7 +309,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--spacing-sm);
-  justify-content: center;
+  justify-content: flex-start;
   color: var(--color-text-muted);
   font-size: var(--font-size-lg);
 }
@@ -399,7 +399,8 @@
 .fact:hover {
   background: var(--color-surface);
   transform: scale(1.03) translateY(-2px);
-  box-shadow: var(--shadow-md),
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 12%, transparent),
+    var(--shadow-md),
     0 0 20px color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
@@ -487,8 +488,9 @@
 
 .grid {
   max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 var(--spacing-xl);
+  margin: var(--spacing-xl) auto 0;
+  padding: var(--spacing-3xl) var(--spacing-xl) 0;
+  border-top: 1px solid var(--color-border-light);
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--spacing-xl);
@@ -606,6 +608,8 @@
 .blockA:hover {
   transform: translateY(-6px);
   border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 12%, transparent),
+    var(--shadow-lg);
 }
 
 .blockA:hover::before {
@@ -681,6 +685,8 @@
 .blockB:hover {
   transform: translateY(-6px);
   border-color: var(--color-engagement);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-engagement) 12%, transparent),
+    var(--shadow-lg);
 }
 
 .blockB:hover::before {
@@ -857,6 +863,8 @@
 .blockC:hover {
   transform: translateY(-6px);
   border-color: var(--color-engagement);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-engagement) 12%, transparent),
+    var(--shadow-lg);
 }
 
 .blockC:hover::before {
@@ -969,6 +977,8 @@
 .blockD:hover {
   transform: translateY(-6px);
   border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 12%, transparent),
+    var(--shadow-lg);
 }
 
 .blockD:hover::before {
