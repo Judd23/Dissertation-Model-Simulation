@@ -84,6 +84,15 @@
   text-align: center;
 }
 
+.statsFooter {
+  margin-top: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
 /* ============================================
    FINDINGS SECTION - Editorial layout
    ============================================ */

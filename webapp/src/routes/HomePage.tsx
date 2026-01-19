@@ -53,6 +53,10 @@ export default function HomePage() {
     c: paths.c?.estimate,
   });
 
+  const handleRefreshData = () => {
+    window.dispatchEvent(new Event('model-data-refresh'));
+  };
+
   return (
     <div className={styles.page}>
       {/* Hero Section - Full viewport */}
@@ -148,7 +152,18 @@ export default function HomePage() {
               />
             </motion.div>
           </div>
-          <DataTimestamp />
+          <div className={styles.statsFooter}>
+            <DataTimestamp />
+            <InteractiveSurface
+              as="button"
+              type="button"
+              className="button button-secondary button-sm interactiveSurface"
+              onClick={handleRefreshData}
+              aria-label="Refresh data from the latest model run"
+            >
+              Refresh data
+            </InteractiveSurface>
+          </div>
         </div>
       </motion.div>
 
