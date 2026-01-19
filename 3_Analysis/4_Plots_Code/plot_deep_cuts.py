@@ -298,198 +298,201 @@ def main(data_path='1_Dataset/rep_data.csv', outdir='4_Model_Results/Figures', w
     # =========================================================================
     # FIGURE 8: Credit Dose × FASt Interaction (Moderation Visualization)
     # =========================================================================
-    fig, axes = plt.subplots(2, 2, figsize=(14, 12))
-    
-    # Reconstruct raw credits if needed
-    if 'trnsfr_cr' in df.columns:
-        credits = df['trnsfr_cr']
+    if 'trnsfr_cr' in df.columns or 'credit_dose' in df.columns:
+        fig, axes = plt.subplots(2, 2, figsize=(14, 12))
+        
+        # Reconstruct raw credits if needed
+        if 'trnsfr_cr' in df.columns:
+            credits = df['trnsfr_cr']
+        else:
+            credits = df['credit_dose'] * 10 + 12  # reverse transformation
+        
+        # 8a. Scatter: Credits vs Distress by FASt status
+        ax = axes[0, 0]
+        fast_mask = df['x_FASt'] == 1
+        
+        ax.scatter(credits[~fast_mask], df.loc[~fast_mask, 'mean_distress'], 
+                   alpha=0.3, c=colors['nonfast'], label='Non-FASt', s=20)
+        ax.scatter(credits[fast_mask], df.loc[fast_mask, 'mean_distress'], 
+                   alpha=0.5, c=colors['fast'], label='FASt', s=30)  # Orange for FASt
+        
+        # Add LOESS-style smoothed lines
+        for mask, color, label in [(~fast_mask, colors['nonfast'], 'Non-FASt'), 
+                                    (fast_mask, colors['fast'], 'FASt')]:  # Orange for FASt
+            x = credits[mask].values
+            y = df.loc[mask, 'mean_distress'].values
+            w_mask = w[mask]
+            # Bin and average for smooth line
+            bins = np.linspace(0, max(credits), 15)
+            bin_means = []
+            bin_centers = []
+            for i in range(len(bins)-1):
+                bin_mask = (x >= bins[i]) & (x < bins[i+1])
+                if bin_mask.sum() > 5:
+                    bin_centers.append((bins[i] + bins[i+1])/2)
+                    bin_means.append(weighted_mean(y[bin_mask], w_mask[bin_mask]))
+            if len(bin_centers) > 2:
+                ax.plot(bin_centers, bin_means, '-', color=color, linewidth=3, alpha=0.8)
+        
+        ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2)  # Yellow credit threshold
+        ax.set_xlabel('Transfer Credits', fontsize=11)
+        ax.set_ylabel('Mean Emotional Distress', fontsize=11)
+        ax.set_title('Credit Dose → Distress by FASt Status', fontsize=12, fontweight='bold')
+        ax.legend()
+        
+        # 8b. Conditional effects at different credit doses
+        ax = axes[0, 1]
+        
+        # Create credit dose bins
+        credit_bins = pd.cut(credits, bins=[0, 3, 6, 12, 20, 60], labels=['0-3', '4-6', '7-12', '13-20', '21+'])
+        df['credit_bin'] = credit_bins
+        
+        # Calculate FASt gap at each bin
+        gaps = []
+        gap_ses = []
+        bin_labels = []
+        for bin_label in ['0-3', '4-6', '7-12', '13-20', '21+']:
+            mask_bin = df['credit_bin'] == bin_label
+            if mask_bin.sum() > 10:
+                mask_fast = mask_bin & (df['x_FASt'] == 1)
+                mask_nonfast = mask_bin & (df['x_FASt'] == 0)
+                fast_vals = df.loc[mask_fast, 'mean_distress'].values
+                nonfast_vals = df.loc[mask_nonfast, 'mean_distress'].values
+                fast_w = w[mask_fast]
+                nonfast_w = w[mask_nonfast]
+                fast_n = weighted_n_eff(fast_w)
+                nonfast_n = weighted_n_eff(nonfast_w)
+                
+                if fast_n > 5 and nonfast_n > 5:
+                    fast_mean = weighted_mean(fast_vals, fast_w)
+                    nonfast_mean = weighted_mean(nonfast_vals, nonfast_w)
+                    gap = fast_mean - nonfast_mean
+                    # Pooled SE
+                    fast_var = weighted_std(fast_vals, fast_w) ** 2
+                    nonfast_var = weighted_std(nonfast_vals, nonfast_w) ** 2
+                    se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
+                    gaps.append(gap)
+                    gap_ses.append(se)
+                    bin_labels.append(bin_label)
+        
+        x_pos = np.arange(len(bin_labels))
+        # Use orange for FASt-related gaps
+        bars = ax.bar(x_pos, gaps, yerr=[1.96*se for se in gap_ses], 
+                      capsize=5, color=[colors['fast'] if g > 0 else colors['engagement'] for g in gaps])
+        ax.axhline(0, color='black', linewidth=0.8)
+        ax.set_xticks(x_pos)
+        ax.set_xticklabels(bin_labels)
+        ax.set_xlabel('Credit Dose Range', fontsize=11)
+        ax.set_ylabel('FASt - Non-FASt Gap (Distress)', fontsize=11)
+        ax.set_title('FASt Effect by Credit Dose\n(+ = FASt higher distress)', fontsize=12, fontweight='bold')
+        
+        # 8c. Johnson-Neyman style: At what credit level does FASt effect become significant?
+        ax = axes[1, 0]
+        
+        # Compute rolling FASt effect
+        credit_vals = np.arange(0, 35, 2)
+        effects = []
+        ci_lows = []
+        ci_highs = []
+        
+        for cv in credit_vals:
+            # Window around this credit value
+            window = 5
+            mask = (credits >= cv - window) & (credits <= cv + window)
+            if mask.sum() > 20:
+                mask_fast = mask & (df['x_FASt']==1)
+                mask_nonfast = mask & (df['x_FASt']==0)
+                fast_data = df.loc[mask_fast, 'mean_distress'].values
+                nonfast_data = df.loc[mask_nonfast, 'mean_distress'].values
+                fast_w = w[mask_fast]
+                nonfast_w = w[mask_nonfast]
+                
+                if len(fast_data) > 5 and len(nonfast_data) > 5:
+                    fast_mean = weighted_mean(fast_data, fast_w)
+                    nonfast_mean = weighted_mean(nonfast_data, nonfast_w)
+                    effect = fast_mean - nonfast_mean
+                    fast_var = weighted_std(fast_data, fast_w) ** 2
+                    nonfast_var = weighted_std(nonfast_data, nonfast_w) ** 2
+                    fast_n = weighted_n_eff(fast_w)
+                    nonfast_n = weighted_n_eff(nonfast_w)
+                    se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
+                    effects.append(effect)
+                    ci_lows.append(effect - 1.96*se)
+                    ci_highs.append(effect + 1.96*se)
+                else:
+                    effects.append(np.nan)
+                    ci_lows.append(np.nan)
+                    ci_highs.append(np.nan)
+            else:
+                effects.append(np.nan)
+                ci_lows.append(np.nan)
+                ci_highs.append(np.nan)
+        
+        ax.fill_between(credit_vals, ci_lows, ci_highs, alpha=0.3, color=colors['fast'])  # Orange for FASt
+        ax.plot(credit_vals, effects, '-', color=colors['fast'], linewidth=2)  # Orange
+        ax.axhline(0, color='black', linewidth=1)
+        ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2, label='FASt threshold')  # Yellow
+        ax.set_xlabel('Transfer Credits', fontsize=11)
+        ax.set_ylabel('FASt Effect on Distress', fontsize=11)
+        ax.set_title('Conditional FASt Effect Across Credit Spectrum\n(Rolling window, 95% CI)', fontsize=12, fontweight='bold')
+        ax.legend()
+        
+        # 8d. Engagement pattern
+        ax = axes[1, 1]
+        
+        effects = []
+        ci_lows = []
+        ci_highs = []
+        
+        for cv in credit_vals:
+            window = 5
+            mask = (credits >= cv - window) & (credits <= cv + window)
+            if mask.sum() > 20:
+                mask_fast = mask & (df['x_FASt']==1)
+                mask_nonfast = mask & (df['x_FASt']==0)
+                fast_data = df.loc[mask_fast, 'mean_engagement'].values
+                nonfast_data = df.loc[mask_nonfast, 'mean_engagement'].values
+                fast_w = w[mask_fast]
+                nonfast_w = w[mask_nonfast]
+                
+                if len(fast_data) > 5 and len(nonfast_data) > 5:
+                    fast_mean = weighted_mean(fast_data, fast_w)
+                    nonfast_mean = weighted_mean(nonfast_data, nonfast_w)
+                    effect = fast_mean - nonfast_mean
+                    fast_var = weighted_std(fast_data, fast_w) ** 2
+                    nonfast_var = weighted_std(nonfast_data, nonfast_w) ** 2
+                    fast_n = weighted_n_eff(fast_w)
+                    nonfast_n = weighted_n_eff(nonfast_w)
+                    se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
+                    effects.append(effect)
+                    ci_lows.append(effect - 1.96*se)
+                    ci_highs.append(effect + 1.96*se)
+                else:
+                    effects.append(np.nan)
+                    ci_lows.append(np.nan)
+                    ci_highs.append(np.nan)
+            else:
+                effects.append(np.nan)
+                ci_lows.append(np.nan)
+                ci_highs.append(np.nan)
+        
+        ax.fill_between(credit_vals, ci_lows, ci_highs, alpha=0.3, color=colors['engagement'])
+        ax.plot(credit_vals, effects, '-', color=colors['engagement'], linewidth=2)
+        ax.axhline(0, color='black', linewidth=1)
+        ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2, label='FASt threshold')  # Yellow
+        ax.set_xlabel('Transfer Credits', fontsize=11)
+        ax.set_ylabel('FASt Effect on Engagement', fontsize=11)
+        ax.set_title('Conditional FASt Effect on Engagement\n(Rolling window, 95% CI)', fontsize=12, fontweight='bold')
+        ax.legend()
+        
+        plt.suptitle('Figure 8\nCredit Dose × FASt Moderation Pattern', fontsize=14, fontweight='bold', y=1.02)
+        plt.tight_layout()
+        add_sim_note(fig)
+        plt.savefig(f'{outdir}/fig8_credit_dose_moderation.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        print('✓ Figure 8: Credit Dose Moderation saved')
     else:
-        credits = df['credit_dose'] * 10 + 12  # reverse transformation
-    
-    # 8a. Scatter: Credits vs Distress by FASt status
-    ax = axes[0, 0]
-    fast_mask = df['x_FASt'] == 1
-    
-    ax.scatter(credits[~fast_mask], df.loc[~fast_mask, 'mean_distress'], 
-               alpha=0.3, c=colors['nonfast'], label='Non-FASt', s=20)
-    ax.scatter(credits[fast_mask], df.loc[fast_mask, 'mean_distress'], 
-               alpha=0.5, c=colors['fast'], label='FASt', s=30)  # Orange for FASt
-    
-    # Add LOESS-style smoothed lines
-    for mask, color, label in [(~fast_mask, colors['nonfast'], 'Non-FASt'), 
-                                (fast_mask, colors['fast'], 'FASt')]:  # Orange for FASt
-        x = credits[mask].values
-        y = df.loc[mask, 'mean_distress'].values
-        w_mask = w[mask]
-        # Bin and average for smooth line
-        bins = np.linspace(0, max(credits), 15)
-        bin_means = []
-        bin_centers = []
-        for i in range(len(bins)-1):
-            bin_mask = (x >= bins[i]) & (x < bins[i+1])
-            if bin_mask.sum() > 5:
-                bin_centers.append((bins[i] + bins[i+1])/2)
-                bin_means.append(weighted_mean(y[bin_mask], w_mask[bin_mask]))
-        if len(bin_centers) > 2:
-            ax.plot(bin_centers, bin_means, '-', color=color, linewidth=3, alpha=0.8)
-    
-    ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2)  # Yellow credit threshold
-    ax.set_xlabel('Transfer Credits', fontsize=11)
-    ax.set_ylabel('Mean Emotional Distress', fontsize=11)
-    ax.set_title('Credit Dose → Distress by FASt Status', fontsize=12, fontweight='bold')
-    ax.legend()
-    
-    # 8b. Conditional effects at different credit doses
-    ax = axes[0, 1]
-    
-    # Create credit dose bins
-    credit_bins = pd.cut(credits, bins=[0, 3, 6, 12, 20, 60], labels=['0-3', '4-6', '7-12', '13-20', '21+'])
-    df['credit_bin'] = credit_bins
-    
-    # Calculate FASt gap at each bin
-    gaps = []
-    gap_ses = []
-    bin_labels = []
-    for bin_label in ['0-3', '4-6', '7-12', '13-20', '21+']:
-        mask_bin = df['credit_bin'] == bin_label
-        if mask_bin.sum() > 10:
-            mask_fast = mask_bin & (df['x_FASt'] == 1)
-            mask_nonfast = mask_bin & (df['x_FASt'] == 0)
-            fast_vals = df.loc[mask_fast, 'mean_distress'].values
-            nonfast_vals = df.loc[mask_nonfast, 'mean_distress'].values
-            fast_w = w[mask_fast]
-            nonfast_w = w[mask_nonfast]
-            fast_n = weighted_n_eff(fast_w)
-            nonfast_n = weighted_n_eff(nonfast_w)
-            
-            if fast_n > 5 and nonfast_n > 5:
-                fast_mean = weighted_mean(fast_vals, fast_w)
-                nonfast_mean = weighted_mean(nonfast_vals, nonfast_w)
-                gap = fast_mean - nonfast_mean
-                # Pooled SE
-                fast_var = weighted_std(fast_vals, fast_w) ** 2
-                nonfast_var = weighted_std(nonfast_vals, nonfast_w) ** 2
-                se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
-                gaps.append(gap)
-                gap_ses.append(se)
-                bin_labels.append(bin_label)
-    
-    x_pos = np.arange(len(bin_labels))
-    # Use orange for FASt-related gaps
-    bars = ax.bar(x_pos, gaps, yerr=[1.96*se for se in gap_ses], 
-                  capsize=5, color=[colors['fast'] if g > 0 else colors['engagement'] for g in gaps])
-    ax.axhline(0, color='black', linewidth=0.8)
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels(bin_labels)
-    ax.set_xlabel('Credit Dose Range', fontsize=11)
-    ax.set_ylabel('FASt - Non-FASt Gap (Distress)', fontsize=11)
-    ax.set_title('FASt Effect by Credit Dose\n(+ = FASt higher distress)', fontsize=12, fontweight='bold')
-    
-    # 8c. Johnson-Neyman style: At what credit level does FASt effect become significant?
-    ax = axes[1, 0]
-    
-    # Compute rolling FASt effect
-    credit_vals = np.arange(0, 35, 2)
-    effects = []
-    ci_lows = []
-    ci_highs = []
-    
-    for cv in credit_vals:
-        # Window around this credit value
-        window = 5
-        mask = (credits >= cv - window) & (credits <= cv + window)
-        if mask.sum() > 20:
-            mask_fast = mask & (df['x_FASt']==1)
-            mask_nonfast = mask & (df['x_FASt']==0)
-            fast_data = df.loc[mask_fast, 'mean_distress'].values
-            nonfast_data = df.loc[mask_nonfast, 'mean_distress'].values
-            fast_w = w[mask_fast]
-            nonfast_w = w[mask_nonfast]
-            
-            if len(fast_data) > 5 and len(nonfast_data) > 5:
-                fast_mean = weighted_mean(fast_data, fast_w)
-                nonfast_mean = weighted_mean(nonfast_data, nonfast_w)
-                effect = fast_mean - nonfast_mean
-                fast_var = weighted_std(fast_data, fast_w) ** 2
-                nonfast_var = weighted_std(nonfast_data, nonfast_w) ** 2
-                fast_n = weighted_n_eff(fast_w)
-                nonfast_n = weighted_n_eff(nonfast_w)
-                se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
-                effects.append(effect)
-                ci_lows.append(effect - 1.96*se)
-                ci_highs.append(effect + 1.96*se)
-            else:
-                effects.append(np.nan)
-                ci_lows.append(np.nan)
-                ci_highs.append(np.nan)
-        else:
-            effects.append(np.nan)
-            ci_lows.append(np.nan)
-            ci_highs.append(np.nan)
-    
-    ax.fill_between(credit_vals, ci_lows, ci_highs, alpha=0.3, color=colors['fast'])  # Orange for FASt
-    ax.plot(credit_vals, effects, '-', color=colors['fast'], linewidth=2)  # Orange
-    ax.axhline(0, color='black', linewidth=1)
-    ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2, label='FASt threshold')  # Yellow
-    ax.set_xlabel('Transfer Credits', fontsize=11)
-    ax.set_ylabel('FASt Effect on Distress', fontsize=11)
-    ax.set_title('Conditional FASt Effect Across Credit Spectrum\n(Rolling window, 95% CI)', fontsize=12, fontweight='bold')
-    ax.legend()
-    
-    # 8d. Engagement pattern
-    ax = axes[1, 1]
-    
-    effects = []
-    ci_lows = []
-    ci_highs = []
-    
-    for cv in credit_vals:
-        window = 5
-        mask = (credits >= cv - window) & (credits <= cv + window)
-        if mask.sum() > 20:
-            mask_fast = mask & (df['x_FASt']==1)
-            mask_nonfast = mask & (df['x_FASt']==0)
-            fast_data = df.loc[mask_fast, 'mean_engagement'].values
-            nonfast_data = df.loc[mask_nonfast, 'mean_engagement'].values
-            fast_w = w[mask_fast]
-            nonfast_w = w[mask_nonfast]
-            
-            if len(fast_data) > 5 and len(nonfast_data) > 5:
-                fast_mean = weighted_mean(fast_data, fast_w)
-                nonfast_mean = weighted_mean(nonfast_data, nonfast_w)
-                effect = fast_mean - nonfast_mean
-                fast_var = weighted_std(fast_data, fast_w) ** 2
-                nonfast_var = weighted_std(nonfast_data, nonfast_w) ** 2
-                fast_n = weighted_n_eff(fast_w)
-                nonfast_n = weighted_n_eff(nonfast_w)
-                se = np.sqrt(fast_var/fast_n + nonfast_var/nonfast_n)
-                effects.append(effect)
-                ci_lows.append(effect - 1.96*se)
-                ci_highs.append(effect + 1.96*se)
-            else:
-                effects.append(np.nan)
-                ci_lows.append(np.nan)
-                ci_highs.append(np.nan)
-        else:
-            effects.append(np.nan)
-            ci_lows.append(np.nan)
-            ci_highs.append(np.nan)
-    
-    ax.fill_between(credit_vals, ci_lows, ci_highs, alpha=0.3, color=colors['engagement'])
-    ax.plot(credit_vals, effects, '-', color=colors['engagement'], linewidth=2)
-    ax.axhline(0, color='black', linewidth=1)
-    ax.axvline(12, color=colors['credits'], linestyle='--', alpha=0.7, linewidth=2, label='FASt threshold')  # Yellow
-    ax.set_xlabel('Transfer Credits', fontsize=11)
-    ax.set_ylabel('FASt Effect on Engagement', fontsize=11)
-    ax.set_title('Conditional FASt Effect on Engagement\n(Rolling window, 95% CI)', fontsize=12, fontweight='bold')
-    ax.legend()
-    
-    plt.suptitle('Figure 8\nCredit Dose × FASt Moderation Pattern', fontsize=14, fontweight='bold', y=1.02)
-    plt.tight_layout()
-    add_sim_note(fig)
-    plt.savefig(f'{outdir}/fig8_credit_dose_moderation.png', dpi=300, bbox_inches='tight')
-    plt.close()
-    print('✓ Figure 8: Credit Dose Moderation saved')
+        print("⚠ Figure 8 skipped: requires 'trnsfr_cr' or 'credit_dose' column.")
     
     # =========================================================================
     # FIGURE 9: Mediation Pathway Visualization
