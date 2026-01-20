@@ -5,7 +5,7 @@ const dataBase = new URL(
   window.location.origin + import.meta.env.BASE_URL,
 );
 
-async function fetchJson(filename: string) {
+async function fetchJson(filename: string): Promise<unknown | null> {
   const url = new URL(filename, dataBase);
   url.searchParams.set("t", String(Date.now()));
   const response = await fetch(url.toString(), { cache: "no-store" });
@@ -22,7 +22,7 @@ async function fetchJson(filename: string) {
 
 export async function fetchFastComparison(): Promise<FastComparison> {
   const data = await fetchJson("fastComparison.json");
-  // Return an empty object if the file is missing; the UI should render a
-  // friendly "data unavailable" state rather than crashing.
+  // If the file is missing, return an empty object so the UI can render a
+  // friendly "data unavailable" state instead of crashing.
   return (data ?? {}) as FastComparison;
 }
