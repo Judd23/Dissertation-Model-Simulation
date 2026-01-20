@@ -176,6 +176,9 @@ export type GroupComparisonResult = z.infer<typeof GroupComparisonResultSchema>;
 // Validation Utilities
 // =============================================================================
 
+// Track which datasets have already logged errors (log-once gate)
+const loggedErrors = new Set<string>();
+
 /**
  * Safe parse that returns typed result with error details
  */
@@ -194,8 +197,10 @@ export function safeParseData<T>(
     .map(issue => `${issue.path.join('.')}: ${issue.message}`)
     .join('; ');
   
-  if (import.meta.env.DEV) {
-    console.error(`Validation failed for ${dataName}:`, result.error.issues);
+  // Log once per dataset to avoid spam from polling
+  if (import.meta.env.DEV && !loggedErrors.has(dataName)) {
+    loggedErrors.add(dataName);
+    console.warn(`[Schema] Validation failed for ${dataName}:`, result.error.issues[0]);
   }
 
   return {
