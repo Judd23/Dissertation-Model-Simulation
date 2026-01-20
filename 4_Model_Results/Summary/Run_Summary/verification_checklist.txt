@@ -4,14 +4,14 @@ REP_DATA_MTIME=2026-01-18 15:46:17.498697
 REP_DATA_MD5=c2a3b94fca9921c7a80da1b639163024
 TREATMENT_VAR=x_FASt
 
-ANALYSIS_DATA_CSV=4_Model_Results/Outputs/runs/run_01_19_0439p/logs/analysis_dataset_cleaned.csv
+ANALYSIS_DATA_CSV=4_Model_Results/Outputs/runs/run_01_19_0445p/logs/analysis_dataset_cleaned.csv
 ANALYSIS_DATA_MD5=1cda6930f0656a591b2c3dcb4220b8ea
 
 (0) Executed SEM syntax files
-measurement_syntax=4_Model_Results/Outputs/runs/run_01_19_0439p/raw/syntax/executed_measurement_syntax.lav
-sem_parallel=4_Model_Results/Outputs/runs/run_01_19_0439p/raw/syntax/executed_sem_parallel.lav
-sem_total=4_Model_Results/Outputs/runs/run_01_19_0439p/raw/syntax/executed_sem_total.lav
-sem_serial=4_Model_Results/Outputs/runs/run_01_19_0439p/raw/syntax/executed_sem_serial.lav
+measurement_syntax=4_Model_Results/Outputs/runs/run_01_19_0445p/raw/syntax/executed_measurement_syntax.lav
+sem_parallel=4_Model_Results/Outputs/runs/run_01_19_0445p/raw/syntax/executed_sem_parallel.lav
+sem_total=4_Model_Results/Outputs/runs/run_01_19_0445p/raw/syntax/executed_sem_total.lav
+sem_serial=4_Model_Results/Outputs/runs/run_01_19_0445p/raw/syntax/executed_sem_serial.lav
 
 (6) Group counts (credit_band)
 
@@ -43,7 +43,7 @@ hgrades present: TRUE
 hgrades_AF present in input then removed: FALSE
 
 (2b) Item recode report (out-of-range -> NA; MHW 9->NA)
-recode_report_path=4_Model_Results/Outputs/runs/run_01_19_0439p/logs/recode_report.tsv
+recode_report_path=4_Model_Results/Outputs/runs/run_01_19_0445p/logs/recode_report.tsv
 No out-of-range values detected in enforced item sets.
 
 (2c) MHW finance naming check (executed SEM uses MHWdfinancial)
