@@ -1,27 +1,26 @@
-import { PageShell, Section, Card } from "../components/ui"; // adjust imports as needed
-import React from "react";
+import type { FastComparison } from "../types/fastComparison";
 
-export default function DemographicsPage(props) {
-  const { modelResults, doseEffects, sampleDescriptives, fastComparison } = props.data;
+const dataBase = new URL(
+  "data/",
+  window.location.origin + import.meta.env.BASE_URL,
+);
 
-  if (!modelResults || !doseEffects || !sampleDescriptives) {
-    return (
-      <PageShell>
-        <Section>
-          <Card>
-            <h2>Data not available yet</h2>
-            <p>
-              The dashboard is running, but the required JSON files did not load into valid objects. Check the console validation warnings for details.
-            </p>
-          </Card>
-        </Section>
-      </PageShell>
-    );
+async function fetchJson(filename: string) {
+  const url = new URL(filename, dataBase);
+  url.searchParams.set("t", String(Date.now()));
+  const response = await fetch(url.toString(), { cache: "no-store" });
+  if (!response.ok) {
+    console.log("(NO $) [FastComparisonFetch] response:", {
+      filename,
+      status: response.status,
+      ok: response.ok,
+    });
+    throw new Error(`Failed to load ${filename} (${response.status})`);
   }
+  return response.json();
+}
 
-  // Example of null-safe Object.keys usage around line ~439
-  // Replace Object.keys(someVar) with Object.keys(someVar ?? {})
-  const keys = Object.keys(modelResults ?? {});
-
-  // rest of the component code...
+export async function fetchFastComparison(): Promise<FastComparison> {
+  const data = await fetchJson("fastComparison.json");
+  return data as FastComparison;
 }
