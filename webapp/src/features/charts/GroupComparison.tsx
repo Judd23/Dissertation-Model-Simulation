@@ -30,17 +30,15 @@ function getGroupData(
   demographics: SampleDescriptives["demographics"],
   groupComparisons: GroupComparisonsJson,
   grouping: GroupComparisonProps["grouping"],
-  pathway: "a1" | "a2"
+  pathway: "a1" | "a2",
 ): GroupEffect[] {
   const sampleSizes: Record<string, Record<string, number>> = {
     race: {
       "Hispanic/Latino": demographics.race["Hispanic/Latino"].n,
       White: demographics.race["White"].n,
       Asian: demographics.race["Asian"].n,
-      "Black/African American":
-        demographics.race["Black/African American"].n,
-      "Other/Multiracial":
-        demographics.race["Other/Multiracial/Unknown"].n,
+      "Black/African American": demographics.race["Black/African American"].n,
+      "Other/Multiracial": demographics.race["Other/Multiracial/Unknown"].n,
     },
     firstgen: {
       "First-Gen": demographics.firstgen.yes.n,
@@ -90,8 +88,10 @@ export default function GroupComparison({
   grouping,
   pathway,
 }: GroupComparisonProps) {
-  const [groupComparisons, setGroupComparisons] = useState<GroupComparisonsJson | null>(null);
-  const [sampleDescriptives, setSampleDescriptives] = useState<SampleDescriptives | null>(null);
+  const [groupComparisons, setGroupComparisons] =
+    useState<GroupComparisonsJson | null>(null);
+  const [sampleDescriptives, setSampleDescriptives] =
+    useState<SampleDescriptives | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -107,7 +107,7 @@ export default function GroupComparison({
         }
       } catch (error) {
         if (import.meta.env.DEV) {
-          console.error('(NO $) [GroupComparison] data load failed:', error);
+          console.error("(NO $) [GroupComparison] data load failed:", error);
         }
       }
     };
@@ -118,13 +118,15 @@ export default function GroupComparison({
   }, []);
 
   // useMemo MUST be called before any early return to avoid React #310 error
-  const data = useMemo(
-    () => {
-      if (!groupComparisons || !sampleDescriptives) return [];
-      return getGroupData(sampleDescriptives.demographics, groupComparisons, grouping, pathway);
-    },
-    [grouping, pathway, groupComparisons, sampleDescriptives]
-  );
+  const data = useMemo(() => {
+    if (!groupComparisons || !sampleDescriptives) return [];
+    return getGroupData(
+      sampleDescriptives.demographics,
+      groupComparisons,
+      grouping,
+      pathway,
+    );
+  }, [grouping, pathway, groupComparisons, sampleDescriptives]);
 
   if (!groupComparisons || !sampleDescriptives) {
     return null;
