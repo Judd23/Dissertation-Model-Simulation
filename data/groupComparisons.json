@@ -1,0 +1,82 @@
+{
+  "byRace": {
+    "groupVariable": "re_all",
+    "groups": [
+      {
+        "label": "Hispanic/Latino",
+        "effects": {
+          "a1": {
+            "estimate": 0.1486,
+            "se": 0.0651,
+            "pvalue": 0.0224669744602204
+          },
+          "a2": {
+            "estimate": -0.0268,
+            "se": 0.0665,
+            "pvalue": 0.68729379455671
+          }
+        }
+      },
+      {
+        "label": "White",
+        "effects": {
+          "a1": {
+            "estimate": -0.39,
+            "se": 0.1124,
+            "pvalue": 0.0005178492456532
+          },
+          "a2": {
+            "estimate": 0.2937,
+            "se": 0.1349,
+            "pvalue": 0.0293942593929348
+          }
+        }
+      },
+      {
+        "label": "Asian",
+        "effects": {
+          "a1": {
+            "estimate": 0.0967,
+            "se": 0.1053,
+            "pvalue": 0.358620695325935
+          },
+          "a2": {
+            "estimate": -0.1608,
+            "se": 0.105,
+            "pvalue": 0.125851364830451
+          }
+        }
+      },
+      {
+        "label": "Black/African American",
+        "effects": {
+          "a1": {
+            "estimate": -0.2961,
+            "se": 0.1793,
+            "pvalue": 0.0986191741903031
+          },
+          "a2": {
+            "estimate": -0.3693,
+            "se": 0.3493,
+            "pvalue": 0.290346822524953
+          }
+        }
+      },
+      {
+        "label": "Other/Multiracial",
+        "effects": {
+          "a1": {
+            "estimate": 0.0776,
+            "se": 0.1374,
+            "pvalue": 0.572029116445991
+          },
+          "a2": {
+            "estimate": 0.0465,
+            "se": 0.1232,
+            "pvalue": 0.705657972381094
+          }
+        }
+      }
+    ]
+  }
+}

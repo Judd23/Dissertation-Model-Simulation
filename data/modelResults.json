@@ -1,0 +1,172 @@
+{
+  "mainModel": {
+    "fitMeasures": {
+      "df": 569.0,
+      "chisq": 1045.8119,
+      "pvalue": 0.0,
+      "cfi": 0.9954,
+      "tli": 0.9949,
+      "rmsea": 0.0129,
+      "srmr": 0.046,
+      "cfi.scaled": 0.9971,
+      "tli.scaled": 0.9968,
+      "rmsea.scaled": 0.0089,
+      "cfi.robust": 0.9973,
+      "tli.robust": 0.997,
+      "rmsea.robust": 0.0101
+    },
+    "structuralPaths": [
+      {
+        "id": "a1",
+        "from": "x_FASt",
+        "to": "EmoDiss",
+        "estimate": 0.1238,
+        "se": 0.0506,
+        "z": 2.447,
+        "pvalue": 0.0143995715758409,
+        "std_estimate": 0.0608
+      },
+      {
+        "id": "a1z",
+        "from": "XZ_c",
+        "to": "EmoDiss",
+        "estimate": 0.0234,
+        "se": 0.0185,
+        "z": 1.265,
+        "pvalue": 0.205745500609911,
+        "std_estimate": 0.0354
+      },
+      {
+        "id": "g1",
+        "from": "cohort",
+        "to": "EmoDiss",
+        "estimate": -0.0044,
+        "se": 0.0342,
+        "z": -0.127,
+        "pvalue": 0.898644449675644,
+        "std_estimate": -0.0021
+      },
+      {
+        "id": "a2",
+        "from": "x_FASt",
+        "to": "QualEngag",
+        "estimate": -0.0105,
+        "se": 0.0485,
+        "z": -0.217,
+        "pvalue": 0.827984901995846,
+        "std_estimate": -0.0053
+      },
+      {
+        "id": "a2z",
+        "from": "XZ_c",
+        "to": "QualEngag",
+        "estimate": -0.0184,
+        "se": 0.0176,
+        "z": -1.047,
+        "pvalue": 0.295099290033134,
+        "std_estimate": -0.0286
+      },
+      {
+        "id": "g2",
+        "from": "cohort",
+        "to": "QualEngag",
+        "estimate": 0.0565,
+        "se": 0.0327,
+        "z": 1.728,
+        "pvalue": 0.0839796500178545,
+        "std_estimate": 0.0284
+      },
+      {
+        "id": "c",
+        "from": "x_FASt",
+        "to": "DevAdj",
+        "estimate": 0.0182,
+        "se": 0.019,
+        "z": 0.958,
+        "pvalue": 0.3381160633946,
+        "std_estimate": 0.0297
+      },
+      {
+        "id": "cz",
+        "from": "XZ_c",
+        "to": "DevAdj",
+        "estimate": 0.0014,
+        "se": 0.0069,
+        "z": 0.199,
+        "pvalue": 0.842419180437124,
+        "std_estimate": 0.007
+      },
+      {
+        "id": "b1",
+        "from": "EmoDiss",
+        "to": "DevAdj",
+        "estimate": -0.1988,
+        "se": 0.0098,
+        "z": -20.282,
+        "pvalue": 0.0,
+        "std_estimate": -0.663
+      },
+      {
+        "id": "b2",
+        "from": "QualEngag",
+        "to": "DevAdj",
+        "estimate": 0.1592,
+        "se": 0.0081,
+        "z": 19.63,
+        "pvalue": 0.0,
+        "std_estimate": 0.517
+      },
+      {
+        "id": "g3",
+        "from": "cohort",
+        "to": "DevAdj",
+        "estimate": 0.0025,
+        "se": 0.0128,
+        "z": 0.199,
+        "pvalue": 0.842610588763325,
+        "std_estimate": 0.0042
+      }
+    ],
+    "sourcePaths": {
+      "parameterEstimates": "4_Model_Results/Outputs/RQ1_RQ3_main/structural/structural_parameterEstimates.txt",
+      "fitMeasures": "4_Model_Results/Outputs/RQ1_RQ3_main/structural/structural_fitMeasures.txt"
+    }
+  },
+  "totalEffectModel": {
+    "fitMeasures": {
+      "df": 319.0,
+      "chisq": 2503.1433,
+      "pvalue": 0.0,
+      "cfi": 0.9789,
+      "tli": 0.9768,
+      "rmsea": 0.037,
+      "srmr": 0.1405,
+      "cfi.scaled": 0.9797,
+      "tli.scaled": 0.9776,
+      "rmsea.scaled": 0.0317,
+      "cfi.robust": 0.9807,
+      "tli.robust": 0.9788,
+      "rmsea.robust": 0.0362
+    },
+    "structuralPaths": [
+      {
+        "id": "c_total",
+        "from": "x_FASt",
+        "to": "DevAdj",
+        "estimate": -0.0216,
+        "se": 0.0166,
+        "z": -1.295,
+        "pvalue": 0.195269006080688,
+        "std_estimate": -0.032
+      }
+    ],
+    "sourcePaths": {
+      "parameterEstimates": "4_Model_Results/Outputs/A0_total_effect/structural/structural_parameterEstimates.txt",
+      "fitMeasures": "4_Model_Results/Outputs/A0_total_effect/structural/structural_fitMeasures.txt"
+    }
+  },
+  "bootstrap": {
+    "n_replicates": 2000,
+    "ci_type": "bca.simple"
+  }
+}

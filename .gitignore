@@ -1,0 +1,122 @@
+# Simulation outputs
+results/
+results/**
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# R
+.Rhistory
+.RData
+.Rproj.user
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Results (previously kept directory structure; now ignore everything)
+!results/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# --- local env & cache ---
+.venv/
+.pytest_cache/
+**/__pycache__/
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/
+
+# --- outputs ---
+results/
+
+# --- local data (keep examples only) ---
+data/*.csv
+!data/example_*.csv
+
+# ------------------------------
+# Generated analysis outputs (do not track)
+# ------------------------------
+results/
+outputs/
+plots/
+
+# But DO track 4_Model_Results (official outputs)
+!4_Model_Results/
+!4_Model_Results/**
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+*~
+
+# R / IDE / OS artifacts
+.Rhistory
+.RData
+.Rproj.user/
+.DS_Store
+.vscode/
+.idea/
+
+# Common derived artifacts written by this pipeline
+**/*rep_data_with_psw*.csv
+**/*psw_stage_report*.txt
+**/*psw_balance_smd*.txt
+**/*diagnostics*.csv
+
+# Local scratch data
+process_sem/Dataset/
+
+# Editor/backup artifacts
+**/*.bak_*
