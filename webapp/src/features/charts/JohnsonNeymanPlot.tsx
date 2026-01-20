@@ -1,6 +1,7 @@
 import { useRef, useEffect, useMemo, useState } from 'react';
 import * as d3 from 'd3';
-import { doseEffects } from '../../data/adapters/doseEffects';
+import { fetchDoseEffects } from '../../data/adapters/doseEffects';
+import type { DoseEffectsData } from '../../data/types/doseEffects';
 import styles from './JohnsonNeymanPlot.module.css';
 
 interface JohnsonNeymanPlotProps {
@@ -24,24 +25,35 @@ export default function JohnsonNeymanPlot({
     ciLower: number;
     ciUpper: number;
   } | null>(null);
+  const [doseEffects, setDoseEffects] = useState<DoseEffectsData | null>(null);
   const outcomeLabel = outcome === 'distress' ? 'Emotional Distress' : 'Campus Engagement';
+
+  // Fetch dose effects data
+  useEffect(() => {
+    let isMounted = true;
+    fetchDoseEffects().then((data) => {
+      if (isMounted && data) setDoseEffects(data);
+    });
+    return () => { isMounted = false; };
+  }, []);
 
   // Get the JN point for this outcome
   const jnPoint = useMemo(() => {
-    if (outcome !== 'engagement') return null;
+    if (outcome !== 'engagement' || !doseEffects) return null;
     const crossover = doseEffects.johnsonNeymanPoints.engagement.crossover;
     return typeof crossover === 'number' ? crossover : null;
-  }, [outcome]);
+  }, [outcome, doseEffects]);
 
   // Process data
   const data = useMemo(() => {
+    if (!doseEffects) return [];
     return doseEffects.effects.map((d) => ({
       dose: d.creditDose,
       effect: outcome === 'distress' ? d.distressEffect : d.engagementEffect,
       ciLower: outcome === 'distress' ? d.distressCI[0] : d.engagementCI[0],
       ciUpper: outcome === 'distress' ? d.distressCI[1] : d.engagementCI[1],
     }));
-  }, [outcome]);
+  }, [outcome, doseEffects]);
 
   const pointByDose = useMemo(() => {
     return new Map(data.map((d) => [d.dose, d] as const));

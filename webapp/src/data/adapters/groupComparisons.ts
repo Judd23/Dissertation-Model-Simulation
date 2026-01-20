@@ -1,9 +1,14 @@
 import type { GroupComparisonsJson } from '../types/groupComparisons';
 
-const DATA_BASE_PATH = '/data';
+const dataBase = new URL(
+  'data/',
+  window.location.origin + import.meta.env.BASE_URL,
+);
 
 async function fetchJson(filename: string) {
-  const response = await fetch(`${DATA_BASE_PATH}/${filename}?t=${Date.now()}`, { cache: 'no-store' });
+  const url = new URL(filename, dataBase);
+  url.searchParams.set('t', String(Date.now()));
+  const response = await fetch(url.toString(), { cache: 'no-store' });
   if (!response.ok) {
     throw new Error(`Failed to load ${filename} (${response.status})`);
   }
