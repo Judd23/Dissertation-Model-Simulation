@@ -1,0 +1,111 @@
+============================================================
+Generating Empirically-Aligned Synthetic Dataset
+============================================================
+
+Archetype sample sizes:
+  1. Latina Commuter Caretaker: n=1250
+  2. Latino Off-Campus Working: n=450
+  3. Asian High-Pressure Achiever: n=550
+  4. Asian First-Gen Navigator: n=200
+  5. Black Campus Connector: n=125
+  6. White Residential Traditional: n=150
+  7. White Off-Campus Working: n=150
+  8. Multiracial Bridge-Builder: n=500
+  9. Hispanic On-Campus Transitioner: n=1000
+  10. Continuing-Gen Cruiser: n=200
+  11. White Rural First-Gen: n=200
+  12. Black Male Striver: n=75
+  13. White Working-Class Striver: n=150
+
+Generating archetype 1: Latina Commuter Caretaker...
+
+Generating archetype 2: Latino Off-Campus Working...
+
+Generating archetype 3: Asian High-Pressure Achiever...
+
+Generating archetype 4: Asian First-Gen Navigator...
+
+Generating archetype 5: Black Campus Connector...
+
+Generating archetype 6: White Residential Traditional...
+
+Generating archetype 7: White Off-Campus Working...
+
+Generating archetype 8: Multiracial Bridge-Builder...
+
+Generating archetype 9: Hispanic On-Campus Transitioner...
+
+Generating archetype 10: Continuing-Gen Cruiser...
+
+Generating archetype 11: White Rural First-Gen...
+
+Generating archetype 12: Black Male Striver...
+
+Generating archetype 13: White Working-Class Striver...
+
+Applying missingness patterns...
+
+============================================================
+DATASET SUMMARY
+============================================================
+
+Total N: 5000
+
+--- Demographics ---
+FASt (x_FASt=1): 1321 (26.4%)
+
+Race/Ethnicity:
+re_all
+Hispanic/Latino              54.0
+Asian                        16.5
+White                        14.7
+Other/Multiracial/Unknown    10.8
+Black/African American        4.0
+Name: proportion, dtype: float64
+
+First-gen: 47.5%
+Pell: 52.6%
+Female: 60.4%
+
+Living Situation:
+living18
+With family (commuting)        48.2
+On-campus (residence hall)     28.4
+Off-campus (rent/apartment)    23.4
+Name: proportion, dtype: float64
+
+--- Treatment Distribution ---
+Credit dose (FASt only):
+  Mean: 2.17, SD: 1.65
+  Min: 0.0, Max: 6.8
+
+--- Construct Means (Raw) ---
+Belonging: 2.71
+Gains: 2.95
+EmoDiss: 3.80
+QualEngag: 4.85
+
+--- FASt vs Non-FASt (Raw - showing selection bias) ---
+Belonging: FASt=2.67, Non-FASt=2.73, Diff=-0.05
+EmoDiss: FASt=3.92, Non-FASt=3.76, Diff=+0.16
+QualEngag: FASt=4.83, Non-FASt=4.86, Diff=-0.03
+
+--- Missingness ---
+Variables with >2% missing:
+MHWdlonely       7.2
+MHWdsleep        6.7
+MHWdmental       6.4
+MHWdfinancial    5.8
+MHWdexhaust      5.6
+MHWdacad         5.6
+QIfaculty        4.4
+QIadvisor        4.4
+QIadmin          4.3
+QIstudent        4.2
+QIstaff          4.0
+dtype: float64
+
+============================================================
+Dataset saved to: 1_Dataset/rep_data.csv
+============================================================
+Archetype assignments saved to: 1_Dataset/archetype_assignments.csv
