@@ -10,17 +10,19 @@ async function fetchJson(filename: string) {
   url.searchParams.set("t", String(Date.now()));
   const response = await fetch(url.toString(), { cache: "no-store" });
   if (!response.ok) {
-    console.log("(NO $) [FastComparisonFetch] response:", {
+    console.warn("[FastComparisonFetch] missing or unavailable JSON", {
       filename,
       status: response.status,
       ok: response.ok,
     });
-    throw new Error(`Failed to load ${filename} (${response.status})`);
+    return null;
   }
   return response.json();
 }
 
 export async function fetchFastComparison(): Promise<FastComparison> {
   const data = await fetchJson("fastComparison.json");
-  return data as FastComparison;
+  // Return an empty object if the file is missing; the UI should render a
+  // friendly "data unavailable" state rather than crashing.
+  return (data ?? {}) as FastComparison;
 }
