@@ -603,19 +603,19 @@ Run and report:
 
 ---
 
-#### PHASE 8.5: VERIFICATION SMOKE TEST
+#### PHASE 8.5: VERIFICATION SMOKE TEST ✅
 
 **Run full pipeline and verify**:
 
-- [ ] `./scripts/run smoke` completes without errors
-- [ ] Run ID follows new format: `run_01_19_HHMMp`
-- [ ] `raw/RQ1_RQ3_main/ps_model.csv` exists with correct columns
-- [ ] `raw/RQ1_RQ3_main/weight_diagnostics.csv` exists with correct columns
-- [ ] `tables/Plain_Language_Summary.docx` has NO `[Placeholder` text
-- [ ] `tables/Dissertation_Tables.docx` Tables 1-8 show actual values (not "—")
-- [ ] `tables/Dissertation_Tables.docx` Table 13 shows sensitivity results
-- [ ] All 15 figures still generate correctly
-- [ ] Webapp loads run and displays manifest
+- [x] `./scripts/run smoke` completes without errors
+- [x] Run ID follows new format: `run_01_19_HHMMp`
+- [x] `raw/RQ1_RQ3_main/ps_model.csv` exists with correct columns
+- [x] `raw/RQ1_RQ3_main/weight_diagnostics.csv` exists with correct columns
+- [x] `tables/Plain_Language_Summary.docx` has NO `[Placeholder` text
+- [x] `tables/Dissertation_Tables.docx` Tables 1-8 show actual values (not "—")
+- [x] `tables/Dissertation_Tables.docx` Table 13 shows sensitivity results
+- [x] All 15 figures still generate correctly
+- [x] Webapp loads run and displays manifest
 
 **Verification commands**:
 

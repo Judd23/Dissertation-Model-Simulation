@@ -1123,12 +1123,14 @@ def table5_balance(doc, table_num, data_dir, compact=True):
     Uses APA 7 column spanners (decked heads) for Pre/Post groupings.
     Total rows (Mean |SMD|, Max |SMD|) get horizontal separator.
     """
-    balance_file = find_csv(data_dir, "balance.csv")
+    # Check for balance file - R exports psw_balance_smd.txt, not balance.csv
+    balance_txt = data_dir / "RQ1_RQ3_main" / "psw_balance_smd.txt"
+    balance_csv = find_csv(data_dir, "balance.csv")
     
     total_row_indices = []
     
-    if balance_file.exists():
-        raw = pd.read_csv(balance_file)
+    if balance_csv.exists():
+        raw = pd.read_csv(balance_csv)
         # Build data rows with readable labels
         data_rows = []
         for idx, row in raw.iterrows():
@@ -1147,8 +1149,43 @@ def table5_balance(doc, table_num, data_dir, compact=True):
                 fmt(row['SMD_Post'], 3),
                 fmt(row['VR_Post'], 3)
             ])
+    elif balance_txt.exists():
+        # Primary path: R exports psw_balance_smd.txt
+        computed = compute_balance_from_txt(data_dir)
+        if not computed.empty:
+            data_rows = []
+            for idx, row in computed.iterrows():
+                covariate_raw = row['Covariate']
+                covariate = get_label(covariate_raw)
+                
+                # Mark summary rows for separator
+                if covariate_raw in ['Mean |SMD|', 'Max |SMD|']:
+                    if len(data_rows) > 0 and covariate_raw == 'Mean |SMD|':
+                        total_row_indices.append(len(data_rows))
+                
+                data_rows.append([
+                    covariate,
+                    fmt(row['SMD_Pre'], 3),
+                    fmt(row['VR_Pre'], 3) if pd.notna(row['VR_Pre']) else '—',
+                    fmt(row['SMD_Post'], 3),
+                    fmt(row['VR_Post'], 3) if pd.notna(row['VR_Post']) else '—'
+                ])
+        else:
+            # File exists but empty/invalid - use placeholder
+            data_rows = [
+                ['Cohort', '—', '—', '—', '—'],
+                ['High School GPA', '—', '—', '—', '—'],
+                ['Parental Education', '—', '—', '—', '—'],
+                ['Pell Grant Recipient', '—', '—', '—', '—'],
+                ['AP/IB/College-Level Course', '—', '—', '—', '—'],
+                ['Precalculus Completion', '—', '—', '—', '—'],
+                ['High School Academic Challenge', '—', '—', '—', '—'],
+                ['Mean |SMD|', '—', '—', '—', '—'],
+                ['Max |SMD|', '—', '—', '—', '—'],
+            ]
+            total_row_indices = [7]
     else:
-        # Try to load from psw_balance_smd.txt
+        # Fallback: Use compute function which searches multiple paths
         computed = compute_balance_from_txt(data_dir)
         if not computed.empty:
             data_rows = []
