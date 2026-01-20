@@ -11,3 +11,64 @@ Wrote verification checklist: 4_Model_Results/Outputs/runs/run_01_19_0453p/logs/
 
 === Exporting bootstrap_results.csv (for dissertation tables) ===
 Wrote: 4_Model_Results/Outputs/runs/run_01_19_0453p/raw/bootstrap_results.csv
+[SKIP_RQ4] SKIP_RQ4=TRUE: completed A0/A/A1 only; skipping RUN B/C2/C.
+
+=== Generating Standards Compliance Visualizations ===
+Wrote standards data: 4_Model_Results/Outputs/runs/run_01_19_0453p/figures/standards_data.json
+Loaded data from: 4_Model_Results/Outputs/runs/run_01_19_0453p/figures/standards_data.json
+Saved: 4_Model_Results/Outputs/runs/run_01_19_0453p/figures/standards_compliance_dashboard.png
+Saved: 4_Model_Results/Outputs/runs/run_01_19_0453p/figures/standards_compliance_dashboard.pdf
+Saved: 4_Model_Results/Outputs/runs/run_01_19_0453p/figures/standards_sample_modelfit.png
+Saved: 4_Model_Results/Outputs/runs/run_01_19_0453p/figures/standards_bootstrap_effects.png
+
+✅ Professional standards visualizations complete!
+Standards visualizations saved to: 4_Model_Results/Outputs/runs/run_01_19_0453p/figures
+
+=== Building Bootstrap Tables ===
+/Users/jjohnson3/Documents/GitHub/Dissertation-Model-Simulation_clean/3_Analysis/3_Tables_Code/build_bootstrap_tables.py:46: FutureWarning: Truth-testing of elements was a source of confusion and will always return True in future versions. Use specific 'len(elem)' or 'elem is not None' test instead.
+  tblPr = tbl.tblPr or parse_xml(r'<w:tblPr %s/>' % nsdecls('w'))
+Wrote: 4_Model_Results/Outputs/runs/run_01_19_0453p/tables/Bootstrap_Tables.docx
+Tables: 3 | B = 10 | CI = percentile
+Bootstrap tables saved to: 4_Model_Results/Outputs/runs/run_01_19_0453p/tables
+
+=== Building Dissertation Tables ===
+Loaded bootstrap results: 4_Model_Results/Outputs/runs/run_01_19_0453p/raw/bootstrap_results.csv
+
+============================================================
+Wrote: 4_Model_Results/Outputs/runs/run_01_19_0453p/tables/Dissertation_Tables.docx
+============================================================
+
+Tables generated (APA 7 format):
+  PART I:   Tables 1-3  (Sample, Descriptives, Missing)
+  PART II:  Tables 4-6  (PS Model, Balance, Weights)
+  PART III: Tables 7-9  (CFA, Invariance, Fit)
+  PART IV:  Tables 10-12 (Paths, Indirect, Conditional)
+  PART V:   Table 13    (Robustness)
+
+Metadata: B = 10 | CI = perc
+
+Note: Tables with '—' placeholders need data files in 4_Model_Results/Outputs/runs/run_01_19_0453p/raw/
+      Required: sample_flow.csv, descriptives.csv, missing_data.csv,
+                ps_model.csv, balance.csv, weight_diagnostics.csv,
+                cfa_results.csv, invariance.csv, model_fit.csv, robustness.csv
+Dissertation tables saved to: 4_Model_Results/Outputs/runs/run_01_19_0453p/tables/Dissertation_Tables.docx
+
+=== Building Plain Language Summary ===
+
+============================================================
+Wrote: 4_Model_Results/Outputs/runs/run_01_19_0453p/tables/Plain_Language_Summary.docx
+============================================================
+Plain language summary saved to: 4_Model_Results/Outputs/runs/run_01_19_0453p/tables/Plain_Language_Summary.docx
+
+=== Generating Descriptive Plots ===
+✓ Using PSW weights from column 'psw'
+✓ Figure 1: Demographics saved
+✓ Figure 2: Emotional Distress saved
+✓ Figure 3: Quality of Engagement saved
+✓ Figure 4: Developmental Adjustment saved
+✓ Figure 5: Equity Gaps saved
+✓ Figure 6: Correlation Heatmap saved
+! Figure 13 skipped: psw_balance_smd.txt not found
+
+✓ All figures saved to 4_Model_Results/Outputs/runs/run_01_19_0453p/figures/
+Descriptive plots saved to: 4_Model_Results/Outputs/runs/run_01_19_0453p/figures
