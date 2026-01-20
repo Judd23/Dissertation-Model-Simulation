@@ -8,3 +8,6 @@ RUN_MODE: smoke
 Output folder: 4_Model_Results/Outputs/runs/run_01_19_1013p
 Wrote verification checklist: 4_Model_Results/Outputs/runs/run_01_19_1013p/logs/verification_checklist.txt
 [living18] levels after cleaning: Off-campus (rent/apartment), On-campus (residence hall), With family (commuting)
+
+=== Exporting bootstrap_results.csv (for dissertation tables) ===
+Wrote: 4_Model_Results/Outputs/runs/run_01_19_1013p/raw/bootstrap_results.csv
