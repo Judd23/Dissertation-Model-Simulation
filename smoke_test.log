@@ -1,0 +1,13 @@
+[0;34m[INFO][0m Starting pipeline in 'smoke' mode...
+[0;34m[INFO][0m Run ID: run_01_19_0445p
+[0;34m[INFO][0m Run Mode: smoke
+[0;34m[INFO][0m === Stage 1: R Pipeline ===
+[1;33m[WARN][0m SKIP_DOCKER=1 — Running R locally...
+RUN_ID: run_01_19_0445p
+RUN_MODE: smoke
+Output folder: 4_Model_Results/Outputs/runs/run_01_19_0445p
+Wrote verification checklist: 4_Model_Results/Outputs/runs/run_01_19_0445p/logs/verification_checklist.txt
+[living18] levels after cleaning: Off-campus (rent/apartment), On-campus (residence hall), With family (commuting)
+
+=== Exporting bootstrap_results.csv (for dissertation tables) ===
+Wrote: 4_Model_Results/Outputs/runs/run_01_19_0445p/raw/bootstrap_results.csv

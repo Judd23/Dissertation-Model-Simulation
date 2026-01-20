@@ -1063,6 +1063,16 @@ def table4_ps_model(doc, table_num, data_dir, compact=True):
     
     if ps_file.exists():
         df = pd.read_csv(ps_file)
+        
+        # Map R export column names to expected names
+        column_mapping = {
+            'term': 'Covariate',
+            'estimate': 'B',
+            'std_error': 'SE',
+            'odds_ratio': 'OR'
+        }
+        df = df.rename(columns=column_mapping)
+        
         # Apply readable labels to Covariate column
         if 'Covariate' in df.columns:
             df['Covariate'] = df['Covariate'].apply(get_label)
