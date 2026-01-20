@@ -117,14 +117,18 @@ export default function GroupComparison({
     };
   }, []);
 
+  // useMemo MUST be called before any early return to avoid React #310 error
+  const data = useMemo(
+    () => {
+      if (!groupComparisons || !sampleDescriptives) return [];
+      return getGroupData(sampleDescriptives.demographics, groupComparisons, grouping, pathway);
+    },
+    [grouping, pathway, groupComparisons, sampleDescriptives]
+  );
+
   if (!groupComparisons || !sampleDescriptives) {
     return null;
   }
-
-  const data = useMemo(
-    () => getGroupData(sampleDescriptives.demographics, groupComparisons, grouping, pathway),
-    [grouping, pathway, groupComparisons, sampleDescriptives]
-  );
 
   if (data.length === 0) {
     return (

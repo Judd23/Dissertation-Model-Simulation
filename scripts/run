@@ -114,6 +114,9 @@ main() {
       B_BOOT_MAIN="${B_BOOT_MAIN:-2000}"
       B_BOOT_MG="${B_BOOT_MG:-100}"
       BOOT_CI_TYPE_MAIN="${BOOT_CI_TYPE_MAIN:-bca.simple}"
+      BOOT_NCPUS="${BOOT_NCPUS:-8}"
+      SKIP_RQ4="${SKIP_RQ4:-1}"
+      SKIP_RQ4_STRUCT_MG="${SKIP_RQ4_STRUCT_MG:-0}"
       ;;
     *)
       log_error "Invalid mode: $mode"
@@ -140,11 +143,11 @@ main() {
   export B_BOOT_MG
   export BOOT_CI_TYPE_MAIN
   
-  # Set common environment variables
+  # Set common environment variables (mode-specific defaults set above)
   export MANIFEST_FIRST_PYTHON="${MANIFEST_FIRST_PYTHON:-FALSE}"
   export SKIP_WEBAPP_SYNC="${SKIP_WEBAPP_SYNC:-FALSE}"
-  export BOOT_NCPUS="${BOOT_NCPUS:-4}"
-  export SKIP_RQ4="${SKIP_RQ4:-0}"
+  export BOOT_NCPUS="${BOOT_NCPUS:-4}"  # Full_Deploy default: 8
+  export SKIP_RQ4="${SKIP_RQ4:-0}"       # Full_Deploy default: 1
   export SKIP_RQ4_STRUCT_MG="${SKIP_RQ4_STRUCT_MG:-0}"
   
   # Define output paths

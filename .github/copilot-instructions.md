@@ -73,6 +73,23 @@ Check immediately when results look wrong:
 
 ## Running Tests & Workflows
 
+### Pipeline Run Modes
+```bash
+./scripts/run smoke        # Quick test (B=10, perc CIs)
+./scripts/run main         # Standard run (B=500, bca.simple)
+./scripts/run Full_Deploy  # Production (B=2000, bca.simple, 8 cores)
+```
+
+### Full_Deploy Study Settings (Official)
+| Variable | Value |
+|----------|-------|
+| `RUN_MODE` | `Full_Deploy` |
+| `B_BOOT_MAIN` | 2000 |
+| `BOOT_CI_TYPE_MAIN` | bca.simple |
+| `BOOT_NCPUS` | 8 |
+| `SKIP_RQ4` | 1 |
+| `SKIP_RQ4_STRUCT_MG` | 0 |
+
 ### E2E Integration Test
 ```bash
 Rscript scripts/e2e_integration_test_fa_st_pipeline.R
