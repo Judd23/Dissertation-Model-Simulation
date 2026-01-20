@@ -468,6 +468,182 @@ Run and report:
 
 ---
 
+### PHASE 8: AUTO-POPULATE TABLES & SUMMARY (APA 7)
+
+**Goal**: Wire `Plain_Language_Summary.docx` and `Dissertation_Tables.docx` to auto-populate from R outputs with APA 7 formatting. Change run ID format to human-readable `run_MM_DD_HHMMp`.
+
+---
+
+#### PHASE 8.0: RUN ID FORMAT CHANGE [1 FILE] ✅
+
+**File**: `scripts/run` (lines 60-62)
+
+- [x] Change `generate_run_id()` from `run_YYYYMMDD_HHMMSS` to `run_MM_DD_HHMMa/p`
+  - Example: `run_01_19_0337p` (January 19, 3:37 PM)
+- [x] Use 12-hour format with `a`/`p` suffix (lowercase)
+- [x] Verify downstream consumers handle new format (manifest.json, runs_index.json)
+
+**Estimated changes**: ~15 lines
+
+**⛔ STOP and verify run ID propagates correctly before Phase 8.1.**
+
+---
+
+#### PHASE 8.1: R PIPELINE PS MODEL EXPORT [1 FILE] ✅
+
+**File**: `3_Analysis/1_Main_Pipeline_Code/run_all_RQs_official.R`
+
+**Problem**: `compute_psw_overlap()` creates `ps_mod` but discards it. Table 4 (PS Model Coefficients) needs this data.
+
+- [x] Modify `compute_psw_overlap()` to return `list(psw = w, model = ps_mod)` instead of just `w`
+- [x] Update caller (~line 1023) to unpack: `psw_result <- compute_psw_overlap(...); psw <- psw_result$psw; ps_mod <- psw_result$model`
+- [x] Export `ps_model.csv` with columns: `term`, `estimate`, `std_error`, `z_value`, `p_value`, `odds_ratio`, `or_ci_low`, `or_ci_high`
+- [x] Export `weight_diagnostics.csv` with columns: `metric`, `value` (min, max, mean, sd, n_extreme, ess)
+- [x] Add variance ratio (VR) column to `psw_balance_smd.txt` or create new `balance.csv`
+
+**Estimated changes**: ~50 lines
+
+**⛔ STOP and verify CSVs appear in `raw/` folder before Phase 8.2.**
+
+---
+
+#### PHASE 8.2: PLAIN LANGUAGE SUMMARY REWRITE [1 FILE] ✅
+
+**File**: `3_Analysis/3_Tables_Code/build_plain_language_summary.py`
+
+**Problem**: Current file is a 253-line STUB with hardcoded `[Placeholder: ...]` text.
+
+**Rewrite approach** (~650 lines total):
+
+- [x] Add `load_structural_params(run_dir)` - parse `structural_parameterEstimates.txt`
+- [x] Add `load_fit_measures(run_dir)` - parse `structural_fitMeasures.txt`
+- [x] Add `load_bootstrap_effects(run_dir)` - read `bootstrap_results.csv`
+- [x] Add `format_apa_stat(estimate, ci_low, ci_high, p)` - returns `β = 0.XX, 95% CI [0.XX, 0.XX], p < .001`
+- [x] Add `interpret_effect_size(beta)` - returns "small"/"medium"/"large" per Cohen's d conventions
+- [x] Add `generate_rq1_section(params, boot)` - Total effect interpretation
+- [x] Add `generate_rq2_section(params, boot)` - Mediation pathways (EmoDiss, QualEngag)
+- [x] Add `generate_rq3_section(params, boot)` - Moderated mediation (credit_dose interaction)
+- [x] Add `generate_rq4_section(fit)` - Measurement model fit (CFI, RMSEA, SRMR)
+- [x] Add `generate_limitations_section()` - Static text with study limitations
+- [x] Add `generate_implications_section(boot)` - Data-driven implications based on effect directions
+- [x] Wire `main()` to call all sections and write DOCX with APA 7 heading styles
+
+**Key data mappings**:
+| Section | R Output File | Key Values |
+|---------|---------------|------------|
+| RQ1 Total Effect | `bootstrap_results.csv` | `total_z_mid` row |
+| RQ2 Indirect Effects | `bootstrap_results.csv` | `ind_EmoDiss_*`, `ind_QualEngag_*` rows |
+| RQ3 Moderation | `bootstrap_results.csv` | `index_MM_*` rows |
+| RQ4 Fit | `structural_fitMeasures.txt` | CFI, RMSEA, SRMR values |
+
+**⛔ STOP and verify summary populates correctly before Phase 8.3.**
+
+---
+
+#### PHASE 8.3: DISSERTATION TABLES - COMPUTE FUNCTIONS [1 FILE]
+
+**File**: `3_Analysis/3_Tables_Code/build_dissertation_tables.py`
+
+**Problem**: Tables 1-8, 13 show "—" because they expect CSV files R doesn't produce.
+
+**Add compute functions** (~200 lines):
+
+- [ ] `compute_sample_descriptives(df)` - For Table 1: N, %, M, SD by demographic
+- [ ] `compute_construct_descriptives(df)` - For Table 2: Item-level M, SD, α, ω
+- [ ] `compute_correlations(df)` - For Table 3: Correlation matrix with significance stars
+- [ ] `compute_ps_model_table(ps_csv)` - For Table 4: Read `ps_model.csv`, format ORs
+- [ ] `compute_balance_table(balance_csv)` - For Table 5: SMD and VR pre/post weighting
+- [ ] `compute_weight_diagnostics(diag_csv)` - For Table 6: Weight distribution stats
+- [ ] `compute_measurement_model(fit_txt)` - For Table 7: Factor loadings from CFA
+- [ ] `compute_fit_indices(fit_txt)` - For Table 8: Model fit comparison table
+- [ ] `compute_sensitivity_analysis(boot_csv)` - For Table 13: Robustness checks
+
+**Data sources**:
+| Table | Source File | Notes |
+|-------|-------------|-------|
+| 1 | `rep_data_with_psw.csv` | Compute from raw data |
+| 2 | `rep_data_with_psw.csv` | Compute from raw data |
+| 3 | `rep_data_with_psw.csv` | Compute from raw data |
+| 4 | `ps_model.csv` | NEW from Phase 8.1 |
+| 5 | `balance.csv` or `psw_balance_smd.txt` | Needs VR added |
+| 6 | `weight_diagnostics.csv` | NEW from Phase 8.1 |
+| 7 | `measurement_parameterEstimates.txt` | Already exists |
+| 8 | `structural_fitMeasures.txt` | Already exists |
+| 9-12 | Various `.txt` files | Already working |
+| 13 | `bootstrap_results.csv` | Compute sensitivity |
+
+**⛔ STOP and verify compute functions return expected DataFrames before Phase 8.4.**
+
+---
+
+#### PHASE 8.3 & 8.4: DISSERTATION TABLES - COMPUTE FUNCTIONS & WIRING ✅
+
+**File**: `3_Analysis/3_Tables_Code/build_dissertation_tables.py`
+
+**Added compute functions** (~250 lines):
+
+- [x] `compute_sample_descriptives(data_dir)` - For Table 1: derives from rep_data_with_psw.csv
+- [x] `compute_variable_descriptives(data_dir)` - For Table 2: M, SD, Min, Max
+- [x] `compute_missing_data(data_dir)` - For Table 3: Missing percentages
+- [x] `compute_ps_model_from_csv(data_dir)` - For Table 4: Read ps_model.csv
+- [x] `compute_balance_from_txt(data_dir)` - For Table 5: SMD and VR from psw_balance_smd.txt
+- [x] `compute_weight_diagnostics_from_csv(data_dir)` - For Table 6: Weight distribution
+
+**Wired table builders**:
+
+- [x] Update `table1_sample_flow()` to call `compute_sample_descriptives()`
+- [x] Update `table2_descriptives()` to call `compute_variable_descriptives()`
+- [x] Update `table3_missing_data()` to call `compute_missing_data()`
+- [x] Update `table4_ps_model()` to call `compute_ps_model_from_csv()`
+- [x] Update `table5_balance()` to call `compute_balance_from_txt()`
+- [x] Update `table6_weights()` to call `compute_weight_diagnostics_from_csv()`
+- [x] Tables 7-12 already work (read from R .txt files)
+- [x] APA 7 table notes already present
+- [x] Column alignment and borders already configured
+
+---
+
+#### PHASE 8.5: VERIFICATION SMOKE TEST
+
+**Run full pipeline and verify**:
+
+- [ ] `./scripts/run smoke` completes without errors
+- [ ] Run ID follows new format: `run_01_19_HHMMp`
+- [ ] `raw/RQ1_RQ3_main/ps_model.csv` exists with correct columns
+- [ ] `raw/RQ1_RQ3_main/weight_diagnostics.csv` exists with correct columns
+- [ ] `tables/Plain_Language_Summary.docx` has NO `[Placeholder` text
+- [ ] `tables/Dissertation_Tables.docx` Tables 1-8 show actual values (not "—")
+- [ ] `tables/Dissertation_Tables.docx` Table 13 shows sensitivity results
+- [ ] All 15 figures still generate correctly
+- [ ] Webapp loads run and displays manifest
+
+**Verification commands**:
+
+```bash
+# Check for placeholders
+grep -i "placeholder" tables/Plain_Language_Summary.docx && echo "FAIL: Placeholders found" || echo "PASS"
+
+# Check for dashes in tables (crude check)
+grep -c "—" tables/Dissertation_Tables.docx | xargs -I{} test {} -lt 5 && echo "PASS" || echo "FAIL: Too many placeholders"
+
+# Verify new CSVs
+ls -la raw/RQ1_RQ3_main/ps_model.csv raw/RQ1_RQ3_main/weight_diagnostics.csv
+```
+
+---
+
+#### PHASE 8 FILE SUMMARY
+
+| Phase     | File                              | Lines Changed  |
+| --------- | --------------------------------- | -------------- |
+| 8.0       | `scripts/run`                     | ~15            |
+| 8.1       | `run_all_RQs_official.R`          | ~50            |
+| 8.2       | `build_plain_language_summary.py` | ~400 (rewrite) |
+| 8.3-8.4   | `build_dissertation_tables.py`    | ~300           |
+| **Total** | **4 files**                       | **~765 lines** |
+
+---
+
 ## REMINDER AT EACH PHASE
 
 - Show exact files you propose to modify and why.

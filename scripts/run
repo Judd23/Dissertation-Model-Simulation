@@ -58,7 +58,19 @@ log_error() {
 }
 
 generate_run_id() {
-  echo "run_$(date +%Y%m%d_%H%M%S)"
+  # Format: run_MM_DD_HHMMp (e.g., run_01_19_0337p)
+  local hour=$(date +%H)
+  local ampm="a"
+  if [[ $hour -ge 12 ]]; then
+    ampm="p"
+  fi
+  if [[ $hour -gt 12 ]]; then
+    hour=$((hour - 12))
+  fi
+  if [[ $hour -eq 0 ]]; then
+    hour=12
+  fi
+  printf "run_%s_%02d%s%s\n" "$(date +%m_%d)" "$hour" "$(date +%M)" "$ampm"
 }
 
 check_dependencies() {

@@ -1039,17 +1039,30 @@ compute_psw_overlap <- function(d, x = "x_FASt", covars, out_txt = NULL) {
     cat("Weights normalized to mean 1\n", file = out_txt, append = TRUE)
   }
 
-  dd
+  # Return both data and model for downstream exports
+  list(data = dd, model = ps_mod, ps_scores = ps, weights = w)
 }
 
 balance_table <- function(d, x = "x_FASt", covars, wcol = "psw") {
   g <- as.numeric(d[[x]])
-  out <- data.frame(covariate = covars, smd_unweighted = NA_real_, smd_weighted = NA_real_)
+  out <- data.frame(covariate = covars, smd_unweighted = NA_real_, smd_weighted = NA_real_,
+                    vr_unweighted = NA_real_, vr_weighted = NA_real_)
   for (i in seq_along(covars)) {
     v <- d[[covars[[i]]]]
-    out$smd_unweighted[i] <- smd(v, g, w = rep(1, length(g)))
-    w <- d[[wcol]]; w[is.na(w)] <- 0
-    out$smd_weighted[i]   <- smd(v, g, w = w)
+    w_unit <- rep(1, length(g))
+    w_psw <- d[[wcol]]; w_psw[is.na(w_psw)] <- 0
+    
+    out$smd_unweighted[i] <- smd(v, g, w = w_unit)
+    out$smd_weighted[i]   <- smd(v, g, w = w_psw)
+    
+    # Variance ratio (VR): ratio of weighted variances (treated / control)
+    var_t_uw <- weighted.mean((v[g==1] - weighted.mean(v[g==1], w_unit[g==1], na.rm=TRUE))^2, w_unit[g==1], na.rm=TRUE)
+    var_c_uw <- weighted.mean((v[g==0] - weighted.mean(v[g==0], w_unit[g==0], na.rm=TRUE))^2, w_unit[g==0], na.rm=TRUE)
+    var_t_w  <- weighted.mean((v[g==1] - weighted.mean(v[g==1], w_psw[g==1], na.rm=TRUE))^2, w_psw[g==1], na.rm=TRUE)
+    var_c_w  <- weighted.mean((v[g==0] - weighted.mean(v[g==0], w_psw[g==0], na.rm=TRUE))^2, w_psw[g==0], na.rm=TRUE)
+    
+    out$vr_unweighted[i] <- if(var_c_uw > 0) var_t_uw / var_c_uw else NA_real_
+    out$vr_weighted[i]   <- if(var_c_w > 0) var_t_w / var_c_w else NA_real_
   }
   out
 }
@@ -1075,7 +1088,41 @@ if (nzchar(USE_PREPPED_DATA) && file.exists(USE_PREPPED_DATA)) {
   dat_main <- dat
   
   # PSW is always computed and used in the official pipeline.
-  dat_main <- compute_psw_overlap(dat_main, x = TREATMENT_VAR, covars = PSW_COVARS, out_txt = file.path(out_main, "psw_stage_report.txt"))
+  psw_result <- compute_psw_overlap(dat_main, x = TREATMENT_VAR, covars = PSW_COVARS, out_txt = file.path(out_main, "psw_stage_report.txt"))
+  dat_main <- psw_result$data
+  ps_mod <- psw_result$model
+  
+  # Export PS model coefficients for Table 4
+  ps_summary <- summary(ps_mod)
+  ps_coef <- as.data.frame(ps_summary$coefficients)
+  ps_coef$term <- rownames(ps_coef)
+  ps_coef$odds_ratio <- exp(ps_coef$Estimate)
+  ps_coef$or_ci_low <- exp(ps_coef$Estimate - 1.96 * ps_coef$`Std. Error`)
+  ps_coef$or_ci_high <- exp(ps_coef$Estimate + 1.96 * ps_coef$`Std. Error`)
+  ps_coef <- ps_coef[, c("term", "Estimate", "Std. Error", "z value", "Pr(>|z|)", "odds_ratio", "or_ci_low", "or_ci_high")]
+  names(ps_coef) <- c("term", "estimate", "std_error", "z_value", "p_value", "odds_ratio", "or_ci_low", "or_ci_high")
+  write.csv(ps_coef, file.path(out_main, "ps_model.csv"), row.names = FALSE)
+  
+  # Export weight diagnostics for Table 6
+  ws <- dat_main$psw[!is.na(dat_main$psw)]
+  weight_diag <- data.frame(
+    metric = c("n_obs", "min", "p5", "median", "mean", "p95", "max", "sd", "n_extreme_low", "n_extreme_high", "ess"),
+    value = c(
+      length(ws),
+      min(ws),
+      quantile(ws, 0.05),
+      median(ws),
+      mean(ws),
+      quantile(ws, 0.95),
+      max(ws),
+      sd(ws),
+      sum(ws < 0.1),
+      sum(ws > 10),
+      sum(ws)^2 / sum(ws^2)  # Effective sample size
+    )
+  )
+  write.csv(weight_diag, file.path(out_main, "weight_diagnostics.csv"), row.names = FALSE)
+  
   bal <- balance_table(dat_main, x = TREATMENT_VAR, covars = PSW_COVARS)
   write.table(bal, file.path(out_main, "psw_balance_smd.txt"), sep = "\t", row.names = FALSE, quote = FALSE)
   write.csv(dat_main, file.path(out_main, "rep_data_with_psw.csv"), row.names = FALSE)

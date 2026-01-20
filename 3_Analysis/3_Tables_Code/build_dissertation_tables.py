@@ -142,11 +142,15 @@ def get_label(var_name: str) -> str:
 
 
 def find_csv(data_dir, filename):
-    """Find CSV file checking both main directory and pooled subfolder."""
+    """Find CSV file checking main directory, RQ1_RQ3_main, and pooled subfolders."""
     # Try main directory first
     main_path = data_dir / filename
     if main_path.exists():
         return main_path
+    # Try RQ1_RQ3_main subfolder (where R exports most outputs)
+    rq_path = data_dir / "RQ1_RQ3_main" / filename
+    if rq_path.exists():
+        return rq_path
     # Try pooled subfolder
     pooled_path = data_dir / "pooled" / filename
     if pooled_path.exists():
@@ -189,6 +193,279 @@ def load_standardized_coefficients(data_dir):
             print(f"Warning: Could not parse {txt_path}: {e}")
     
     return std_map
+
+
+# =============================================================================
+# COMPUTE FUNCTIONS - Derive table data from raw outputs
+# =============================================================================
+
+def compute_sample_descriptives(data_dir: Path) -> pd.DataFrame:
+    """Compute sample descriptive statistics from rep_data_with_psw.csv.
+    
+    Returns DataFrame for Table 1 sample flow.
+    """
+    # Try to find the data file
+    candidates = [
+        data_dir / "RQ1_RQ3_main" / "rep_data_with_psw.csv",
+        data_dir / "rep_data_with_psw.csv",
+    ]
+    
+    df = None
+    for path in candidates:
+        if path.exists():
+            df = pd.read_csv(path)
+            break
+    
+    if df is None:
+        return pd.DataFrame()
+    
+    # Determine treatment groups
+    # FASt: x_FASt == 1, Lite_DC: x_FASt == 0 and credit_dose > 0, No_Cred: credit_dose == 0
+    if 'x_FASt' not in df.columns:
+        return pd.DataFrame()
+    
+    n_total = len(df)
+    n_fast = (df['x_FASt'] == 1).sum()
+    
+    # Determine Lite_DC vs No_Cred if credit_dose is available
+    if 'credit_dose' in df.columns:
+        n_lite = ((df['x_FASt'] == 0) & (df['credit_dose'] > 0)).sum()
+        n_no_cred = ((df['x_FASt'] == 0) & (df['credit_dose'] == 0)).sum()
+    else:
+        n_lite = (df['x_FASt'] == 0).sum()
+        n_no_cred = 0
+    
+    # Cohort breakdown if available
+    rows = []
+    if 'cohort' in df.columns:
+        for cohort_val in sorted(df['cohort'].unique()):
+            cohort_df = df[df['cohort'] == cohort_val]
+            cohort_label = f"Cohort {int(cohort_val)}" if pd.notna(cohort_val) else "Unknown"
+            
+            c_fast = (cohort_df['x_FASt'] == 1).sum()
+            if 'credit_dose' in df.columns:
+                c_lite = ((cohort_df['x_FASt'] == 0) & (cohort_df['credit_dose'] > 0)).sum()
+                c_no_cred = ((cohort_df['x_FASt'] == 0) & (cohort_df['credit_dose'] == 0)).sum()
+            else:
+                c_lite = (cohort_df['x_FASt'] == 0).sum()
+                c_no_cred = 0
+            
+            rows.append({
+                'Stage': f'  {cohort_label}',
+                'FASt': c_fast,
+                'Lite_DC': c_lite,
+                'No_Cred': c_no_cred,
+                'Total': len(cohort_df)
+            })
+    
+    # Add final analytic sample row
+    rows.insert(0, {
+        'Stage': 'Final analytic sample',
+        'FASt': n_fast,
+        'Lite_DC': n_lite,
+        'No_Cred': n_no_cred,
+        'Total': n_total
+    })
+    
+    # Add ESS if psw column exists
+    if 'psw' in df.columns:
+        ws = df['psw'].dropna()
+        ess = (ws.sum() ** 2) / (ws ** 2).sum()
+        rows.append({
+            'Stage': 'Weighted ESS',
+            'FASt': '',
+            'Lite_DC': '',
+            'No_Cred': '',
+            'Total': int(ess)
+        })
+    
+    return pd.DataFrame(rows)
+
+
+def compute_variable_descriptives(data_dir: Path) -> pd.DataFrame:
+    """Compute descriptive statistics for study variables.
+    
+    Returns DataFrame for Table 2.
+    """
+    candidates = [
+        data_dir / "RQ1_RQ3_main" / "rep_data_with_psw.csv",
+        data_dir / "rep_data_with_psw.csv",
+    ]
+    
+    df = None
+    for path in candidates:
+        if path.exists():
+            df = pd.read_csv(path)
+            break
+    
+    if df is None:
+        return pd.DataFrame()
+    
+    # Variables to describe (in order)
+    study_vars = [
+        'x_FASt', 'credit_dose',
+        'hgrades_c', 'bparented_c', 'pell', 'hapcl', 'hprecalc13', 'hchallenge_c',
+        # Mediators - EmoDiss
+        'MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial',
+        # Mediators - QualEngag  
+        'QIstudent', 'QIadvisor', 'QIfaculty', 'QIstaff', 'QIadmin',
+        # Outcome - Belong
+        'sbvalued', 'sbmyself', 'sbcommunity',
+        # Outcome - Gains
+        'pgthink', 'pganalyze', 'pgwork', 'pgvalues', 'pgprobsolve',
+        # Outcome - SupportEnv
+        'SEwellness', 'SEnonacad', 'SEactivities', 'SEacademic', 'SEdiverse',
+        # Outcome - Satisfaction
+        'evalexp', 'sameinst',
+    ]
+    
+    rows = []
+    for var in study_vars:
+        if var in df.columns:
+            col = df[var].dropna()
+            rows.append({
+                'Variable': var,
+                'N': len(col),
+                'M': col.mean(),
+                'SD': col.std(),
+                'Min': col.min(),
+                'Max': col.max()
+            })
+    
+    return pd.DataFrame(rows)
+
+
+def compute_missing_data(data_dir: Path) -> pd.DataFrame:
+    """Compute missing data rates for study variables.
+    
+    Returns DataFrame for Table 3.
+    """
+    candidates = [
+        data_dir / "RQ1_RQ3_main" / "rep_data_with_psw.csv",
+        data_dir / "rep_data_with_psw.csv",
+    ]
+    
+    df = None
+    for path in candidates:
+        if path.exists():
+            df = pd.read_csv(path)
+            break
+    
+    if df is None:
+        return pd.DataFrame()
+    
+    # Variables to check
+    study_vars = [
+        'x_FASt', 'credit_dose',
+        'hgrades_c', 'bparented_c', 'pell', 'hapcl', 'hprecalc13', 'hchallenge_c',
+        'MHWdacad', 'MHWdlonely', 'MHWdmental', 'MHWdexhaust', 'MHWdsleep', 'MHWdfinancial',
+        'QIstudent', 'QIadvisor', 'QIfaculty', 'QIstaff', 'QIadmin',
+        'sbvalued', 'sbmyself', 'sbcommunity',
+        'pgthink', 'pganalyze', 'pgwork', 'pgvalues', 'pgprobsolve',
+        'SEwellness', 'SEnonacad', 'SEactivities', 'SEacademic', 'SEdiverse',
+        'evalexp', 'sameinst',
+    ]
+    
+    n_total = len(df)
+    rows = []
+    for var in study_vars:
+        if var in df.columns:
+            n_missing = df[var].isna().sum()
+            pct_missing = 100.0 * n_missing / n_total if n_total > 0 else 0
+            rows.append({
+                'Variable': var,
+                'Missing_Pct': pct_missing
+            })
+    
+    return pd.DataFrame(rows)
+
+
+def compute_ps_model_from_csv(data_dir: Path) -> pd.DataFrame:
+    """Load PS model coefficients from ps_model.csv (produced by R).
+    
+    Returns DataFrame for Table 4.
+    """
+    candidates = [
+        data_dir / "RQ1_RQ3_main" / "ps_model.csv",
+        data_dir / "ps_model.csv",
+    ]
+    
+    for path in candidates:
+        if path.exists():
+            df = pd.read_csv(path)
+            # Rename columns to match table expectations
+            result = pd.DataFrame({
+                'Covariate': df['term'],
+                'B': df['estimate'],
+                'SE': df['std_error'],
+                'OR': df['odds_ratio']
+            })
+            return result
+    
+    return pd.DataFrame()
+
+
+def compute_balance_from_txt(data_dir: Path) -> pd.DataFrame:
+    """Load balance table from psw_balance_smd.txt (produced by R).
+    
+    Returns DataFrame for Table 5.
+    """
+    candidates = [
+        data_dir / "RQ1_RQ3_main" / "psw_balance_smd.txt",
+        data_dir / "psw_balance_smd.txt",
+    ]
+    
+    for path in candidates:
+        if path.exists():
+            df = pd.read_csv(path, sep='\t')
+            # Convert to expected format
+            result = pd.DataFrame({
+                'Covariate': df['covariate'],
+                'SMD_Pre': df['smd_unweighted'],
+                'VR_Pre': df.get('vr_unweighted', np.nan),
+                'SMD_Post': df['smd_weighted'],
+                'VR_Post': df.get('vr_weighted', np.nan)
+            })
+            
+            # Add summary rows
+            summary = pd.DataFrame([
+                {
+                    'Covariate': 'Mean |SMD|',
+                    'SMD_Pre': result['SMD_Pre'].abs().mean(),
+                    'VR_Pre': np.nan,
+                    'SMD_Post': result['SMD_Post'].abs().mean(),
+                    'VR_Post': np.nan
+                },
+                {
+                    'Covariate': 'Max |SMD|',
+                    'SMD_Pre': result['SMD_Pre'].abs().max(),
+                    'VR_Pre': np.nan,
+                    'SMD_Post': result['SMD_Post'].abs().max(),
+                    'VR_Post': np.nan
+                }
+            ])
+            result = pd.concat([result, summary], ignore_index=True)
+            return result
+    
+    return pd.DataFrame()
+
+
+def compute_weight_diagnostics_from_csv(data_dir: Path) -> pd.DataFrame:
+    """Load weight diagnostics from weight_diagnostics.csv (produced by R).
+    
+    Returns DataFrame for Table 6.
+    """
+    candidates = [
+        data_dir / "RQ1_RQ3_main" / "weight_diagnostics.csv",
+        data_dir / "weight_diagnostics.csv",
+    ]
+    
+    for path in candidates:
+        if path.exists():
+            df = pd.read_csv(path)
+            return df
+    
+    return pd.DataFrame()
 
 
 def fmt(x, nd=2):
@@ -592,19 +869,32 @@ def table1_sample_flow(doc, table_num, data_dir, compact=True):
             # No cohort breakdown - simple format
             data_rows = raw.values.tolist()
     else:
-        # Placeholder structure
-        data_rows = [
-            ['BCSSE respondents (baseline)', '—', '—', '—', '—'],
-            ['  Cohort 2022-23', '—', '—', '—', '—'],
-            ['  Cohort 2023-24', '—', '—', '—', '—'],
-            ['Linked to NSSE (follow-up)', '—', '—', '—', '—'],
-            ['  Cohort 2022-23', '—', '—', '—', '—'],
-            ['  Cohort 2023-24', '—', '—', '—', '—'],
-            ['Final analytic sample', '—', '—', '—', '—'],
-            ['  Cohort 2022-23', '—', '—', '—', '—'],
-            ['  Cohort 2023-24', '—', '—', '—', '—'],
-            ['Weighted ESS', '—', '—', '—', '—'],
-        ]
+        # Try to compute from rep_data_with_psw.csv
+        computed = compute_sample_descriptives(data_dir)
+        if not computed.empty:
+            data_rows = []
+            for _, row in computed.iterrows():
+                data_rows.append([
+                    str(row['Stage']),
+                    fmt_int(row['FASt']) if row['FASt'] != '' else '',
+                    fmt_int(row['Lite_DC']) if row['Lite_DC'] != '' else '',
+                    fmt_int(row['No_Cred']) if row['No_Cred'] != '' else '',
+                    fmt_int(row['Total'])
+                ])
+        else:
+            # Placeholder structure
+            data_rows = [
+                ['BCSSE respondents (baseline)', '—', '—', '—', '—'],
+                ['  Cohort 2022-23', '—', '—', '—', '—'],
+                ['  Cohort 2023-24', '—', '—', '—', '—'],
+                ['Linked to NSSE (follow-up)', '—', '—', '—', '—'],
+                ['  Cohort 2022-23', '—', '—', '—', '—'],
+                ['  Cohort 2023-24', '—', '—', '—', '—'],
+                ['Final analytic sample', '—', '—', '—', '—'],
+                ['  Cohort 2022-23', '—', '—', '—', '—'],
+                ['  Cohort 2023-24', '—', '—', '—', '—'],
+                ['Weighted ESS', '—', '—', '—', '—'],
+            ]
     
     # Use column spanners to group treatment columns
     column_spanners = [
@@ -660,19 +950,37 @@ def table2_descriptives(doc, table_num, data_dir, compact=True):
         total_row_indices = [len(data_rows)]
         data_rows.append(['Total N', fmt_int(total_n), '', '', '', ''])
     else:
-        # Placeholder structure
-        data_rows = [
-            ['FASt Status (≥12 credits)', '—', '—', '—', '—', '—'],
-            ['Dual Credit Units Earned', '—', '—', '—', '—', '—'],
-            ['High School GPA', '—', '—', '—', '—', '—'],
-            ['Parent Education Level', '—', '—', '—', '—', '—'],
-            ['Pell Grant Recipient', '—', '—', '—', '—', '—'],
-            ['AP/IB/College-Level Courses', '—', '—', '—', '—', '—'],
-            ['Precalculus or Higher', '—', '—', '—', '—', '—'],
-            ['HS Academic Challenge', '—', '—', '—', '—', '—'],
-            ['Total N', '—', '', '', '', ''],
-        ]
-        total_row_indices = [8]
+        # Try to compute from rep_data_with_psw.csv
+        computed = compute_variable_descriptives(data_dir)
+        if not computed.empty:
+            data_rows = []
+            for _, row in computed.iterrows():
+                data_rows.append([
+                    get_label(row['Variable']),
+                    fmt_int(row['N']),
+                    fmt(row['M'], 2),
+                    fmt(row['SD'], 2),
+                    fmt(row['Min'], 2),
+                    fmt(row['Max'], 2)
+                ])
+            # Add Total row
+            total_n = computed['N'].max()
+            total_row_indices = [len(data_rows)]
+            data_rows.append(['Total N', fmt_int(total_n), '', '', '', ''])
+        else:
+            # Placeholder structure
+            data_rows = [
+                ['FASt Status (≥12 credits)', '—', '—', '—', '—', '—'],
+                ['Dual Credit Units Earned', '—', '—', '—', '—', '—'],
+                ['High School GPA', '—', '—', '—', '—', '—'],
+                ['Parent Education Level', '—', '—', '—', '—', '—'],
+                ['Pell Grant Recipient', '—', '—', '—', '—', '—'],
+                ['AP/IB/College-Level Courses', '—', '—', '—', '—', '—'],
+                ['Precalculus or Higher', '—', '—', '—', '—', '—'],
+                ['HS Academic Challenge', '—', '—', '—', '—', '—'],
+                ['Total N', '—', '', '', '', ''],
+            ]
+            total_row_indices = [8]
     
     return add_apa7_table_advanced(
         doc, table_num,
@@ -711,15 +1019,25 @@ def table3_missing_data(doc, table_num, data_dir, compact=True):
         else:
             data_rows = raw.values.tolist()
     else:
-        data_rows = [
-            ['FASt Status (≥12 credits)', '0.0%'],
-            ['Dual Credit Units Earned', '0.0%'],
-            ['Emotional Distress items', '—'],
-            ['Quality of Engagement items', '—'],
-            ['Developmental Adjustment items', '—'],
-            ['High School GPA', '—'],
-            ['Pell status', '—'],
-        ]
+        # Try to compute from rep_data_with_psw.csv
+        computed = compute_missing_data(data_dir)
+        if not computed.empty:
+            data_rows = []
+            for _, row in computed.iterrows():
+                data_rows.append([
+                    get_label(row['Variable']),
+                    fmt_pct(row['Missing_Pct'], 1)
+                ])
+        else:
+            data_rows = [
+                ['FASt Status (≥12 credits)', '0.0%'],
+                ['Dual Credit Units Earned', '0.0%'],
+                ['Emotional Distress items', '—'],
+                ['Quality of Engagement items', '—'],
+                ['Developmental Adjustment items', '—'],
+                ['High School GPA', '—'],
+                ['Pell status', '—'],
+            ]
     
     return add_apa7_table_advanced(
         doc, table_num,
@@ -759,15 +1077,27 @@ def table4_ps_model(doc, table_num, data_dir, compact=True):
                 fmt(row.get('OR', None), 3)
             ])
     else:
-        data_rows = [
-            ['Cohort (2022–23 vs 2023–24)', '—', '—', '—'],
-            ['High School GPA (centered)', '—', '—', '—'],
-            ['Parental Education (centered)', '—', '—', '—'],
-            ['Pell Grant Recipient', '—', '—', '—'],
-            ['AP/IB/College-Level Course', '—', '—', '—'],
-            ['Precalculus Completion', '—', '—', '—'],
-            ['High School Academic Challenge (centered)', '—', '—', '—'],
-        ]
+        # Try to load from ps_model.csv in RQ1_RQ3_main subfolder (new format)
+        computed = compute_ps_model_from_csv(data_dir)
+        if not computed.empty:
+            data_rows = []
+            for _, row in computed.iterrows():
+                data_rows.append([
+                    get_label(row['Covariate']),
+                    fmt(row['B'], 3),
+                    fmt(row['SE'], 3),
+                    fmt(row['OR'], 3)
+                ])
+        else:
+            data_rows = [
+                ['Cohort (2022–23 vs 2023–24)', '—', '—', '—'],
+                ['High School GPA (centered)', '—', '—', '—'],
+                ['Parental Education (centered)', '—', '—', '—'],
+                ['Pell Grant Recipient', '—', '—', '—'],
+                ['AP/IB/College-Level Course', '—', '—', '—'],
+                ['Precalculus Completion', '—', '—', '—'],
+                ['High School Academic Challenge (centered)', '—', '—', '—'],
+            ]
     
     return add_apa7_table_advanced(
         doc, table_num,
@@ -818,18 +1148,39 @@ def table5_balance(doc, table_num, data_dir, compact=True):
                 fmt(row['VR_Post'], 3)
             ])
     else:
-        data_rows = [
-            ['Cohort', '—', '—', '—', '—'],
-            ['High School GPA', '—', '—', '—', '—'],
-            ['Parental Education', '—', '—', '—', '—'],
-            ['Pell Grant Recipient', '—', '—', '—', '—'],
-            ['AP/IB/College-Level Course', '—', '—', '—', '—'],
-            ['Precalculus Completion', '—', '—', '—', '—'],
-            ['High School Academic Challenge', '—', '—', '—', '—'],
-            ['Mean |SMD|', '—', '—', '—', '—'],
-            ['Max |SMD|', '—', '—', '—', '—'],
-        ]
-        total_row_indices = [7]  # Mean |SMD| row gets separator
+        # Try to load from psw_balance_smd.txt
+        computed = compute_balance_from_txt(data_dir)
+        if not computed.empty:
+            data_rows = []
+            for idx, row in computed.iterrows():
+                covariate_raw = row['Covariate']
+                covariate = get_label(covariate_raw)
+                
+                # Mark summary rows for separator
+                if covariate_raw in ['Mean |SMD|', 'Max |SMD|']:
+                    if len(data_rows) > 0 and covariate_raw == 'Mean |SMD|':
+                        total_row_indices.append(len(data_rows))
+                
+                data_rows.append([
+                    covariate,
+                    fmt(row['SMD_Pre'], 3),
+                    fmt(row['VR_Pre'], 3) if pd.notna(row['VR_Pre']) else '—',
+                    fmt(row['SMD_Post'], 3),
+                    fmt(row['VR_Post'], 3) if pd.notna(row['VR_Post']) else '—'
+                ])
+        else:
+            data_rows = [
+                ['Cohort', '—', '—', '—', '—'],
+                ['High School GPA', '—', '—', '—', '—'],
+                ['Parental Education', '—', '—', '—', '—'],
+                ['Pell Grant Recipient', '—', '—', '—', '—'],
+                ['AP/IB/College-Level Course', '—', '—', '—', '—'],
+                ['Precalculus Completion', '—', '—', '—', '—'],
+                ['High School Academic Challenge', '—', '—', '—', '—'],
+                ['Mean |SMD|', '—', '—', '—', '—'],
+                ['Max |SMD|', '—', '—', '—', '—'],
+            ]
+            total_row_indices = [7]  # Mean |SMD| row gets separator
     
     return add_apa7_table_advanced(
         doc, table_num,
@@ -886,12 +1237,30 @@ def table6_weights(doc, table_num, data_dir, compact=True):
         
         data_rows = df.values.tolist()
     else:
-        data_rows = [
-            ['FASt (≥12)', '—', '—', '—', '—', '—', '—', '—'],
-            ['Non-FASt (<12)', '—', '—', '—', '—', '—', '—', '—'],
-            ['Total', '—', '—', '—', '—', '—', '—', '—'],
-        ]
-        total_row_indices = [2]  # Total row
+        # Try to load from weight_diagnostics.csv in RQ1_RQ3_main (new format)
+        computed = compute_weight_diagnostics_from_csv(data_dir)
+        if not computed.empty:
+            # Convert row-based format to table format
+            # The new format has metric/value pairs, need to reshape
+            metrics = computed.set_index('metric')['value'].to_dict()
+            data_rows = [[
+                'Total',
+                fmt_int(metrics.get('n_obs', 0)),
+                fmt(metrics.get('min', 0), 3),
+                fmt(metrics.get('p5', 0), 3),
+                fmt(metrics.get('median', 0), 3),
+                fmt(metrics.get('p95', 0), 3),
+                fmt(metrics.get('max', 0), 3),
+                fmt(metrics.get('ess', 0), 1)
+            ]]
+            total_row_indices = []
+        else:
+            data_rows = [
+                ['FASt (≥12)', '—', '—', '—', '—', '—', '—', '—'],
+                ['Non-FASt (<12)', '—', '—', '—', '—', '—', '—', '—'],
+                ['Total', '—', '—', '—', '—', '—', '—', '—'],
+            ]
+            total_row_indices = [2]  # Total row
     
     return add_apa7_table_advanced(
         doc, table_num,
