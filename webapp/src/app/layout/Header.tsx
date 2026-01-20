@@ -8,12 +8,14 @@ import {
   TAP_SUBTLE,
 } from "../../lib/transitionConfig";
 import { navItems } from "./navItems";
+import { useModelDataActions } from "../contexts/ModelDataContext";
 import styles from "./Header.module.css";
 
 export default function Header() {
   const location = useLocation();
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   const lastLoggedProgressRef = useRef(-1);
+  const { currentRunId, availableRuns, setCurrentRunId } = useModelDataActions();
 
   // Don't show progress bar on landing page (HashRouter initially shows '/')
   const showProgress =
@@ -110,6 +112,24 @@ export default function Header() {
             </motion.span>
           ))}
         </nav>
+        {availableRuns.length > 0 && (
+          <div className={styles.runSelector}>
+            <label htmlFor="run-select">Run:</label>
+            <select
+              id="run-select"
+              className={styles.runSelect}
+              value={currentRunId ?? ""}
+              onChange={(e) => setCurrentRunId(e.target.value)}
+              aria-label="Select data run"
+            >
+              {availableRuns.map((run) => (
+                <option key={run.run_id} value={run.run_id}>
+                  {run.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
     </header>
   );

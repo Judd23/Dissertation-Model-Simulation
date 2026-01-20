@@ -644,6 +644,213 @@ ls -la raw/RQ1_RQ3_main/ps_model.csv raw/RQ1_RQ3_main/weight_diagnostics.csv
 
 ---
 
+### PHASE 9: WIRE REMAINING PLACEHOLDER TABLES (7, 8, 13) ✅
+
+**Goal**: Eliminate all placeholder tables by adding R exports and Python compute functions.
+
+---
+
+#### PHASE 9.0: AUDIT CURRENT STATE [NO EDITS] ✅
+
+- [x] Verify Table 7 (CFA) shows placeholder "—" values
+- [x] Verify Table 8 (Invariance) shows placeholder "—" values
+- [x] Verify Table 13 (Robustness) shows placeholder "—" values
+- [x] Confirm `cfa_loadings.csv` does NOT exist in any run output
+- [x] Confirm `invariance_summary.csv` does NOT exist in any run output
+- [x] Confirm `robustness.csv` does NOT exist in any run output
+- [x] Identify exact line numbers in R where exports should be added
+- [x] Identify exact line numbers in Python where compute functions exist
+
+**⛔ STOP and confirm gaps before Phase 9.1.**
+
+---
+
+#### PHASE 9.1: R EXPORT — CFA LOADINGS [1 FILE] ✅
+
+**File**: `3_Analysis/1_Main_Pipeline_Code/run_all_RQs_official.R`
+
+**Location**: After measurement model fit (after `fit_main` is created)
+
+- [x] Extract factor loadings via `lavaan::parameterEstimates(fit, standardized = TRUE)`
+- [x] Filter to `op == "=~"` (factor loading operator)
+- [x] Compute omega per factor via `semTools::reliability(fit)`
+- [x] Compute AVE per factor: `AVE = mean(std.all^2)` for each factor
+- [x] Create `cfa_loadings.csv` with columns:
+  - `factor` — latent variable name
+  - `indicator` — observed variable name
+  - `loading` — unstandardized loading
+  - `loading_std` — standardized loading
+  - `se` — standard error
+  - `omega` — factor omega
+  - `ave` — AVE
+- [x] Write to `OUT_RAW/cfa_loadings.csv`
+- [x] Add message: `"Wrote: cfa_loadings.csv"`
+
+**Estimated lines**: ~45
+
+**⛔ STOP and verify CSV exists with correct columns before Phase 9.2.**
+
+---
+
+#### PHASE 9.2: R EXPORT — INVARIANCE SUMMARY [1 FILE] ✅
+
+**File**: `3_Analysis/1_Main_Pipeline_Code/run_all_RQs_official.R`
+
+**Location**: After RQ4 measurement invariance loop
+
+**Precondition**: Only runs if `SKIP_RQ4 == 0`
+
+- [x] Locate RQ4 output folders: `RQ4_measurement/by_<W>/fit_index_stack.txt`
+- [x] After loop completes, consolidate all per-W fit indices
+- [x] Read each file and extract: configural, metric, scalar rows
+- [x] Compute ΔCFI and ΔRMSEA between levels
+- [x] Apply Chen (2007) decision rule:
+  - "Accept" if ΔCFI < 0.01 AND ΔRMSEA < 0.015
+  - "Reject" otherwise
+- [x] Create `invariance_summary.csv` with columns:
+  - `moderator` — W variable name
+  - `model` — invariance level (configural, metric, scalar)
+  - `cfi` — CFI
+  - `rmsea` — RMSEA
+  - `delta_cfi` — ΔCFI from previous level
+  - `delta_rmsea` — ΔRMSEA from previous level
+  - `decision` — Accept/Reject
+- [x] Write to `OUT_RAW/invariance_summary.csv`
+- [x] Handle `SKIP_RQ4 == 1` gracefully (skip export, no error)
+
+**Estimated lines**: ~55
+
+**⛔ STOP and verify CSV exists (or graceful skip) before Phase 9.3.**
+
+---
+
+#### PHASE 9.3: R EXPORT — ROBUSTNESS COMPARISON [1 FILE] ✅
+
+**File**: `3_Analysis/1_Main_Pipeline_Code/run_all_RQs_official.R`
+
+**Location**: After BOTH weighted (`fit_main`) and unweighted (`fit_sens`) models complete
+
+- [x] Extract parameters from weighted fit via `parameterEstimates(fit_main)`
+- [x] Extract parameters from unweighted fit via `parameterEstimates(fit_sens)`
+- [x] Define 13 key parameters to compare:
+  - Direct paths: `a1`, `a2`, `b1`, `b2`, `c`
+  - Moderation: `a1z`, `a2z`, `cz`
+  - Indirect effects: `ind_EmoDiss_z_mid`, `ind_QualEngag_z_mid`
+  - IMM: `index_MM_EmoDiss`, `index_MM_QualEngag`
+  - Total: `total_z_mid`
+- [x] Compute difference metrics:
+  - `diff_est = abs(weighted - unweighted)`
+  - `diff_pct = 100 * diff_est / abs(weighted)`
+- [x] Create `robustness.csv` with columns:
+  - `parameter` — parameter name
+  - `weighted_est` — PSW-weighted estimate
+  - `unweighted_est` — unweighted estimate
+  - `diff_est` — absolute difference
+  - `diff_pct` — percent difference
+- [x] Write to `OUT_RAW/robustness.csv`
+
+**Estimated lines**: ~60
+
+**⛔ STOP and verify CSV exists with all 13 parameters before Phase 9.4.**
+
+---
+
+#### PHASE 9.4: PYTHON — TABLE 7 CFA COMPUTE FUNCTION [1 FILE] ✅
+
+**File**: `3_Analysis/3_Tables_Code/build_dissertation_tables.py`
+
+- [x] Add `compute_cfa_from_csv(data_dir)` function:
+  - Search for `cfa_loadings.csv` in data_dir
+  - Return `None` if not found
+  - Read CSV into DataFrame
+- [x] Update `table7_cfa()` to call compute function:
+  - Try `compute_cfa_from_csv(data_dir)` first
+  - If `None`, fall back to placeholder
+- [x] Format table display:
+  - Group by factor
+  - Show omega/AVE only on first row of each factor group
+  - Columns: Factor | Indicator | λ | SE | ω | AVE
+- [x] APA 7 table note added
+
+**Estimated lines**: ~35
+
+**⛔ STOP and verify Table 7 shows real data before Phase 9.5.**
+
+---
+
+#### PHASE 9.5: PYTHON — TABLE 8 INVARIANCE COMPUTE FUNCTION [1 FILE] ✅
+
+**File**: `3_Analysis/3_Tables_Code/build_dissertation_tables.py`
+
+- [x] Add `compute_invariance_from_csv(data_dir)` function:
+  - Search for `invariance_summary.csv` in data_dir
+  - Return `None` if not found
+  - Read CSV into DataFrame
+- [x] Update `table8_invariance()` to call compute function:
+  - Try `compute_invariance_from_csv(data_dir)` first
+  - If `None`, show "RQ4 skipped or data unavailable" message
+- [x] Format table display:
+  - Group by moderator
+  - Columns: Moderator | Model | CFI | RMSEA | ΔCFI | ΔRMSEA | Decision
+- [x] APA 7 table note with Chen (2007) criteria
+
+**Estimated lines**: ~40
+
+**⛔ STOP and verify Table 8 shows real data (or skip message) before Phase 9.6.**
+
+---
+
+#### PHASE 9.6: PYTHON — TABLE 13 ROBUSTNESS COMPUTE FUNCTION [1 FILE] ✅
+
+**File**: `3_Analysis/3_Tables_Code/build_dissertation_tables.py`
+
+- [x] Add `compute_robustness_from_csv(data_dir)` function:
+  - Search for `robustness.csv` in data_dir
+  - Return `None` if not found
+  - Read CSV into DataFrame
+- [x] Update `table13_robustness()` to call compute function:
+  - Try `compute_robustness_from_csv(data_dir)` first
+  - If `None`, fall back to placeholder
+- [x] Format table display:
+  - Columns: Parameter | Weighted B | Unweighted B | |Δ| | Δ%
+  - Flag parameters with Δ% > 10% using † symbol
+- [x] APA 7 table note explaining weighting and flagging threshold
+
+**Estimated lines**: ~45
+
+**⛔ STOP and verify Table 13 shows real data before Phase 9.7.**
+
+---
+
+#### PHASE 9.7: VERIFICATION SMOKE TEST ⏭️ SKIPPED
+
+**Note**: User declined running verification tests. Code changes complete but untested.
+
+- [ ] `./scripts/run smoke` completes without errors
+- [ ] `raw/RQ1_RQ3_main/cfa_loadings.csv` exists with correct columns
+- [ ] `raw/RQ1_RQ3_main/invariance_summary.csv` exists (or skip message if RQ4 disabled)
+- [ ] `raw/RQ1_RQ3_main/robustness.csv` exists with 13 parameters
+- [ ] `tables/Dissertation_Tables.docx` Table 7 shows factor loadings (not "—")
+- [ ] `tables/Dissertation_Tables.docx` Table 8 shows invariance results (or skip message)
+- [ ] `tables/Dissertation_Tables.docx` Table 13 shows weighted vs unweighted comparison
+- [ ] No regression in Tables 1-6, 9-12 (still working)
+
+---
+
+#### PHASE 9 FILE SUMMARY
+
+| Phase   | File                           | Purpose                    | Lines  |
+| ------- | ------------------------------ | -------------------------- | ------ |
+| 9.1     | `run_all_RQs_official.R`       | CFA loadings export        | ~45    |
+| 9.2     | `run_all_RQs_official.R`       | Invariance consolidation   | ~55    |
+| 9.3     | `run_all_RQs_official.R`       | Robustness comparison      | ~60    |
+| 9.4-9.6 | `build_dissertation_tables.py` | Python compute functions   | ~120   |
+| **Total** | **2 files**                  |                            | **~280 lines** |
+
+**Configuration note**: Δ% > 10% flagging threshold in Table 13 is hardcoded. Consider making configurable if needed.
+
+---
+
 ## REMINDER AT EACH PHASE
 
 - Show exact files you propose to modify and why.

@@ -86,7 +86,25 @@ def sync_run_to_webapp(run_dir: Path, webapp_results: Path) -> None:
             if src.exists():
                 shutil.copy2(src, figures_dest / fig_name)
                 print(f"Copied: figures/{fig_name}")
-    
+
+    # Copy webapp JSON files (dict of key: filename)
+    webapp_json = artifacts.get('webapp_json', {})
+    if webapp_json:
+        for key, json_name in webapp_json.items():
+            src = run_dir / json_name
+            if src.exists():
+                shutil.copy2(src, dest_dir / json_name)
+                print(f"Copied: {json_name}")
+
+    # Also copy any JSON files at run root that might have been created
+    # (fallback in case webapp_json not in manifest yet)
+    for json_file in ['modelResults.json', 'doseEffects.json', 'sampleDescriptives.json',
+                      'groupComparisons.json', 'variableMetadata.json', 'dataMetadata.json']:
+        src = run_dir / json_file
+        if src.exists() and not (dest_dir / json_file).exists():
+            shutil.copy2(src, dest_dir / json_file)
+            print(f"Copied: {json_file}")
+
     print(f"\nSynced run to: {dest_dir}")
 
 

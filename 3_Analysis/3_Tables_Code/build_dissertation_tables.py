@@ -1356,20 +1356,60 @@ def table7_cfa(doc, table_num, data_dir, compact=True):
     """Table 7: Measurement Model (CFA) Results
     
     Uses column spanners for Loading (λ/SE) grouping (matching Table 5 style).
+    Reads from cfa_loadings.csv exported by R pipeline.
     """
-    cfa_file = find_csv(data_dir, "cfa_results.csv")
+    cfa_file = find_csv(data_dir, "cfa_loadings.csv")
     if cfa_file.exists():
         df = pd.read_csv(cfa_file)
-        # Apply labels to Item/Factor column if present
-        if 'Item/Factor' in df.columns:
-            def format_item(x):
-                if not x:
-                    return x
-                if x.startswith(' '):
-                    return '  ' + get_label(x.strip())
-                return get_label(x.strip())
-            df['Item/Factor'] = df['Item/Factor'].apply(format_item)
-        data_rows = df.values.tolist()
+        # Group by factor, format for APA table
+        data_rows = []
+        current_factor = None
+        
+        for _, row in df.iterrows():
+            factor = row.get('factor', '')
+            indicator = row.get('indicator', '')
+            loading = row.get('std_loading', row.get('loading', ''))
+            se = row.get('se', '')
+            omega = row.get('omega', '')
+            ave = row.get('ave', '')
+            
+            # New factor group header
+            if factor != current_factor:
+                current_factor = factor
+                # Factor header row (bold in label)
+                factor_label = get_label(factor) if factor else factor
+                data_rows.append([factor_label, '', '', '', ''])
+            
+            # Indicator row (indented)
+            ind_label = get_label(indicator) if indicator else indicator
+            lambda_val = f"{loading:.3f}" if pd.notna(loading) and loading != '' else '—'
+            se_val = f"{se:.3f}" if pd.notna(se) and se != '' else '—'
+            # omega/AVE are factor-level, show only on first indicator of factor
+            omega_val = ''
+            ave_val = ''
+            
+            data_rows.append([f"  {ind_label}", lambda_val, se_val, omega_val, ave_val])
+        
+        # Add factor-level omega/AVE summary rows
+        factor_stats = df.groupby('factor').agg({
+            'omega': 'first',
+            'ave': 'first'
+        }).reset_index()
+        
+        for _, frow in factor_stats.iterrows():
+            factor = frow['factor']
+            omega_val = f"{frow['omega']:.3f}" if pd.notna(frow['omega']) else '—'
+            ave_val = f"{frow['ave']:.3f}" if pd.notna(frow['ave']) else '—'
+            # Find insertion point (after last indicator of this factor)
+            for i in range(len(data_rows) - 1, -1, -1):
+                if data_rows[i][0].strip() == get_label(factor) or \
+                   (i > 0 and data_rows[i-1][0].strip() == get_label(factor)):
+                    # Insert omega row after last indicator
+                    insert_idx = i + 1
+                    while insert_idx < len(data_rows) and data_rows[insert_idx][0].startswith('  '):
+                        insert_idx += 1
+                    data_rows.insert(insert_idx, [f"  Factor ω/AVE", '', '', omega_val, ave_val])
+                    break
     else:
         data_rows = [
             ['Emotional Distress (EmoDiss)', '', '', '', ''],
@@ -1412,12 +1452,67 @@ def table8_invariance(doc, table_num, data_dir, compact=True):
     """Table 8: Measurement Invariance Tests
     
     Uses APA 7 column spanners for Fit Indices and Model Comparison.
+    Reads from invariance_summary.csv exported by R pipeline.
     """
-    inv_file = find_csv(data_dir, "invariance.csv")
+    inv_file = find_csv(data_dir, "invariance_summary.csv")
     
     if inv_file.exists():
         raw = pd.read_csv(inv_file)
-        data_rows = raw.values.tolist()
+        # Group by W_var and model level to create table rows
+        data_rows = []
+        
+        for w_var in raw['W_var'].unique():
+            w_data = raw[raw['W_var'] == w_var]
+            w_label = get_label(w_var) if w_var else w_var
+            
+            # Header row for this W variable
+            data_rows.append([f"By {w_label}", '', '', '', '', '', '', ''])
+            
+            # Get rows for each invariance level
+            for model in ['configural', 'metric_firstorder', 'metric_secondorder', 'scalar']:
+                row_data = w_data[w_data['model'] == model]
+                if row_data.empty:
+                    continue
+                    
+                r = row_data.iloc[0]
+                model_label = {
+                    'configural': '  Configural',
+                    'metric_firstorder': '  Metric (1st-order)',
+                    'metric_secondorder': '  Metric (2nd-order)', 
+                    'scalar': '  Scalar'
+                }.get(model, f'  {model}')
+                
+                chisq = f"{r.get('chisq', ''):.2f}" if pd.notna(r.get('chisq')) else '—'
+                df = f"{int(r.get('df', 0))}" if pd.notna(r.get('df')) else '—'
+                cfi = f"{r.get('cfi', ''):.3f}" if pd.notna(r.get('cfi')) else '—'
+                rmsea = f"{r.get('rmsea', ''):.3f}" if pd.notna(r.get('rmsea')) else '—'
+                
+                # Delta values (only for non-configural)
+                if model == 'configural':
+                    delta_cfi = ''
+                    delta_rmsea = ''
+                    decision = 'Baseline'
+                elif model in ['metric_firstorder', 'metric_secondorder']:
+                    d_cfi = r.get('delta_cfi_config_metric', None)
+                    d_rmsea = r.get('delta_rmsea_config_metric', None)
+                    delta_cfi = f"{d_cfi:.3f}" if pd.notna(d_cfi) else '—'
+                    delta_rmsea = f"{d_rmsea:.3f}" if pd.notna(d_rmsea) else '—'
+                    # Decision based on Chen (2007) criteria
+                    if pd.notna(d_cfi) and pd.notna(d_rmsea):
+                        decision = 'Supported' if (d_cfi > -0.010 and d_rmsea < 0.015) else 'Not supported'
+                    else:
+                        decision = '—'
+                else:  # scalar
+                    d_cfi = r.get('delta_cfi_metric_scalar', None)
+                    d_rmsea = r.get('delta_rmsea_metric_scalar', None)
+                    delta_cfi = f"{d_cfi:.3f}" if pd.notna(d_cfi) else '—'
+                    delta_rmsea = f"{d_rmsea:.3f}" if pd.notna(d_rmsea) else '—'
+                    if pd.notna(d_cfi) and pd.notna(d_rmsea):
+                        decision = 'Supported' if (d_cfi > -0.010 and d_rmsea < 0.015) else 'Not supported'
+                    else:
+                        decision = '—'
+                
+                data_rows.append([model_label, chisq, df, cfi, rmsea, delta_cfi, delta_rmsea, decision])
     else:
         data_rows = [
             ['Configural', '—', '—', '—', '—', '—', '—', '—'],
@@ -1749,30 +1844,63 @@ def table12_conditional_indirect(doc, table_num, bootstrap_df, B, ci_type, data_
 
 
 def table13_robustness(doc, table_num, data_dir, compact=True):
-    """Table 13: Robustness Checks"""
+    """Table 13: Robustness Checks
+    
+    Compares weighted (PSW) vs unweighted parameter estimates.
+    Reads from robustness.csv exported by R pipeline.
+    """
     
     robust_file = find_csv(data_dir, "robustness.csv")
     if robust_file.exists():
         df = pd.read_csv(robust_file)
+        
+        # Build formatted rows
+        data_rows = []
+        for _, row in df.iterrows():
+            label = row.get('label', row.get('parameter', ''))
+            weighted = row.get('weighted_est', None)
+            unweighted = row.get('unweighted_est', None)
+            diff = row.get('diff_est', None)
+            diff_pct = row.get('diff_pct', None)
+            
+            # Format values
+            wt_str = f"{weighted:.3f}" if pd.notna(weighted) else '—'
+            unwt_str = f"{unweighted:.3f}" if pd.notna(unweighted) else '—'
+            diff_str = f"{diff:.3f}" if pd.notna(diff) else '—'
+            pct_str = f"{diff_pct:.1f}%" if pd.notna(diff_pct) else '—'
+            
+            data_rows.append([label, wt_str, unwt_str, diff_str, pct_str])
+        
+        if len(data_rows) == 0:
+            data_rows = [['No data available', '—', '—', '—', '—']]
     else:
-        df = pd.DataFrame([
-            ['a₁ (X → M₁)', '—', '—', '—', '—'],
-            ['a₂ (X → M₂)', '—', '—', '—', '—'],
-            ['b₁ (M₁ → Y)', '—', '—', '—', '—'],
-            ['b₂ (M₂ → Y)', '—', '—', '—', '—'],
-            ['c′ (direct)', '—', '—', '—', '—'],
+        data_rows = [
+            ['X → M₁ (EmoDiss)', '—', '—', '—', '—'],
+            ['X → M₂ (QualEngag)', '—', '—', '—', '—'],
+            ['M₁ → Y', '—', '—', '—', '—'],
+            ['M₂ → Y', '—', '—', '—', '—'],
+            ['X → Y (direct)', '—', '—', '—', '—'],
+            ['Indirect (EmoDiss)', '—', '—', '—', '—'],
+            ['Indirect (QualEngag)', '—', '—', '—', '—'],
             ['IMM (EmoDiss)', '—', '—', '—', '—'],
             ['IMM (QualEngag)', '—', '—', '—', '—'],
-        ], columns=['Parameter', 'Weighted B', 'Unweighted B', 'IPTW B', 'Difference'])
+            ['Total Effect', '—', '—', '—', '—'],
+        ]
     
-    return add_apa7_table(
+    return add_apa7_table_advanced(
         doc, table_num,
-        "Robustness Checks: Comparison Across Estimation Methods",
-        df,
+        "Robustness Checks: PSW-Weighted vs Unweighted Estimates",
+        data_rows,
+        stub_heading="Parameter",
+        column_headers=["Parameter", "Weighted B", "Unweighted B", "|Δ|", "Δ%"],
+        column_spanners=[
+            ("Estimate", 1, 2),  # Spans Weighted and Unweighted
+            ("Difference", 3, 4),  # Spans |Δ| and Δ%
+        ],
         note_general=(
-            "Weighted = overlap (ATO) weights; Unweighted = no propensity adjustment; "
-            "IPTW = inverse probability of treatment weights. "
-            "Difference = |Weighted − Unweighted|."
+            "Weighted = propensity-score overlap weights (ATO); Unweighted = no covariate balancing. "
+            "|Δ| = absolute difference in unstandardized estimates; Δ% = percent change relative to weighted. "
+            "Large differences (>20%) suggest sensitivity to weighting approach."
         ),
         compact=compact
     )

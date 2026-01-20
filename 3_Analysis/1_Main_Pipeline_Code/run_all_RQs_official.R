@@ -1243,6 +1243,64 @@ if (file.exists(BOOTSTRAP_SOURCE_TSV)) {
   warning("Bootstrap source not found: ", BOOTSTRAP_SOURCE_TSV)
 }
 
+# -----------------------------------------------------------------------------
+# Export cfa_loadings.csv (measurement model results for Table 7)
+# Extracts factor loadings, SEs, standardized values, plus omega and AVE
+# -----------------------------------------------------------------------------
+message("\n=== Exporting cfa_loadings.csv (measurement model for Table 7) ===")
+CFA_LOADINGS_CSV <- file.path(OUT_RAW, "cfa_loadings.csv")
+
+tryCatch({
+  # Extract parameter estimates from fit_main (the main SEM includes measurement model)
+  pe_all <- parameterEstimates(fit_main, standardized = TRUE)
+  
+  # Filter to factor loadings only (op == "=~")
+  loadings_df <- pe_all[pe_all$op == "=~", c("lhs", "rhs", "est", "se", "z", "pvalue", "std.all")]
+  names(loadings_df) <- c("factor", "indicator", "loading", "se", "z", "pvalue", "std_loading")
+  
+  # Compute omega and AVE for each factor
+  omega_vals <- tryCatch({
+    semTools::compRelSEM(fit_main)
+  }, error = function(e) {
+    # If full model fails, try computing manually from loadings
+    NULL
+  })
+  
+  ave_vals <- tryCatch({
+    semTools::AVE(fit_main)
+  }, error = function(e) NULL)
+  
+  # Add omega and AVE columns (factor-level, repeated for each indicator)
+  if (!is.null(omega_vals)) {
+    loadings_df$omega <- sapply(loadings_df$factor, function(f) {
+      if (f %in% names(omega_vals)) omega_vals[f] else NA_real_
+    })
+  } else {
+    loadings_df$omega <- NA_real_
+  }
+  
+  if (!is.null(ave_vals)) {
+    loadings_df$ave <- sapply(loadings_df$factor, function(f) {
+      if (f %in% names(ave_vals)) ave_vals[f] else NA_real_
+    })
+  } else {
+    loadings_df$ave <- NA_real_
+  }
+  
+  # Add model fit indices at the end (as attributes or separate row)
+  fit_indices <- fitMeasures(fit_main, c("chisq", "df", "pvalue", "cfi", "tli", "rmsea", "srmr"))
+  loadings_df$model_cfi <- fit_indices["cfi"]
+  loadings_df$model_tli <- fit_indices["tli"]
+  loadings_df$model_rmsea <- fit_indices["rmsea"]
+  loadings_df$model_srmr <- fit_indices["srmr"]
+  
+  write.csv(loadings_df, file = CFA_LOADINGS_CSV, row.names = FALSE, na = "")
+  message("Wrote: ", CFA_LOADINGS_CSV, " (", nrow(loadings_df), " loadings)")
+  
+}, error = function(e) {
+  warning("Could not export CFA loadings: ", e$message)
+})
+
 # -------------------------
 # Sensitivity: unweighted parallel fit (for Table 12)
 # -------------------------
@@ -1261,6 +1319,90 @@ fit_sens <- fit_mg_fast_vs_nonfast_with_outputs(
   parallel = "no",
   ncpus = 1
 )
+
+# -------------------------
+# Export robustness.csv (weighted vs unweighted comparison for Table 13)
+# -------------------------
+message("\n=== Exporting robustness.csv (weighted vs unweighted comparison) ===")
+ROBUSTNESS_CSV <- file.path(OUT_RAW, "robustness.csv")
+
+# Paths to parameter estimates from both fits
+weighted_pe_path <- file.path(out_main, "structural", "structural_parameterEstimates.txt")
+unweighted_pe_path <- file.path(out_sens, "structural", "structural_parameterEstimates.txt")
+
+if (file.exists(weighted_pe_path) && file.exists(unweighted_pe_path)) {
+  pe_wt <- tryCatch(read.delim(weighted_pe_path, stringsAsFactors = FALSE), error = function(e) NULL)
+  pe_unwt <- tryCatch(read.delim(unweighted_pe_path, stringsAsFactors = FALSE), error = function(e) NULL)
+  
+  if (!is.null(pe_wt) && !is.null(pe_unwt) && nrow(pe_wt) > 0 && nrow(pe_unwt) > 0) {
+    # Key parameters for robustness comparison
+    key_params <- c("a1", "a2", "b1", "b2", "c", "a1z", "a2z", "cz",
+                    "ind_EmoDiss_z_mid", "ind_QualEngag_z_mid",
+                    "index_MM_EmoDiss", "index_MM_QualEngag", "total_z_mid")
+    
+    # Human-readable labels
+    param_labels <- c(
+      a1 = "X → M₁ (EmoDiss)",
+      a2 = "X → M₂ (QualEngag)",
+      b1 = "M₁ → Y",
+      b2 = "M₂ → Y",
+      c = "X → Y (direct)",
+      a1z = "XZ → M₁ (moderation)",
+      a2z = "XZ → M₂ (moderation)",
+      cz = "XZ → Y (moderation)",
+      ind_EmoDiss_z_mid = "Indirect (EmoDiss)",
+      ind_QualEngag_z_mid = "Indirect (QualEngag)",
+      index_MM_EmoDiss = "IMM (EmoDiss)",
+      index_MM_QualEngag = "IMM (QualEngag)",
+      total_z_mid = "Total Effect"
+    )
+    
+    # Helper: extract parameter by label or lhs (for := defined)
+    get_param <- function(pe, param) {
+      idx <- which(pe$label == param)
+      if (length(idx) == 0) {
+        idx <- which(pe$lhs == param & pe$op == ":=")
+      }
+      if (length(idx) == 0) return(list(est = NA_real_, se = NA_real_, ci.lower = NA_real_, ci.upper = NA_real_))
+      list(
+        est = if ("est" %in% names(pe)) pe$est[idx[1]] else NA_real_,
+        se = if ("se" %in% names(pe)) pe$se[idx[1]] else NA_real_,
+        ci.lower = if ("ci.lower" %in% names(pe)) pe$ci.lower[idx[1]] else NA_real_,
+        ci.upper = if ("ci.upper" %in% names(pe)) pe$ci.upper[idx[1]] else NA_real_
+      )
+    }
+    
+    robustness <- do.call(rbind, lapply(key_params, function(p) {
+      wt <- get_param(pe_wt, p)
+      unwt <- get_param(pe_unwt, p)
+      diff_est <- abs(wt$est - unwt$est)
+      diff_pct <- if (!is.na(wt$est) && abs(wt$est) > 0.001) 100 * diff_est / abs(wt$est) else NA_real_
+      
+      data.frame(
+        parameter = p,
+        label = param_labels[p],
+        weighted_est = wt$est,
+        weighted_se = wt$se,
+        weighted_ci_lower = wt$ci.lower,
+        weighted_ci_upper = wt$ci.upper,
+        unweighted_est = unwt$est,
+        unweighted_se = unwt$se,
+        diff_est = diff_est,
+        diff_pct = diff_pct,
+        stringsAsFactors = FALSE
+      )
+    }))
+    
+    write.csv(robustness, file = ROBUSTNESS_CSV, row.names = FALSE, na = "")
+    message("Wrote: ", ROBUSTNESS_CSV)
+  } else {
+    warning("Could not parse parameter estimate files for robustness comparison")
+  }
+} else {
+  warning("Missing parameter files for robustness comparison: ",
+          if (!file.exists(weighted_pe_path)) weighted_pe_path else "",
+          if (!file.exists(unweighted_pe_path)) unweighted_pe_path else "")
+}
 
 # -------------------------
 # RUN A1: Serial mediation (exploratory add-on)
@@ -1315,6 +1457,62 @@ if (length(W_VARS_MEAS_OK) > 0) {
     handle_small = HANDLE_SMALL_W,
     other_label = OTHER_LABEL_W
   )
+  
+  # -------------------------
+  # Export invariance_summary.csv (consolidated invariance results for Table 8)
+  # -------------------------
+  message("\n=== Exporting invariance_summary.csv (for Table 8) ===")
+  INVARIANCE_SUMMARY_CSV <- file.path(OUT_RAW, "invariance_summary.csv")
+  
+  inv_results <- lapply(W_VARS_MEAS_OK, function(w) {
+    stack_file <- file.path(out_meas, paste0("by_", w), "fit_index_stack.txt")
+    deltas_file <- file.path(out_meas, paste0("by_", w), "fit_change_deltas.txt")
+    
+    if (!file.exists(stack_file)) return(NULL)
+    
+    stack <- tryCatch(read.delim(stack_file, stringsAsFactors = FALSE), error = function(e) NULL)
+    deltas <- tryCatch(read.delim(deltas_file, stringsAsFactors = FALSE), error = function(e) NULL)
+    
+    if (is.null(stack) || nrow(stack) == 0) return(NULL)
+    
+    # Reshape stack to wide format (one row per model level)
+    stack_wide <- reshape(stack, idvar = "model", timevar = "measure", direction = "wide")
+    names(stack_wide) <- gsub("^value\\.", "", names(stack_wide))
+    stack_wide$W_var <- w
+    
+    # Add delta information if available
+    if (!is.null(deltas) && nrow(deltas) > 0) {
+      # Extract delta_CFI and delta_RMSEA for each step
+      for (i in seq_len(nrow(deltas))) {
+        step_name <- deltas$step[i]
+        if (grepl("configural_to_metric", step_name)) {
+          stack_wide$delta_cfi_config_metric <- deltas$delta_cfi[i]
+          stack_wide$delta_rmsea_config_metric <- deltas$delta_rmsea[i]
+        } else if (grepl("metric.*to_scalar", step_name)) {
+          stack_wide$delta_cfi_metric_scalar <- deltas$delta_cfi[i]
+          stack_wide$delta_rmsea_metric_scalar <- deltas$delta_rmsea[i]
+        }
+      }
+    }
+    
+    stack_wide
+  })
+  
+  inv_combined <- do.call(rbind, inv_results[!sapply(inv_results, is.null)])
+  
+  if (!is.null(inv_combined) && nrow(inv_combined) > 0) {
+    # Select key columns for Table 8
+    cols_to_keep <- c("W_var", "model", "chisq", "df", "cfi", "rmsea", "srmr",
+                      "delta_cfi_config_metric", "delta_rmsea_config_metric",
+                      "delta_cfi_metric_scalar", "delta_rmsea_metric_scalar")
+    cols_present <- cols_to_keep[cols_to_keep %in% names(inv_combined)]
+    inv_final <- inv_combined[, cols_present, drop = FALSE]
+    
+    write.csv(inv_final, file = INVARIANCE_SUMMARY_CSV, row.names = FALSE, na = "")
+    message("Wrote: ", INVARIANCE_SUMMARY_CSV, " (", nrow(inv_final), " rows)")
+  } else {
+    message("No invariance results to consolidate")
+  }
 }
 
 # Default for logging if structural MG block is skipped

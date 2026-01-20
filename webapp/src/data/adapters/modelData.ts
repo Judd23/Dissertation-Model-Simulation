@@ -20,31 +20,46 @@ export type ModelDataPayload = {
   sampleDescriptives?: unknown;
 };
 
-const dataBase = new URL(
-  "data/",
-  window.location.origin + import.meta.env.BASE_URL,
-);
+/**
+ * Build base URL for fetching data from a specific run folder.
+ * Falls back to legacy /data/ path if no runId provided (for backwards compatibility during migration).
+ */
+function getDataBaseUrl(runId?: string): URL {
+  const origin = window.location.origin + import.meta.env.BASE_URL;
+  if (runId) {
+    // New manifest-driven path: results/<runId>/
+    return new URL(`results/${runId}/`, origin);
+  }
+  // Legacy path (deprecated) - will be removed after full migration
+  return new URL("data/", origin);
+}
 
-async function fetchJson(filename: string) {
-  const url = new URL(filename, dataBase);
+async function fetchJson(filename: string, baseUrl: URL) {
+  const url = new URL(filename, baseUrl);
   url.searchParams.set("t", String(Date.now()));
   const response = await fetch(url.toString(), { cache: "no-store" });
   if (!response.ok) {
-    console.log("(NO $) [ModelDataFetch] response:", {
+    console.log("[ModelDataFetch] response:", {
       filename,
       status: response.status,
       ok: response.ok,
+      url: url.toString(),
     });
     throw new Error(`Failed to load ${filename} (${response.status})`);
   }
   return response.json();
 }
 
-export async function fetchModelData(): Promise<ModelData> {
+/**
+ * Fetch model data from a specific run folder.
+ * @param runId - The run ID to fetch data for. If omitted, falls back to legacy /data/ path.
+ */
+export async function fetchModelData(runId?: string): Promise<ModelData> {
+  const dataBase = getDataBaseUrl(runId);
   const [modelResults, doseEffects, sampleDescriptives] = await Promise.all([
-    fetchJson("modelResults.json"),
-    fetchJson("doseEffects.json"),
-    fetchJson("sampleDescriptives.json"),
+    fetchJson("modelResults.json", dataBase),
+    fetchJson("doseEffects.json", dataBase),
+    fetchJson("sampleDescriptives.json", dataBase),
   ]);
 
   return parseModelData({ modelResults, doseEffects, sampleDescriptives });
