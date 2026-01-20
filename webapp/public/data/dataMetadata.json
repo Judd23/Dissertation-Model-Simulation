@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-01-19T22:18:01.119980",
-  "generatedAtFormatted": "January 19, 2026 at 10:18 PM",
-  "generatedAtShort": "2026-01-19 22:18",
+  "generatedAt": "2026-01-19T23:40:14.003082",
+  "generatedAtFormatted": "January 19, 2026 at 11:40 PM",
+  "generatedAtShort": "2026-01-19 23:40",
   "pipelineVersion": "1.0.0",
   "dataSource": "run_all_RQs_official.R",
   "bootstrapReplicates": 2000,
   "ciType": "bca.simple",
-  "pipelineRunId": "20260119221801",
+  "pipelineRunId": "20260119234014",
   "inputFiles": [
     {
       "path": "/Users/jjohnson3/Documents/GitHub/Dissertation-Model-Simulation_clean/4_Model_Results/Outputs/RQ1_RQ3_main/structural/structural_parameterEstimates.txt",
