@@ -1,11 +1,13 @@
 import type { SampleDescriptives } from '../types/sampleDescriptives';
 
-const DATA_BASE_PATH = new URL('data', import.meta.env.BASE_URL).pathname;
+const dataBase = new URL('data/', window.location.origin + import.meta.env.BASE_URL);
 
 async function fetchJson(filename: string) {
-  const response = await fetch(`${DATA_BASE_PATH}/${filename}?t=${Date.now()}`, { cache: 'no-store' });
+  const url = new URL(filename, dataBase);
+  url.searchParams.set('t', String(Date.now()));
+  const response = await fetch(url.toString(), { cache: 'no-store' });
   if (!response.ok) {
-    console.log('(NO $) [ModelDataFetch] response:', { filename, status: response.status, ok: response.ok });
+    console.log('(NO $) [SampleDescriptivesFetch] response:', { filename, status: response.status, ok: response.ok });
     throw new Error(`Failed to load ${filename} (${response.status})`);
   }
   return response.json();
