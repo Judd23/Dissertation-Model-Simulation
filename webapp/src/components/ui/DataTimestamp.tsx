@@ -56,25 +56,6 @@ export default function DataTimestamp({
       <span className={styles.note}>
         Run: {dataMetadata?.pipelineRunId || "Unknown"}
       </span>
-      {inputFiles.length > 0 ? (
-        <span className={styles.note}>
-          Inputs:{" "}
-          {inputFiles
-            .map((file) => {
-              if (!file || typeof file !== "object") {
-                return null;
-              }
-              const path = "path" in file ? String(file.path) : "Unknown";
-              const modifiedAt =
-                "modifiedAt" in file
-                  ? String(file.modifiedAt || "Unknown")
-                  : "Unknown";
-              return `${path} (${modifiedAt})`;
-            })
-            .filter(Boolean)
-            .join("; ")}
-        </span>
-      ) : null}
     </div>
   );
 }
