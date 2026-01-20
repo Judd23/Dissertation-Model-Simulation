@@ -37,14 +37,18 @@ export interface RunIndexEntry {
 }
 
 // BASE_URL-aware path for results
-const RESULTS_BASE_PATH = new URL("results", import.meta.env.BASE_URL).pathname;
+const resultsBase = new URL(
+  "results/",
+  window.location.origin + import.meta.env.BASE_URL,
+);
 
 /**
  * Fetch JSON with cache-busting and error handling.
  */
 async function fetchJson<T>(path: string): Promise<T> {
-  const url = `${RESULTS_BASE_PATH}/${path}?t=${Date.now()}`;
-  const response = await fetch(url, { cache: "no-store" });
+  const url = new URL(path, resultsBase);
+  url.searchParams.set("t", String(Date.now()));
+  const response = await fetch(url.toString(), { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error(`Failed to load ${path} (${response.status})`);
@@ -84,7 +88,7 @@ export async function fetchRunManifest(
  * Get the full URL for a run artifact.
  */
 export function getArtifactUrl(runId: string, relativePath: string): string {
-  return `${RESULTS_BASE_PATH}/${runId}/${relativePath}`;
+  return new URL(`${runId}/${relativePath}`, resultsBase).toString();
 }
 
 /**
