@@ -1,19 +1,24 @@
-import type { FastComparison } from '../types/fastComparison';
+import type { FastComparison } from "../types/fastComparison";
 
-const dataBase = new URL('data/', window.location.origin + import.meta.env.BASE_URL);
+const dataBase = new URL(
+  "data/",
+  window.location.origin + import.meta.env.BASE_URL,
+);
 
 async function fetchJson(filename: string) {
   const url = new URL(filename, dataBase);
-  url.searchParams.set('t', String(Date.now()));
-  const response = await fetch(url.toString(), { cache: 'no-store' });
+  url.searchParams.set("t", String(Date.now()));
+  const response = await fetch(url.toString(), { cache: "no-store" });
   if (!response.ok) {
-    console.warn(`[FastComparison] Failed to load ${filename} (${response.status})`);
+    console.warn(
+      `[FastComparison] Failed to load ${filename} (${response.status})`,
+    );
     throw new Error(`Failed to load ${filename} (${response.status})`);
   }
   return response.json();
 }
 
 export async function fetchFastComparison(): Promise<FastComparison> {
-  const data = await fetchJson('fastComparison.json');
+  const data = await fetchJson("fastComparison.json");
   return data as FastComparison;
 }
