@@ -1262,33 +1262,56 @@ def table6_weights(doc, table_num, data_dir, compact=True):
     if weights_file.exists():
         df = pd.read_csv(weights_file)
         
-        # Standardize group names with credit indicators
-        group_mapping = {
-            'Overall': 'Total',
-            'FASt (treated)': 'FASt (≥12)',
-            'Non-FASt (control)': 'Non-FASt (<12)',
-        }
-        df['Group'] = df['Group'].replace(group_mapping)
-        
-        # Format numeric columns
-        df['N'] = df['N'].apply(fmt_int)
-        for col in ['Min', 'P5', 'Median', 'P95', 'Max']:
-            df[col] = df[col].apply(lambda x: fmt(x, 3))
-        df['ESS'] = df['ESS'].apply(lambda x: fmt(x, 1))
-        
-        # Find Total row for separator
-        for idx, row in df.iterrows():
-            if 'Total' in str(row.get('Group', '')):
-                total_row_indices.append(idx)
-                break
-        
-        data_rows = df.values.tolist()
+        # Check if this is the new metric/value format (from R export) vs old Group-based format
+        if 'metric' in df.columns and 'value' in df.columns:
+            # New format: metric/value pairs - reshape to table format
+            metrics = df.set_index('metric')['value'].to_dict()
+            data_rows = [[
+                'Total',
+                fmt_int(metrics.get('n_obs', 0)),
+                fmt(metrics.get('min', 0), 3),
+                fmt(metrics.get('p5', 0), 3),
+                fmt(metrics.get('median', 0), 3),
+                fmt(metrics.get('p95', 0), 3),
+                fmt(metrics.get('max', 0), 3),
+                fmt(metrics.get('ess', 0), 1)
+            ]]
+            total_row_indices = []
+        elif 'Group' in df.columns:
+            # Old format: Group-based rows
+            group_mapping = {
+                'Overall': 'Total',
+                'FASt (treated)': 'FASt (≥12)',
+                'Non-FASt (control)': 'Non-FASt (<12)',
+            }
+            df['Group'] = df['Group'].replace(group_mapping)
+            
+            # Format numeric columns
+            df['N'] = df['N'].apply(fmt_int)
+            for col in ['Min', 'P5', 'Median', 'P95', 'Max']:
+                df[col] = df[col].apply(lambda x: fmt(x, 3))
+            df['ESS'] = df['ESS'].apply(lambda x: fmt(x, 1))
+            
+            # Find Total row for separator
+            for idx, row in df.iterrows():
+                if 'Total' in str(row.get('Group', '')):
+                    total_row_indices.append(idx)
+                    break
+            
+            data_rows = df.values.tolist()
+        else:
+            # Unknown format - use placeholders
+            data_rows = [
+                ['FASt (≥12)', '—', '—', '—', '—', '—', '—', '—'],
+                ['Non-FASt (<12)', '—', '—', '—', '—', '—', '—', '—'],
+                ['Total', '—', '—', '—', '—', '—', '—', '—'],
+            ]
+            total_row_indices = [2]
     else:
-        # Try to load from weight_diagnostics.csv in RQ1_RQ3_main (new format)
+        # Try to load from weight_diagnostics.csv in RQ1_RQ3_main (fallback)
         computed = compute_weight_diagnostics_from_csv(data_dir)
         if not computed.empty:
             # Convert row-based format to table format
-            # The new format has metric/value pairs, need to reshape
             metrics = computed.set_index('metric')['value'].to_dict()
             data_rows = [[
                 'Total',
