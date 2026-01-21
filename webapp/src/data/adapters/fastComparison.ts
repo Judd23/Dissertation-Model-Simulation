@@ -8,7 +8,10 @@ function getBaseUrl(runId?: string): URL {
   return new URL("data/", origin);
 }
 
-async function fetchJson(filename: string, runId?: string): Promise<unknown | null> {
+async function fetchJson(
+  filename: string,
+  runId?: string,
+): Promise<unknown | null> {
   const baseUrl = getBaseUrl(runId);
   const url = new URL(filename, baseUrl);
   url.searchParams.set("t", String(Date.now()));
@@ -25,9 +28,13 @@ async function fetchJson(filename: string, runId?: string): Promise<unknown | nu
   return response.json();
 }
 
-export async function fetchFastComparison(runId?: string): Promise<FastComparison> {
-  const data = await fetchJson("fastComparison.json", runId);
-  // If the file is missing, return an empty object so the UI can render a
-  // friendly "data unavailable" state instead of crashing.
+export async function fetchFastComparison(
+  runId?: string,
+): Promise<FastComparison> {
+  let data = await fetchJson("fastComparison.json", runId);
+  // Fall back to global data if run-specific not found
+  if (!data && runId) {
+    data = await fetchJson("fastComparison.json", undefined);
+  }
   return (data ?? {}) as FastComparison;
 }
