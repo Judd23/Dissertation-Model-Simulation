@@ -102,20 +102,20 @@ main() {
   case "$mode" in
     smoke)
       B_BOOT_MAIN="${B_BOOT_MAIN:-10}"
-      B_BOOT_MG="${B_BOOT_MG:-4}"
+      B_BOOT_MG="${B_BOOT_MG:-1}"
       BOOT_CI_TYPE_MAIN="${BOOT_CI_TYPE_MAIN:-perc}"
       ;;
     main)
       B_BOOT_MAIN="${B_BOOT_MAIN:-500}"
-      B_BOOT_MG="${B_BOOT_MG:-4}"
+      B_BOOT_MG="${B_BOOT_MG:-1}"
       BOOT_CI_TYPE_MAIN="${BOOT_CI_TYPE_MAIN:-bca.simple}"
       ;;
     Full_Deploy)
       B_BOOT_MAIN="${B_BOOT_MAIN:-2000}"
-      B_BOOT_MG="${B_BOOT_MG:-100}"
+      B_BOOT_MG="${B_BOOT_MG:-1}"
       BOOT_CI_TYPE_MAIN="${BOOT_CI_TYPE_MAIN:-bca.simple}"
       BOOT_NCPUS="${BOOT_NCPUS:-8}"
-      SKIP_RQ4="${SKIP_RQ4:-1}"
+      SKIP_RQ4="${SKIP_RQ4:-0}"
       SKIP_RQ4_STRUCT_MG="${SKIP_RQ4_STRUCT_MG:-0}"
       ;;
     *)
