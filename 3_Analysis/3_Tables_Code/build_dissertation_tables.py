@@ -142,7 +142,7 @@ def get_label(var_name: str) -> str:
 
 
 def find_csv(data_dir, filename):
-    """Find CSV file checking main directory, RQ1_RQ3_main, and pooled subfolders."""
+    """Find CSV/TXT file checking main directory, RQ1_RQ3_main, structural, and pooled subfolders."""
     # Try main directory first
     main_path = data_dir / filename
     if main_path.exists():
@@ -151,6 +151,10 @@ def find_csv(data_dir, filename):
     rq_path = data_dir / "RQ1_RQ3_main" / filename
     if rq_path.exists():
         return rq_path
+    # Try RQ1_RQ3_main/structural subfolder (fit measures, parameter estimates)
+    struct_path = data_dir / "RQ1_RQ3_main" / "structural" / filename
+    if struct_path.exists():
+        return struct_path
     # Try pooled subfolder
     pooled_path = data_dir / "pooled" / filename
     if pooled_path.exists():
@@ -179,18 +183,26 @@ def load_standardized_coefficients(data_dir):
         return std_map
     
     # Try TXT format (structural_standardizedSolution.txt) - tab-delimited
-    txt_path = data_dir / "structural_standardizedSolution.txt"
-    if txt_path.exists():
-        try:
-            std_df = pd.read_csv(txt_path, sep='\t')
-            # The TXT format has columns: lhs, op, rhs, label, est.std, se, z, pvalue, ci.lower, ci.upper
-            for _, row in std_df.iterrows():
-                if row['op'] in ('~', ':=') and pd.notna(row.get('label')) and str(row.get('label', '')).strip() != '':
-                    std_col = 'est.std' if 'est.std' in std_df.columns else 'est'
-                    if std_col in std_df.columns:
-                        std_map[row['label']] = row[std_col]
-        except Exception as e:
-            print(f"Warning: Could not parse {txt_path}: {e}")
+    # Search multiple locations
+    txt_candidates = [
+        data_dir / "structural_standardizedSolution.txt",
+        data_dir / "RQ1_RQ3_main" / "structural" / "structural_standardizedSolution.txt",
+        data_dir / "RQ1_RQ3_main" / "structural_standardizedSolution.txt",
+    ]
+    
+    for txt_path in txt_candidates:
+        if txt_path.exists():
+            try:
+                std_df = pd.read_csv(txt_path, sep='\t')
+                # The TXT format has columns: lhs, op, rhs, label, est.std, se, z, pvalue, ci.lower, ci.upper
+                for _, row in std_df.iterrows():
+                    if row['op'] in ('~', ':=') and pd.notna(row.get('label')) and str(row.get('label', '')).strip() != '':
+                        std_col = 'est.std' if 'est.std' in std_df.columns else 'est'
+                        if std_col in std_df.columns:
+                            std_map[row['label']] = row[std_col]
+                break  # Found and parsed, exit loop
+            except Exception as e:
+                print(f"Warning: Could not parse {txt_path}: {e}")
     
     return std_map
 
@@ -219,19 +231,24 @@ def compute_sample_descriptives(data_dir: Path) -> pd.DataFrame:
     if df is None:
         return pd.DataFrame()
     
-    # Determine treatment groups
-    # FASt: x_FASt == 1, Lite_DC: x_FASt == 0 and credit_dose > 0, No_Cred: credit_dose == 0
+    # Determine treatment groups based on dual credit status:
+    # FASt: x_FASt == 1 (>=12 credits)
+    # Lite_DC: x_FASt == 0 AND DC_student == 1 (1-11 credits, had some dual credit)
+    # No_Cred: x_FASt == 0 AND DC_student == 0 (0 credits, no dual credit)
     if 'x_FASt' not in df.columns:
         return pd.DataFrame()
     
     n_total = len(df)
     n_fast = (df['x_FASt'] == 1).sum()
     
-    # Determine Lite_DC vs No_Cred if credit_dose is available
-    if 'credit_dose' in df.columns:
-        n_lite = ((df['x_FASt'] == 0) & (df['credit_dose'] > 0)).sum()
-        n_no_cred = ((df['x_FASt'] == 0) & (df['credit_dose'] == 0)).sum()
+    # Use DC_student to differentiate Lite_DC vs No_Cred within non-FASt
+    if 'DC_student' in df.columns:
+        # DC_student = 1 means had some dual credit (1+ courses)
+        # DC_student = 0 means no dual credit at all
+        n_lite = ((df['x_FASt'] == 0) & (df['DC_student'] == 1)).sum()
+        n_no_cred = ((df['x_FASt'] == 0) & (df['DC_student'] == 0)).sum()
     else:
+        # Fallback: all non-FASt in one category
         n_lite = (df['x_FASt'] == 0).sum()
         n_no_cred = 0
     
@@ -240,12 +257,13 @@ def compute_sample_descriptives(data_dir: Path) -> pd.DataFrame:
     if 'cohort' in df.columns:
         for cohort_val in sorted(df['cohort'].unique()):
             cohort_df = df[df['cohort'] == cohort_val]
-            cohort_label = f"Cohort {int(cohort_val)}" if pd.notna(cohort_val) else "Unknown"
+            # Map cohort values: 0 = 2022-23, 1 = 2023-24
+            cohort_label = f"Cohort {'2022-23' if cohort_val == 0 else '2023-24'}"
             
             c_fast = (cohort_df['x_FASt'] == 1).sum()
-            if 'credit_dose' in df.columns:
-                c_lite = ((cohort_df['x_FASt'] == 0) & (cohort_df['credit_dose'] > 0)).sum()
-                c_no_cred = ((cohort_df['x_FASt'] == 0) & (cohort_df['credit_dose'] == 0)).sum()
+            if 'DC_student' in cohort_df.columns:
+                c_lite = ((cohort_df['x_FASt'] == 0) & (cohort_df['DC_student'] == 1)).sum()
+                c_no_cred = ((cohort_df['x_FASt'] == 0) & (cohort_df['DC_student'] == 0)).sum()
             else:
                 c_lite = (cohort_df['x_FASt'] == 0).sum()
                 c_no_cred = 0
@@ -1361,55 +1379,48 @@ def table7_cfa(doc, table_num, data_dir, compact=True):
     cfa_file = find_csv(data_dir, "cfa_loadings.csv")
     if cfa_file.exists():
         df = pd.read_csv(cfa_file)
-        # Group by factor, format for APA table
-        data_rows = []
-        current_factor = None
         
-        for _, row in df.iterrows():
-            factor = row.get('factor', '')
-            indicator = row.get('indicator', '')
-            loading = row.get('std_loading', row.get('loading', ''))
-            se = row.get('se', '')
-            omega = row.get('omega', '')
-            ave = row.get('ave', '')
-            
-            # New factor group header
-            if factor != current_factor:
-                current_factor = factor
-                # Factor header row (bold in label)
-                factor_label = get_label(factor) if factor else factor
-                data_rows.append([factor_label, '', '', '', ''])
-            
-            # Indicator row (indented)
-            ind_label = get_label(indicator) if indicator else indicator
-            lambda_val = f"{loading:.3f}" if pd.notna(loading) and loading != '' else '—'
-            se_val = f"{se:.3f}" if pd.notna(se) and se != '' else '—'
-            # omega/AVE are factor-level, show only on first indicator of factor
-            omega_val = ''
-            ave_val = ''
-            
-            data_rows.append([f"  {ind_label}", lambda_val, se_val, omega_val, ave_val])
-        
-        # Add factor-level omega/AVE summary rows
+        # Get factor-level reliability stats (omega, AVE) - first row per factor
         factor_stats = df.groupby('factor').agg({
             'omega': 'first',
             'ave': 'first'
-        }).reset_index()
+        }).to_dict()
         
-        for _, frow in factor_stats.iterrows():
-            factor = frow['factor']
-            omega_val = f"{frow['omega']:.3f}" if pd.notna(frow['omega']) else '—'
-            ave_val = f"{frow['ave']:.3f}" if pd.notna(frow['ave']) else '—'
-            # Find insertion point (after last indicator of this factor)
-            for i in range(len(data_rows) - 1, -1, -1):
-                if data_rows[i][0].strip() == get_label(factor) or \
-                   (i > 0 and data_rows[i-1][0].strip() == get_label(factor)):
-                    # Insert omega row after last indicator
-                    insert_idx = i + 1
-                    while insert_idx < len(data_rows) and data_rows[insert_idx][0].startswith('  '):
-                        insert_idx += 1
-                    data_rows.insert(insert_idx, [f"  Factor ω/AVE", '', '', omega_val, ave_val])
-                    break
+        # Build table rows grouped by factor
+        data_rows = []
+        current_factor = None
+        factor_indicators = {}  # Track indicators per factor
+        
+        # First pass: collect indicators by factor
+        for factor in df['factor'].unique():
+            factor_indicators[factor] = df[df['factor'] == factor]
+        
+        # Build rows for each factor
+        for factor in df['factor'].unique():
+            factor_df = factor_indicators[factor]
+            factor_label = get_label(factor) if factor else factor
+            
+            # Get omega/AVE for this factor
+            omega_val = factor_stats['omega'].get(factor, None)
+            ave_val = factor_stats['ave'].get(factor, None)
+            omega_str = f"{omega_val:.3f}" if pd.notna(omega_val) else '—'
+            ave_str = f"{ave_val:.3f}" if pd.notna(ave_val) else '—'
+            
+            # Factor header row with omega/AVE in the reliability columns
+            data_rows.append([factor_label, '', '', omega_str, ave_str])
+            
+            # Indicator rows
+            for _, row in factor_df.iterrows():
+                indicator = row.get('indicator', '')
+                # Prefer std_loading, fall back to loading
+                loading = row.get('std_loading', row.get('loading', None))
+                se = row.get('se', None)
+                
+                ind_label = get_label(indicator) if indicator else indicator
+                lambda_val = f"{loading:.3f}" if pd.notna(loading) else '—'
+                se_val = f"{se:.3f}" if pd.notna(se) else '—'
+                
+                data_rows.append([f"  {ind_label}", lambda_val, se_val, '', ''])
     else:
         data_rows = [
             ['Emotional Distress (EmoDiss)', '', '', '', ''],
@@ -1544,10 +1555,21 @@ def table9_model_fit(doc, table_num, data_dir, B, ci_type, compact=True):
     
     Uses column spanners for fit index groupings (matching Table 5 style).
     """
-    # Try multiple file formats
+    # Try multiple file formats and locations
     fit_file = find_csv(data_dir, "model_fit.csv")
     pe_fit_file = find_csv(data_dir, "point_estimates_fit_indices.csv")
-    fit_txt_file = data_dir / "structural_fitMeasures.txt"
+    
+    # Search multiple locations for structural_fitMeasures.txt
+    fit_txt_candidates = [
+        data_dir / "structural_fitMeasures.txt",
+        data_dir / "RQ1_RQ3_main" / "structural" / "structural_fitMeasures.txt",
+        data_dir / "RQ1_RQ3_main" / "structural_fitMeasures.txt",
+    ]
+    fit_txt_file = None
+    for candidate in fit_txt_candidates:
+        if candidate.exists():
+            fit_txt_file = candidate
+            break
     
     data_rows = None
     
@@ -1568,7 +1590,7 @@ def table9_model_fit(doc, table_num, data_dir, B, ci_type, compact=True):
              rmsea_ci,
              fmt(raw.get('srmr', [None])[0], 3)],
         ]
-    elif fit_txt_file.exists():
+    elif fit_txt_file is not None:
         # Read the structural_fitMeasures.txt format (two columns: measure, value)
         try:
             fit_df = pd.read_csv(fit_txt_file, sep='\t')
