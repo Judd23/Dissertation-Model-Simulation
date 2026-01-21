@@ -63,6 +63,20 @@
         "pct": 39.6
       }
     },
+    "living": {
+      "With Family": {
+        "n": 2410,
+        "pct": 48.2
+      },
+      "On-Campus": {
+        "n": 1422,
+        "pct": 28.4
+      },
+      "Off-Campus": {
+        "n": 1168,
+        "pct": 23.4
+      }
+    },
     "transferCredits": {
       "mean": 12.8,
       "sd": 15.2,
