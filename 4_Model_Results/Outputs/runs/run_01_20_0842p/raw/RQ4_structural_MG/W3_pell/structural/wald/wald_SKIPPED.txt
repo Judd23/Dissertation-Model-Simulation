@@ -1,0 +1,3 @@
+Wald tests skipped.
+Reason: fit has >1 group; pooled-label constraints (a1, c, cz, ...) are not applicable.
+If needed, implement W-specific/group-specific constraints using the W-prefixed labels (e.g., <W>__a1_g1).

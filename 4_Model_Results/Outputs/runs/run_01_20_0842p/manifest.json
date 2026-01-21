@@ -1,0 +1,54 @@
+{
+  "run_id": "run_01_20_0842p",
+  "timestamp": "2026-01-20T21:49:13",
+  "mode": "Full_Deploy",
+  "settings": {
+    "seed": {},
+    "N": 5000,
+    "estimator": "ML",
+    "bootstrap": 2000,
+    "CI": "bca.simple",
+    "group_flags": {
+      "DO_PSW": true,
+      "TABLE_CHECK_MODE": false
+    }
+  },
+  "artifacts": {
+    "fit_measures": "raw/RQ1_RQ3_main/structural/structural_fitMeasures.txt",
+    "parameters": "raw/RQ1_RQ3_main/structural/structural_parameterEstimates.txt",
+    "executed_model_syntax": "raw/syntax/measurement_syntax.lav",
+    "verification_checklist": "logs/verification_checklist.txt",
+    "bootstrap_results": "raw/bootstrap_results.csv",
+    "tables": [
+      "Bootstrap_Tables.docx",
+      "Dissertation_Tables.docx",
+      "Plain_Language_Summary.docx"
+    ],
+    "figures": [
+      "fig5_equity_gaps.png",
+      "fig2_emotional_distress.png",
+      "fig6_correlation_heatmap.png",
+      "fig1_demographics.png",
+      "fig7_cumulative_risk.png",
+      "fig11_outcome_profiles.png",
+      "fig3_quality_engagement.png",
+      "fig10_intersectionality.png",
+      "fig8_credit_dose_moderation.png",
+      "standards_sample_modelfit.png",
+      "fig4_developmental_adjustment.png",
+      "standards_compliance_dashboard.png",
+      "fig12_cohort_patterns.png",
+      "standards_bootstrap_effects.png",
+      "fig9_mediation_pathways.png"
+    ],
+    "webapp_json": {
+      "modelResults": "modelResults.json",
+      "doseEffects": "doseEffects.json",
+      "sampleDescriptives": "sampleDescriptives.json",
+      "groupComparisons": "groupComparisons.json",
+      "variableMetadata": "variableMetadata.json",
+      "dataMetadata": "dataMetadata.json"
+    }
+  },
+  "python_stage_completed": "2026-01-20T21:49:19.958824"
+}

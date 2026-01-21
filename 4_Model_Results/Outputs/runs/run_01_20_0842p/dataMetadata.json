@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-01-20T21:49:19.958662",
+  "generatedAtFormatted": "January 20, 2026 at 09:49 PM",
+  "generatedAtShort": "2026-01-20 21:49",
+  "pipelineVersion": "2.0.0",
+  "dataSource": "run_python_stage.py",
+  "bootstrapReplicates": 2000,
+  "ciType": "bca.simple",
+  "runId": "run_01_20_0842p"
+}

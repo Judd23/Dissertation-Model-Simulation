@@ -1,0 +1,13 @@
+Wald tests: linear constraints (treatment and moderation terms)
+$stat
+[1] 181.6864
+
+$df
+[1] 8
+
+$p.value
+[1] 0
+
+$se
+[1] "robust.huber.white"
+
