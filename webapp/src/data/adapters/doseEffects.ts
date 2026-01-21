@@ -1,20 +1,35 @@
 import type { DoseEffectsData } from "../types/doseEffects";
 
-const dataBase = new URL(
-  "data/",
-  window.location.origin + import.meta.env.BASE_URL,
-);
+function getBaseUrl(runId?: string): URL {
+  const origin = window.location.origin + import.meta.env.BASE_URL;
+  if (runId) {
+    return new URL(`results/${runId}/`, origin);
+  }
+  return new URL("data/", origin);
+}
 
-export async function fetchDoseEffects(): Promise<DoseEffectsData | null> {
+async function fetchJson(runId?: string): Promise<DoseEffectsData | null> {
+  const baseUrl = getBaseUrl(runId);
+  const url = new URL("doseEffects.json", baseUrl);
+  url.searchParams.set("t", String(Date.now()));
+  const response = await fetch(url.toString(), { cache: "no-store" });
+  if (!response.ok) return null;
+  return (await response.json()) as DoseEffectsData;
+}
+
+export async function fetchDoseEffects(
+  runId?: string,
+): Promise<DoseEffectsData | null> {
   try {
-    const url = new URL("doseEffects.json", dataBase);
-    url.searchParams.set("t", String(Date.now()));
-    const response = await fetch(url.toString(), { cache: "no-store" });
-    if (!response.ok) return null;
-    return (await response.json()) as DoseEffectsData;
+    let data = await fetchJson(runId);
+    // Fall back to legacy data/ if run-specific not found
+    if (!data && runId) {
+      data = await fetchJson(undefined);
+    }
+    return data;
   } catch (error) {
     if (import.meta.env.DEV) {
-      console.error("(NO $) [fetchDoseEffects] fetch failed:", error);
+      console.error("[fetchDoseEffects] fetch failed:", error);
     }
     return null;
   }

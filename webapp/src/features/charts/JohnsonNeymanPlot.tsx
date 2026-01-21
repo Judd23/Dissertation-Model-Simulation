@@ -2,6 +2,7 @@ import { useRef, useEffect, useMemo, useState } from "react";
 import * as d3 from "d3";
 import { fetchDoseEffects } from "../../data/adapters/doseEffects";
 import type { DoseEffectsData } from "../../data/types/doseEffects";
+import { useModelDataActions } from "../../app/contexts/ModelDataContext";
 import styles from "./JohnsonNeymanPlot.module.css";
 
 interface JohnsonNeymanPlotProps {
@@ -26,19 +27,20 @@ export default function JohnsonNeymanPlot({
     ciUpper: number;
   } | null>(null);
   const [doseEffects, setDoseEffects] = useState<DoseEffectsData | null>(null);
+  const { currentRunId } = useModelDataActions();
   const outcomeLabel =
     outcome === "distress" ? "Emotional Distress" : "Campus Engagement";
 
   // Fetch dose effects data
   useEffect(() => {
     let isMounted = true;
-    fetchDoseEffects().then((data) => {
+    fetchDoseEffects(currentRunId ?? undefined).then((data) => {
       if (isMounted && data) setDoseEffects(data);
     });
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [currentRunId]);
 
   // Get the JN point for this outcome
   const jnPoint = useMemo(() => {
