@@ -123,6 +123,38 @@
         }
       }
     },
+    "living": {
+      "With Family": {
+        "fast": {
+          "n": 630,
+          "pct": 47.7
+        },
+        "nonfast": {
+          "n": 1780,
+          "pct": 48.4
+        }
+      },
+      "On-Campus": {
+        "fast": {
+          "n": 417,
+          "pct": 31.6
+        },
+        "nonfast": {
+          "n": 1005,
+          "pct": 27.3
+        }
+      },
+      "Off-Campus": {
+        "fast": {
+          "n": 274,
+          "pct": 20.7
+        },
+        "nonfast": {
+          "n": 894,
+          "pct": 24.3
+        }
+      }
+    },
     "transferCredits": {
       "fast": {
         "mean": 33.3,

@@ -100,6 +100,28 @@ def main():
             }
         }
 
+    # Living situation comparison (living18 column)
+    comparison["demographics"]["living"] = {}
+    living_labels = {
+        "With family (commuting)": "With Family",
+        "On-campus (residence hall)": "On-Campus",
+        "Off-campus (rent/apartment)": "Off-Campus"
+    }
+    for raw_val, display_label in living_labels.items():
+        fast = df[(df['x_FASt'] == 1) & (df['living18'] == raw_val)]
+        nonfast = df[(df['x_FASt'] == 0) & (df['living18'] == raw_val)]
+
+        comparison["demographics"]["living"][display_label] = {
+            "fast": {
+                "n": len(fast),
+                "pct": round(len(fast) / len(df[df['x_FASt'] == 1]) * 100, 1) if len(df[df['x_FASt'] == 1]) > 0 else 0
+            },
+            "nonfast": {
+                "n": len(nonfast),
+                "pct": round(len(nonfast) / len(df[df['x_FASt'] == 0]) * 100, 1) if len(df[df['x_FASt'] == 0]) > 0 else 0
+            }
+        }
+
     # Transfer credits by group
     fast_students = df[df['x_FASt'] == 1]
     nonfast_students = df[df['x_FASt'] == 0]
