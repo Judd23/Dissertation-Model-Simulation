@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useModelDataActions } from "../../app/contexts";
 import { DANCE_SPRING_HEAVY, TIMING_SECONDS } from "../../lib/transitionConfig";
 import { fetchGroupComparisons } from "../../data/adapters/groupComparisons";
 import { fetchSampleDescriptives } from "../../data/adapters/sampleDescriptives";
@@ -88,6 +89,7 @@ export default function GroupComparison({
   grouping,
   pathway,
 }: GroupComparisonProps) {
+  const { currentRunId } = useModelDataActions();
   const [groupComparisons, setGroupComparisons] =
     useState<GroupComparisonsJson | null>(null);
   const [sampleDescriptives, setSampleDescriptives] =
@@ -98,8 +100,8 @@ export default function GroupComparison({
     const loadData = async () => {
       try {
         const [comparisons, descriptives] = await Promise.all([
-          fetchGroupComparisons(),
-          fetchSampleDescriptives(),
+          fetchGroupComparisons(currentRunId ?? undefined),
+          fetchSampleDescriptives(currentRunId ?? undefined),
         ]);
         if (isMounted) {
           setGroupComparisons(comparisons);
@@ -115,7 +117,7 @@ export default function GroupComparison({
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [currentRunId]);
 
   // useMemo MUST be called before any early return to avoid React #310 error
   const data = useMemo(() => {

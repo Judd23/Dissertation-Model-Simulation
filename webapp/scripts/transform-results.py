@@ -101,7 +101,7 @@ def parse_fit_measures(filepath: Path) -> dict:
     return fit
 
 
-def compute_dose_effects(main_paths: list) -> dict:
+def compute_dose_effects(main_paths: list, mean_credit_dose: float = 0.0) -> dict:
     """Compute dose-response effects at various credit levels based on actual model coefficients."""
     # Extract coefficients from main model
     def get_path(paths, label):
@@ -168,7 +168,7 @@ def compute_dose_effects(main_paths: list) -> dict:
     effects = []
 
     for dose in dose_range:
-        dose_units = (dose - 12) / 10  # 10-credit units above threshold
+        dose_units = ((dose - 12) / 10) - mean_credit_dose  # centered 10-credit units
 
         for outcome, coef in coefficients.items():
             effect = coef["main"] + dose_units * coef["moderation"]
@@ -199,6 +199,7 @@ def compute_dose_effects(main_paths: list) -> dict:
             "max": 80,
             "threshold": 12,
             "units": "credits",
+            "centeringConstant": round(mean_credit_dose, 4),
         },
         "coefficients": coefficients,
         "effects": effects,
@@ -241,6 +242,19 @@ def compute_sample_descriptives(data_path: Path) -> dict:
         demographics["sex"] = {
             "women": {"n": int(sex_counts.get(0, 0)), "pct": round(sex_counts.get(0, 0) / n * 100, 1)},
             "men": {"n": int(sex_counts.get(1, 0)), "pct": round(sex_counts.get(1, 0) / n * 100, 1)},
+        }
+
+    # Living situation (living18 -> living)
+    if "living18" in df.columns:
+        living_counts = df["living18"].value_counts()
+        living_map = {
+            "With family (commuting)": "With Family",
+            "Off-campus (rent/apartment)": "Off-Campus",
+            "On-campus (residence hall)": "On-Campus",
+        }
+        demographics["living"] = {
+            living_map.get(k, k): {"n": int(v), "pct": round(v / n * 100, 1)}
+            for k, v in living_counts.items()
         }
 
     # Transfer credits
@@ -584,7 +598,14 @@ def main():
 
     # 2. Dose Effects
     print("\n[2/5] Computing dose-response effects...")
-    dose_effects = compute_dose_effects(main_model["structuralPaths"])
+    # Compute centering constant from data (credit_dose is mean-centered in SEM)
+    data_path = DATA_DIR / "rep_data.csv"
+    if data_path.exists():
+        df_temp = pd.read_csv(data_path)
+        mean_credit_dose = df_temp["credit_dose"].mean() if "credit_dose" in df_temp.columns else 0.0
+    else:
+        mean_credit_dose = 0.0
+    dose_effects = compute_dose_effects(main_model["structuralPaths"], mean_credit_dose)
 
     with open(OUTPUT_DIR / "doseEffects.json", "w") as f:
         json.dump(dose_effects, f, indent=2)

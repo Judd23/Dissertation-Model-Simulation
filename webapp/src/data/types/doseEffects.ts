@@ -3,6 +3,7 @@ export interface CreditDoseRange {
   max: number;
   threshold: number;
   units?: string;
+  centeringConstant?: number;
 }
 
 export interface DoseCoefficient {
