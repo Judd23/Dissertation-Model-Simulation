@@ -1,0 +1,7 @@
+W_index = 5
+W = living18
+reference = Off-campus (rent/apartment)
+levels:
+- Off-campus (rent/apartment)
+- On-campus (residence hall)
+- With family (commuting)

@@ -1,5 +1,11 @@
 [
   {
+    "run_id": "run_01_20_0330p",
+    "timestamp": "2026-01-20T16:35:23",
+    "label": "smoke - run_01_20_0330p",
+    "manifest_path": "run_01_20_0330p/manifest.json"
+  },
+  {
     "run_id": "run_01_19_1136p",
     "timestamp": "2026-01-19T23:40:14",
     "label": "Full_Deploy - run_01_19_1136p",
