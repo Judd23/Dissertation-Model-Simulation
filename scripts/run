@@ -13,11 +13,15 @@
 #   - Python 3.9+ with .venv at repo root
 #
 # Environment Variables (optional):
-#   RUN_ID        Override auto-generated run ID
+#   RUN_ID        Override auto-generated run ID (required for RESUME=1)
+#   RESUME        Set to 1 to resume an interrupted run (requires RUN_ID)
 #   SKIP_DOCKER   Set to 1 to run R locally instead of in Docker
 #   BOOT_NCPUS    Number of CPU cores for bootstrap (default: 4)
 #   SKIP_RQ4      Set to 1 to skip RQ4 measurement invariance
 #   SKIP_RQ4_STRUCT_MG  Set to 1 to skip RQ4 structural multi-group
+#
+# Resume Example:
+#   RUN_ID=run_01_20_0315p RESUME=1 ./scripts/run Full_Deploy
 #
 # ==============================================================================
 
@@ -55,6 +59,81 @@ log_warn() {
 
 log_error() {
   echo -e "${RED}[ERROR]${NC} $1" >&2
+}
+
+# -----------------------------------------------------------------------------
+# Progress tracker for Full_Deploy
+# -----------------------------------------------------------------------------
+
+# Stage status: pending, running, done, failed
+declare -A STAGE_STATUS
+declare -A STAGE_START_TIME
+STAGES=(
+  "R_PIPELINE:R Pipeline (SEM + Bootstrap)"
+  "MANIFEST_CHECK:Verify Manifest"
+  "PYTHON_STAGE:Python Stage (Tables/Figures)"
+  "WEBAPP_SYNC:Sync to Webapp"
+)
+
+init_progress() {
+  for stage_info in "${STAGES[@]}"; do
+    local key="${stage_info%%:*}"
+    STAGE_STATUS[$key]="pending"
+  done
+}
+
+show_progress() {
+  local current_stage="$1"
+  
+  echo ""
+  echo "┌──────────────────────────────────────────────────────────────┐"
+  echo "│              FULL DEPLOY PROGRESS                            │"
+  echo "├──────────────────────────────────────────────────────────────┤"
+  
+  for stage_info in "${STAGES[@]}"; do
+    local key="${stage_info%%:*}"
+    local label="${stage_info#*:}"
+    local status="${STAGE_STATUS[$key]}"
+    local icon elapsed_str=""
+    
+    case "$status" in
+      pending)  icon="○" ;;
+      running)  icon="◉" 
+                if [[ -n "${STAGE_START_TIME[$key]:-}" ]]; then
+                  local elapsed=$(($(date +%s) - STAGE_START_TIME[$key]))
+                  elapsed_str=" (${elapsed}s)"
+                fi
+                ;;
+      done)     icon="✓" ;;
+      failed)   icon="✗" ;;
+    esac
+    
+    printf "│  %s %-50s │\n" "$icon" "${label}${elapsed_str}"
+  done
+  
+  echo "└──────────────────────────────────────────────────────────────┘"
+  echo ""
+}
+
+start_stage() {
+  local stage="$1"
+  STAGE_STATUS[$stage]="running"
+  STAGE_START_TIME[$stage]=$(date +%s)
+  show_progress "$stage"
+}
+
+complete_stage() {
+  local stage="$1"
+  local end_time=$(date +%s)
+  local elapsed=$((end_time - STAGE_START_TIME[$stage]))
+  STAGE_STATUS[$stage]="done"
+  log_success "Stage complete: $stage (${elapsed}s)"
+}
+
+fail_stage() {
+  local stage="$1"
+  STAGE_STATUS[$stage]="failed"
+  show_progress "$stage"
 }
 
 generate_run_id() {
@@ -154,12 +233,59 @@ main() {
   local run_dir="$REPO_ROOT/4_Model_Results/Outputs/runs/$run_id"
   local manifest_path="$run_dir/manifest.json"
   local webapp_results="$REPO_ROOT/webapp/public/results"
+  local resume_marker="$run_dir/.resume_state"
+  
+  # Initialize progress tracker
+  init_progress
+  
+  # -------------------------------------------------------------------------
+  # Resume detection
+  # -------------------------------------------------------------------------
+  
+  local skip_r_pipeline=false
+  local skip_python_stage=false
+  
+  if [[ "${RESUME:-0}" == "1" ]]; then
+    if [[ -z "${RUN_ID:-}" ]]; then
+      log_error "RESUME=1 requires RUN_ID to be set"
+      log_error "Example: RUN_ID=run_01_20_0315p RESUME=1 ./scripts/run Full_Deploy"
+      exit 1
+    fi
+    
+    if [[ ! -d "$run_dir" ]]; then
+      log_error "Cannot resume: run directory not found: $run_dir"
+      exit 1
+    fi
+    
+    log_warn "RESUME mode enabled for run: $run_id"
+    
+    # Check what stages are already complete
+    if [[ -f "$manifest_path" ]]; then
+      log_info "Manifest exists — skipping R pipeline"
+      skip_r_pipeline=true
+      STAGE_STATUS[R_PIPELINE]="done"
+      STAGE_STATUS[MANIFEST_CHECK]="done"
+    fi
+    
+    # Check if Python stage completed (tables exist)
+    if [[ -f "$run_dir/tables/Dissertation_Tables.docx" ]]; then
+      log_info "Tables exist — skipping Python stage"
+      skip_python_stage=true
+      STAGE_STATUS[PYTHON_STAGE]="done"
+    fi
+    
+    show_progress "RESUME"
+  fi
   
   # -------------------------------------------------------------------------
   # Stage 1: R Pipeline (via Docker or local)
   # -------------------------------------------------------------------------
   
-  log_info "=== Stage 1: R Pipeline ==="
+  if [[ "$skip_r_pipeline" == "true" ]]; then
+    log_info "=== Stage 1: R Pipeline (SKIPPED - already complete) ==="
+  else
+    start_stage "R_PIPELINE"
+    log_info "=== Stage 1: R Pipeline ==="
   
   if [[ -z "${SKIP_DOCKER:-}" ]]; then
     log_info "Running R in Docker (rocker/verse:4.4.0)..."
@@ -183,50 +309,72 @@ main() {
     Rscript 3_Analysis/1_Main_Pipeline_Code/run_all_RQs_official.R
   fi
   
+  complete_stage "R_PIPELINE"
+  fi  # end skip_r_pipeline check
+  
   # -------------------------------------------------------------------------
   # Stage 2: Verify manifest exists
   # -------------------------------------------------------------------------
   
-  log_info "=== Stage 2: Verify Manifest ==="
+  if [[ "$skip_r_pipeline" != "true" ]]; then
+    start_stage "MANIFEST_CHECK"
+    log_info "=== Stage 2: Verify Manifest ==="
   
-  if [[ ! -f "$manifest_path" ]]; then
-    log_error "CRITICAL: manifest.json not found at $manifest_path"
-    log_error "R pipeline may have failed. Check logs in:"
-    log_error "  $run_dir/logs/"
-    exit 1
-  fi
+    if [[ ! -f "$manifest_path" ]]; then
+      fail_stage "MANIFEST_CHECK"
+      log_error "CRITICAL: manifest.json not found at $manifest_path"
+      log_error "R pipeline may have failed. Check logs in:"
+      log_error "  $run_dir/logs/"
+      exit 1
+    fi
   
-  log_success "Manifest found: $manifest_path"
+    log_success "Manifest found: $manifest_path"
+    complete_stage "MANIFEST_CHECK"
+  fi  # end skip_r_pipeline manifest check
   
   # -------------------------------------------------------------------------
   # Stage 3: Python stage (manifest-first)
   # -------------------------------------------------------------------------
   
-  log_info "=== Stage 3: Python Stage ==="
-  
-  # Activate venv and run Python stage
-  source "$REPO_ROOT/.venv/bin/activate"
-  
-  if [[ -f "$REPO_ROOT/3_Analysis/run_python_stage.py" ]]; then
-    log_info "Running manifest-first Python stage..."
-    python "$REPO_ROOT/3_Analysis/run_python_stage.py" --manifest "$manifest_path"
+  if [[ "$skip_python_stage" == "true" ]]; then
+    log_info "=== Stage 3: Python Stage (SKIPPED - already complete) ==="
   else
-    log_warn "run_python_stage.py not found, skipping Python stage"
-  fi
+    start_stage "PYTHON_STAGE"
+    log_info "=== Stage 3: Python Stage ==="
+  
+    # Activate venv and run Python stage
+    source "$REPO_ROOT/.venv/bin/activate"
+  
+    if [[ -f "$REPO_ROOT/3_Analysis/run_python_stage.py" ]]; then
+      log_info "Running manifest-first Python stage..."
+      python "$REPO_ROOT/3_Analysis/run_python_stage.py" --manifest "$manifest_path"
+    else
+      log_warn "run_python_stage.py not found, skipping Python stage"
+    fi
+  
+    complete_stage "PYTHON_STAGE"
+  fi  # end skip_python_stage check
   
   # -------------------------------------------------------------------------
   # Stage 4: Sync to webapp
   # -------------------------------------------------------------------------
   
+  start_stage "WEBAPP_SYNC"
   log_info "=== Stage 4: Sync to Webapp ==="
+  
+  # Activate venv (may already be active, but ensure it)
+  source "$REPO_ROOT/.venv/bin/activate"
   
   python "$REPO_ROOT/scripts/sync_run_to_webapp.py" --run-dir "$run_dir"
   
   log_success "Synced to: $webapp_results/$run_id/"
+  complete_stage "WEBAPP_SYNC"
   
   # -------------------------------------------------------------------------
-  # Stage 5: Summary
+  # Final Summary
   # -------------------------------------------------------------------------
+  
+  show_progress "COMPLETE"
   
   echo ""
   echo "============================================================"
