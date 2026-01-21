@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useResearch } from "../app/contexts";
+import { useResearch, useModelDataActions } from "../app/contexts";
 import GroupComparison from "../features/charts/GroupComparison";
 import Toggle from "../components/ui/Toggle";
 import GlossaryTerm from "../components/ui/GlossaryTerm";
@@ -51,6 +51,7 @@ const groupingOptions = [
 
 export default function DemographicsPage() {
   const { groupingVariable, setGroupingVariable } = useResearch();
+  const { currentRunId } = useModelDataActions();
   const [showComparison, setShowComparison] = useState(false);
   const [fastComparison, setFastComparison] = useState<FastComparison | null>(
     null,
@@ -63,8 +64,8 @@ export default function DemographicsPage() {
     const loadData = async () => {
       try {
         const [comparison, descriptives] = await Promise.all([
-          fetchFastComparison(),
-          fetchSampleDescriptives(),
+          fetchFastComparison(currentRunId ?? undefined),
+          fetchSampleDescriptives(currentRunId ?? undefined),
         ]);
         if (isMounted) {
           setFastComparison(comparison);
@@ -80,7 +81,7 @@ export default function DemographicsPage() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [currentRunId]);
 
   if (!fastComparison || !sampleDescriptives) {
     return (
