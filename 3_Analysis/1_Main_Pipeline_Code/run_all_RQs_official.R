@@ -14,7 +14,9 @@ suppressPackageStartupMessages({
 # Helper: read boolean env vars like 1/0, TRUE/FALSE, yes/no.
 env_flag <- function(name, default = FALSE) {
   raw <- Sys.getenv(name, unset = "")
-  if (!nzchar(raw)) return(isTRUE(default))
+  if (!nzchar(raw)) {
+    return(isTRUE(default))
+  }
   raw <- tolower(trimws(raw))
   raw %in% c("1", "true", "t", "yes", "y", "on")
 }
@@ -25,7 +27,7 @@ has_env <- function(name) nzchar(Sys.getenv(name, unset = ""))
 # -------------------------
 # USER SETTINGS (edit these)
 # -------------------------
-MODEL_FILE   <- "5_Statistical_Models/models/mg_fast_vs_nonfast_model.R"
+MODEL_FILE <- "5_Statistical_Models/models/mg_fast_vs_nonfast_model.R"
 
 # Priority order for rep_data.csv:
 #   1. REP_DATA_CSV env var (explicit override)
@@ -59,12 +61,12 @@ RUN_ID <- Sys.getenv("RUN_ID", unset = "")
 if (!nzchar(RUN_ID)) {
   stop("FATAL: RUN_ID environment variable is REQUIRED. Example: RUN_ID=smoke_20260119_120000")
 }
-RUN_MODE <- Sys.getenv("RUN_MODE", unset = "main")  # smoke | main | Full_Deploy
+RUN_MODE <- Sys.getenv("RUN_MODE", unset = "main") # smoke | main | Full_Deploy
 
 # Predeclare globals (used with <<- inside set_out_base)
 OUT_BASE <- NULL
-OUT_RUN <- NULL     # The actual run folder: OUT_BASE/runs/RUN_ID
-OUT_RAW <- NULL     # Raw lavaan outputs
+OUT_RUN <- NULL # The actual run folder: OUT_BASE/runs/RUN_ID
+OUT_RAW <- NULL # Raw lavaan outputs
 OUT_FIGURES <- NULL
 OUT_TABLES <- NULL
 OUT_SYNTAX <- NULL
@@ -75,20 +77,20 @@ OUT_SENS <- NULL
 # MANIFEST-DRIVEN: All outputs go to OUT_BASE/runs/RUN_ID/
 set_out_base <- function(out_base, run_id) {
   OUT_BASE <<- out_base
-  OUT_RUN  <<- file.path(out_base, "runs", run_id)
-  
+  OUT_RUN <<- file.path(out_base, "runs", run_id)
+
   # All outputs within the run folder (manifest-driven structure)
-  OUT_RAW       <<- file.path(OUT_RUN, "raw")
-  OUT_FIGURES   <<- file.path(OUT_RUN, "figures")
-  OUT_TABLES    <<- file.path(OUT_RUN, "tables")
-  OUT_SYNTAX    <<- file.path(OUT_RUN, "raw", "syntax")
-  OUT_LOGS      <<- file.path(OUT_RUN, "logs")
-  OUT_SENS      <<- file.path(OUT_RUN, "raw", "sensitivity")
+  OUT_RAW <<- file.path(OUT_RUN, "raw")
+  OUT_FIGURES <<- file.path(OUT_RUN, "figures")
+  OUT_TABLES <<- file.path(OUT_RUN, "tables")
+  OUT_SYNTAX <<- file.path(OUT_RUN, "raw", "syntax")
+  OUT_LOGS <<- file.path(OUT_RUN, "logs")
+  OUT_SENS <<- file.path(OUT_RUN, "raw", "sensitivity")
 
   for (d in c(OUT_RUN, OUT_RAW, OUT_FIGURES, OUT_TABLES, OUT_SYNTAX, OUT_LOGS, OUT_SENS)) {
     dir.create(d, recursive = TRUE, showWarnings = FALSE)
   }
-  
+
   message("RUN_ID: ", run_id)
   message("RUN_MODE: ", RUN_MODE)
   message("Output folder: ", OUT_RUN)
@@ -102,7 +104,7 @@ set_out_base(Sys.getenv("OUT_BASE", unset = "4_Model_Results/Outputs"), RUN_ID)
 TREATMENT_VAR <- "x_FASt"
 
 
-DO_PSW       <- TRUE
+DO_PSW <- TRUE
 
 # -------------------------
 # TABLE-CHECK MODE (super-fast verification)
@@ -115,53 +117,61 @@ TABLE_CHECK_MODE <- env_flag("TABLE_CHECK_MODE", FALSE)
 # BOOTSTRAP + CI SETTINGS
 # -------------------------
 # Main/primary vs exploratory bootstrap counts
-B_BOOT_MAIN   <- 2000
-B_BOOT_TOTAL  <- 500
-B_BOOT_SERIAL <- 200
-B_BOOT_MG     <- 200
-B_BOOT_RACE   <- 200
+B_BOOT_MAIN <- 2000
+B_BOOT_TOTAL <- 500
+B_BOOT_SERIAL <- 10
+B_BOOT_MG <- 200
+B_BOOT_RACE <- 200
 
 # CI type by run (use "bca.simple" for final headline runs; "perc" or "none" for debug/smoke)
-BOOT_CI_TYPE_MAIN   <- "bca.simple"
-BOOT_CI_TYPE_TOTAL  <- "perc"
+BOOT_CI_TYPE_MAIN <- "bca.simple"
+BOOT_CI_TYPE_TOTAL <- "perc"
 BOOT_CI_TYPE_SERIAL <- "perc"
-BOOT_CI_TYPE_MG     <- "none"
-BOOT_CI_TYPE_RACE   <- "none"
+BOOT_CI_TYPE_MG <- "none"
+BOOT_CI_TYPE_RACE <- "none"
 
 # Allow env overrides for bootstrap settings (e.g., B=2000 runs)
 boot_int_env <- function(name, current) {
-  if (!has_env(name)) return(current)
+  if (!has_env(name)) {
+    return(current)
+  }
   v <- suppressWarnings(as.integer(Sys.getenv(name)))
-  if (is.na(v) || v < 0) return(current)
+  if (is.na(v) || v < 0) {
+    return(current)
+  }
   v
 }
 
 boot_chr_env <- function(name, current) {
-  if (!has_env(name)) return(current)
+  if (!has_env(name)) {
+    return(current)
+  }
   v <- Sys.getenv(name)
-  if (!nzchar(v)) return(current)
+  if (!nzchar(v)) {
+    return(current)
+  }
   v
 }
 
-B_BOOT_MAIN   <- boot_int_env("B_BOOT_MAIN",   B_BOOT_MAIN)
-B_BOOT_TOTAL  <- boot_int_env("B_BOOT_TOTAL",  B_BOOT_TOTAL)
+B_BOOT_MAIN <- boot_int_env("B_BOOT_MAIN", B_BOOT_MAIN)
+B_BOOT_TOTAL <- boot_int_env("B_BOOT_TOTAL", B_BOOT_TOTAL)
 B_BOOT_SERIAL <- boot_int_env("B_BOOT_SERIAL", B_BOOT_SERIAL)
-B_BOOT_MG     <- boot_int_env("B_BOOT_MG",     B_BOOT_MG)
-B_BOOT_RACE   <- boot_int_env("B_BOOT_RACE",   B_BOOT_RACE)
+B_BOOT_MG <- boot_int_env("B_BOOT_MG", B_BOOT_MG)
+B_BOOT_RACE <- boot_int_env("B_BOOT_RACE", B_BOOT_RACE)
 
-BOOT_CI_TYPE_MAIN   <- boot_chr_env("BOOT_CI_TYPE_MAIN",   BOOT_CI_TYPE_MAIN)
-BOOT_CI_TYPE_TOTAL  <- boot_chr_env("BOOT_CI_TYPE_TOTAL",  BOOT_CI_TYPE_TOTAL)
+BOOT_CI_TYPE_MAIN <- boot_chr_env("BOOT_CI_TYPE_MAIN", BOOT_CI_TYPE_MAIN)
+BOOT_CI_TYPE_TOTAL <- boot_chr_env("BOOT_CI_TYPE_TOTAL", BOOT_CI_TYPE_TOTAL)
 BOOT_CI_TYPE_SERIAL <- boot_chr_env("BOOT_CI_TYPE_SERIAL", BOOT_CI_TYPE_SERIAL)
-BOOT_CI_TYPE_MG     <- boot_chr_env("BOOT_CI_TYPE_MG",     BOOT_CI_TYPE_MG)
-BOOT_CI_TYPE_RACE   <- boot_chr_env("BOOT_CI_TYPE_RACE",   BOOT_CI_TYPE_RACE)
+BOOT_CI_TYPE_MG <- boot_chr_env("BOOT_CI_TYPE_MG", BOOT_CI_TYPE_MG)
+BOOT_CI_TYPE_RACE <- boot_chr_env("BOOT_CI_TYPE_RACE", BOOT_CI_TYPE_RACE)
 
 # Don’t bootstrap multi-group / race unless you truly need bootstrap CIs
-BOOTSTRAP_MG   <- env_flag("BOOTSTRAP_MG", FALSE)
+BOOTSTRAP_MG <- env_flag("BOOTSTRAP_MG", FALSE)
 BOOTSTRAP_RACE <- env_flag("BOOTSTRAP_RACE", FALSE)
 
 # Bootstrap parallelization for lavaan (only used when bootstrap > 0)
 BOOT_PARALLEL <- "multicore"
-BOOT_NCPUS    <- 6
+BOOT_NCPUS <- 6
 
 # Allow env overrides (useful for smoke/table-check runs)
 if (has_env("BOOT_PARALLEL")) {
@@ -196,7 +206,7 @@ SMOKE_ONLY_A <- env_flag("SMOKE_ONLY_A", FALSE)
 SKIP_RQ4 <- env_flag("SKIP_RQ4", FALSE)
 SMOKE_B_BOOT <- suppressWarnings(as.integer(Sys.getenv(
   "SMOKE_B_BOOT",
-  unset = if (isTRUE(TABLE_CHECK_MODE)) "10" else "10"  # 10 is sufficient for smoke (just verify syntax)
+  unset = if (isTRUE(TABLE_CHECK_MODE)) "10" else "10" # 10 is sufficient for smoke (just verify syntax)
 )))
 if (is.na(SMOKE_B_BOOT) || SMOKE_B_BOOT < 0) SMOKE_B_BOOT <- 10
 SMOKE_BOOT_CI_TYPE <- Sys.getenv("SMOKE_BOOT_CI_TYPE", unset = "perc")
@@ -216,10 +226,10 @@ USE_PREPPED_DATA <- Sys.getenv("USE_PREPPED_DATA", unset = "")
 if (isTRUE(SMOKE_ONLY_A)) {
   # SMOKE mode: use reduced bootstraps (RUN_MODE should be "smoke")
   # Note: Output folder is already determined by RUN_ID (manifest-driven)
-  
+
   # Auto-skip post-processing (plots/tables) in smoke mode unless explicitly requested
   if (!has_env("SKIP_POST_PROCESSING")) SKIP_POST_PROCESSING <- TRUE
-  
+
   B_BOOT_MAIN <- SMOKE_B_BOOT
   B_BOOT_TOTAL <- SMOKE_B_BOOT
   B_BOOT_SERIAL <- SMOKE_B_BOOT
@@ -247,10 +257,10 @@ if (isTRUE(SMOKE_ONLY_A)) {
 
 # Formal W assignment (indexed W1..W5)
 W_DEFINITIONS <- list(
-  W1 = list(var = "re_all",   label = "Race/Ethnicity"),
+  W1 = list(var = "re_all", label = "Race/Ethnicity"),
   W2 = list(var = "firstgen", label = "First-Generation Status"),
-  W3 = list(var = "pell",     label = "Pell Status"),
-  W4 = list(var = "sex",      label = "Sex/Gender"),
+  W3 = list(var = "pell", label = "Pell Status"),
+  W4 = list(var = "sex", label = "Sex/Gender"),
   W5 = list(var = "living18", label = "Living Arrangement")
 )
 
@@ -267,15 +277,15 @@ if (nzchar(W_SELECT_ENV)) {
 }
 
 # Extract variable names for measurement and structural analyses
-W_VARS_MEAS   <- sapply(W_DEFINITIONS, function(x) x$var)   # c("re_all", "firstgen", ...)
-W_VARS_STRUCT <- W_VARS_MEAS  # Same variables for structural MG
+W_VARS_MEAS <- sapply(W_DEFINITIONS, function(x) x$var) # c("re_all", "firstgen", ...)
+W_VARS_STRUCT <- W_VARS_MEAS # Same variables for structural MG
 
 # Human-readable labels for output tables
 W_LABELS <- sapply(W_DEFINITIONS, function(x) x$label)
 names(W_LABELS) <- W_VARS_MEAS
 
 MIN_W_N_STRUCT <- 200
-HANDLE_SMALL_W_STRUCT <- "drop"   # "warn" | "drop" | "combine"
+HANDLE_SMALL_W_STRUCT <- "drop" # "warn" | "drop" | "combine"
 OTHER_LABEL_W_STRUCT <- "Other"
 
 # Reference (baseline) group for each W in multi-group structural runs (g1)
@@ -293,19 +303,19 @@ W_REF_LEVEL <- list(
 PSW_WITHIN_GROUP_FOR_MG <- FALSE
 
 # RQ4 structural stratified-by-race (exploratory; NOT multi-group)
-RACE_VAR     <- "re_all"        # W1 variable name
-MIN_RACE_N   <- 200             # skip race cells smaller than this for structural run
+RACE_VAR <- "re_all" # W1 variable name
+MIN_RACE_N <- 200 # skip race cells smaller than this for structural run
 
 # Handling small W categories for measurement invariance
-MIN_W_N_MEAS     <- 200
-HANDLE_SMALL_W   <- "drop"      # "warn" | "drop" | "combine"
-OTHER_LABEL_W    <- "Other"
+MIN_W_N_MEAS <- 200
+HANDLE_SMALL_W <- "drop" # "warn" | "drop" | "combine"
+OTHER_LABEL_W <- "Other"
 
 # PSW overlap-weight covariates (edit only if your covariate table changes)
 # NOTE: Use centered versions for continuous covariates. Cohort is excluded from PSW.
 PSW_COVARS <- c(
-  "hgrades_c","bparented_c","hapcl_c","hprecalc13_c","hchallenge_c","cSFcareer_c",
-  "hacadpr13_c","tcare_c","StemMaj_c"
+  "hgrades_c", "bparented_c", "hapcl_c", "hprecalc13_c", "hchallenge_c", "cSFcareer_c",
+  "hacadpr13_c", "tcare_c", "StemMaj_c"
 )
 
 # -------------------------
@@ -399,7 +409,9 @@ dat$archetype_name <- as.character(arch$archetype_name[idx_arch])
 # -------------------------
 
 .as_num01 <- function(x) {
-  if (is.logical(x)) return(as.integer(x))
+  if (is.logical(x)) {
+    return(as.integer(x))
+  }
   x <- as.character(x)
   x <- trimws(x)
   suppressWarnings(as.integer(x))
@@ -488,7 +500,6 @@ if ("sex" %in% names(dat)) {
 }
 
 
-
 # -------------------------
 # Single source-of-truth derived X/Z/moderation terms
 # -------------------------
@@ -506,7 +517,9 @@ dat[[TREATMENT_VAR]] <- as.integer(dat$trnsfr_cr >= 12)
 tol_derived <- 1e-10
 
 .mx_abs_diff <- function(a, b) {
-  if (length(a) != length(b)) return(Inf)
+  if (length(a) != length(b)) {
+    return(Inf)
+  }
   suppressWarnings(max(abs(a - b), na.rm = TRUE))
 }
 
@@ -522,11 +535,11 @@ calc_XZ_c <- dat[[TREATMENT_VAR]] * calc_credit_dose_c
 # Guard: if alternate naming schemes exist, they must be identical to the computed truth
 guards <- list(
   credit_dose_raw = list(present = "credit_dose_raw" %in% names(dat), expected = calc_credit_dose),
-  credit_dose     = list(present = "credit_dose" %in% names(dat),     expected = calc_credit_dose),
-  Z               = list(present = "Z" %in% names(dat),               expected = calc_credit_dose),
-  Z_c             = list(present = "Z_c" %in% names(dat),             expected = calc_credit_dose_c),
-  XZ              = list(present = "XZ" %in% names(dat),              expected = calc_XZ_c),
-  XZ_c            = list(present = "XZ_c" %in% names(dat),            expected = calc_XZ_c)
+  credit_dose     = list(present = "credit_dose" %in% names(dat), expected = calc_credit_dose),
+  Z               = list(present = "Z" %in% names(dat), expected = calc_credit_dose),
+  Z_c             = list(present = "Z_c" %in% names(dat), expected = calc_credit_dose_c),
+  XZ              = list(present = "XZ" %in% names(dat), expected = calc_XZ_c),
+  XZ_c            = list(present = "XZ_c" %in% names(dat), expected = calc_XZ_c)
 )
 
 guard_mx <- data.frame(var = character(0), max_abs_diff = numeric(0), stringsAsFactors = FALSE)
@@ -557,7 +570,6 @@ if (!("hgrades" %in% names(dat))) stop("rep_data missing required column: hgrade
 dat$hgrades <- suppressWarnings(as.numeric(dat$hgrades))
 n_hgrades_9 <- sum(dat$hgrades == 9, na.rm = TRUE)
 if (n_hgrades_9 > 0) {
-
   message("[hgrades] Merging ", n_hgrades_9, " cases with hgrades=9 (A+) into hgrades=8 (A)")
   dat$hgrades[dat$hgrades == 9] <- 8
 }
@@ -587,14 +599,18 @@ if (had_mhw_financial && had_mhw_finance) {
 # Controls/comparison groups (3-level credit band)
 dat$credit_band <- factor(
   ifelse(dat$trnsfr_cr == 0, "non_DE",
-         ifelse(dat$trnsfr_cr >= 1 & dat$trnsfr_cr <= 11, "non_FASt_1_11",
-                ifelse(dat$trnsfr_cr >= 12, "FASt_12plus", NA))),
+    ifelse(dat$trnsfr_cr >= 1 & dat$trnsfr_cr <= 11, "non_FASt_1_11",
+      ifelse(dat$trnsfr_cr >= 12, "FASt_12plus", NA)
+    )
+  ),
   levels = c("non_DE", "non_FASt_1_11", "FASt_12plus")
 )
 
 # Item recode integrity (range enforcement; no collapsing)
 .add_recode_counts <- function(out, var, bad_values, rule) {
-  if (length(bad_values) == 0) return(out)
+  if (length(bad_values) == 0) {
+    return(out)
+  }
   tt <- table(bad_values)
   data.frame(
     var = rep(var, length(tt)),
@@ -608,7 +624,9 @@ dat$credit_band <- factor(
 .enforce_range <- function(d, vars, allowed, rule_label, treat_9_as_na = FALSE) {
   rep <- data.frame(var = character(0), value = character(0), n = integer(0), rule = character(0), stringsAsFactors = FALSE)
   vars <- vars[vars %in% names(d)]
-  if (length(vars) == 0) return(list(dat = d, report = rep))
+  if (length(vars) == 0) {
+    return(list(dat = d, report = rep))
+  }
   for (v in vars) {
     x <- suppressWarnings(as.numeric(d[[v]]))
     # 9 -> NA only when explicitly requested (MHW)
@@ -636,15 +654,18 @@ four_pt_items <- c(
   "evalexp", "sameinst"
 )
 mhw_items <- c("MHWdacad", "MHWdlonely", "MHWdmental", "MHWdexhaust", "MHWdsleep", "MHWdfinancial")
-qi_items  <- c("QIadmin", "QIstudent", "QIadvisor", "QIfaculty", "QIstaff")
+qi_items <- c("QIadmin", "QIstudent", "QIadvisor", "QIfaculty", "QIstaff")
 
 recode_all <- data.frame(var = character(0), value = character(0), n = integer(0), rule = character(0), stringsAsFactors = FALSE)
 tmp <- .enforce_range(dat, four_pt_items, allowed = 1:4, rule_label = "out_of_range_1_4", treat_9_as_na = FALSE)
-dat <- tmp$dat; recode_all <- rbind(recode_all, tmp$report)
+dat <- tmp$dat
+recode_all <- rbind(recode_all, tmp$report)
 tmp <- .enforce_range(dat, mhw_items, allowed = 1:6, rule_label = "out_of_range_1_6", treat_9_as_na = TRUE)
-dat <- tmp$dat; recode_all <- rbind(recode_all, tmp$report)
+dat <- tmp$dat
+recode_all <- rbind(recode_all, tmp$report)
 tmp <- .enforce_range(dat, qi_items, allowed = 1:7, rule_label = "out_of_range_1_7", treat_9_as_na = FALSE)
-dat <- tmp$dat; recode_all <- rbind(recode_all, tmp$report)
+dat <- tmp$dat
+recode_all <- rbind(recode_all, tmp$report)
 
 recode_report_path <- file.path(OUT_LOGS, "recode_report.tsv")
 if (nrow(recode_all) == 0) {
@@ -703,23 +724,23 @@ if (!isTRUE(cent_ok)) {
 }
 
 req <- c(
-  "x_FASt","trnsfr_cr","credit_dose","credit_dose_c","XZ_c","credit_band","cohort",
-  "hgrades","hgrades_c","bparented_c","pell",
-  "hapcl","hapcl_c","hprecalc13","hprecalc13_c","StemMaj","StemMaj_c",
-  "hacadpr13","hacadpr13_c","tcare","tcare_c",
-  "hchallenge_c","cSFcareer_c",
-  "sbvalued","sbmyself","sbcommunity",
-  "pganalyze","pgthink","pgwork","pgvalues","pgprobsolve",
-  "SEacademic","SEwellness","SEnonacad","SEactivities","SEdiverse",
-  "sameinst","evalexp",
-  "MHWdacad","MHWdlonely","MHWdmental","MHWdexhaust","MHWdsleep","MHWdfinancial",
-  "QIadmin","QIstudent","QIadvisor","QIfaculty","QIstaff"
+  "x_FASt", "trnsfr_cr", "credit_dose", "credit_dose_c", "XZ_c", "credit_band", "cohort",
+  "hgrades", "hgrades_c", "bparented_c", "pell",
+  "hapcl", "hapcl_c", "hprecalc13", "hprecalc13_c", "StemMaj", "StemMaj_c",
+  "hacadpr13", "hacadpr13_c", "tcare", "tcare_c",
+  "hchallenge_c", "cSFcareer_c",
+  "sbvalued", "sbmyself", "sbcommunity",
+  "pganalyze", "pgthink", "pgwork", "pgvalues", "pgprobsolve",
+  "SEacademic", "SEwellness", "SEnonacad", "SEactivities", "SEdiverse",
+  "sameinst", "evalexp",
+  "MHWdacad", "MHWdlonely", "MHWdmental", "MHWdexhaust", "MHWdsleep", "MHWdfinancial",
+  "QIadmin", "QIstudent", "QIadvisor", "QIfaculty", "QIstaff"
 )
 miss <- setdiff(req, names(dat))
 if (length(miss) > 0) stop("rep_data missing required columns: ", paste(miss, collapse = ", "))
 
 # Coerce binary covariates used in regressions to numeric 0/1 (robust to character/logic)
-for (v in c("pell","hapcl","hprecalc13","StemMaj")) {
+for (v in c("pell", "hapcl", "hprecalc13", "StemMaj")) {
   if (v %in% names(dat)) dat[[v]] <- .as_num01(dat[[v]])
 }
 
@@ -883,7 +904,9 @@ if (!is.null(mhw_raw) && ncol(mhw_raw) > 0) {
     cat("min/max after recode(9->NA): ", mn, "/", mx, "\n", sep = "", file = con, append = TRUE)
     cat("n_raw_9=", n9, "  n_analysis_NA=", nNA, "\n", sep = "", file = con, append = TRUE)
     cat("max_abs_pp_dev_to_anchorA=", format(devA, digits = 4), "  max_abs_pp_dev_to_anchorB=", format(devB, digits = 4),
-        "  best=", best, " (", format(best_dev, digits = 4), ")\n", sep = "", file = con, append = TRUE)
+      "  best=", best, " (", format(best_dev, digits = 4), ")\n",
+      sep = "", file = con, append = TRUE
+    )
   }
   cat("\n", file = con, append = TRUE)
 }
@@ -936,50 +959,49 @@ if (!is.null(mhw_raw) && ncol(mhw_raw) > 0) {
 
 cat("(7) Indicator directional alignment (higher = more of construct)\n", file = con, append = TRUE)
 cat("Belonging (SB): higher => more belonging (Strongly disagree=1 ... Strongly agree=4)\n", file = con, append = TRUE)
-chk <- .dir_check(dat, c("sbvalued","sbmyself","sbcommunity"), expected_min = 1, expected_max = 4, label = "Belong")
+chk <- .dir_check(dat, c("sbvalued", "sbmyself", "sbcommunity"), expected_min = 1, expected_max = 4, label = "Belong")
 cat(paste(capture.output(chk$range), collapse = "\n"), "\n", file = con, append = TRUE)
 cat(paste(capture.output(chk$corr), collapse = "\n"), "\n\n", file = con, append = TRUE)
 
 cat("Gains (PG): higher => more gains (Very little=1 ... Very much=4)\n", file = con, append = TRUE)
-chk <- .dir_check(dat, c("pganalyze","pgthink","pgwork","pgvalues","pgprobsolve"), expected_min = 1, expected_max = 4, label = "Gains")
+chk <- .dir_check(dat, c("pganalyze", "pgthink", "pgwork", "pgvalues", "pgprobsolve"), expected_min = 1, expected_max = 4, label = "Gains")
 cat(paste(capture.output(chk$range), collapse = "\n"), "\n", file = con, append = TRUE)
 cat(paste(capture.output(chk$corr), collapse = "\n"), "\n\n", file = con, append = TRUE)
 
 cat("SupportEnv (SE): higher => more support (Very little=1 ... Very much=4)\n", file = con, append = TRUE)
-chk <- .dir_check(dat, c("SEacademic","SEwellness","SEnonacad","SEactivities","SEdiverse"), expected_min = 1, expected_max = 4, label = "SupportEnv")
+chk <- .dir_check(dat, c("SEacademic", "SEwellness", "SEnonacad", "SEactivities", "SEdiverse"), expected_min = 1, expected_max = 4, label = "SupportEnv")
 cat(paste(capture.output(chk$range), collapse = "\n"), "\n", file = con, append = TRUE)
 cat(paste(capture.output(chk$corr), collapse = "\n"), "\n\n", file = con, append = TRUE)
 
 cat("Satisf: higher => more satisfaction (evalexp: Poor=1..Excellent=4; sameinst: Def no=1..Def yes=4)\n", file = con, append = TRUE)
-chk <- .dir_check(dat, c("sameinst","evalexp"), expected_min = 1, expected_max = 4, label = "Satisf")
+chk <- .dir_check(dat, c("sameinst", "evalexp"), expected_min = 1, expected_max = 4, label = "Satisf")
 cat(paste(capture.output(chk$range), collapse = "\n"), "\n", file = con, append = TRUE)
 cat(paste(capture.output(chk$corr), collapse = "\n"), "\n\n", file = con, append = TRUE)
 
 cat("EmoDiss (MHW difficulty): higher => more difficulty/distress (no collapsing in pipeline; expected raw scale up to 6)\n", file = con, append = TRUE)
-chk <- .dir_check(dat, c("MHWdacad","MHWdlonely","MHWdmental","MHWdexhaust","MHWdsleep","MHWdfinancial"), expected_min = 1, expected_max = 6, label = "EmoDiss")
+chk <- .dir_check(dat, c("MHWdacad", "MHWdlonely", "MHWdmental", "MHWdexhaust", "MHWdsleep", "MHWdfinancial"), expected_min = 1, expected_max = 6, label = "EmoDiss")
 cat(paste(capture.output(chk$range), collapse = "\n"), "\n", file = con, append = TRUE)
 cat(paste(capture.output(chk$corr), collapse = "\n"), "\n\n", file = con, append = TRUE)
 
 cat("QualEngag (QI only): higher => better interactions (Poor=1..Excellent=7)\n", file = con, append = TRUE)
-chk <- .dir_check(dat, c("QIadmin","QIstudent","QIadvisor","QIfaculty","QIstaff"), expected_min = 1, expected_max = 7, label = "QualEngag")
+chk <- .dir_check(dat, c("QIadmin", "QIstudent", "QIadvisor", "QIfaculty", "QIstaff"), expected_min = 1, expected_max = 7, label = "QualEngag")
 cat(paste(capture.output(chk$range), collapse = "\n"), "\n", file = con, append = TRUE)
 cat(paste(capture.output(chk$corr), collapse = "\n"), "\n\n", file = con, append = TRUE)
 
 cat("(1) Composite proxies rebuilt from raw items (not used in SEM)\n", file = con, append = TRUE)
-Belong_comp <- rowMeans(dat[, c("sbvalued","sbmyself","sbcommunity")], na.rm = TRUE)
-Gains_comp  <- rowMeans(dat[, c("pganalyze","pgthink","pgwork","pgvalues","pgprobsolve")], na.rm = TRUE)
-SupportEnv_comp <- rowMeans(dat[, c("SEacademic","SEwellness","SEnonacad","SEactivities","SEdiverse")], na.rm = TRUE)
-Satisf_comp <- rowMeans(dat[, c("sameinst","evalexp")], na.rm = TRUE)
-EmoDiss_comp <- rowMeans(dat[, c("MHWdacad","MHWdlonely","MHWdmental","MHWdexhaust","MHWdsleep","MHWdfinancial")], na.rm = TRUE)
-QualEngag_comp <- rowMeans(dat[, c("QIadmin","QIstudent","QIadvisor","QIfaculty","QIstaff")], na.rm = TRUE)
+Belong_comp <- rowMeans(dat[, c("sbvalued", "sbmyself", "sbcommunity")], na.rm = TRUE)
+Gains_comp <- rowMeans(dat[, c("pganalyze", "pgthink", "pgwork", "pgvalues", "pgprobsolve")], na.rm = TRUE)
+SupportEnv_comp <- rowMeans(dat[, c("SEacademic", "SEwellness", "SEnonacad", "SEactivities", "SEdiverse")], na.rm = TRUE)
+Satisf_comp <- rowMeans(dat[, c("sameinst", "evalexp")], na.rm = TRUE)
+EmoDiss_comp <- rowMeans(dat[, c("MHWdacad", "MHWdlonely", "MHWdmental", "MHWdexhaust", "MHWdsleep", "MHWdfinancial")], na.rm = TRUE)
+QualEngag_comp <- rowMeans(dat[, c("QIadmin", "QIstudent", "QIadvisor", "QIfaculty", "QIstaff")], na.rm = TRUE)
 DevAdj_comp <- rowMeans(cbind(Belong_comp, Gains_comp, SupportEnv_comp, Satisf_comp), na.rm = TRUE)
 
 
-for (nm in c("DevAdj","EmoDiss","QualEngag")) {
+for (nm in c("DevAdj", "EmoDiss", "QualEngag")) {
   if (nm %in% names(dat)) {
     ex <- suppressWarnings(as.numeric(dat[[nm]]))
-    cmpv <- switch(
-      nm,
+    cmpv <- switch(nm,
       DevAdj = DevAdj_comp,
       EmoDiss = EmoDiss_comp,
       QualEngag = QualEngag_comp
@@ -996,16 +1018,20 @@ message("Wrote verification checklist: ", verif_path)
 # WEIGHTING HELPERS (PSW overlap weights) + balance check
 # -------------------------
 w_mean <- function(x, w) sum(w * x, na.rm = TRUE) / sum(w[!is.na(x)], na.rm = TRUE)
-w_var  <- function(x, w) {
+w_var <- function(x, w) {
   m <- w_mean(x, w)
   sum(w * (x - m)^2, na.rm = TRUE) / sum(w[!is.na(x)], na.rm = TRUE)
 }
 smd <- function(x, g, w = NULL) {
   if (is.null(w)) w <- rep(1, length(g))
-  x0 <- x[g == 0]; w0 <- w[g == 0]
-  x1 <- x[g == 1]; w1 <- w[g == 1]
-  m0 <- w_mean(x0, w0); m1 <- w_mean(x1, w1)
-  v0 <- w_var(x0, w0);  v1 <- w_var(x1, w1)
+  x0 <- x[g == 0]
+  w0 <- w[g == 0]
+  x1 <- x[g == 1]
+  w1 <- w[g == 1]
+  m0 <- w_mean(x0, w0)
+  m1 <- w_mean(x1, w1)
+  v0 <- w_var(x0, w0)
+  v1 <- w_var(x1, w1)
   (m1 - m0) / sqrt((v0 + v1) / 2)
 }
 
@@ -1045,24 +1071,27 @@ compute_psw_overlap <- function(d, x = "x_FASt", covars, out_txt = NULL) {
 
 balance_table <- function(d, x = "x_FASt", covars, wcol = "psw") {
   g <- as.numeric(d[[x]])
-  out <- data.frame(covariate = covars, smd_unweighted = NA_real_, smd_weighted = NA_real_,
-                    vr_unweighted = NA_real_, vr_weighted = NA_real_)
+  out <- data.frame(
+    covariate = covars, smd_unweighted = NA_real_, smd_weighted = NA_real_,
+    vr_unweighted = NA_real_, vr_weighted = NA_real_
+  )
   for (i in seq_along(covars)) {
     v <- d[[covars[[i]]]]
     w_unit <- rep(1, length(g))
-    w_psw <- d[[wcol]]; w_psw[is.na(w_psw)] <- 0
-    
+    w_psw <- d[[wcol]]
+    w_psw[is.na(w_psw)] <- 0
+
     out$smd_unweighted[i] <- smd(v, g, w = w_unit)
-    out$smd_weighted[i]   <- smd(v, g, w = w_psw)
-    
+    out$smd_weighted[i] <- smd(v, g, w = w_psw)
+
     # Variance ratio (VR): ratio of weighted variances (treated / control)
-    var_t_uw <- weighted.mean((v[g==1] - weighted.mean(v[g==1], w_unit[g==1], na.rm=TRUE))^2, w_unit[g==1], na.rm=TRUE)
-    var_c_uw <- weighted.mean((v[g==0] - weighted.mean(v[g==0], w_unit[g==0], na.rm=TRUE))^2, w_unit[g==0], na.rm=TRUE)
-    var_t_w  <- weighted.mean((v[g==1] - weighted.mean(v[g==1], w_psw[g==1], na.rm=TRUE))^2, w_psw[g==1], na.rm=TRUE)
-    var_c_w  <- weighted.mean((v[g==0] - weighted.mean(v[g==0], w_psw[g==0], na.rm=TRUE))^2, w_psw[g==0], na.rm=TRUE)
-    
-    out$vr_unweighted[i] <- if(var_c_uw > 0) var_t_uw / var_c_uw else NA_real_
-    out$vr_weighted[i]   <- if(var_c_w > 0) var_t_w / var_c_w else NA_real_
+    var_t_uw <- weighted.mean((v[g == 1] - weighted.mean(v[g == 1], w_unit[g == 1], na.rm = TRUE))^2, w_unit[g == 1], na.rm = TRUE)
+    var_c_uw <- weighted.mean((v[g == 0] - weighted.mean(v[g == 0], w_unit[g == 0], na.rm = TRUE))^2, w_unit[g == 0], na.rm = TRUE)
+    var_t_w <- weighted.mean((v[g == 1] - weighted.mean(v[g == 1], w_psw[g == 1], na.rm = TRUE))^2, w_psw[g == 1], na.rm = TRUE)
+    var_c_w <- weighted.mean((v[g == 0] - weighted.mean(v[g == 0], w_psw[g == 0], na.rm = TRUE))^2, w_psw[g == 0], na.rm = TRUE)
+
+    out$vr_unweighted[i] <- if (var_c_uw > 0) var_t_uw / var_c_uw else NA_real_
+    out$vr_weighted[i] <- if (var_c_w > 0) var_t_w / var_c_w else NA_real_
   }
   out
 }
@@ -1080,18 +1109,20 @@ if (nzchar(USE_PREPPED_DATA) && file.exists(USE_PREPPED_DATA)) {
   if (!"psw" %in% names(dat_main)) {
     stop("USE_PREPPED_DATA file missing 'psw' column: ", USE_PREPPED_DATA)
   }
-  message("[USE_PREPPED_DATA] Skipping PSW computation (N=", nrow(dat_main), ", psw range: ",
-          round(min(dat_main$psw, na.rm=TRUE), 3), "-", round(max(dat_main$psw, na.rm=TRUE), 3), ")")
+  message(
+    "[USE_PREPPED_DATA] Skipping PSW computation (N=", nrow(dat_main), ", psw range: ",
+    round(min(dat_main$psw, na.rm = TRUE), 3), "-", round(max(dat_main$psw, na.rm = TRUE), 3), ")"
+  )
   # Copy prepped data to output folder for reference
   file.copy(USE_PREPPED_DATA, file.path(out_main, "rep_data_with_psw.csv"), overwrite = TRUE)
 } else {
   dat_main <- dat
-  
+
   # PSW is always computed and used in the official pipeline.
   psw_result <- compute_psw_overlap(dat_main, x = TREATMENT_VAR, covars = PSW_COVARS, out_txt = file.path(out_main, "psw_stage_report.txt"))
   dat_main <- psw_result$data
   ps_mod <- psw_result$model
-  
+
   # Export PS model coefficients for Table 4
   ps_summary <- summary(ps_mod)
   ps_coef <- as.data.frame(ps_summary$coefficients)
@@ -1102,7 +1133,7 @@ if (nzchar(USE_PREPPED_DATA) && file.exists(USE_PREPPED_DATA)) {
   ps_coef <- ps_coef[, c("term", "Estimate", "Std. Error", "z value", "Pr(>|z|)", "odds_ratio", "or_ci_low", "or_ci_high")]
   names(ps_coef) <- c("term", "estimate", "std_error", "z_value", "p_value", "odds_ratio", "or_ci_low", "or_ci_high")
   write.csv(ps_coef, file.path(out_main, "ps_model.csv"), row.names = FALSE)
-  
+
   # Export weight diagnostics for Table 6
   ws <- dat_main$psw[!is.na(dat_main$psw)]
   weight_diag <- data.frame(
@@ -1118,11 +1149,11 @@ if (nzchar(USE_PREPPED_DATA) && file.exists(USE_PREPPED_DATA)) {
       sd(ws),
       sum(ws < 0.1),
       sum(ws > 10),
-      sum(ws)^2 / sum(ws^2)  # Effective sample size
+      sum(ws)^2 / sum(ws^2) # Effective sample size
     )
   )
   write.csv(weight_diag, file.path(out_main, "weight_diagnostics.csv"), row.names = FALSE)
-  
+
   bal <- balance_table(dat_main, x = TREATMENT_VAR, covars = PSW_COVARS)
   write.table(bal, file.path(out_main, "psw_balance_smd.txt"), sep = "\t", row.names = FALSE, quote = FALSE)
   write.csv(dat_main, file.path(out_main, "rep_data_with_psw.csv"), row.names = FALSE)
@@ -1250,56 +1281,64 @@ if (file.exists(BOOTSTRAP_SOURCE_TSV)) {
 message("\n=== Exporting cfa_loadings.csv (measurement model for Table 7) ===")
 CFA_LOADINGS_CSV <- file.path(OUT_RAW, "cfa_loadings.csv")
 
-tryCatch({
-  # Extract parameter estimates from fit_main (the main SEM includes measurement model)
-  pe_all <- parameterEstimates(fit_main, standardized = TRUE)
-  
-  # Filter to factor loadings only (op == "=~")
-  loadings_df <- pe_all[pe_all$op == "=~", c("lhs", "rhs", "est", "se", "z", "pvalue", "std.all")]
-  names(loadings_df) <- c("factor", "indicator", "loading", "se", "z", "pvalue", "std_loading")
-  
-  # Compute omega and AVE for each factor
-  omega_vals <- tryCatch({
-    semTools::compRelSEM(fit_main)
-  }, error = function(e) {
-    # If full model fails, try computing manually from loadings
-    NULL
-  })
-  
-  ave_vals <- tryCatch({
-    semTools::AVE(fit_main)
-  }, error = function(e) NULL)
-  
-  # Add omega and AVE columns (factor-level, repeated for each indicator)
-  if (!is.null(omega_vals)) {
-    loadings_df$omega <- sapply(loadings_df$factor, function(f) {
-      if (f %in% names(omega_vals)) omega_vals[f] else NA_real_
-    })
-  } else {
-    loadings_df$omega <- NA_real_
+tryCatch(
+  {
+    # Extract parameter estimates from fit_main (the main SEM includes measurement model)
+    pe_all <- parameterEstimates(fit_main, standardized = TRUE)
+
+    # Filter to factor loadings only (op == "=~")
+    loadings_df <- pe_all[pe_all$op == "=~", c("lhs", "rhs", "est", "se", "z", "pvalue", "std.all")]
+    names(loadings_df) <- c("factor", "indicator", "loading", "se", "z", "pvalue", "std_loading")
+
+    # Compute omega and AVE for each factor
+    omega_vals <- tryCatch(
+      {
+        semTools::compRelSEM(fit_main)
+      },
+      error = function(e) {
+        # If full model fails, try computing manually from loadings
+        NULL
+      }
+    )
+
+    ave_vals <- tryCatch(
+      {
+        semTools::AVE(fit_main)
+      },
+      error = function(e) NULL
+    )
+
+    # Add omega and AVE columns (factor-level, repeated for each indicator)
+    if (!is.null(omega_vals)) {
+      loadings_df$omega <- sapply(loadings_df$factor, function(f) {
+        if (f %in% names(omega_vals)) omega_vals[f] else NA_real_
+      })
+    } else {
+      loadings_df$omega <- NA_real_
+    }
+
+    if (!is.null(ave_vals)) {
+      loadings_df$ave <- sapply(loadings_df$factor, function(f) {
+        if (f %in% names(ave_vals)) ave_vals[f] else NA_real_
+      })
+    } else {
+      loadings_df$ave <- NA_real_
+    }
+
+    # Add model fit indices at the end (as attributes or separate row)
+    fit_indices <- fitMeasures(fit_main, c("chisq", "df", "pvalue", "cfi", "tli", "rmsea", "srmr"))
+    loadings_df$model_cfi <- fit_indices["cfi"]
+    loadings_df$model_tli <- fit_indices["tli"]
+    loadings_df$model_rmsea <- fit_indices["rmsea"]
+    loadings_df$model_srmr <- fit_indices["srmr"]
+
+    write.csv(loadings_df, file = CFA_LOADINGS_CSV, row.names = FALSE, na = "")
+    message("Wrote: ", CFA_LOADINGS_CSV, " (", nrow(loadings_df), " loadings)")
+  },
+  error = function(e) {
+    warning("Could not export CFA loadings: ", e$message)
   }
-  
-  if (!is.null(ave_vals)) {
-    loadings_df$ave <- sapply(loadings_df$factor, function(f) {
-      if (f %in% names(ave_vals)) ave_vals[f] else NA_real_
-    })
-  } else {
-    loadings_df$ave <- NA_real_
-  }
-  
-  # Add model fit indices at the end (as attributes or separate row)
-  fit_indices <- fitMeasures(fit_main, c("chisq", "df", "pvalue", "cfi", "tli", "rmsea", "srmr"))
-  loadings_df$model_cfi <- fit_indices["cfi"]
-  loadings_df$model_tli <- fit_indices["tli"]
-  loadings_df$model_rmsea <- fit_indices["rmsea"]
-  loadings_df$model_srmr <- fit_indices["srmr"]
-  
-  write.csv(loadings_df, file = CFA_LOADINGS_CSV, row.names = FALSE, na = "")
-  message("Wrote: ", CFA_LOADINGS_CSV, " (", nrow(loadings_df), " loadings)")
-  
-}, error = function(e) {
-  warning("Could not export CFA loadings: ", e$message)
-})
+)
 
 # -------------------------
 # Sensitivity: unweighted parallel fit (for Table 12)
@@ -1333,13 +1372,15 @@ unweighted_pe_path <- file.path(out_sens, "structural", "structural_parameterEst
 if (file.exists(weighted_pe_path) && file.exists(unweighted_pe_path)) {
   pe_wt <- tryCatch(read.delim(weighted_pe_path, stringsAsFactors = FALSE), error = function(e) NULL)
   pe_unwt <- tryCatch(read.delim(unweighted_pe_path, stringsAsFactors = FALSE), error = function(e) NULL)
-  
+
   if (!is.null(pe_wt) && !is.null(pe_unwt) && nrow(pe_wt) > 0 && nrow(pe_unwt) > 0) {
     # Key parameters for robustness comparison
-    key_params <- c("a1", "a2", "b1", "b2", "c", "a1z", "a2z", "cz",
-                    "ind_EmoDiss_z_mid", "ind_QualEngag_z_mid",
-                    "index_MM_EmoDiss", "index_MM_QualEngag", "total_z_mid")
-    
+    key_params <- c(
+      "a1", "a2", "b1", "b2", "c", "a1z", "a2z", "cz",
+      "ind_EmoDiss_z_mid", "ind_QualEngag_z_mid",
+      "index_MM_EmoDiss", "index_MM_QualEngag", "total_z_mid"
+    )
+
     # Human-readable labels
     param_labels <- c(
       a1 = "X → M₁ (EmoDiss)",
@@ -1356,14 +1397,16 @@ if (file.exists(weighted_pe_path) && file.exists(unweighted_pe_path)) {
       index_MM_QualEngag = "IMM (QualEngag)",
       total_z_mid = "Total Effect"
     )
-    
+
     # Helper: extract parameter by label or lhs (for := defined)
     get_param <- function(pe, param) {
       idx <- which(pe$label == param)
       if (length(idx) == 0) {
         idx <- which(pe$lhs == param & pe$op == ":=")
       }
-      if (length(idx) == 0) return(list(est = NA_real_, se = NA_real_, ci.lower = NA_real_, ci.upper = NA_real_))
+      if (length(idx) == 0) {
+        return(list(est = NA_real_, se = NA_real_, ci.lower = NA_real_, ci.upper = NA_real_))
+      }
       list(
         est = if ("est" %in% names(pe)) pe$est[idx[1]] else NA_real_,
         se = if ("se" %in% names(pe)) pe$se[idx[1]] else NA_real_,
@@ -1371,13 +1414,13 @@ if (file.exists(weighted_pe_path) && file.exists(unweighted_pe_path)) {
         ci.upper = if ("ci.upper" %in% names(pe)) pe$ci.upper[idx[1]] else NA_real_
       )
     }
-    
+
     robustness <- do.call(rbind, lapply(key_params, function(p) {
       wt <- get_param(pe_wt, p)
       unwt <- get_param(pe_unwt, p)
       diff_est <- abs(wt$est - unwt$est)
       diff_pct <- if (!is.na(wt$est) && abs(wt$est) > 0.001) 100 * diff_est / abs(wt$est) else NA_real_
-      
+
       data.frame(
         parameter = p,
         label = param_labels[p],
@@ -1392,16 +1435,18 @@ if (file.exists(weighted_pe_path) && file.exists(unweighted_pe_path)) {
         stringsAsFactors = FALSE
       )
     }))
-    
+
     write.csv(robustness, file = ROBUSTNESS_CSV, row.names = FALSE, na = "")
     message("Wrote: ", ROBUSTNESS_CSV)
   } else {
     warning("Could not parse parameter estimate files for robustness comparison")
   }
 } else {
-  warning("Missing parameter files for robustness comparison: ",
-          if (!file.exists(weighted_pe_path)) weighted_pe_path else "",
-          if (!file.exists(unweighted_pe_path)) unweighted_pe_path else "")
+  warning(
+    "Missing parameter files for robustness comparison: ",
+    if (!file.exists(weighted_pe_path)) weighted_pe_path else "",
+    if (!file.exists(unweighted_pe_path)) unweighted_pe_path else ""
+  )
 }
 
 # -------------------------
@@ -1433,331 +1478,335 @@ if (isTRUE(SMOKE_ONLY_A) || isTRUE(SKIP_RQ4)) {
   W_VARS_MEAS_OK <- character(0)
   W_VARS_STRUCT_OK <- character(0)
 } else {
-
-# -------------------------
-# RUN B: RQ4 measurement invariance for each W individually
-# -------------------------
-out_meas <- file.path(OUT_RAW, "RQ4_measurement")
-dir.create(out_meas, recursive = TRUE, showWarnings = FALSE)
-
-# Use the weighted dataset so measurement checks match the analysis sample
-dat_meas <- dat_main
-
-W_VARS_MEAS_OK <- W_VARS_MEAS[W_VARS_MEAS %in% names(dat_meas)]
-if (length(W_VARS_MEAS_OK) > 0) {
-  fit_invariance_for_W_list(
-    dat = dat_meas,
-    W_vars = W_VARS_MEAS_OK,
-    base_out_dir = out_meas,
-    estimator = "ML",
-    missing = "fiml",
-    fixed.x = TRUE,
-    weight_var = "psw",
-    min_group_n = MIN_W_N_MEAS,
-    handle_small = HANDLE_SMALL_W,
-    other_label = OTHER_LABEL_W
-  )
-  
   # -------------------------
-  # Export invariance_summary.csv (consolidated invariance results for Table 8)
+  # RUN B: RQ4 measurement invariance for each W individually
   # -------------------------
-  message("\n=== Exporting invariance_summary.csv (for Table 8) ===")
-  INVARIANCE_SUMMARY_CSV <- file.path(OUT_RAW, "invariance_summary.csv")
-  
-  inv_results <- lapply(W_VARS_MEAS_OK, function(w) {
-    stack_file <- file.path(out_meas, paste0("by_", w), "fit_index_stack.txt")
-    deltas_file <- file.path(out_meas, paste0("by_", w), "fit_change_deltas.txt")
-    
-    if (!file.exists(stack_file)) return(NULL)
-    
-    stack <- tryCatch(read.delim(stack_file, stringsAsFactors = FALSE), error = function(e) NULL)
-    deltas <- tryCatch(read.delim(deltas_file, stringsAsFactors = FALSE), error = function(e) NULL)
-    
-    if (is.null(stack) || nrow(stack) == 0) return(NULL)
-    
-    # Reshape stack to wide format (one row per model level)
-    stack_wide <- reshape(stack, idvar = "model", timevar = "measure", direction = "wide")
-    names(stack_wide) <- gsub("^value\\.", "", names(stack_wide))
-    stack_wide$W_var <- w
-    
-    # Add delta information if available
-    if (!is.null(deltas) && nrow(deltas) > 0) {
-      # Extract delta_CFI and delta_RMSEA for each step
-      for (i in seq_len(nrow(deltas))) {
-        step_name <- deltas$step[i]
-        if (grepl("configural_to_metric", step_name)) {
-          stack_wide$delta_cfi_config_metric <- deltas$delta_cfi[i]
-          stack_wide$delta_rmsea_config_metric <- deltas$delta_rmsea[i]
-        } else if (grepl("metric.*to_scalar", step_name)) {
-          stack_wide$delta_cfi_metric_scalar <- deltas$delta_cfi[i]
-          stack_wide$delta_rmsea_metric_scalar <- deltas$delta_rmsea[i]
-        }
-      }
-    }
-    
-    stack_wide
-  })
-  
-  inv_combined <- do.call(rbind, inv_results[!sapply(inv_results, is.null)])
-  
-  if (!is.null(inv_combined) && nrow(inv_combined) > 0) {
-    # Select key columns for Table 8
-    cols_to_keep <- c("W_var", "model", "chisq", "df", "cfi", "rmsea", "srmr",
-                      "delta_cfi_config_metric", "delta_rmsea_config_metric",
-                      "delta_cfi_metric_scalar", "delta_rmsea_metric_scalar")
-    cols_present <- cols_to_keep[cols_to_keep %in% names(inv_combined)]
-    inv_final <- inv_combined[, cols_present, drop = FALSE]
-    
-    write.csv(inv_final, file = INVARIANCE_SUMMARY_CSV, row.names = FALSE, na = "")
-    message("Wrote: ", INVARIANCE_SUMMARY_CSV, " (", nrow(inv_final), " rows)")
-  } else {
-    message("No invariance results to consolidate")
-  }
-}
+  out_meas <- file.path(OUT_RAW, "RQ4_measurement")
+  dir.create(out_meas, recursive = TRUE, showWarnings = FALSE)
 
-# Default for logging if structural MG block is skipped
-W_VARS_STRUCT_OK <- character(0)
+  # Use the weighted dataset so measurement checks match the analysis sample
+  dat_meas <- dat_main
 
-# -------------------------
-# RUN C2: RQ4 structural multi-group (each W separately)
-#   Same SEM across W groups; structural paths allowed to differ by group.
-#   Fast by default: no bootstrap unless BOOTSTRAP_MG == TRUE.
-# -------------------------
-if (!isTRUE(SKIP_RQ4_STRUCT_MG)) {
-  out_mg <- file.path(OUT_RAW, "RQ4_structural_MG")
-  dir.create(out_mg, recursive = TRUE, showWarnings = FALSE)
-
-  # Use the same weighted data as main model
-  dat_mg_base <- dat_main
-
-  W_VARS_STRUCT_OK <- W_VARS_STRUCT[W_VARS_STRUCT %in% names(dat_mg_base)]
-
-  # Decide bootstrap settings for MG runs
-  MG_BOOT <- if (isTRUE(BOOTSTRAP_MG)) B_BOOT_MG else 0
-  MG_CI   <- if (MG_BOOT > 0) BOOT_CI_TYPE_MG else "none"
-
-  for (i in seq_along(W_VARS_STRUCT_OK)) {
-    wvar <- W_VARS_STRUCT_OK[[i]]
-    out_w <- file.path(out_mg, paste0("W", i, "_", wvar))
-    dir.create(out_w, recursive = TRUE, showWarnings = FALSE)
-
-    dW <- dat_mg_base
-
-    # Coerce to factor for stable grouping
-    dW[[wvar]] <- as.character(dW[[wvar]])
-    dW[[wvar]] <- trimws(dW[[wvar]])
-    dW[[wvar]][dW[[wvar]] == ""] <- NA
-
-    # Handle small categories
-    tab <- table(dW[[wvar]], useNA = "no")
-    small_levels <- names(tab)[tab < MIN_W_N_STRUCT]
-
-    if (length(small_levels) > 0) {
-      if (HANDLE_SMALL_W_STRUCT == "drop") {
-        dW[[wvar]][dW[[wvar]] %in% small_levels] <- NA
-      } else if (HANDLE_SMALL_W_STRUCT == "combine") {
-        dW[[wvar]][dW[[wvar]] %in% small_levels] <- OTHER_LABEL_W_STRUCT
-      } else {
-        # warn: keep as-is
-        writeLines(
-          paste0("Warning: small levels kept for ", wvar, ": ", paste(small_levels, collapse = ", ")),
-          con = file.path(out_w, "small_levels_warning.txt")
-        )
-      }
-    }
-
-    # Drop rows with missing group (after handling)
-    keep_idx <- !is.na(dW[[wvar]])
-    dW <- dW[keep_idx, , drop = FALSE]
-
-    # Recompute counts and decide whether to run
-    tab2 <- table(dW[[wvar]], useNA = "no")
-    ok_levels <- names(tab2)[tab2 >= MIN_W_N_STRUCT]
-
-    if (length(ok_levels) < 2) {
-      writeLines(
-        c(
-          paste0("Skipped MG for W=", wvar, ": fewer than 2 groups with n>=", MIN_W_N_STRUCT),
-          "Counts:",
-          paste0(names(tab2), " = ", as.integer(tab2))
-        ),
-        con = file.path(out_w, "skipped_reason.txt")
-      )
-      next
-    }
-
-    # Keep only ok levels (drop any remaining small ones)
-    dW <- dW[dW[[wvar]] %in% ok_levels, , drop = FALSE]
-    dW[[wvar]] <- factor(dW[[wvar]])
-
-    # Set preferred reference group (g1) when present
-    canon <- function(x) {
-      x <- as.character(x)
-      x <- trimws(x)
-      x <- tolower(x)
-      x <- gsub("[^a-z0-9]+", "", x)
-      x
-    }
-
-    ref_pref <- W_REF_LEVEL[[wvar]]
-    ref_level <- levels(dW[[wvar]])[1]
-    if (!is.null(ref_pref)) {
-      levs <- levels(dW[[wvar]])
-      m <- which(canon(levs) == canon(ref_pref))
-      if (length(m) == 1) {
-        ref_level <- levs[[m]]
-        dW[[wvar]] <- stats::relevel(dW[[wvar]], ref = ref_level)
-      } else {
-        message(
-          "[RQ4 structural MG] ", wvar,
-          ": reference level '", ref_pref,
-          "' not found uniquely after cleaning; keeping default reference='", ref_level,
-          "'. Levels: ", paste(levs, collapse = ", ")
-        )
-      }
-    }
-
-    # Record reference and levels used
-    writeLines(
-      c(
-        paste0("W_index = ", i),
-        paste0("W = ", wvar),
-        paste0("reference = ", ref_level),
-        "levels:",
-        paste0("- ", levels(dW[[wvar]]))
-      ),
-      con = file.path(out_w, "reference_group.txt")
+  W_VARS_MEAS_OK <- W_VARS_MEAS[W_VARS_MEAS %in% names(dat_meas)]
+  if (length(W_VARS_MEAS_OK) > 0) {
+    fit_invariance_for_W_list(
+      dat = dat_meas,
+      W_vars = W_VARS_MEAS_OK,
+      base_out_dir = out_meas,
+      estimator = "ML",
+      missing = "fiml",
+      fixed.x = TRUE,
+      weight_var = "psw",
+      min_group_n = MIN_W_N_MEAS,
+      handle_small = HANDLE_SMALL_W,
+      other_label = OTHER_LABEL_W
     )
 
-    # Fit MG structural model
-    if (identical(wvar, "pell")) {
-      # Special-case: when grouping by pell, pell is constant within each group.
-      # So the MG-by-pell model must omit pell from within-group regressions.
-      # Note: build_model_fast_treat_control_mg() automatically excludes group_var from covars.
+    # -------------------------
+    # Export invariance_summary.csv (consolidated invariance results for Table 8)
+    # -------------------------
+    message("\n=== Exporting invariance_summary.csv (for Table 8) ===")
+    INVARIANCE_SUMMARY_CSV <- file.path(OUT_RAW, "invariance_summary.csv")
 
-      # Build a MG model syntax (pell auto-excluded as covariate since it's the group_var)
-      model_mg <- build_model_fast_treat_control_mg(
-        dW,
-        group_var = wvar,
-        w_label = paste0("W", i)
+    inv_results <- lapply(W_VARS_MEAS_OK, function(w) {
+      stack_file <- file.path(out_meas, paste0("by_", w), "fit_index_stack.txt")
+      deltas_file <- file.path(out_meas, paste0("by_", w), "fit_change_deltas.txt")
+
+      if (!file.exists(stack_file)) {
+        return(NULL)
+      }
+
+      stack <- tryCatch(read.delim(stack_file, stringsAsFactors = FALSE), error = function(e) NULL)
+      deltas <- tryCatch(read.delim(deltas_file, stringsAsFactors = FALSE), error = function(e) NULL)
+
+      if (is.null(stack) || nrow(stack) == 0) {
+        return(NULL)
+      }
+
+      # Reshape stack to wide format (one row per model level)
+      stack_wide <- reshape(stack, idvar = "model", timevar = "measure", direction = "wide")
+      names(stack_wide) <- gsub("^value\\.", "", names(stack_wide))
+      stack_wide$W_var <- w
+
+      # Add delta information if available
+      if (!is.null(deltas) && nrow(deltas) > 0) {
+        # Extract delta_CFI and delta_RMSEA for each step
+        for (i in seq_len(nrow(deltas))) {
+          step_name <- deltas$step[i]
+          if (grepl("configural_to_metric", step_name)) {
+            stack_wide$delta_cfi_config_metric <- deltas$delta_cfi[i]
+            stack_wide$delta_rmsea_config_metric <- deltas$delta_rmsea[i]
+          } else if (grepl("metric.*to_scalar", step_name)) {
+            stack_wide$delta_cfi_metric_scalar <- deltas$delta_cfi[i]
+            stack_wide$delta_rmsea_metric_scalar <- deltas$delta_rmsea[i]
+          }
+        }
+      }
+
+      stack_wide
+    })
+
+    inv_combined <- do.call(rbind, inv_results[!sapply(inv_results, is.null)])
+
+    if (!is.null(inv_combined) && nrow(inv_combined) > 0) {
+      # Select key columns for Table 8
+      cols_to_keep <- c(
+        "W_var", "model", "chisq", "df", "cfi", "rmsea", "srmr",
+        "delta_cfi_config_metric", "delta_rmsea_config_metric",
+        "delta_cfi_metric_scalar", "delta_rmsea_metric_scalar"
       )
+      cols_present <- cols_to_keep[cols_to_keep %in% names(inv_combined)]
+      inv_final <- inv_combined[, cols_present, drop = FALSE]
 
-      writeLines(model_mg, con = file.path(out_w, "executed_model_mg.lav"))
-
-      se_arg <- if (MG_BOOT > 0) "bootstrap" else "standard"
-      boot_arg <- if (MG_BOOT > 0) MG_BOOT else NULL
-
-      fit <- lavaan::sem(
-        model = model_mg,
-        data = dW,
-        group = wvar,
-        estimator = "ML",
-        missing = "fiml",
-        fixed.x = TRUE,
-        sampling.weights = "psw",
-        se = se_arg,
-        bootstrap = boot_arg,
-        check.lv.names = FALSE,
-        meanstructure = TRUE,
-        check.gradient = FALSE,
-        control = list(iter.max = 20000),
-        parallel = if (MG_BOOT > 0) BOOT_PARALLEL else "no",
-        ncpus = if (MG_BOOT > 0) BOOT_NCPUS else 1
-      )
-
-      out_struct <- file.path(out_w, "structural")
-      dir.create(out_struct, recursive = TRUE, showWarnings = FALSE)
-      writeLines(paste0("group = ", wvar), con = file.path(out_struct, "group_var.txt"))
-      writeLines(paste0("w_label = W", i), con = file.path(out_struct, "w_label.txt"))
-      write_lavaan_txt_tables(fit, out_struct, "structural", boot_ci_type = MG_CI)
-      run_wald_tests_fast_vs_nonfast(fit, out_dir = file.path(out_struct, "wald"), prefix = "wald")
+      write.csv(inv_final, file = INVARIANCE_SUMMARY_CSV, row.names = FALSE, na = "")
+      message("Wrote: ", INVARIANCE_SUMMARY_CSV, " (", nrow(inv_final), " rows)")
     } else {
-      fit_mg_fast_vs_nonfast_with_outputs(
-        dat = dW,
-        group = wvar,
-        w_label = paste0("W", i),
-        out_dir = file.path(out_w, "structural"),
-        estimator = "ML",
-        missing = "fiml",
-        fixed.x = TRUE,
-        weight_var = "psw",
-        bootstrap = MG_BOOT,
-        boot_ci_type = MG_CI,
-        parallel = if (MG_BOOT > 0) BOOT_PARALLEL else "no",
-        ncpus = if (MG_BOOT > 0) BOOT_NCPUS else 1
-      )
+      message("No invariance results to consolidate")
     }
   }
-} else {
-  message("[RQ4 structural MG] Skipped via SKIP_RQ4_STRUCT_MG=TRUE.")
-}
 
-# -------------------------
-# RUN C: RQ4 structural stratified-by-race (exploratory)
-#   Fit the same SEM within each race category (within-group run; NOT multi-group).
-#   Fast by default: no bootstrap unless BOOTSTRAP_RACE == TRUE.
-# -------------------------
-out_race <- file.path(OUT_RAW, paste0("RQ4_structural_by_", RACE_VAR))
-dir.create(out_race, recursive = TRUE, showWarnings = FALSE)
+  # Default for logging if structural MG block is skipped
+  W_VARS_STRUCT_OK <- character(0)
 
-dat_race_base <- dat_main
+  # -------------------------
+  # RUN C2: RQ4 structural multi-group (each W separately)
+  #   Same SEM across W groups; structural paths allowed to differ by group.
+  #   Fast by default: no bootstrap unless BOOTSTRAP_MG == TRUE.
+  # -------------------------
+  if (!isTRUE(SKIP_RQ4_STRUCT_MG)) {
+    out_mg <- file.path(OUT_RAW, "RQ4_structural_MG")
+    dir.create(out_mg, recursive = TRUE, showWarnings = FALSE)
 
-RACE_BOOT <- if (isTRUE(BOOTSTRAP_RACE)) B_BOOT_RACE else 0
-RACE_CI   <- if (RACE_BOOT > 0) BOOT_CI_TYPE_RACE else "none"
+    # Use the same weighted data as main model
+    dat_mg_base <- dat_main
 
-if (!(RACE_VAR %in% names(dat_race_base))) {
-  writeLines(
-    c(
-      paste0("Skipped race-stratified RUN C: RACE_VAR not found: ", RACE_VAR),
-      paste0("Available columns: ", paste(names(dat_race_base), collapse = ", "))
-    ),
-    con = file.path(out_race, "skipped_reason.txt")
-  )
-} else {
-  dR <- dat_race_base
-  dR[[RACE_VAR]] <- as.character(dR[[RACE_VAR]])
-  dR[[RACE_VAR]] <- trimws(dR[[RACE_VAR]])
-  dR[[RACE_VAR]][dR[[RACE_VAR]] == ""] <- NA
+    W_VARS_STRUCT_OK <- W_VARS_STRUCT[W_VARS_STRUCT %in% names(dat_mg_base)]
 
-  tabR <- table(dR[[RACE_VAR]], useNA = "no")
-  race_levels <- names(tabR)[as.integer(tabR) >= MIN_RACE_N]
+    # Decide bootstrap settings for MG runs
+    MG_BOOT <- if (isTRUE(BOOTSTRAP_MG)) B_BOOT_MG else 0
+    MG_CI <- if (MG_BOOT > 0) BOOT_CI_TYPE_MG else "none"
 
-  if (length(race_levels) == 0) {
+    for (i in seq_along(W_VARS_STRUCT_OK)) {
+      wvar <- W_VARS_STRUCT_OK[[i]]
+      out_w <- file.path(out_mg, paste0("W", i, "_", wvar))
+      dir.create(out_w, recursive = TRUE, showWarnings = FALSE)
+
+      dW <- dat_mg_base
+
+      # Coerce to factor for stable grouping
+      dW[[wvar]] <- as.character(dW[[wvar]])
+      dW[[wvar]] <- trimws(dW[[wvar]])
+      dW[[wvar]][dW[[wvar]] == ""] <- NA
+
+      # Handle small categories
+      tab <- table(dW[[wvar]], useNA = "no")
+      small_levels <- names(tab)[tab < MIN_W_N_STRUCT]
+
+      if (length(small_levels) > 0) {
+        if (HANDLE_SMALL_W_STRUCT == "drop") {
+          dW[[wvar]][dW[[wvar]] %in% small_levels] <- NA
+        } else if (HANDLE_SMALL_W_STRUCT == "combine") {
+          dW[[wvar]][dW[[wvar]] %in% small_levels] <- OTHER_LABEL_W_STRUCT
+        } else {
+          # warn: keep as-is
+          writeLines(
+            paste0("Warning: small levels kept for ", wvar, ": ", paste(small_levels, collapse = ", ")),
+            con = file.path(out_w, "small_levels_warning.txt")
+          )
+        }
+      }
+
+      # Drop rows with missing group (after handling)
+      keep_idx <- !is.na(dW[[wvar]])
+      dW <- dW[keep_idx, , drop = FALSE]
+
+      # Recompute counts and decide whether to run
+      tab2 <- table(dW[[wvar]], useNA = "no")
+      ok_levels <- names(tab2)[tab2 >= MIN_W_N_STRUCT]
+
+      if (length(ok_levels) < 2) {
+        writeLines(
+          c(
+            paste0("Skipped MG for W=", wvar, ": fewer than 2 groups with n>=", MIN_W_N_STRUCT),
+            "Counts:",
+            paste0(names(tab2), " = ", as.integer(tab2))
+          ),
+          con = file.path(out_w, "skipped_reason.txt")
+        )
+        next
+      }
+
+      # Keep only ok levels (drop any remaining small ones)
+      dW <- dW[dW[[wvar]] %in% ok_levels, , drop = FALSE]
+      dW[[wvar]] <- factor(dW[[wvar]])
+
+      # Set preferred reference group (g1) when present
+      canon <- function(x) {
+        x <- as.character(x)
+        x <- trimws(x)
+        x <- tolower(x)
+        x <- gsub("[^a-z0-9]+", "", x)
+        x
+      }
+
+      ref_pref <- W_REF_LEVEL[[wvar]]
+      ref_level <- levels(dW[[wvar]])[1]
+      if (!is.null(ref_pref)) {
+        levs <- levels(dW[[wvar]])
+        m <- which(canon(levs) == canon(ref_pref))
+        if (length(m) == 1) {
+          ref_level <- levs[[m]]
+          dW[[wvar]] <- stats::relevel(dW[[wvar]], ref = ref_level)
+        } else {
+          message(
+            "[RQ4 structural MG] ", wvar,
+            ": reference level '", ref_pref,
+            "' not found uniquely after cleaning; keeping default reference='", ref_level,
+            "'. Levels: ", paste(levs, collapse = ", ")
+          )
+        }
+      }
+
+      # Record reference and levels used
+      writeLines(
+        c(
+          paste0("W_index = ", i),
+          paste0("W = ", wvar),
+          paste0("reference = ", ref_level),
+          "levels:",
+          paste0("- ", levels(dW[[wvar]]))
+        ),
+        con = file.path(out_w, "reference_group.txt")
+      )
+
+      # Fit MG structural model
+      if (identical(wvar, "pell")) {
+        # Special-case: when grouping by pell, pell is constant within each group.
+        # So the MG-by-pell model must omit pell from within-group regressions.
+        # Note: build_model_fast_treat_control_mg() automatically excludes group_var from covars.
+
+        # Build a MG model syntax (pell auto-excluded as covariate since it's the group_var)
+        model_mg <- build_model_fast_treat_control_mg(
+          dW,
+          group_var = wvar,
+          w_label = paste0("W", i)
+        )
+
+        writeLines(model_mg, con = file.path(out_w, "executed_model_mg.lav"))
+
+        se_arg <- if (MG_BOOT > 0) "bootstrap" else "standard"
+        boot_arg <- if (MG_BOOT > 0) MG_BOOT else NULL
+
+        fit <- lavaan::sem(
+          model = model_mg,
+          data = dW,
+          group = wvar,
+          estimator = "ML",
+          missing = "fiml",
+          fixed.x = TRUE,
+          sampling.weights = "psw",
+          se = se_arg,
+          bootstrap = boot_arg,
+          check.lv.names = FALSE,
+          meanstructure = TRUE,
+          check.gradient = FALSE,
+          control = list(iter.max = 20000),
+          parallel = if (MG_BOOT > 0) BOOT_PARALLEL else "no",
+          ncpus = if (MG_BOOT > 0) BOOT_NCPUS else 1
+        )
+
+        out_struct <- file.path(out_w, "structural")
+        dir.create(out_struct, recursive = TRUE, showWarnings = FALSE)
+        writeLines(paste0("group = ", wvar), con = file.path(out_struct, "group_var.txt"))
+        writeLines(paste0("w_label = W", i), con = file.path(out_struct, "w_label.txt"))
+        write_lavaan_txt_tables(fit, out_struct, "structural", boot_ci_type = MG_CI)
+        run_wald_tests_fast_vs_nonfast(fit, out_dir = file.path(out_struct, "wald"), prefix = "wald")
+      } else {
+        fit_mg_fast_vs_nonfast_with_outputs(
+          dat = dW,
+          group = wvar,
+          w_label = paste0("W", i),
+          out_dir = file.path(out_w, "structural"),
+          estimator = "ML",
+          missing = "fiml",
+          fixed.x = TRUE,
+          weight_var = "psw",
+          bootstrap = MG_BOOT,
+          boot_ci_type = MG_CI,
+          parallel = if (MG_BOOT > 0) BOOT_PARALLEL else "no",
+          ncpus = if (MG_BOOT > 0) BOOT_NCPUS else 1
+        )
+      }
+    }
+  } else {
+    message("[RQ4 structural MG] Skipped via SKIP_RQ4_STRUCT_MG=TRUE.")
+  }
+
+  # -------------------------
+  # RUN C: RQ4 structural stratified-by-race (exploratory)
+  #   Fit the same SEM within each race category (within-group run; NOT multi-group).
+  #   Fast by default: no bootstrap unless BOOTSTRAP_RACE == TRUE.
+  # -------------------------
+  out_race <- file.path(OUT_RAW, paste0("RQ4_structural_by_", RACE_VAR))
+  dir.create(out_race, recursive = TRUE, showWarnings = FALSE)
+
+  dat_race_base <- dat_main
+
+  RACE_BOOT <- if (isTRUE(BOOTSTRAP_RACE)) B_BOOT_RACE else 0
+  RACE_CI <- if (RACE_BOOT > 0) BOOT_CI_TYPE_RACE else "none"
+
+  if (!(RACE_VAR %in% names(dat_race_base))) {
     writeLines(
       c(
-        paste0("Skipped race-stratified RUN C: no race level has n>=", MIN_RACE_N),
-        "Counts:",
-        paste0(names(tabR), " = ", as.integer(tabR))
+        paste0("Skipped race-stratified RUN C: RACE_VAR not found: ", RACE_VAR),
+        paste0("Available columns: ", paste(names(dat_race_base), collapse = ", "))
       ),
       con = file.path(out_race, "skipped_reason.txt")
     )
   } else {
-    for (race_level in race_levels) {
-      dsub <- dR[dR[[RACE_VAR]] == race_level, , drop = FALSE]
-      out_level <- file.path(out_race, gsub("[^A-Za-z0-9]+", "_", race_level))
-      dir.create(out_level, recursive = TRUE, showWarnings = FALSE)
+    dR <- dat_race_base
+    dR[[RACE_VAR]] <- as.character(dR[[RACE_VAR]])
+    dR[[RACE_VAR]] <- trimws(dR[[RACE_VAR]])
+    dR[[RACE_VAR]][dR[[RACE_VAR]] == ""] <- NA
 
-      writeLines(paste0("RACE_VAR = ", RACE_VAR), con = file.path(out_level, "race_var.txt"))
-      writeLines(paste0("race_level = ", race_level), con = file.path(out_level, "race_level.txt"))
-      writeLines(paste0("n = ", nrow(dsub)), con = file.path(out_level, "n.txt"))
+    tabR <- table(dR[[RACE_VAR]], useNA = "no")
+    race_levels <- names(tabR)[as.integer(tabR) >= MIN_RACE_N]
 
-      fit_mg_fast_vs_nonfast_with_outputs(
-        dat = dsub,
-        out_dir = file.path(out_level, "structural"),
-        model_type = "parallel",
-        estimator = "ML",
-        missing = "fiml",
-        fixed.x = TRUE,
-        weight_var = "psw",
-        bootstrap = RACE_BOOT,
-        boot_ci_type = RACE_CI,
-        parallel = if (RACE_BOOT > 0) BOOT_PARALLEL else "no",
-        ncpus = if (RACE_BOOT > 0) BOOT_NCPUS else 1
+    if (length(race_levels) == 0) {
+      writeLines(
+        c(
+          paste0("Skipped race-stratified RUN C: no race level has n>=", MIN_RACE_N),
+          "Counts:",
+          paste0(names(tabR), " = ", as.integer(tabR))
+        ),
+        con = file.path(out_race, "skipped_reason.txt")
       )
+    } else {
+      for (race_level in race_levels) {
+        dsub <- dR[dR[[RACE_VAR]] == race_level, , drop = FALSE]
+        out_level <- file.path(out_race, gsub("[^A-Za-z0-9]+", "_", race_level))
+        dir.create(out_level, recursive = TRUE, showWarnings = FALSE)
+
+        writeLines(paste0("RACE_VAR = ", RACE_VAR), con = file.path(out_level, "race_var.txt"))
+        writeLines(paste0("race_level = ", race_level), con = file.path(out_level, "race_level.txt"))
+        writeLines(paste0("n = ", nrow(dsub)), con = file.path(out_level, "n.txt"))
+
+        fit_mg_fast_vs_nonfast_with_outputs(
+          dat = dsub,
+          out_dir = file.path(out_level, "structural"),
+          model_type = "parallel",
+          estimator = "ML",
+          missing = "fiml",
+          fixed.x = TRUE,
+          weight_var = "psw",
+          bootstrap = RACE_BOOT,
+          boot_ci_type = RACE_CI,
+          parallel = if (RACE_BOOT > 0) BOOT_PARALLEL else "no",
+          ncpus = if (RACE_BOOT > 0) BOOT_NCPUS else 1
+        )
+      }
     }
   }
-}
-
 }
 
 sink(file.path(OUT_LOGS, "run_log.txt"))
@@ -1799,226 +1848,226 @@ sink()
 if (isTRUE(SKIP_POST_PROCESSING)) {
   message("\n=== SKIP_POST_PROCESSING=TRUE: Skipping plots/tables/standards visualization ===")
 } else {
-message("\n=== Generating Standards Compliance Visualizations ===")
+  message("\n=== Generating Standards Compliance Visualizations ===")
 
-# Extract actual fit measures from the main fit for the visualization
-standards_data_path <- file.path(OUT_FIGURES, "standards_data.json")
-tryCatch({
-  # Read fit measures from main structural output
-  fm_path <- file.path(out_main, "structural", "structural_fitMeasures.txt")
-  if (file.exists(fm_path)) {
-    fm_df <- read.delim(fm_path, stringsAsFactors = FALSE)
-    fm <- setNames(fm_df$value, fm_df$measure)
-    
-    # Read PSW balance report for SMD info
-    psw_path <- file.path(out_main, "psw_balance_smd.txt")
-    max_smd_weighted <- 0.0
-    max_smd_unweighted <- 0.0
-    if (file.exists(psw_path)) {
-      psw_lines <- readLines(psw_path)
-      # Extract SMD values (format varies, try to find max)
-      smd_pattern <- "SMD.*weighted.*([0-9.]+)"
-      # Simplified: use defaults if parsing fails
+  # Extract actual fit measures from the main fit for the visualization
+  standards_data_path <- file.path(OUT_FIGURES, "standards_data.json")
+  tryCatch(
+    {
+      # Read fit measures from main structural output
+      fm_path <- file.path(out_main, "structural", "structural_fitMeasures.txt")
+      if (file.exists(fm_path)) {
+        fm_df <- read.delim(fm_path, stringsAsFactors = FALSE)
+        fm <- setNames(fm_df$value, fm_df$measure)
+
+        # Read PSW balance report for SMD info
+        psw_path <- file.path(out_main, "psw_balance_smd.txt")
+        max_smd_weighted <- 0.0
+        max_smd_unweighted <- 0.0
+        if (file.exists(psw_path)) {
+          psw_lines <- readLines(psw_path)
+          # Extract SMD values (format varies, try to find max)
+          smd_pattern <- "SMD.*weighted.*([0-9.]+)"
+          # Simplified: use defaults if parsing fails
+        }
+
+        # Build JSON data with actual values
+        standards_list <- list(
+          n = nrow(dat_main),
+          cfi = as.numeric(fm["cfi"]),
+          tli = as.numeric(fm["tli"]),
+          rmsea = as.numeric(fm["rmsea"]),
+          srmr = as.numeric(fm["srmr"]),
+          chisq = as.numeric(fm["chisq"]),
+          df = as.numeric(fm["df"]),
+          pvalue = as.numeric(fm["pvalue"]),
+          cfi_robust = as.numeric(fm["cfi.robust"]),
+          tli_robust = as.numeric(fm["tli.robust"]),
+          rmsea_robust = as.numeric(fm["rmsea.robust"]),
+          bootstrap_b = B_BOOT_MAIN,
+          bootstrap_converged = B_BOOT_MAIN, # Assume all converged unless we have failure info
+          bootstrap_pct = 100.0
+        )
+
+        # Remove NAs (use defaults in Python script)
+        standards_list <- standards_list[!sapply(standards_list, function(x) is.na(x) || is.null(x))]
+
+        # Write JSON
+        jsonlite::write_json(standards_list, standards_data_path, auto_unbox = TRUE, pretty = TRUE)
+        message("Wrote standards data: ", standards_data_path)
+      }
+    },
+    error = function(e) {
+      message("Could not extract fit measures for visualization: ", e$message)
     }
-    
-    # Build JSON data with actual values
-    standards_list <- list(
-      n = nrow(dat_main),
-      cfi = as.numeric(fm["cfi"]),
-      tli = as.numeric(fm["tli"]),
-      rmsea = as.numeric(fm["rmsea"]),
-      srmr = as.numeric(fm["srmr"]),
-      chisq = as.numeric(fm["chisq"]),
-      df = as.numeric(fm["df"]),
-      pvalue = as.numeric(fm["pvalue"]),
-      cfi_robust = as.numeric(fm["cfi.robust"]),
-      tli_robust = as.numeric(fm["tli.robust"]),
-      rmsea_robust = as.numeric(fm["rmsea.robust"]),
-      bootstrap_b = B_BOOT_MAIN,
-      bootstrap_converged = B_BOOT_MAIN,  # Assume all converged unless we have failure info
-      bootstrap_pct = 100.0
+  )
+
+  # Call visualization script with actual data (outputs to OUT_FIGURES)
+  viz_cmd <- if (file.exists(standards_data_path)) {
+    sprintf(
+      "python3 3_Analysis/4_Plots_Code/plot_standards_comparison.py --out '%s' --data '%s'",
+      OUT_FIGURES, standards_data_path
     )
-    
-    # Remove NAs (use defaults in Python script)
-    standards_list <- standards_list[!sapply(standards_list, function(x) is.na(x) || is.null(x))]
-    
-    # Write JSON
-    jsonlite::write_json(standards_list, standards_data_path, auto_unbox = TRUE, pretty = TRUE)
-    message("Wrote standards data: ", standards_data_path)
-  }
-}, error = function(e) {
-  message("Could not extract fit measures for visualization: ", e$message)
-})
-
-# Call visualization script with actual data (outputs to OUT_FIGURES)
-viz_cmd <- if (file.exists(standards_data_path)) {
-  sprintf(
-    "python3 3_Analysis/4_Plots_Code/plot_standards_comparison.py --out '%s' --data '%s'",
-    OUT_FIGURES, standards_data_path
-  )
-} else {
-  sprintf("python3 3_Analysis/4_Plots_Code/plot_standards_comparison.py --out '%s'", OUT_FIGURES)
-}
-viz_result <- system(viz_cmd, intern = FALSE)
-if (viz_result == 0) {
-  message("Standards visualizations saved to: ", OUT_FIGURES)
-} else {
-  warning("Standards visualization script failed (exit code ", viz_result, ")")
-}
-
-# =============================================================================
-# PYTHON STAGE: Tables and Figures
-# =============================================================================
-# MANIFEST_FIRST_PYTHON: When TRUE, use the single manifest-first entrypoint
-# instead of calling individual Python scripts.
-MANIFEST_FIRST_PYTHON <- env_flag("MANIFEST_FIRST_PYTHON", default = FALSE)
-
-if (isTRUE(MANIFEST_FIRST_PYTHON)) {
-  # -----------------------------------------------------------------------------
-  # MANIFEST-FIRST MODE: Single Python entrypoint reads manifest.json
-  # -----------------------------------------------------------------------------
-  message("\n=== Running Python Stage (manifest-first mode) ===")
-  manifest_path <- file.path(OUT_RUN, "manifest.json")
-  
-  python_stage_cmd <- sprintf(
-    "python3 3_Analysis/run_python_stage.py --manifest '%s'",
-    manifest_path
-  )
-  python_result <- system(python_stage_cmd, intern = FALSE)
-  if (python_result == 0) {
-    message("Python stage completed successfully")
   } else {
-    warning("Python stage failed (exit code ", python_result, ")")
+    sprintf("python3 3_Analysis/4_Plots_Code/plot_standards_comparison.py --out '%s'", OUT_FIGURES)
   }
-  
-} else {
-  # -----------------------------------------------------------------------------
-  # LEGACY MODE: Call individual Python scripts directly
-  # -----------------------------------------------------------------------------
-
-# Build Bootstrap Tables (DOCX)
-# =============================================================================
-message("\n=== Building Bootstrap Tables ===")
-
-# Find the parameter estimates file from the main structural run
-boot_csv_path <- file.path(OUT_RAW, "RQ1_RQ3_main", "structural", "structural_parameterEstimates.txt")
-if (file.exists(boot_csv_path)) {
-  tables_cmd <- sprintf(
-    "python3 3_Analysis/3_Tables_Code/build_bootstrap_tables.py --csv '%s' --B %d --ci_type '%s' --out '%s'",
-    boot_csv_path, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN, OUT_TABLES
-  )
-  tables_result <- system(tables_cmd, intern = FALSE)
-  if (tables_result == 0) {
-    message("Bootstrap tables saved to: ", OUT_TABLES)
+  viz_result <- system(viz_cmd, intern = FALSE)
+  if (viz_result == 0) {
+    message("Standards visualizations saved to: ", OUT_FIGURES)
   } else {
-    warning("Bootstrap tables script failed (exit code ", tables_result, ")")
+    warning("Standards visualization script failed (exit code ", viz_result, ")")
   }
-} else {
-  warning("Bootstrap parameter estimates not found: ", boot_csv_path)
-}
 
-# =============================================================================
-# Build Dissertation Tables (DOCX) - comprehensive APA 7 tables
-# =============================================================================
-message("\n=== Building Dissertation Tables ===")
+  # =============================================================================
+  # PYTHON STAGE: Tables and Figures
+  # =============================================================================
+  # MANIFEST_FIRST_PYTHON: When TRUE, use the single manifest-first entrypoint
+  # instead of calling individual Python scripts.
+  MANIFEST_FIRST_PYTHON <- env_flag("MANIFEST_FIRST_PYTHON", default = FALSE)
 
-# build_dissertation_tables.py reads from OUT_RAW and outputs to OUT_TABLES
-diss_tables_cmd <- sprintf(
-  "python3 3_Analysis/3_Tables_Code/build_dissertation_tables.py --outdir '%s' --out '%s' --B %d --ci_type '%s'",
-  OUT_RAW, OUT_TABLES, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN
-)
-diss_tables_result <- system(diss_tables_cmd, intern = FALSE)
-if (diss_tables_result == 0) {
-  message("Dissertation tables saved to: ", OUT_TABLES, "/Dissertation_Tables.docx")
-} else {
-  warning("build_dissertation_tables.py failed (exit code ", diss_tables_result, ")")
-}
+  if (isTRUE(MANIFEST_FIRST_PYTHON)) {
+    # -----------------------------------------------------------------------------
+    # MANIFEST-FIRST MODE: Single Python entrypoint reads manifest.json
+    # -----------------------------------------------------------------------------
+    message("\n=== Running Python Stage (manifest-first mode) ===")
+    manifest_path <- file.path(OUT_RUN, "manifest.json")
 
-# =============================================================================
-# Build Plain Language Summary (DOCX) - accessible findings for stakeholders
-# =============================================================================
-message("\n=== Building Plain Language Summary ===")
+    python_stage_cmd <- sprintf(
+      "python3 3_Analysis/run_python_stage.py --manifest '%s'",
+      manifest_path
+    )
+    python_result <- system(python_stage_cmd, intern = FALSE)
+    if (python_result == 0) {
+      message("Python stage completed successfully")
+    } else {
+      warning("Python stage failed (exit code ", python_result, ")")
+    }
+  } else {
+    # -----------------------------------------------------------------------------
+    # LEGACY MODE: Call individual Python scripts directly
+    # -----------------------------------------------------------------------------
 
-plain_summary_cmd <- sprintf(
-  "python3 3_Analysis/3_Tables_Code/build_plain_language_summary.py --outdir '%s' --out '%s' --B %d --ci_type '%s'",
-  OUT_RAW, OUT_TABLES, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN
-)
-plain_summary_result <- system(plain_summary_cmd, intern = FALSE)
-if (plain_summary_result == 0) {
-  message("Plain language summary saved to: ", OUT_TABLES, "/Plain_Language_Summary.docx")
-} else {
-  warning("build_plain_language_summary.py failed (exit code ", plain_summary_result, ")")
-}
+    # Build Bootstrap Tables (DOCX)
+    # =============================================================================
+    message("\n=== Building Bootstrap Tables ===")
 
-# =============================================================================
-# Generate Descriptive Plots (repopulated with fresh data each run)
-# All outputs go to OUT_BASE (same folder as tables, results, figures)
-# Uses PSW-weighted data for causal inference visualizations
-# =============================================================================
-message("\n=== Generating Descriptive Plots ===")
+    # Find the parameter estimates file from the main structural run
+    boot_csv_path <- file.path(OUT_RAW, "RQ1_RQ3_main", "structural", "structural_parameterEstimates.txt")
+    if (file.exists(boot_csv_path)) {
+      tables_cmd <- sprintf(
+        "python3 3_Analysis/3_Tables_Code/build_bootstrap_tables.py --csv '%s' --B %d --ci_type '%s' --out '%s'",
+        boot_csv_path, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN, OUT_TABLES
+      )
+      tables_result <- system(tables_cmd, intern = FALSE)
+      if (tables_result == 0) {
+        message("Bootstrap tables saved to: ", OUT_TABLES)
+      } else {
+        warning("Bootstrap tables script failed (exit code ", tables_result, ")")
+      }
+    } else {
+      warning("Bootstrap parameter estimates not found: ", boot_csv_path)
+    }
 
-# Use PSW-weighted data file which includes the 'psw' column
-PSW_DATA_CSV <- file.path(OUT_RAW, "RQ1_RQ3_main", "rep_data_with_psw.csv")
-if (!file.exists(PSW_DATA_CSV)) {
-  stop("PSW data file not found: ", PSW_DATA_CSV, " (PSW-weighted outputs are required)")
-} else {
-  PSW_FLAG <- "--weights psw"
-}
+    # =============================================================================
+    # Build Dissertation Tables (DOCX) - comprehensive APA 7 tables
+    # =============================================================================
+    message("\n=== Building Dissertation Tables ===")
 
-# Run plot_descriptives.py - outputs to OUT_BASE with PSW weighting
-desc_cmd <- sprintf(
-  "python3 3_Analysis/4_Plots_Code/plot_descriptives.py --data '%s' --outdir '%s' %s",
-  PSW_DATA_CSV, OUT_FIGURES, PSW_FLAG
-)
-desc_result <- system(desc_cmd, intern = FALSE)
-if (desc_result == 0) {
-  message("Descriptive plots saved to: ", OUT_FIGURES)
-} else {
-  warning("plot_descriptives.py failed (exit code ", desc_result, ")")
-}
+    # build_dissertation_tables.py reads from OUT_RAW and outputs to OUT_TABLES
+    diss_tables_cmd <- sprintf(
+      "python3 3_Analysis/3_Tables_Code/build_dissertation_tables.py --outdir '%s' --out '%s' --B %d --ci_type '%s'",
+      OUT_RAW, OUT_TABLES, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN
+    )
+    diss_tables_result <- system(diss_tables_cmd, intern = FALSE)
+    if (diss_tables_result == 0) {
+      message("Dissertation tables saved to: ", OUT_TABLES, "/Dissertation_Tables.docx")
+    } else {
+      warning("build_dissertation_tables.py failed (exit code ", diss_tables_result, ")")
+    }
 
-# Run plot_deep_cuts.py - outputs to OUT_BASE with PSW weighting
-deep_cmd <- sprintf(
-  "python3 3_Analysis/4_Plots_Code/plot_deep_cuts.py --data '%s' --outdir '%s' %s",
-  PSW_DATA_CSV, OUT_FIGURES, PSW_FLAG
-)
-deep_result <- system(deep_cmd, intern = FALSE)
-if (deep_result == 0) {
-  message("Deep-cut plots saved to: ", OUT_FIGURES)
-} else {
-  warning("plot_deep_cuts.py failed (exit code ", deep_result, ")")
-}
+    # =============================================================================
+    # Build Plain Language Summary (DOCX) - accessible findings for stakeholders
+    # =============================================================================
+    message("\n=== Building Plain Language Summary ===")
 
-}  # end MANIFEST_FIRST_PYTHON else block (legacy mode)
+    plain_summary_cmd <- sprintf(
+      "python3 3_Analysis/3_Tables_Code/build_plain_language_summary.py --outdir '%s' --out '%s' --B %d --ci_type '%s'",
+      OUT_RAW, OUT_TABLES, B_BOOT_MAIN, BOOT_CI_TYPE_MAIN
+    )
+    plain_summary_result <- system(plain_summary_cmd, intern = FALSE)
+    if (plain_summary_result == 0) {
+      message("Plain language summary saved to: ", OUT_TABLES, "/Plain_Language_Summary.docx")
+    } else {
+      warning("build_plain_language_summary.py failed (exit code ", plain_summary_result, ")")
+    }
 
-# =============================================================================
-# Webapp JSON exports (webapp/public/data)
-# =============================================================================
-message("\n=== Exporting webapp fetch JSONs ===")
-WEBAPP_DATA_DIR <- file.path("webapp", "public", "data")
-dir.create(WEBAPP_DATA_DIR, recursive = TRUE, showWarnings = FALSE)
+    # =============================================================================
+    # Generate Descriptive Plots (repopulated with fresh data each run)
+    # All outputs go to OUT_BASE (same folder as tables, results, figures)
+    # Uses PSW-weighted data for causal inference visualizations
+    # =============================================================================
+    message("\n=== Generating Descriptive Plots ===")
 
-webapp_cmd <- sprintf(
-  "PYTHONDONTWRITEBYTECODE=1 python3 webapp/scripts/transform-results.py"
-)
-webapp_result <- system(webapp_cmd, intern = FALSE)
-if (webapp_result == 0) {
-  message("Webapp model JSONs written to: ", WEBAPP_DATA_DIR)
-} else {
-  warning("transform-results.py failed (exit code ", webapp_result, ")")
-}
+    # Use PSW-weighted data file which includes the 'psw' column
+    PSW_DATA_CSV <- file.path(OUT_RAW, "RQ1_RQ3_main", "rep_data_with_psw.csv")
+    if (!file.exists(PSW_DATA_CSV)) {
+      stop("PSW data file not found: ", PSW_DATA_CSV, " (PSW-weighted outputs are required)")
+    } else {
+      PSW_FLAG <- "--weights psw"
+    }
 
-fast_cmd <- sprintf(
-  "PYTHONDONTWRITEBYTECODE=1 python3 webapp/scripts/generate_fast_comparison.py"
-)
-fast_result <- system(fast_cmd, intern = FALSE)
-if (fast_result == 0) {
-  message("Webapp fastComparison.json written to: ", WEBAPP_DATA_DIR)
-} else {
-  warning("generate_fast_comparison.py failed (exit code ", fast_result, ")")
-}
+    # Run plot_descriptives.py - outputs to OUT_BASE with PSW weighting
+    desc_cmd <- sprintf(
+      "python3 3_Analysis/4_Plots_Code/plot_descriptives.py --data '%s' --outdir '%s' %s",
+      PSW_DATA_CSV, OUT_FIGURES, PSW_FLAG
+    )
+    desc_result <- system(desc_cmd, intern = FALSE)
+    if (desc_result == 0) {
+      message("Descriptive plots saved to: ", OUT_FIGURES)
+    } else {
+      warning("plot_descriptives.py failed (exit code ", desc_result, ")")
+    }
 
-}  # end if (!SKIP_POST_PROCESSING)
+    # Run plot_deep_cuts.py - outputs to OUT_BASE with PSW weighting
+    deep_cmd <- sprintf(
+      "python3 3_Analysis/4_Plots_Code/plot_deep_cuts.py --data '%s' --outdir '%s' %s",
+      PSW_DATA_CSV, OUT_FIGURES, PSW_FLAG
+    )
+    deep_result <- system(deep_cmd, intern = FALSE)
+    if (deep_result == 0) {
+      message("Deep-cut plots saved to: ", OUT_FIGURES)
+    } else {
+      warning("plot_deep_cuts.py failed (exit code ", deep_result, ")")
+    }
+  } # end MANIFEST_FIRST_PYTHON else block (legacy mode)
+
+  # =============================================================================
+  # Webapp JSON exports (webapp/public/data)
+  # =============================================================================
+  message("\n=== Exporting webapp fetch JSONs ===")
+  WEBAPP_DATA_DIR <- file.path("webapp", "public", "data")
+  dir.create(WEBAPP_DATA_DIR, recursive = TRUE, showWarnings = FALSE)
+
+  webapp_cmd <- sprintf(
+    "PYTHONDONTWRITEBYTECODE=1 python3 webapp/scripts/transform-results.py"
+  )
+  webapp_result <- system(webapp_cmd, intern = FALSE)
+  if (webapp_result == 0) {
+    message("Webapp model JSONs written to: ", WEBAPP_DATA_DIR)
+  } else {
+    warning("transform-results.py failed (exit code ", webapp_result, ")")
+  }
+
+  fast_cmd <- sprintf(
+    "PYTHONDONTWRITEBYTECODE=1 python3 webapp/scripts/generate_fast_comparison.py"
+  )
+  fast_result <- system(fast_cmd, intern = FALSE)
+  if (fast_result == 0) {
+    message("Webapp fastComparison.json written to: ", WEBAPP_DATA_DIR)
+  } else {
+    warning("generate_fast_comparison.py failed (exit code ", fast_result, ")")
+  }
+} # end if (!SKIP_POST_PROCESSING)
 
 # =============================================================================
 # Regenerate Summary outputs (remove old, write fresh artifacts)
@@ -2196,28 +2245,31 @@ write_manifest <- function() {
       figures = list.files(OUT_FIGURES, pattern = "\\.(png|pdf|svg)$", full.names = FALSE)
     )
   )
-  
+
   manifest_path <- file.path(OUT_RUN, "manifest.json")
-  tryCatch({
-    jsonlite_available <- requireNamespace("jsonlite", quietly = TRUE)
-    if (jsonlite_available) {
-      writeLines(jsonlite::toJSON(manifest, auto_unbox = TRUE, pretty = TRUE), manifest_path)
-    } else {
-      # Fallback: write minimal JSON manually
-      json_lines <- c(
-        "{",
-        sprintf("  \"run_id\": \"%s\",", RUN_ID),
-        sprintf("  \"timestamp\": \"%s\",", format(Sys.time(), "%Y-%m-%dT%H:%M:%S")),
-        sprintf("  \"mode\": \"%s\"", RUN_MODE),
-        "}"
-      )
-      writeLines(json_lines, manifest_path)
+  tryCatch(
+    {
+      jsonlite_available <- requireNamespace("jsonlite", quietly = TRUE)
+      if (jsonlite_available) {
+        writeLines(jsonlite::toJSON(manifest, auto_unbox = TRUE, pretty = TRUE), manifest_path)
+      } else {
+        # Fallback: write minimal JSON manually
+        json_lines <- c(
+          "{",
+          sprintf("  \"run_id\": \"%s\",", RUN_ID),
+          sprintf("  \"timestamp\": \"%s\",", format(Sys.time(), "%Y-%m-%dT%H:%M:%S")),
+          sprintf("  \"mode\": \"%s\"", RUN_MODE),
+          "}"
+        )
+        writeLines(json_lines, manifest_path)
+      }
+      message("Wrote manifest: ", manifest_path)
+    },
+    error = function(e) {
+      warning("Failed to write manifest: ", e$message)
     }
-    message("Wrote manifest: ", manifest_path)
-  }, error = function(e) {
-    warning("Failed to write manifest: ", e$message)
-  })
-  
+  )
+
   invisible(manifest)
 }
 
