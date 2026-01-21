@@ -62,52 +62,88 @@ log_error() {
 }
 
 # -----------------------------------------------------------------------------
-# Progress tracker for Full_Deploy
+# Progress tracker for Full_Deploy (bash 3.2 compatible)
 # -----------------------------------------------------------------------------
 
-# Stage status: pending, running, done, failed
-declare -A STAGE_STATUS
-declare -A STAGE_START_TIME
-STAGES=(
-  "R_PIPELINE:R Pipeline (SEM + Bootstrap)"
-  "MANIFEST_CHECK:Verify Manifest"
-  "PYTHON_STAGE:Python Stage (Tables/Figures)"
-  "WEBAPP_SYNC:Sync to Webapp"
-)
+# Stage status stored as individual variables (no associative arrays)
+STATUS_R_PIPELINE="pending"
+STATUS_MANIFEST_CHECK="pending"
+STATUS_PYTHON_STAGE="pending"
+STATUS_WEBAPP_SYNC="pending"
+
+START_R_PIPELINE=0
+START_MANIFEST_CHECK=0
+START_PYTHON_STAGE=0
+START_WEBAPP_SYNC=0
+
+get_status() {
+  case "$1" in
+    R_PIPELINE) echo "$STATUS_R_PIPELINE" ;;
+    MANIFEST_CHECK) echo "$STATUS_MANIFEST_CHECK" ;;
+    PYTHON_STAGE) echo "$STATUS_PYTHON_STAGE" ;;
+    WEBAPP_SYNC) echo "$STATUS_WEBAPP_SYNC" ;;
+  esac
+}
+
+set_status() {
+  case "$1" in
+    R_PIPELINE) STATUS_R_PIPELINE="$2" ;;
+    MANIFEST_CHECK) STATUS_MANIFEST_CHECK="$2" ;;
+    PYTHON_STAGE) STATUS_PYTHON_STAGE="$2" ;;
+    WEBAPP_SYNC) STATUS_WEBAPP_SYNC="$2" ;;
+  esac
+}
+
+get_start_time() {
+  case "$1" in
+    R_PIPELINE) echo "$START_R_PIPELINE" ;;
+    MANIFEST_CHECK) echo "$START_MANIFEST_CHECK" ;;
+    PYTHON_STAGE) echo "$START_PYTHON_STAGE" ;;
+    WEBAPP_SYNC) echo "$START_WEBAPP_SYNC" ;;
+  esac
+}
+
+set_start_time() {
+  case "$1" in
+    R_PIPELINE) START_R_PIPELINE="$2" ;;
+    MANIFEST_CHECK) START_MANIFEST_CHECK="$2" ;;
+    PYTHON_STAGE) START_PYTHON_STAGE="$2" ;;
+    WEBAPP_SYNC) START_WEBAPP_SYNC="$2" ;;
+  esac
+}
 
 init_progress() {
-  for stage_info in "${STAGES[@]}"; do
-    local key="${stage_info%%:*}"
-    STAGE_STATUS[$key]="pending"
-  done
+  STATUS_R_PIPELINE="pending"
+  STATUS_MANIFEST_CHECK="pending"
+  STATUS_PYTHON_STAGE="pending"
+  STATUS_WEBAPP_SYNC="pending"
 }
 
 show_progress() {
-  local current_stage="$1"
-  
   echo ""
   echo "┌──────────────────────────────────────────────────────────────┐"
   echo "│              FULL DEPLOY PROGRESS                            │"
   echo "├──────────────────────────────────────────────────────────────┤"
   
-  for stage_info in "${STAGES[@]}"; do
-    local key="${stage_info%%:*}"
-    local label="${stage_info#*:}"
-    local status="${STAGE_STATUS[$key]}"
-    local icon elapsed_str=""
+  for pair in "R_PIPELINE:R Pipeline (SEM + Bootstrap)" \
+              "MANIFEST_CHECK:Verify Manifest" \
+              "PYTHON_STAGE:Python Stage (Tables/Figures)" \
+              "WEBAPP_SYNC:Sync to Webapp"; do
+    local key="${pair%%:*}"
+    local label="${pair#*:}"
+    local status=$(get_status "$key")
+    local icon="" elapsed_str=""
     
     case "$status" in
-      pending)  icon="○" ;;
-      running)  icon="◉" 
-                if [[ -n "${STAGE_START_TIME[$key]:-}" ]]; then
-                  local elapsed=$(($(date +%s) - STAGE_START_TIME[$key]))
-                  elapsed_str=" (${elapsed}s)"
-                fi
-                ;;
-      done)     icon="✓" ;;
-      failed)   icon="✗" ;;
+      pending) icon="○" ;;
+      running) icon="◉"
+               local st=$(get_start_time "$key")
+               if [[ "$st" -gt 0 ]]; then
+                 elapsed_str=" ($(($(date +%s) - st))s)"
+               fi ;;
+      done)    icon="✓" ;;
+      failed)  icon="✗" ;;
     esac
-    
     printf "│  %s %-50s │\n" "$icon" "${label}${elapsed_str}"
   done
   
@@ -116,24 +152,21 @@ show_progress() {
 }
 
 start_stage() {
-  local stage="$1"
-  STAGE_STATUS[$stage]="running"
-  STAGE_START_TIME[$stage]=$(date +%s)
-  show_progress "$stage"
+  set_status "$1" "running"
+  set_start_time "$1" "$(date +%s)"
+  show_progress
 }
 
 complete_stage() {
-  local stage="$1"
-  local end_time=$(date +%s)
-  local elapsed=$((end_time - STAGE_START_TIME[$stage]))
-  STAGE_STATUS[$stage]="done"
-  log_success "Stage complete: $stage (${elapsed}s)"
+  local st=$(get_start_time "$1")
+  local elapsed=$(($(date +%s) - st))
+  set_status "$1" "done"
+  log_success "Stage complete: $1 (${elapsed}s)"
 }
 
 fail_stage() {
-  local stage="$1"
-  STAGE_STATUS[$stage]="failed"
-  show_progress "$stage"
+  set_status "$1" "failed"
+  show_progress
 }
 
 generate_run_id() {
@@ -263,18 +296,18 @@ main() {
     if [[ -f "$manifest_path" ]]; then
       log_info "Manifest exists — skipping R pipeline"
       skip_r_pipeline=true
-      STAGE_STATUS[R_PIPELINE]="done"
-      STAGE_STATUS[MANIFEST_CHECK]="done"
+      set_status "R_PIPELINE" "done"
+      set_status "MANIFEST_CHECK" "done"
     fi
     
     # Check if Python stage completed (tables exist)
     if [[ -f "$run_dir/tables/Dissertation_Tables.docx" ]]; then
       log_info "Tables exist — skipping Python stage"
       skip_python_stage=true
-      STAGE_STATUS[PYTHON_STAGE]="done"
+      set_status "PYTHON_STAGE" "done"
     fi
     
-    show_progress "RESUME"
+    show_progress
   fi
   
   # -------------------------------------------------------------------------
