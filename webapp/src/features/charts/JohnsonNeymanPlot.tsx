@@ -261,10 +261,12 @@ export default function JohnsonNeymanPlot({
       .attr("d", lineGenerator);
 
     // Selected dose marker
-    const centeringConstant = doseEffects.creditDoseRange.centeringConstant ?? 0;
+    const centeringConstant =
+      doseEffects.creditDoseRange.centeringConstant ?? 0;
     const interpolatedEffect =
       doseEffects.coefficients[outcome].main +
-      ((selectedDose - 12) / 10 - centeringConstant) * doseEffects.coefficients[outcome].moderation;
+      ((selectedDose - 12) / 10 - centeringConstant) *
+        doseEffects.coefficients[outcome].moderation;
 
     g.append("circle")
       .attr("cx", xScale(selectedDose))
