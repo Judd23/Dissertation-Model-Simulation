@@ -273,7 +273,7 @@ def build_webapp_json(run_dir: Path, manifest: dict) -> dict:
     if rq4_race_dir.exists() or rq4_mg_dir.exists():
         # Temporarily update module paths for group comparison building
         original_outputs = getattr(transform, 'OUTPUTS_DIR', None)
-        transform.OUTPUTS_DIR = raw_dir.parent  # Point to run's raw parent
+        transform.OUTPUTS_DIR = raw_dir  # Point to run's raw folder
         try:
             group_comparisons = transform.build_group_comparisons()
         finally:
