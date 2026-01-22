@@ -19,6 +19,7 @@ Writes:
 
 import json
 import os
+import re
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -34,6 +35,9 @@ OUTPUT_DIR = Path(__file__).parent.parent / "public" / "data"
 # Key structural paths we want to extract
 KEY_PATHS = ["a1", "a1z", "a2", "a2z", "b1", "b2", "c", "cz", "g1", "g2", "g3"]
 TOTAL_EFFECT_KEYS = ["c_total"]
+
+# Regex to extract core label from MG-prefixed labels (e.g., W2__a1_g1 -> a1)
+MG_LABEL_PATTERN = re.compile(r'W\d+__(\w+)_g\d+')
 
 
 def parse_parameter_estimates(filepath: Path) -> pd.DataFrame:
@@ -58,11 +62,23 @@ def extract_key_paths(params: pd.DataFrame, key_paths: list = None) -> list:
     paths = []
     for _, row in structural.iterrows():
         label = row["label"]
-        if label not in active_keys:
+        
+        # Check for exact match first
+        path_id = label if label in active_keys else None
+        
+        # If no exact match, try extracting core label from MG-prefixed format (W2__a1_g1 -> a1)
+        if path_id is None:
+            mg_match = MG_LABEL_PATTERN.match(label)
+            if mg_match:
+                core_label = mg_match.group(1)
+                if core_label in active_keys:
+                    path_id = core_label
+        
+        if path_id is None:
             continue
 
         path = {
-            "id": label,
+            "id": path_id,
             "from": row["rhs"],
             "to": row["lhs"],
             "estimate": round(float(row["est"]), 4) if pd.notna(row["est"]) else None,

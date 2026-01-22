@@ -78,5 +78,160 @@
         }
       }
     ]
+  },
+  "byFirstGen": {
+    "groupVariable": "firstgen",
+    "groups": [
+      {
+        "label": "First-Gen",
+        "effects": {
+          "a1": {
+            "estimate": 0.0854,
+            "se": 0.0887,
+            "pvalue": 0.335949723571666
+          },
+          "a2": {
+            "estimate": -0.2234,
+            "se": 0.0918,
+            "pvalue": 0.0149853760666174
+          }
+        }
+      },
+      {
+        "label": "Continuing-Gen",
+        "effects": {
+          "a1": {
+            "estimate": 0.2387,
+            "se": 0.0838,
+            "pvalue": 0.0043758937302833
+          },
+          "a2": {
+            "estimate": 0.1391,
+            "se": 0.0787,
+            "pvalue": 0.0770588966555692
+          }
+        }
+      }
+    ]
+  },
+  "byPell": {
+    "groupVariable": "pell",
+    "groups": [
+      {
+        "label": "Pell Eligible",
+        "effects": {
+          "a1": {
+            "estimate": 0.1358,
+            "se": 0.0906,
+            "pvalue": 0.133773795962224
+          },
+          "a2": {
+            "estimate": 0.1626,
+            "se": 0.0829,
+            "pvalue": 0.049829309221016
+          }
+        }
+      },
+      {
+        "label": "Not Pell Eligible",
+        "effects": {
+          "a1": {
+            "estimate": 0.202,
+            "se": 0.082,
+            "pvalue": 0.0137537264894478
+          },
+          "a2": {
+            "estimate": -0.2111,
+            "se": 0.086,
+            "pvalue": 0.0141328561157881
+          }
+        }
+      }
+    ]
+  },
+  "bySex": {
+    "groupVariable": "sex",
+    "groups": [
+      {
+        "label": "Women",
+        "effects": {
+          "a1": {
+            "estimate": 0.1941,
+            "se": 0.0781,
+            "pvalue": 0.0130021838638346
+          },
+          "a2": {
+            "estimate": -0.0656,
+            "se": 0.0783,
+            "pvalue": 0.40217935263159
+          }
+        }
+      },
+      {
+        "label": "Men",
+        "effects": {
+          "a1": {
+            "estimate": 0.1406,
+            "se": 0.0965,
+            "pvalue": 0.144861699062878
+          },
+          "a2": {
+            "estimate": 0.0402,
+            "se": 0.0935,
+            "pvalue": 0.667166704690596
+          }
+        }
+      }
+    ]
+  },
+  "byLiving": {
+    "groupVariable": "living18",
+    "groups": [
+      {
+        "label": "With Family",
+        "effects": {
+          "a1": {
+            "estimate": -0.0893,
+            "se": 0.0918,
+            "pvalue": 0.33066767472312
+          },
+          "a2": {
+            "estimate": -0.0082,
+            "se": 0.103,
+            "pvalue": 0.936288470249654
+          }
+        }
+      },
+      {
+        "label": "Off-Campus",
+        "effects": {
+          "a1": {
+            "estimate": 0.3162,
+            "se": 0.0853,
+            "pvalue": 0.0002079235087328
+          },
+          "a2": {
+            "estimate": -0.0765,
+            "se": 0.0833,
+            "pvalue": 0.358477284931491
+          }
+        }
+      },
+      {
+        "label": "On-Campus",
+        "effects": {
+          "a1": {
+            "estimate": 0.2512,
+            "se": 0.125,
+            "pvalue": 0.0444803596405297
+          },
+          "a2": {
+            "estimate": 0.0027,
+            "se": 0.1272,
+            "pvalue": 0.983025092984868
+          }
+        }
+      }
+    ]
   }
 }
