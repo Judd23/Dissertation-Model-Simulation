@@ -242,16 +242,38 @@
 
 ---
 
-## Propensity Score Model Considerations
+## Propensity Score Weighting (PSW) Model
 
-Students more likely to be FASt (12+ credits) if:
+### PSW Covariates (9 variables, all mean-centered)
+| Variable | Description |
+|----------|-------------|
+| `hgrades_c` | High school grades |
+| `bparented_c` | Parent education level |
+| `hapcl_c` | AP/college-level coursework |
+| `hprecalc13_c` | HS pre-calculus completion |
+| `hchallenge_c` | Academic challenge in HS |
+| `cSFcareer_c` | Career orientation |
+| `hacadpr13_c` | HS study hours (last year) |
+| `tcare_c` | Caregiving hours |
+| `StemMaj_c` | STEM major intent |
+
+### Exclusions
+- `cohort` — excluded from PSW (design variable; included in SEM structural paths)
+- `pell` — W-moderator only (not in PSW or SEM structural paths)
+
+### Weighting Approach: Overlap Weights
+- **Treated (x_FASt = 1)**: w = 1 − p̂
+- **Control (x_FASt = 0)**: w = p̂
+- Weights normalized to mean = 1
+
+### Students more likely to be FASt (12+ credits) if:
 - Higher HS GPA (+)
 - More AP courses (+)
 - Higher parent education (+)
 - Pre-calculus completion (+)
-- Suburban/urban school district (+)
-- Asian or White (+, currently)
-- NOT first-generation (−, historical pattern, changing with CCAP)
+- More HS study hours (+)
+- STEM major intent (+)
+- Lower caregiving hours (−)
 
 ---
 

@@ -36,9 +36,11 @@ See: `run_all_RQs_official.R:51-172` for all env var definitions.
 
 Derived variables are recomputed each run from raw sources to prevent stale values:
 
-- `x_FASt = 1(trnsfr_cr >= 12)` - Always derived from transfer credits
-- `credit_dose_c` - Centered credit dose
-- `XZ_c` - Treatment x Moderator interaction (centered)
+- `x_FASt = 1(trnsfr_cr >= 12)` - Binary treatment; 0=non-FASt (0-11 credits), 1=FASt (≥12 credits)
+- `credit_dose = pmax(0, trnsfr_cr - 12)/10` - Credits above threshold in 10-unit increments; Z=0 for all non-FASt
+- `credit_dose_c = credit_dose - mean(credit_dose)` - Centered dose moderator
+- `XZ_c = x_FASt * credit_dose_c` - Treatment × Dose interaction (first-stage moderation)
+- `psw = X·(1−ps) + (1−X)·ps; normalized` - Overlap weights for ATO estimand
 
 See: `run_all_RQs_official.R:357-411` for derived variable computation.
 

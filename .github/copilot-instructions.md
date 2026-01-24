@@ -6,12 +6,29 @@ Ed.D. dissertation studying psychosocial effects of accelerated dual credit (FAS
 
 ## Conceptual Model
 
+### Two-Stage Dual Credit Categorization
+1. **Stage 1**: `DC_student = 1(hdc17 >= 2)` — DC vs No_DC based on HS dual credit courses
+2. **Stage 2**: `x_FASt = 1(trnsfr_cr >= 12)` — FASt (≥12 credits) vs non-FASt (0-11 credits)
+
+### Treatment & Dose
 - **X (treatment)**: `x_FASt` (0/1 — ≥12 transferable credits at matriculation)
-- **Z (moderator)**: `credit_dose_c` (mean-centered)
-- **Interaction**: `XZ_c = x_FASt * credit_dose_c`
+- **Z (dose moderator)**: `credit_dose = pmax(0, trnsfr_cr - 12)/10` — units above threshold; Z=0 for all non-FASt
+- **Z centered**: `credit_dose_c = credit_dose - mean(credit_dose)`
+- **Interaction**: `XZ_c = x_FASt * credit_dose_c` (first-stage moderation)
+
+### Sample Distribution
+- **FASt (x_FASt=1)**: n=1,321 (26.4%)
+- **non-FASt (x_FASt=0)**: n=3,679 (73.6%) — combines No_Cred + Lite_DC
+
+### Constructs
 - **Mediators** (parallel): `EmoDiss` (emotional distress), `QualEngag` (quality of engagement)
 - **Outcome**: `DevAdj` (second-order latent: Belong, Gains, SupportEnv, Satisf)
-- **Covariates**: cohort, hgrades_c, bparented_c, pell, hapcl, hprecalc13, hchallenge_c, cSFcareer_c
+
+### Covariates
+- **PSW Covariates** (9, all centered): `hgrades_c`, `bparented_c`, `hapcl_c`, `hprecalc13_c`, `hchallenge_c`, `cSFcareer_c`, `hacadpr13_c`, `tcare_c`, `StemMaj_c`
+- **SEM Structural Covariates** (10): PSW covariates + `cohort`
+- **PSW Formula**: `psw = X·(1−ps) + (1−X)·ps; normalized` (overlap weights for ATO)
+- **Exclusions**: `cohort` excluded from PSW (design variable); `pell` is W-moderator only (not in PSW or SEM structural paths)
 
 ## STRICT Naming Rules
 
